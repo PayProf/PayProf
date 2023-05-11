@@ -3,17 +3,17 @@
 # Make sure we are on the master branch
 git checkout master
 
-# Merge the server branch into the master branch
-git merge server
+# Merge the client branch into the master branch
+git merge client
 
-# Create a new directory named "server" in the root of the repository
-mkdir server
+# Create a new directory named "client" in the root of the repository
+mkdir client
 
-# Copy the contents of the server folder from the server branch into the newly created server directory
-git checkout server -- server/*
+# Copy the contents of the client folder from the client branch into the newly created client directory
+git checkout client -- client/*
 
-# Add the new server directory to the master branch
-git add server
+# Add the new client directory to the master branch
+git add client
 
 # Commit the changes
 git commit -m "$*"

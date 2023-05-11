@@ -1,7 +1,7 @@
-git checkout server
+git checkout client
 
 git add .
 
 git commit -m "$*"
 
-git push origin server
+git push origin client
