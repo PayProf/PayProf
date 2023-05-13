@@ -17,11 +17,11 @@ class AdministrateurFactory extends Factory
     public function definition()
     {
         return [
-            
-                'PPR'=>fake()->numberBetween(),
-                'nom'=>fake()->lastName(),
-                'prenom'=>fake()->firstName(),
-                'etablissement_id'=>fake()->numberBetween(1,10),
+
+            'PPR' => fake()->numberBetween(),
+            'nom' => fake()->lastName(),
+            'prenom' => fake()->firstName(),
+            'etablissement_id' => fake()->numberBetween(1, 10),
         ];
     }
 }

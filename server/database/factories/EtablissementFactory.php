@@ -17,12 +17,12 @@ class EtablissementFactory extends Factory
     public function definition()
     {
         return [
-           'code'=>fake()->countryCode(),
-            'nom' =>fake()->name(),
-            'telephone' =>fake()->phoneNumber(),
-            'Faxe' =>fake()->numberBetween(),
-            'ville' => fake()->city(),
-            'Nbr_enseignants'=> fake()->numberBetween(20,100),
+            'code' => fake()->countryCode(),
+            'name' => fake()->name(),
+            'phone' => fake()->phoneNumber(),
+            'Faxe' => fake()->numberBetween(),
+            'city' => fake()->city(),
+            'numberTeacher' => fake()->numberBetween(20, 100),
         ];
     }
 }
