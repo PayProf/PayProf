@@ -41,4 +41,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function types()
+    {
+        
+        //relation many to many ("nom de latable commune",'id du model en cours d'utilisation ','id de l'autre table en relation ')
+    }
 }
