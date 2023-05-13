@@ -17,9 +17,9 @@ class GradeFactory extends Factory
     public function definition()
     {
         return [
-            'designation'=>fake()->name(),
-            'charge_statutaire' =>fake()->numberBetween(),
-            'Taux_horaire_vacation' =>fake()->numberBetween(),
+            'designation' => fake()->name(),
+            'charge_statutaire' => fake()->numberBetween(),
+            'Taux_horaire_vacation' => fake()->numberBetween(),
         ];
     }
 }
