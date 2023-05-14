@@ -1,7 +1,7 @@
-git checkout dev
+git checkout $1
 
 git add .
 
-git commit -m "$*"
+git commit -m "${*:2}"
 
-git push origin dev
+git push origin $1
