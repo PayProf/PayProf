@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('enseignants', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('PPR')->unique()->nullable();   //il faut au moins 7 chiffres
-            $table->string('Lastname')->nullable();
-            $table->string('Firstname')->nullable();
-            $table->date('BirthDay')->nullable();
+            $table->string('nom')->nullable();
+            $table->string('prenom')->nullable();
+            $table->date('date_naissance')->nullable();
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
             $table->foreignId('grade_id')->constrained()->onDelete('cascade');
             $table->timestamps();
