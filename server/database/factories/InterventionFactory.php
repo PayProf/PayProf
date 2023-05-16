@@ -17,16 +17,16 @@ class InterventionFactory extends Factory
     public function definition()
     {
         return [
-          
-        'intitule_intervention'=>fake()->realText(30,2),
-    'enseignant_id'=>fake()->numberBetween(1,10),
-    'etablissement_id'=>fake()->numberBetween(1,10),
 
-       'date_debut'=>fake()->date(),
-    'date_fin'=>fake()->date(),
-   'visa_uae'=>fake()->numberBetween(0,1),
-            'visa_etab'=>fake()->numberBetween(0,1),
-           'Nbr_heures'=>fake()->numberBetween(),
+            'intitule_intervention' => fake()->realText(30, 2),
+            'enseignant_id' => fake()->numberBetween(1, 10),
+            'etablissement_id' => fake()->numberBetween(1, 10),
+
+            'date_debut' => fake()->date(),
+            'date_fin' => fake()->date(),
+            'visa_uae' => fake()->numberBetween(0, 1),
+            'visa_etab' => fake()->numberBetween(0, 1),
+            'Nbr_heures' => fake()->numberBetween(),
         ];
     }
 }

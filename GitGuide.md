@@ -3,7 +3,7 @@
 Made By: **Reda Mountassir**
 ___
 
-This A guide For Payprof Project to make Git/github use easy for you
+This is A guide For Payprof Project to make Git/github use easy for you
 ___
 
 ## If you Want to get your branch (cloning):
@@ -38,6 +38,8 @@ To add a branch I made a ready scriptshell for it
 ./mkbranch.sh branch-name
 ```
 
+___
+
 ## How to push to a branch:
 
 * One of the most important things is to put checkpoints!
@@ -51,7 +53,7 @@ To add a branch I made a ready scriptshell for it
 2-type this (Ready script shell):
 
 ```bash
-  ./push.sh "your commit message"
+  ./push.sh branch-name your commit message
 ```
 
 * Only push to the branch you created!

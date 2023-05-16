@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -22,7 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('role');
             $table->rememberToken();
             $table->timestamps();
-            
+
 
             // 4=>"AdminUae",
             // 3=>"AdminEtab",
@@ -41,8 +40,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('users');
 
-     
 
-       
+
+
     }
 };
