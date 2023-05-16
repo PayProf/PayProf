@@ -18,8 +18,9 @@ return new class extends Migration
             $table->unsignedInteger('PPR')->unique(); //combinaisonde 7chiffres 
             $table->string('nom');
             $table->string('prenom');
+            $table->string('email_perso');
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
-
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

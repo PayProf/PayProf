@@ -4,11 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 class Enseignant extends Model
 {
     use HasFactory;
+    protected $fillable =[
+        'PPR',
+        'nom',
+        'prenom',
+        'date_naissance',
+        'etablissement_id',
+        'grade_id',
+        'user_id',
+
+    ];
+
+
+
+
     public function etablissement(){
         return $this->belongsTo(Etablissement::class);
     }
@@ -26,29 +41,11 @@ class Enseignant extends Model
     {
         return $this->hasMany(Paiements::class);
     }
-
-    public function cash()
-    {
-        $inter=DB::table('interventions')
-        ->where([
-            ['visa_uae','=',1,],
-            ['visa_etab','=',1,],
-            ['enseignant_id','=',2,]
-        ])
-        ->first();
-      ;
-    
-      $ens_id=$inter->enseignant_id;
-
-       $ens=DB::table('paiements')
-       ->where(
           
-           'enseignant_id','=',$ens_id
-       )
-       ->first();
-        $price=$ens->Net + ($ens->VH * $ens->Taux_H );
-          $donnees=array($price,$ens->Annee_univ,$inter->intitule_intervention);
-        return$donnees  ;
-
+    public function user() : BelongsTo
+    {   //to get the user that have the role as enseignant
+        return $this->belongsTo(User::class);
     }
+
+    
 }

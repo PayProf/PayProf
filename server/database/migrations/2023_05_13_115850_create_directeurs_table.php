@@ -13,18 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('paiements', function (Blueprint $table) {
-           
+        Schema::create('directeurs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('enseignant_id')->constrained()->onDelete('cascade');
+            $table->unsignedInteger('PPR')->unique(); //combinaisonde 7chiffres 
+            $table->string('nom');
+            $table->string('prenom');
+            $table->string('email_perso');
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
-            $table->integer('VH');
-            $table->integer('Taux_H');
-            $table->unsignedFloat('Brut');
-            $table->unsignedFloat('IR')->default(0,05);
-            $table->unsignedFloat('Net');
-            $table->string('Annee_univ')->default('2022/2023');
-            $table->string('Semestre')->default('S2');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -36,6 +33,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('paiements');
+        Schema::dropIfExists('directeurs');
+
+
     }
 };

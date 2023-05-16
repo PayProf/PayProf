@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('enseignants', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('PPR')->unique()->nullable();   //il faut au moins 7 chiffres
-            $table->string('Lastname')->nullable();
-            $table->string('Firstname')->nullable();
-            $table->date('BirthDay')->nullable();
+            $table->unsignedInteger('PPR')->unique();   //il faut au moins 7 chiffres
+            $table->string('nom');
+            $table->string('prenom');
+            $table->date('date_naissance');
+            $table->string('email_perso');
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
             $table->foreignId('grade_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
         });

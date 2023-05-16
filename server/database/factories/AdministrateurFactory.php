@@ -22,6 +22,8 @@ class AdministrateurFactory extends Factory
                 'nom'=>fake()->lastName(),
                 'prenom'=>fake()->firstName(),
                 'etablissement_id'=>fake()->numberBetween(1,10),
+                 'user_id'=>fake()->numberBetween(1,10),
+                 'email_perso'=>fake()->email(),
         ];
     }
 }

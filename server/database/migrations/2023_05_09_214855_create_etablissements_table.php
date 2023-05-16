@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('etablissements', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->string('name')->unique();
-            $table->string('phone')->unique();
+            $table->string('nom')->unique();
+            $table->string('telephone')->unique();
             $table->string('Faxe')->unique();
-            $table->unsignedBigInteger('numberTeacher')->nullable();
-            $table->string('city');
+            $table->unsignedBigInteger('Nbrenseignants')->nullable();
+            $table->string('ville');
             $table->timestamps();
             
         });

@@ -22,7 +22,7 @@ class EtablissementFactory extends Factory
             'telephone' =>fake()->phoneNumber(),
             'Faxe' =>fake()->numberBetween(),
             'ville' => fake()->city(),
-            'Nbr_enseignants'=> fake()->numberBetween(20,100),
+            'Nbrenseignants'=> fake()->numberBetween(20,100),
         ];
     }
 }

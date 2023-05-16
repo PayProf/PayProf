@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('interventions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('enseignant_id')->constrained();
-            $table->foreignId('etablissement_id')->constrained();
+            $table->foreignId('enseignant_id')->constrained()->onDelete('cascade');
+            $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
             $table->string('intitule_intervention');
             $table->string('annee_univ')->default('2022/2023');
             $table->string('semestre')->default('S2');

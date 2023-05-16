@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Administrateur;
+use App\Models\Directeur;
 use App\Models\Enseignant;
 use App\Models\Etablissement;
 use App\Models\Grade;
@@ -31,12 +32,14 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         Etablissement::factory(10)->create();
+        User::factory(10)->create();
         Grade::factory(10)->create();
         Enseignant::factory(10)->create();
         Administrateur::factory(10)->create();
         Intervention::factory(10)->create();
-        User::factory(10)->create();
+       
         Paiements::factory(10)->create();
+        Directeur:: factory(10)->create();
        
     }
 }

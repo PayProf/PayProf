@@ -13,7 +13,7 @@ class UpdateEnseignantRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,48 @@ class UpdateEnseignantRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $method=$this->method(); // to check the http method 
+           
+        if($method=="PUT"){
+                return [          
+                    
+                    //all the fields will be sent to the db (also the the fields unchanged )
+
+                        'PPR'=>['required'],
+                        'nom'=>['required'],
+                        'prenom'=>['required'],
+                        'DateNaissancee'=>['required','date'],
+                        'IdEtablissemen'=>['required'],
+                        'IdGrade'=>['required'],
+                        'IdUser'=>['required'],
+                    ];
+            }
+
+            else // if the method is PATCH
+            { 
+
+                return [                 
+                    
+                    // only the specified fileds will be modified and sent to the db
+
+                    'PPR'=>['sometimes','required'],
+                    'nom'=>['sometimes','required'],
+                    'prenom'=>['sometimes','required'],
+                    'DateNaissancee'=>['sometimes','required','date'],
+                    'IdEtablissemen'=>['sometimes','required'],
+                    'IdGrade'=>['sometimes','required'],
+                    'IdUser'=>['sometimes','required'],
+
+                ];
+            }
+    }
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'date_naissance'=> ucfirst($this->DateNaissance),
+            'etablissement_id'=>ucfirst($this->IdEtablissement),
+            'grade_id'=>ucfirst($this->IdGrade),
+            'user_id'=>ucfirst($this->IdUser),
+        ]);
     }
 }

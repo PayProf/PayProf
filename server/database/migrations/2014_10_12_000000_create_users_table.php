@@ -15,8 +15,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+           
             $table->id();
-            $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
             $table->unsignedInteger('role');
@@ -24,11 +24,11 @@ return new class extends Migration
             $table->timestamps();
             
 
-            // 0=>"AdminUae",
-            // 1=>"AdminEtab",
+            // 4=>"AdminUae",
+            // 3=>"AdminEtab",
             // 2=>"DirecteurEtab",
-            // 3=>"DirecteurUae",
-            // 4=>"Enseignant",
+            // 1=>"DirecteurUae",
+            // 0=>"Enseignant",
         });
     }
 

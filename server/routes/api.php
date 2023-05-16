@@ -20,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 route::apiResource('ens',EnseignantController::class);
+//route of  ShowMyInterventions
+route::get('ens/{ens}/inter',[EnseignantController::class,'ShowMyInterventions']);
+//route of  ShowMyPayments
+route::get('ens/{ens}/pay',[EnseignantController::class,'ShowMyPayments']);
 
 route::apiResource('adm',AdministrateurController::class);
 
@@ -31,7 +35,7 @@ route::apiResource('pay',PaiementsController::class);
 
 route::apiResource('etab',EtablissementController::class);
 
-// A developper ulterieurement   i insert this in groups after the discussion with the supvsr
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

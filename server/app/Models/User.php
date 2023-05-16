@@ -43,9 +43,14 @@ class User extends Authenticatable
     ];
 
 
-    public function types()
+    public function enseignant()
     {
         
-        //relation many to many ("nom de latable commune",'id du model en cours d'utilisation ','id de l'autre table en relation ')
+       return $this->hasOne(Enseignant::class);
+    }
+
+    public function administrateur()
+    {
+        return $this->hasOne(Administrateur::class);
     }
 }
