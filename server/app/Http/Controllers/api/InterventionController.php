@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Intervention;
 use Illuminate\Http\Request;
 
 class InterventionController extends Controller
@@ -14,7 +15,7 @@ class InterventionController extends Controller
      */
     public function index()
     {
-        //
+        //return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10)); 
     }
 
     /**
