@@ -35,8 +35,6 @@ route::apiResource('pay',PaiementsController::class);
 
 route::apiResource('etab',EtablissementController::class);
 
-
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
