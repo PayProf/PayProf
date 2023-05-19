@@ -1,5 +1,5 @@
 {
-    "enseignats": [
+    "enseignants": [
         {
             "ppr":"1",
             "nom":"Mouad",
@@ -18,5 +18,12 @@
             "prenom":"Hayaoui",
             "email":"mouadhayaoui@gmail.com"
         }
-    ]
+    ],
+    "user": {
+        "nom":"Reda",
+        "prenom":"Mountassir",
+        "email": "redtius@gmail.com",
+        "role": "1",
+        "token":"123"
+    }
 }
