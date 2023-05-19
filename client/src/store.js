@@ -4,22 +4,10 @@ export default createStore({
   state: {
     enseignants: [
       {
-        ppr: "1",
-        nom: "Mouad",
-        prenom: "Hyaoui",
-        email: "mouadhayaoui@exemple.com",
-      },
-      {
-        ppr: "1",
-        nom: "Mouad",
-        prenom: "Hyaoui",
-        email: "mouadhayaoui@exemple.com",
-      },
-      {
-        ppr: "1",
-        nom: "Mouad",
-        prenom: "Hyaoui",
-        email: "mouadhayaoui@exemple.com",
+        ppr: "",
+        nom: "",
+        prenom: "",
+        email: "",
       },
     ],
   },

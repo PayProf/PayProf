@@ -36,18 +36,27 @@
     <tbody>
   <!-- This import the users from store.state in the table -->
           <tr v-for="(enseignant,index) in $store.state.enseignants " :key="index">
-            <th><input type="checkbox" /></th>
+            <td><input type="checkbox" /></td>
             <td>{{ enseignant.ppr }}</td>
             <td>{{  enseignant.nom  }}</td>
             <td>{{ enseignant.prenom }}</td>
             <td>{{enseignant.email }}</td>
-            <td><button class="delete-btn" ><i class="fas fa-trash"></i></button><button class="inspect-btn"><i class="fas fa-search"></i></button><button class="add-btn" @click="showPopupForm = true"><i class="fas fa-plus"></i></button></td>
-
-            
-          </tr>
+            <td><button class="delete-btn">
+                <i class="fas fa-trash"></i>
+                 <span class="tooltip" data-tooltip="Delete">Supprimer enseignant</span>
+                 </button>
+                 <button class="add-btn">
+                    <i class="fas fa-plus"></i>
+                   <span class="tooltip" data-tooltip="Add">ajouter enseignant</span>
+                  </button>
+                  <button class="add-btn" @click="showPopupForm = true">
+                    <i class="fas fa-search"></i>
+                    <span class="tooltip" data-tooltip="inspect">voir profile</span>
+                  </button></td>
+            </tr>
         </tbody>
   </table>
-<PopupForm/>
+  
 </div>
 <div class="btn-group" style="display: flex; justify-content: center; margin-top: 30px;">
   <button class="btn">1</button>
@@ -55,6 +64,7 @@
   <button class="btn">3</button>
   <button class="btn">4</button>
 </div>
+<PopupForm />
   </template>
   
 
@@ -69,6 +79,11 @@ export default {
     return {
       showPopupForm: false,
     };
+  },
+  methods: {
+    showPopup() {
+      this.showPopupForm = true;
+    },
   },
 };
 

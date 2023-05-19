@@ -1,18 +1,46 @@
 <template>
   <div>
-    <!-- <button @click="showPopup">Add</button> -->
-    <div v-if="isPopupVisible" class="popup">
-      <div class="popup-content">
-        <form @submit.prevent="addEnseignant">
-          <!-- Form fields for adding an enseignant -->
-          <input type="text" v-model="ppr" placeholder="PPR" />
-          <input type="text" v-model="nom" placeholder="Nom" />
-          <input type="text" v-model="prenom" placeholder="Prénom" />
-          <input type="email" v-model="email" placeholder="Email" />
+    <button @click="showPopup" class="btn btn-primary" style="float: right; margin-right: 30px; margin-bottom: 30px; border-radius: 10px;">Add</button>
 
-          <button type="submit">Add Enseignant</button>
-        </form>
+    <div v-if="isPopupVisible" class="popup">
+      <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+  <div class="card-body">
+    <form @submit.prevent="addEnseignant">
+      <!-- Form fields for adding an enseignant -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">PPR</span>
+        </label>
+        <input type="text" v-model="ppr" placeholder="PPR" class="input input-bordered" />
       </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Nom</span>
+        </label>
+        <input type="text" v-model="nom" placeholder="Nom" class="input input-bordered" />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Prénom</span>
+        </label>
+        <input type="text" v-model="prenom" placeholder="Prénom" class="input input-bordered" />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Email</span>
+        </label>
+        <input type="email" v-model="email" placeholder="Email" class="input input-bordered" />
+      </div>
+      
+      <div class="form-control mt-6">
+        <button type="submit" class="btn btn-primary" style="border-radius: 10px;">Add Enseignant</button>
+        <button @click="close" class="btn btn-primary" style="border-radius: 10px; margin-top: 5px;">Cancel</button>
+
+      </div>
+    </form>
+  </div>
+</div>
+
     </div>
   </div>
 </template>
@@ -31,6 +59,10 @@ export default {
   methods: {
     showPopup() {
       this.isPopupVisible = true;
+    },
+    close(){
+      this.isPopupVisible = false;
+
     },
     addEnseignant() {
       const enseignant = {

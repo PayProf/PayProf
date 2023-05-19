@@ -31,12 +31,6 @@
 </div>
 
 
-
-
-
-
-
-
 </template>
 
 <script>
