@@ -30,11 +30,9 @@
    </template>
 
 <script>
-import sidebar from './Side.vue'
 export default{
     name:'Header',
     components:{
-      sidebar,
 
     },
     props:{

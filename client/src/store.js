@@ -1,7 +1,5 @@
 import { createStore } from 'vuex';
 import axios from "axios";
-import axiosinstance from "./axios.js";
-import user from "./views/UI/User.vue";
 
 export default createStore({
   state: {
