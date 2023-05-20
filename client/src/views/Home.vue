@@ -63,9 +63,7 @@ export default{
 
   methods:{
     async login(){
-      await this.$store.dispatch('getuser');
-
-
+      await this.$store.dispatch('login',this.FormData);
     }
   }
 
