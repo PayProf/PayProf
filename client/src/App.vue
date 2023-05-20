@@ -1,6 +1,7 @@
 <template>
-  <Header />
-  
+      <Header/>
+      <EtabAdmins/>
+      <Footer/>
 
   
 </template>
@@ -10,18 +11,25 @@ import {RouterView,RouterLink} from "vue-router"
 import { def } from '@vue/shared';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-import AdminUAE from './views/UI/AdminUAE.vue'
-import Admin from "./views/UI/Admin.vue";
+import Etabs from './views/UI/Etabs.vue';
+import EtabDirecrteurs from './views/UI/EtabDirecteurs.vue';
+import EtabAdmins from './views/UI/EtabAdmins.vue';
+import AdminUAE from './views/UI/AdminUAE.vue';
+
+
 
 
 
 export default{
   name:'App',
-  components:{ 
+  components:{
     Header,
     Footer,
-    Admin,
+    Etabs,
+    EtabDirecrteurs,
     AdminUAE,
+    EtabAdmins,
+    AdminUAE
 },
   props:{
     title:{
