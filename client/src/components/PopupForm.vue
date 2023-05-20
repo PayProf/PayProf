@@ -34,7 +34,7 @@
       
       <div class="form-control mt-6">
         <button type="submit" class="btn btn-primary" style="border-radius: 10px;">Add Enseignant</button>
-        <button @click="close" class="btn btn-primary" style="border-radius: 10px; margin-top: 5px;">Cancel</button>
+        <button @click="close" class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
 
       </div>
     </form>
@@ -62,7 +62,6 @@ export default {
     },
     close(){
       this.isPopupVisible = false;
-
     },
     addEnseignant() {
       const enseignant = {
@@ -85,9 +84,7 @@ export default {
       this.isPopupVisible = false;
     },
   },
-  closeForm() {
-      this.$emit('close');
-    },
+  
   
 };
 </script>

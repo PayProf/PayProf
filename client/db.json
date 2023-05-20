@@ -7,23 +7,71 @@
             "email":"mouadhayaoui@gmail.com"
         },
         {
-            "ppr":"1",
+            "ppr":"2",
             "nom":"Mouad",
-            "prenom":"Hayaoui",
+            "prenom":"Hayaoudadai",
             "email":"mouadhayaoui@gmail.com"
         },
         {
-            "ppr":"1",
-            "nom":"Mouad",
+            "ppr":"3",
+            "nom":"Mouaasad",
             "prenom":"Hayaoui",
             "email":"mouadhayaoui@gmail.com"
         }
     ],
-    "user": {
+    "user":
+     {
         "nom":"Reda",
         "prenom":"Mountassir",
         "email": "redtius@gmail.com",
         "role": "1",
         "token":"123"
-    }
+    },
+    "Interventions":[
+        {
+            "Id_Intr": "1",
+            "Etablisment": "University P",
+            "Intitule_Intervention": "Seminar on Literature",
+            "Annee_universitaire": "2023-2024",
+            "Semester": "Winter",
+            "Date_Debut": "2023-10-20",
+            "Date_Fin": "2024-01-10",
+            "Nombre_heures": "1"
+          },
+          {
+            "Id_Intr": "2",
+            "Etablisment": "University P",
+            "Intitule_Intervention": "Seminar on Literature",
+            "Annee_universitaire": "2023-2024",
+            "Semester": "Winter",
+            "Date_Debut": "2023-12-20",
+            "Date_Fin": "2024-01-10",
+            "Nombre_heures": "5"
+          },
+          {
+            "Id_Intr": "3",
+            "Etablisment": "University P",
+            "Intitule_Intervention": "Seminar on Literature",
+            "Annee_universitaire": "2023-2024",
+            "Semester": "Winter",
+            "Date_Debut": "2023-2-20",
+            "Date_Fin": "2024-01-10",
+            "Nombre_heures": "8"
+          },
+          {
+            "Id_Intr": "4",
+            "Etablisment": "University P",
+            "Intitule_Intervention": "Seminar on Literature",
+            "Annee_universitaire": "2023-2024",
+            "Semester": "Winter",
+            "Date_Debut": "2023-12-20",
+            "Date_Fin": "2024-01-10",
+            "Nombre_heures": "2"
+          }
+          
+          
+          
+          
+    
+    ]
 }

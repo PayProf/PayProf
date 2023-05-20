@@ -35,7 +35,7 @@
     </thead>
     <tbody>
   <!-- This import the users from store.state in the table -->
-          <tr v-for="(enseignant,index) in $store.state.enseignants " :key="index">
+          <tr v-for="(enseignant) in enseignants" :key="enseignant.ppr">
             <td><input type="checkbox" /></td>
             <td>{{ enseignant.ppr }}</td>
             <td>{{  enseignant.nom  }}</td>
@@ -70,6 +70,7 @@
 
 <script>
 import PopupForm from '/src/components/PopupForm.vue';
+import {mapActions,mapState} from 'vuex';
 export default {
   name: 'Admin',
   components: {
@@ -81,10 +82,21 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      'getEnseignants'
+  ]),
     showPopup() {
       this.showPopupForm = true;
     },
   },
+  computed:{
+    ...mapState([
+        'enseignants',
+    ])
+  },
+  async created(){
+    await this.$store.dispatch('getEnseignants');
+  }
 };
 
 

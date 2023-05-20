@@ -1,20 +1,27 @@
 <template>
-<div class="hero min-h-screen bg-base-200">
-  <div class="hero-content flex-col lg:flex-row">
-    
-    <div>
-        <!-- here I need to add the name of the user inspected -->
-      <h1 class="text-5xl font-bold">User: mouad</h1>
-      <!-- information about the user that needs to be emited  -->
-      <p class="py-6">Nom : Hayaoui</p>
-      <p class="py-6">Prenom :  Mouad</p>
-      <p class="py-6">email : Hayaouimouad@gmail.com</p>
-      <p class="py-6">etablissment : ensa</p>
-      <p class="py-6"></p>
-      <button class="btn btn-primary">Get Started</button>
+<div class="w-screen h-70vh" style="margin-bottom: 40px;">
+  <!-- profile card -->
+  <div class="flex items-start justify-start mt-200" style="margin-top: 200px; margin-left: 20px;">
+    <div class="w-1/2">
+      <!-- User Information -->
+      <div class="bg-gray-200 p-4">
+        <h1 class="text-2xl font-bold">Profile enseignat : Mouad Hayaoui</h1>
+        <p class="py-2"><strong>PPR :</strong> 123456</p>
+        <p class="py-2"><strong>Nom:</strong> Hayaoui</p>
+        <p class="py-2"><strong>Prenom :</strong> Mouad</p>
+        <p class="py-2"><strong>Email :</strong> johndoe@example.com</p>
+        <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p>
+        
+
+      </div>
     </div>
   </div>
+  <div class="w-200 h-200 bg-gray-200">
+    <BarChart/>
+  </div>
 </div>
+
+
 <div class="overflow-x-auto" style="margin-left: 20px; margin-right: 50px;">
     <h1 style=" margin-top: 0px;">Table Intervention :</h1>
     <div class="search-bar-container">
@@ -37,84 +44,29 @@
             <th>Action</th>
           </tr>
     </thead>
+    <!-- body -->
     <tbody>
-      <tr>
-        <th><input type="checkbox" /></th>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-        <td>jane@example.com</td>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-        <td>jane@example.com</td>
-        
-        <td>
-        <button class="delete-btn">
-        <i class="fas fa-trash"></i>
-        <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
-        </button>
-        <button class="inspect-btn">
-        <i class="fas fa-edit"></i>
-        <span class="tooltip" data-tooltip="Inspect">modify intervention </span>
-        </button>
-      </td>
-        </tr>
-      <!-- row 2 -->
-      <tr>
-        <th><input type="checkbox" /></th>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-        <td>jane@example.com</td>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-        <td>jane@example.com</td>
-        
-        <td>
-        <button class="delete-btn">
-        <i class="fas fa-trash"></i>
-        <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
-        </button>
-        <button class="inspect-btn">
-        <i class="fas fa-edit"></i>
-        <span class="tooltip" data-tooltip="Inspect">modify intervention </span>
-        </button>
-      </td>
-        </tr>
-      <!-- row 3 -->
-      <tr>
-        <th><input type="checkbox" /></th>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-        <td>jane@example.com</td>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-        <td>jane@example.com</td>
-        
-        <td>
-        <button class="delete-btn">
-        <i class="fas fa-trash"></i>
-        <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
-        </button>
-        <button class="inspect-btn">
-        <i class="fas fa-edit"></i>
-        <span class="tooltip" data-tooltip="Inspect">modify intervention </span>
-        </button>
-      </td>
-        </tr>
-
-          <tr v-for="row in filteredData" :key="row.id">
-            <td>{{ row.ppr }}</td>
-            <td>{{  row.nom  }}</td>
-            <td>{{ row.prenom }}</td>
-            <td>{{row.emaill }}</td>
-            <td><button class="delete-btn" ><i class="fas fa-trash"></i></button><button class="inspect-btn"><i class="fas fa-search"></i></button><button class="add-btn"><i class="fas fa-plus"></i></button></td>
-
+      <tr v-for="(intervention) in Interventions" :key="intervention.Id_Intr">         
+        <td><input type="checkbox" /></td>
+        <td>{{  intervention.Id_Intr }}</td>
+            <td>{{ intervention.Etablisment }}</td>
+            <td>{{intervention.Intitule_Intervention }}</td>
+            <td>{{intervention.Annee_universitaire }}</td>
+            <td>{{intervention.Semester }}</td>
+            <td>{{intervention.Date_Debut }}</td>
+            <td>{{intervention.Date_Fin }}</td>
+            <td>{{intervention.Nombre_heures }}</td>
             <td>
+        <button class="delete-btn">
+        <i class="fas fa-trash"></i>
+        <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
+        </button>
+        <button class="inspect-btn">
+        <i class="fas fa-edit"></i>
+        <span class="tooltip" data-tooltip="Inspect">modify intervention </span>
+        </button>
+      
+            
               <button class="btn btn-danger btn-sm">
                 <i class="fa fa-trash" aria-hidden="true"></i>
               </button>
@@ -129,11 +81,33 @@
   <button class="btn">3</button>
   <button class="btn">4</button>
 </div>
+<PFintervention/>
+
 </template>
 
 <script>
+import {mapActions,mapState} from 'vuex';
+import PFintervention from '../../components/PFintervention.vue';
+import BarChart from '/src/components/chart.vue'
 export default {
     name:'User',
+    components:{
+      PFintervention,
+      BarChart,
+    },
+  methods: {
+    ...mapActions([
+      'getInterventions'
+  ]),
+  },
+  computed:{
+    ...mapState([
+        'Interventions',
+    ])
+  },
+  async created(){
+    await this.$store.dispatch('getInterventions');
+  }
 }
 </script>
 

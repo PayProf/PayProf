@@ -24,37 +24,79 @@ export default createStore({
         role: "",
         token:""
       },
+      Interventions:[
+        {
+          
+          Id_Intr: "",
+          Etablisment: "",
+          Intitule_Intervention: "",
+          Annee_universitaire: "",
+          Semester: "",
+          Date_Debut: "",
+          Date_Fin: "",
+          Nombre_heures: ""
+        }
+      ]
 
 
 
 
   },
   getters: {
-    getEnseignants: (state) => {
-      return state.enseignants;
-    },
+   
   },
   mutations: {
-    addEnseignant: (state, enseignant) => {
-      state.enseignants.push(enseignant);
-    },
+    
     SetCurrentUser(state,payload){
       state.user=payload;
-    }
+    },
+    setEnseignants (state,payload){
+      state.enseignants=payload;
+    },
+    setInterventions (state,payload){
+      state.Interventions=payload;
+    },
+    addEnseignant(state, enseignants) {
+      state.enseignants.push(enseignants);
+    },
   },
   actions: {
-    addEnseignant: (context, enseignant) => {
-      context.commit('addEnseignant', enseignant);
+    async addEnseignant({ commit }, enseignants) {
+      try {
+        const response = await axios.post('http://localhost:5000/enseignants', enseignant);
+        commit('addEnseignant', response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getInterventions({commit}){
+      try{
+      const response =await axios.get('http://localhost:5000/Interventions');
+      console.log(response.data);
+      commit('setInterventions',response.data)
+      console.log(this.state.Interventions);
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
+    async getEnseignants({commit}){
+      try{
+      const response =await axios.get('http://localhost:5000/enseignants');
+      commit('setEnseignants',response.data)
+      }
+      catch(error){
+        console.log(error)
+      }
     },
     /*
     This is where the login request is made it gets the token
     the user data and stores it in the state
      */
-
     async getuser({commit}){
       try {
         const response = await axios.get('http://localhost:5000/user');
-        console.log(response.data)
         commit('SetCurrentUser',response.data)
 
       }
