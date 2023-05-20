@@ -35,6 +35,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import { useToast } from "vue-toastification";
 
 export default{
     name:'Home',
@@ -44,6 +45,16 @@ export default{
     props:{
       
     },
+
+  // setup(){
+  //     const toast=useToast();
+  //     toast.success('3la slamtk',{
+  //       timeout: 2000
+  //     });
+  //
+  //     return {toast}
+  //
+  // },
 
   /* Here there's the data we get from
   the form
@@ -64,7 +75,7 @@ export default{
   methods:{
     async login(){
       await this.$store.dispatch('login',this.FormData);
-    }
+    },
   }
 
 

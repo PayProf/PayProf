@@ -21,6 +21,7 @@
     "vue": "^3.2.36",
     "vue-chartjs": "^5.2.0",
     "vue-router": "^4.0.13",
+    "vue-toastification": "^2.0.0-rc.5",
     "vue3-charts": "^1.1.33",
     "vuex": "^4.1.0"
   },
