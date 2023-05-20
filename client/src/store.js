@@ -21,8 +21,8 @@ export default createStore({
         prenom:"",
         id:sessionStorage.getItem('USERID'),
         email:sessionStorage.getItem('EMAIL'),
-        role:4,//sessionStorage.getItem('ROLE'),
-        token:123//sessionStorage.getItem('TOKEN')
+        role:sessionStorage.getItem('ROLE'),
+        token:sessionStorage.getItem('TOKEN'),
       },
       Interventions:[
         {
@@ -116,7 +116,7 @@ export default createStore({
       }
       catch (error){
         console.log(error)
-        route.push('/')
+        router.push('/')
       }
     },
   },
