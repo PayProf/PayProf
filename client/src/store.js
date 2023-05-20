@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useToast } from "vue-toastification";
+import router from "./router/index.js";
 
 export default createStore({
   state: {
@@ -22,8 +23,8 @@ export default createStore({
         prenom:"",
         id:sessionStorage.getItem('USERID'),
         email:sessionStorage.getItem('EMAIL'),
-        role:0,//sessionStorage.getItem('ROLE'),
-        token:123//sessionStorage.getItem('TOKEN'),
+        role:sessionStorage.getItem('ROLE'),
+        token:sessionStorage.getItem('TOKEN'),
       },
       Interventions:[
         {
@@ -53,15 +54,24 @@ export default createStore({
      */
     
     SetCurrentUser(state,payload){
-      state.user.token=payload.token;
-      sessionStorage.setItem('TOKEN',payload.token);
-      state.user.role=payload.user.role;
-      sessionStorage.setItem('ROLE',payload.role);
+      state.user.token=payload.token.substring(3);
+      // sessionStorage.setItem('TOKEN',payload.token);
+      console.log(state.user.token)
+      // state.user.role=payload.user.role;
+      // sessionStorage.setItem('ROLE',payload.role);
+      // console.log(state.user.role)
+      // console.log(payload.token)
       const DecodedToken = jwtDecode(payload.token);
       state.user.email=DecodedToken.email;
-      sessionStorage.setItem('EMAIL',DecodedToken.email);
-      state.user.id=DecodedToken.id;
-      sessionStorage.setItem('USERID',DecodedToken.id);
+      // sessionStorage.setItem('EMAIL',DecodedToken.email);
+      console.log(state.user.email)
+      // state.user.id=DecodedToken.id;
+      // sessionStorage.setItem('USERID',DecodedToken.id);
+      // console.log(state.user.id)
+    },
+
+    ResetCurrentUser(){
+      sessionStorage.clear();
     },
 
 
@@ -111,8 +121,8 @@ export default createStore({
      */
     async login({commit},FormData){
       try {
-        const response = await axios.post('/login',FormData);
-        commit('SetCurrentUser',response.data)
+        const response = await axios.post('login',FormData);
+        commit('SetCurrentUser',response.data.data)
         router.push('/Dashboard')
       }
       catch (error){

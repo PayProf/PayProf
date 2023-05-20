@@ -83,10 +83,12 @@
 </div>
 <PFintervention/>
 
+  <button class="btn" @click="Reset">Reset State</button>
+
 </template>
 
 <script>
-import {mapActions,mapState} from 'vuex';
+import {mapActions,mapState,mapMutations} from 'vuex';
 import PFintervention from '../../components/PFintervention.vue';
 import BarChart from '/src/components/chart.vue'
 export default {
@@ -98,7 +100,13 @@ export default {
   methods: {
     ...mapActions([
       'getInterventions'
-  ]),
+    ]),
+    ...mapMutations([
+        'ResetCurrentUser',
+    ]),
+    Reset(){
+      this.$store.commit('ResetCurrentUser');
+    }
   },
   computed:{
     ...mapState([
