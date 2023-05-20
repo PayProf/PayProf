@@ -109,6 +109,16 @@ router.beforeEach((to, from, next) => {
     }
     else //if the user is authentificated
     {
+      if(to.name==='Dashboard')
+      {
+        if(isAdminUAE)
+          next({ name: 'Etablissements' });
+        else if(isAdmin)
+          next({ name: 'Enss' });
+        else
+          next({ name: 'Enss' });
+      }
+      else{
       if (to.meta.AdminUAEAccess && !isAdminUAE) //if he's trying to access an adminUAE page and he's not adminUAE
       {
         if (isAdmin) //if he's AdminEtab
@@ -127,6 +137,7 @@ router.beforeEach((to, from, next) => {
       else //if he's an enseignant and trying to access his page
       {
           next();
+      }
       }
     }
   }

@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 export default createStore({
   state: {
@@ -18,9 +19,10 @@ export default createStore({
       {
         nom:"",
         prenom:"",
-        email: "",
-        role:0,
-        token:123
+        id:sessionStorage.getItem('USERID'),
+        email:sessionStorage.getItem('EMAIL'),
+        role:4,//sessionStorage.getItem('ROLE'),
+        token:123//sessionStorage.getItem('TOKEN')
       },
       Interventions:[
         {
@@ -44,17 +46,31 @@ export default createStore({
    
   },
   mutations: {
+
+    /*
+    Here's the mutation that changes the current state when logged in
+     */
     
     SetCurrentUser(state,payload){
-      state.user=payload;
+      state.user.token=payload.token;
+      sessionStorage.setItem('TOKEN',payload.token);
+      state.user.role=payload.role;
+      sessionStorage.setItem('ROLE',payload.role);
+      const DecodedToken = jwtDecode(payload.token);
+      state.user.email=DecodedToken.email;
+      sessionStorage.setItem('EMAIL',DecodedToken.email);
+      state.user.id=DecodedToken.id;
+      sessionStorage.setItem('USERID',DecodedToken.id);
     },
+
+
     setEnseignants (state,payload){
       state.enseignants=payload;
     },
     setInterventions (state,payload){
       state.Interventions=payload;
     },
-    addEnseignant(state, enseignants) {
+    addEnseignant(state, enseignants){
       state.enseignants.push(enseignants);
     },
   },
@@ -91,15 +107,16 @@ export default createStore({
     /*
     This is where the login request is made it gets the token
     the user data and stores it in the state
-    For now we are gonna only get the user as we are working with JSON serverless
      */
-    async getuser({commit}){
+    async login({commit},FormData){
       try {
-        const response = await axios.get('http://localhost:5000/user');
+        const response = await axios.post('/login',FormData);
         commit('SetCurrentUser',response.data)
+        router.push('/Dashboard')
       }
       catch (error){
         console.log(error)
+        route.push('/')
       }
     },
   },
