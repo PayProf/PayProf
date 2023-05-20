@@ -33,8 +33,8 @@ export default createStore({
         nom:"",
         prenom:"",
         email: "",
-        role: "",
-        token:""
+        role:0,
+        token:123
       },
 
 
@@ -61,6 +61,7 @@ export default createStore({
     /*
     This is where the login request is made it gets the token
     the user data and stores it in the state
+    For now we are gonna only get the user as we are working with JSON serverless
      */
 
     async getuser({commit}){
@@ -68,7 +69,6 @@ export default createStore({
         const response = await axios.get('http://localhost:5000/user');
         console.log(response.data)
         commit('SetCurrentUser',response.data)
-
       }
       catch (error){
         console.log(error)
