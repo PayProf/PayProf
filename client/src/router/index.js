@@ -6,6 +6,7 @@ import Etabs from "../views/UI/Etabs.vue";
 import DefaultLayout from "../components/DefaultLayout.vue";
 import store from "../store.js";
 import Notfound from "../views/UI/Notfound.vue";
+import AdminUAE from "../views/UI/AdminUAE.vue";
 
 
 /*Routes Configuration*/

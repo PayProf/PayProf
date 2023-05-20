@@ -1,10 +1,7 @@
 <template>
+  <Header />
   
-<div class="flex flex-row"><Header title="PayProf"/></div>
 
-  <RouterView></RouterView>
-
-  <Footer/>
   
 </template>
 <!-- test -->
@@ -13,17 +10,18 @@ import {RouterView,RouterLink} from "vue-router"
 import { def } from '@vue/shared';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
+import AdminUAE from './views/UI/AdminUAE.vue'
+import Admin from "./views/UI/Admin.vue";
 
 
 
 export default{
   name:'App',
-  components:{
+  components:{ 
     Header,
     Footer,
-    // Home
-    
-    
+    Admin,
+    AdminUAE,
 },
   props:{
     title:{

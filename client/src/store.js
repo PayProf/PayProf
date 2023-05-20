@@ -19,7 +19,7 @@ export default createStore({
         nom:"",
         prenom:"",
         email: "",
-        role:0,
+        role:4,
         token:123
       },
       Interventions:[
