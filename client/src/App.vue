@@ -1,8 +1,9 @@
 <template>
   
 <div class="flex flex-row"><Header title="PayProf"/></div>
- 
-  <RouterView/>
+
+  <RouterView></RouterView>
+
   <Footer/>
   
 </template>
@@ -12,7 +13,6 @@ import {RouterView,RouterLink} from "vue-router"
 import { def } from '@vue/shared';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-// import Home from './views/Home.vue';
 
 
 

@@ -1,12 +1,8 @@
 import axios from "axios";
 
-const axiosinstance=axios.create({
-    baseURL:'http://localhost:5000/',
-    headers:{
-      'Content-Type':'application/json',
-    },
+function Setdefaults(){
+    axios.defaults.baseURL='http://localhost:5000/';
+}
 
-})
-
-export default axiosinstance;
+export default Setdefaults;
 
