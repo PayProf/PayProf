@@ -21,15 +21,25 @@ use Illuminate\Support\Facades\Route;
 */
 route::apiResource('ens',EnseignantController::class);
 //route of  ShowMyInterventions
-route::get('ens/{ens}/inter',[EnseignantController::class,'ShowMyInterventions']);
+route::get('ens/{ens}/MyIntervention',[EnseignantController::class,'ShowMyInterventions']);
 //route of  ShowMyPayments
-route::get('ens/{ens}/pay',[EnseignantController::class,'ShowMyPayments']);
+route::get('ens/{ens}/MyPayments',[EnseignantController::class,'ShowMyPayments']);
+
+route::POST('ens/{ens}/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
+
+route::get('MyEtabProf',[EnseignantController::class,'MyEtabProf']);
 
 route::apiResource('adm',AdministrateurController::class);
 
 route::apiResource('grd',GradeController::class);
 
 route::apiResource('int',InterventionController::class);
+//route of showmore details about an intervention
+route::get('int/{int}/showmore',[InterventionController::class ,'ShowMore']);
+//route of the activation of the visUAE
+route::PATCH('int/{int}/visauae',[InterventionController::class ,'activeVisaUae']);
+//route of the activation of the visETAb
+route::PATCH('int/{int}/visaetab',[InterventionController::class ,'activeVisaEtab']);
 
 route::apiResource('pay',PaiementsController::class);
 

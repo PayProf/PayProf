@@ -18,6 +18,8 @@ class Enseignant extends Model
         'etablissement_id',
         'grade_id',
         'user_id',
+        'image',
+        'email_perso'
 
     ];
 

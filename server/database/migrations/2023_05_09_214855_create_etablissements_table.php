@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('nom')->unique();
             $table->string('telephone')->unique();
             $table->string('Faxe')->unique();
-            $table->unsignedBigInteger('Nbrenseignants')->nullable();
+            $table->unsignedBigInteger('Nbrenseignants')->default(0)->nullable();
             $table->string('ville');
             $table->timestamps();
 

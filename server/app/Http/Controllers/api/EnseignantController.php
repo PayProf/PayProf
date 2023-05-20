@@ -8,21 +8,25 @@ use App\Http\Requests\StoreEnseignantRequest;
 use App\Http\Requests\UpdateEnseignantRequest;
 use App\Http\Resources\EnseignantInterventionResource;
 use App\Models\Enseignant;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 class EnseignantController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+        use HttpResponses;
      public function index()
-                {
-                                //return Enseignant::with('etablissement','grade')->paginate(5);// display all the columns
-
+                {    //this methode is for the adminUae and also Admin Etab
+                              //  return Enseignant::with('etablissement','grade')->paginate(5);// display all the columns
+                       
                                 return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10)); 
+                                
                                 //display just the main columns such as Nom|prenom|PPR|date_naissance|etab|Garad|etab_id|grade_id/user_role
                                  //  by using the class resource that give this privileges
                 }
@@ -38,7 +42,26 @@ class EnseignantController extends Controller
                 {  
                                 //we create  (StoreEnseignantRequest class  that contains all the validation rules that genarte error messages in case of some issues
                                 //the static method create impose the selection of fillable (mass assignable) fields in the model 
-                                return new EnseignantResource(Enseignant::create($request->all()));
+                                //$grade_id= 
+                                 $u=DB::table('grades')
+                                ->select('id')
+                                ->where('designation', $request['Grade'])
+                                ->first();
+                               
+                                $request['IdEtablissement']=1;//soit $request[id] soit auth()->user()->administrateur->etablissement_id
+                               // return new EnseignantResource(Enseignant::create($request->all()));
+                                    $enseignant = new Enseignant();
+                                    $enseignant->PPR = $request['PPR'];
+                                    $enseignant->nom = $request['nom'];
+                                    $enseignant->prenom = $request['prenom'];
+                                    $enseignant->date_naissance = $request['DateNaissance'];
+                                    $enseignant->etablissement_id = $request['IdEtablissement'];
+                                    $enseignant->grade_id =$u->id;  //
+                                   // $enseignant->user_id = $request['IdUser'];
+                                    $enseignant->email_perso=$request['email_perso'];
+                                    $enseignant->save();
+                                   return $this->succes("","added successfully");
+
                 }
 
     /**
@@ -48,17 +71,18 @@ class EnseignantController extends Controller
      * @return \Illuminate\Http\Response
      */
       public function show($id)
-                {
+                 {
                                 
                                 // display  the main  columns of Enseignant 
                                 
-                                return new EnseignantResource(Enseignant::with('etablissement','grade','user')->find($id));
+                     return new EnseignantResource(Enseignant::with('etablissement','grade')->find($id));
+
                                 
                                 // display all the columns of enseignant 
                                         
                                 //$ens= Enseignant::with('grade','etablissement')->where('id',$id)->get();
                                //return response()->json($ens);
-                }
+                 }
         
      
 
@@ -72,8 +96,10 @@ class EnseignantController extends Controller
       public function update( UpdateEnseignantRequest $request, $id)
                 {   
                 
-                                //the class UpdateEnseignantRequest handles both PUT and Patch Request(for more details check the class  ) 
-                                 Enseignant::find($id)->update($request->all());
+                               //the class UpdateEnseignantRequest handles both PUT and Patch Request(for more details check the class  ) 
+                      
+                              Enseignant::find($id)->update($request->all());
+                              
 
 
                               
@@ -104,16 +130,49 @@ class EnseignantController extends Controller
                                 //return response()->json($ensint);
                 
                                 //this method display all the interventions of a specified prof
-                               return new EnseignantInterventionResource(Enseignant::with('interventions.etablissement')->find($id));
-                                
+                                // attention  10 doit etre remplacée par  atttttttention  auth()->user()->id
+                                     //  auth()->user()->id  
+                                return  EnseignantInterventionResource::collection (Enseignant::where('user_id','=',$id)->with('interventions.etablissement')->get());
+                                                                                                //  auth()->user()->id                          
+                              // return response()->json(  dd(Enseignant::with('interventions.etablissement')->where('user_id','=',4))));
+                              // return Enseignant::where('user_id','=',4)->with('interventions.etablissement')->get();
                         
                 }
 
                 public function ShowMyPayments($id)
-                {
-                      $ens=  Enseignant::with('paiements')->find($id);
+                {            //  auth()->user()->id ;
+                      $ens=Enseignant::where('user_id','=',$id)->with('paiements')->get();
+                                           
                       return response()->json($ens);
 
                 }
    
+
+               //this method is specially for the adminEtab
+//                 public function MyEtabProf()
+//                 { 
+//                   $id=7;                       //auth()->user()->administrateur->etablissement_id;
+//                   return EnseignantResource::collection(Enseignant::where('etablissement_id','=',$id)->with('etablissement','grade')->latest()->paginate(10)); 
+
+//                 }
+               public function UploadMyImage( Request $request,$id)
+               {
+                    $ens=Enseignant::where('user_id','=',$id)->first();
+                    if($request->hasFile('image'))
+                    { 
+                         $file=$request->image;
+                         $image_name=time().'_'. $file->getClientOriginalName();
+                         $file->move(public_path('uploads'),$image_name);
+                         $ens->image=$image_name;
+                         $ens->save();
+                   }
+                   return response()->json($request->hasFile('image'));
+                    
+                  
+                    
+                   
+               }
+
+                
+// 
 }
