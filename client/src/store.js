@@ -21,8 +21,8 @@ export default createStore({
         prenom:"",
         id:sessionStorage.getItem('USERID'),
         email:sessionStorage.getItem('EMAIL'),
-        role:sessionStorage.getItem('ROLE'),
-        token:sessionStorage.getItem('TOKEN')
+        role:4,//sessionStorage.getItem('ROLE'),
+        token:123//sessionStorage.getItem('TOKEN')
       },
       Interventions:[
         {
@@ -112,9 +112,11 @@ export default createStore({
       try {
         const response = await axios.post('/login',FormData);
         commit('SetCurrentUser',response.data)
+        router.push('/Dashboard')
       }
       catch (error){
         console.log(error)
+        route.push('/')
       }
     },
   },
