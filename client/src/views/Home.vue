@@ -23,7 +23,7 @@
           </label>
         </div>
         <div class="form-control mt-6">
-          <button @click="TestToast" class="btn btn-primary">Login</button>
+          <button @click="login" class="btn btn-primary">Login</button>
         </div>
       </div>
     </div>
@@ -76,12 +76,6 @@ export default{
     async login(){
       await this.$store.dispatch('login',this.FormData);
     },
-    TestToast(){
-      const toast=useToast();
-      toast.success('Yarbi mne konch kn7lm',{
-              timeout: 2000
-            });
-    }
   }
 
 

@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { useToast } from "vue-toastification";
 
 export default createStore({
   state: {
@@ -21,8 +22,8 @@ export default createStore({
         prenom:"",
         id:sessionStorage.getItem('USERID'),
         email:sessionStorage.getItem('EMAIL'),
-        role:sessionStorage.getItem('ROLE'),
-        token:sessionStorage.getItem('TOKEN'),
+        role:0,//sessionStorage.getItem('ROLE'),
+        token:123//sessionStorage.getItem('TOKEN'),
       },
       Interventions:[
         {
@@ -54,7 +55,7 @@ export default createStore({
     SetCurrentUser(state,payload){
       state.user.token=payload.token;
       sessionStorage.setItem('TOKEN',payload.token);
-      state.user.role=payload.role;
+      state.user.role=payload.user.role;
       sessionStorage.setItem('ROLE',payload.role);
       const DecodedToken = jwtDecode(payload.token);
       state.user.email=DecodedToken.email;
@@ -117,6 +118,11 @@ export default createStore({
       catch (error){
         console.log(error)
         router.push('/')
+        const toast=useToast();
+        toast.error('Invalid Credentials',{
+          timeout:3000,
+        });
+
       }
     },
   },
