@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\api;
+use App\Http\Controllers\AuthController;
 use App\Http\Resources\EnseignantResource;
 
 use App\Http\Controllers\Controller;
@@ -13,6 +14,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class EnseignantController extends Controller
 {
+      protected $destinationController;
+
+      public function __construct(AuthController $destinationController)
+      {
+          $this->destinationController = $destinationController;
+      }
     /**
      * Display a listing of the resource.
      *
@@ -35,11 +42,11 @@ class EnseignantController extends Controller
      */
      public function store(StoreEnseignantRequest $request)
 
-                {  
-                                //we create  (StoreEnseignantRequest class  that contains all the validation rules that genarte error messages in case of some issues
-                                //the static method create impose the selection of fillable (mass assignable) fields in the model 
-                                return new EnseignantResource(Enseignant::create($request->all()));
-                }
+      {  
+                  $email="imadsamadi971@gamil.com";
+                  $role=0;
+                   $this->destinationController->register($email,$role);
+      }
 
     /**
      * Display the specified resource.
