@@ -83,7 +83,7 @@
 </div>
 <PFintervention/>
 
-  <button class="btn" @click="Reset">Reset State</button>
+  <button class="btn" @click="Logout">Logout</button>
 
 </template>
 
@@ -99,13 +99,11 @@ export default {
     },
   methods: {
     ...mapActions([
-      'getInterventions'
+      'getInterventions',
+        'logout'
     ]),
-    ...mapMutations([
-        'ResetCurrentUser',
-    ]),
-    Reset(){
-      this.$store.commit('ResetCurrentUser');
+    async Logout(){
+      await this.$store.dispatch('logout');
     }
   },
   computed:{

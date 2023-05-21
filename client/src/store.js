@@ -21,10 +21,10 @@ export default createStore({
       {
         nom:"",
         prenom:"",
-        id:sessionStorage.getItem('USERID'),
-        email:sessionStorage.getItem('EMAIL'),
-        role:sessionStorage.getItem('ROLE'),
-        token:sessionStorage.getItem('TOKEN'),
+        id:localStorage.getItem('USERID'),
+        email:localStorage.getItem('EMAIL'),
+        role:localStorage.getItem('ROLE'),
+        token:localStorage.getItem('TOKEN'),
       },
       Interventions:[
         {
@@ -54,24 +54,15 @@ export default createStore({
      */
     
     SetCurrentUser(state,payload){
-      state.user.token=payload.token.substring(3);
-      // sessionStorage.setItem('TOKEN',payload.token);
-      console.log(state.user.token)
-      // state.user.role=payload.user.role;
-      // sessionStorage.setItem('ROLE',payload.role);
-      // console.log(state.user.role)
-      // console.log(payload.token)
-      const DecodedToken = jwtDecode(payload.token);
-      state.user.email=DecodedToken.email;
-      // sessionStorage.setItem('EMAIL',DecodedToken.email);
-      console.log(state.user.email)
-      // state.user.id=DecodedToken.id;
-      // sessionStorage.setItem('USERID',DecodedToken.id);
-      // console.log(state.user.id)
+      state.user.token=payload.token;
+      localStorage.setItem('TOKEN',payload.token);
+      state.user.role=payload.user.role;
+      localStorage.setItem('ROLE',payload.role);
     },
 
-    ResetCurrentUser(){
-      sessionStorage.clear();
+    ResetCurrentUser(state){
+      localStorage.clear();
+      state.user.token=null;
     },
 
 
@@ -117,7 +108,7 @@ export default createStore({
     },
     /*
     This is where the login request is made it gets the token
-    the user data and stores it in the state
+    the user data and stores it in the state Abcd314!
      */
     async login({commit},FormData){
       try {
@@ -135,5 +126,35 @@ export default createStore({
 
       }
     },
+    /*
+    This is where the logout request it sends a post request and received a message
+    if the user is not authentificated it directly log him out, if he's authentificated
+    it logs him out and resets the state
+     */
+    async logout({commit}){
+      try{
+        const token = localStorage.getItem('TOKEN'); // Here i used localstorage but later will change it to state
+        console.log(token)
+        const config = {
+          headers: {Authorization: `Bearer ${token}`}
+        };
+        const response = await axios.post('logout',null,config);
+        console.log(response)
+        commit('ResetCurrentUser')
+        console.log('Reset Succesful')
+        router.push('/');
+      }
+      catch(error){
+        console.log(error)
+        if (error.response && error.response.status === 401){
+          commit('ResetCurrentUser');
+          router.push('/');
+        }
+        const toast=useToast();
+        toast.error("Something's Wrong :(",{
+          timeout:3000,
+        });
+      }
+    }
   },
 });
