@@ -43,12 +43,9 @@ class EnseignantController extends Controller
                                 //we create  (StoreEnseignantRequest class  that contains all the validation rules that genarte error messages in case of some issues
                                 //the static method create impose the selection of fillable (mass assignable) fields in the model 
                                 //$grade_id= 
-                                 $u=DB::table('grades')
-                                ->select('id')
-                                ->where('designation', $request['Grade'])
-                                ->first();
-                               
-                                $request['IdEtablissement']=1;//soit $request[id] soit auth()->user()->administrateur->etablissement_id
+                                    $enseignant=new Enseignant();
+                                    $grade_id=$enseignant->IdGrade($request['Grade']);
+                                    $request['IdEtablissement']=1;//soit $request[id] soit auth()->user()->administrateur->etablissement_id
                                // return new EnseignantResource(Enseignant::create($request->all()));
                                     $enseignant = new Enseignant();
                                     $enseignant->PPR = $request['PPR'];
@@ -56,7 +53,7 @@ class EnseignantController extends Controller
                                     $enseignant->prenom = $request['prenom'];
                                     $enseignant->date_naissance = $request['DateNaissance'];
                                     $enseignant->etablissement_id = $request['IdEtablissement'];
-                                    $enseignant->grade_id =$u->id;  //
+                                    $enseignant->grade_id =$grade_id;  //
                                    // $enseignant->user_id = $request['IdUser'];
                                     $enseignant->email_perso=$request['email_perso'];
                                     $enseignant->save();
@@ -98,10 +95,17 @@ class EnseignantController extends Controller
                 
                                //the class UpdateEnseignantRequest handles both PUT and Patch Request(for more details check the class  ) 
                       
-                              Enseignant::find($id)->update($request->all());
-                              
-
-
+                                   $enseignant=Enseignant::find($id);
+                                   $grade_id=$enseignant->IdGrade($request->Grade);
+                                   $enseignant->PPR = $request['PPR'];
+                                   $enseignant->nom = $request['nom'];
+                                   $enseignant->prenom = $request['prenom'];
+                                   $enseignant->date_naissance = $request['DateNaissance'];
+                                   $enseignant->grade_id=$grade_id;
+                                   $enseignant->email_perso=$request['email_perso'];
+                                   //dd($enseignant);
+                                   $enseignant->save();
+                                   return $this->succes("","updated successfully");
                               
                 }
 
@@ -115,7 +119,7 @@ class EnseignantController extends Controller
                 { 
                                 // findorfail send a error msg in case of the entry of invalid id
                                 $ens= Enseignant::FindOrfail($id);
-                        
+                                unlink(public_path('uploads').'/'.$ens->image);
                                 $ens->delete();
                         
                                 // success msg 
@@ -157,20 +161,43 @@ class EnseignantController extends Controller
 //                 }
                public function UploadMyImage( Request $request,$id)
                {
-                    $ens=Enseignant::where('user_id','=',$id)->first();
-                    if($request->hasFile('image'))
-                    { 
-                         $file=$request->image;
-                         $image_name=time().'_'. $file->getClientOriginalName();
-                         $file->move(public_path('uploads'),$image_name);
-                         $ens->image=$image_name;
-                         $ens->save();
-                   }
-                   return response()->json($request->hasFile('image'));
-                    
-                  
-                    
+
+                         $request->validate(
+                              [
+                                   'image'=>'required|max:1024|mimes:png,jpg,png'
+                              ]
+                              );
+
+
+                            $ens=Enseignant::where('user_id','=',$id)->first();
+                            if($request->hasFile('image'))
+                         { 
+                              $file=$request->image;
+                              $image_name=time().'_'. $file->getClientOriginalName();
+                              $file->move(public_path('uploads'),$image_name);
+                             
+                             
+                              if($ens->image)
+                         {
+                              unlink(public_path('uploads'). '/' .$ens->image);
+                         }
+                              
+                              $ens->image=$image_name;
+                              $result=$ens->save();
+                         }
+                              
+                         if($result)
+                         {
+                              return $this->succes("","image uploaded successfully");    
+                         }
+ 
                    
+               }
+
+
+               public function ShowMyProfil($id)
+               {
+                    return new EnseignantResource(Enseignant::where('user_id','=',$id)->with('etablissement','grade')->first());
                }
 
                 

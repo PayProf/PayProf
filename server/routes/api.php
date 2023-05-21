@@ -24,10 +24,13 @@ route::apiResource('ens',EnseignantController::class);
 route::get('ens/{ens}/MyIntervention',[EnseignantController::class,'ShowMyInterventions']);
 //route of  ShowMyPayments
 route::get('ens/{ens}/MyPayments',[EnseignantController::class,'ShowMyPayments']);
-
+//route of UploadMyImage
 route::POST('ens/{ens}/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
 
-route::get('MyEtabProf',[EnseignantController::class,'MyEtabProf']);
+//route::get('MyEtabProf',[EnseignantController::class,'MyEtabProf']);
+
+//route of ShowMyProfil
+route::get('ens/{ens}/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
 
 route::apiResource('adm',AdministrateurController::class);
 

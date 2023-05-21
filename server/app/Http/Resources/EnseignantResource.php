@@ -24,7 +24,7 @@ class EnseignantResource extends JsonResource
             'IdEtablissement'=>$this->etablissement->id,
             'NomEtab'=>$this->etablissement->nom,
             'IdGrade'=>$this->grade->id,
-            'CodeGrade'=>$this->grade->designation,
+            'Grade'=>$this->grade->designation,
             'IdUser'=>$this->user_id,
             'Email'=>$this->email_perso,
             'image'=>$this->image,

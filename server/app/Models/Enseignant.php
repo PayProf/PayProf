@@ -24,7 +24,14 @@ class Enseignant extends Model
     ];
 
 
-
+     public function IdGrade($designation)
+     {
+        $grade_id=DB::table('grades')
+        ->select('id')
+        ->where('designation', $designation)
+        ->first();
+        return $grade_id->id;
+     }
 
     public function etablissement(){
         return $this->belongsTo(Etablissement::class);

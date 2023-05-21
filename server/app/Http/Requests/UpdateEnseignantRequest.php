@@ -34,9 +34,9 @@ class UpdateEnseignantRequest extends FormRequest
                         'nom'=>['required'],
                         'prenom'=>['required'],
                         'DateNaissance'=>['required','date'],
-                        'IdEtablissement'=>['required'],
-                        'IdGrade'=>['required'],
-                        'email_perso'=>['required','email','enseignants:email_perso'],
+                      //  'Etablissement'=>['required'],
+                        'Grade'=>['required'],
+                       // 'email_perso'=>['required','email','unique:enseignants'],
                        // 'IdUser',
                        
                     ];
@@ -44,23 +44,21 @@ class UpdateEnseignantRequest extends FormRequest
 
             else // if the method is PATCH
             { 
-
-                return [                 
+                
+                return
+                 [                 
                     
                     // only the specified fileds will be modified and sent to the db
-                    'email_perso'=>['sometimes','required','email','enseignants:email_perso'],
-                    'image'=>['required','sometimes','file','mimes:jpeg,png,jpg','max:2048'],
-
-                   
-
-                ];
+                    'email_perso'=>['sometimes','required','email','unique:enseignants'],
+                 ];
+                
             }
     }
     // protected function prepareForValidation()
     // {
     //     $this->merge([
     //         'date_naissance'=> ucfirst($this->DateNaissance),
-    //         'etablissement_id'=>ucfirst($this->IdEtablissement),
+    //        // 'etablissement_id'=>ucfirst($this->IdEtablissement),
     //         'grade_id'=>ucfirst($this->IdGrade),
     //        // 'user_id'=>ucfirst($this->IdUser),
     //     ]);
