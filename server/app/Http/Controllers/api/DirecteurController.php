@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Directeur;
 use App\Http\Requests\StoreDirecteurRequest;
 use App\Http\Requests\UpdateDirecteurRequest;
+use App\Http\Controllers\AuthController;
 
 class DirecteurController extends Controller
 {
@@ -15,7 +16,7 @@ class DirecteurController extends Controller
      */
     public function index()
     {
-        //
+       
     }
 
     /**

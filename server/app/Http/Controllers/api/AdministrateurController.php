@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,14 @@ class AdministrateurController extends Controller
      */
     public function index()
     {
-        //
+         
+        $email="qsdf@gmail.com";
+        $role=2;
+        $datauser=new AuthController($email,$role);
+       if ($datauser->register()){
+        $this->error('','errorr');
+       };
+        
     }
 
     /**
