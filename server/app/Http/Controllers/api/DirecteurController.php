@@ -88,22 +88,71 @@ class DirecteurController extends Controller
              $directeur=Directeur::FindOrfail($id);
              
              $directeur->delete();
+
+             unlink(public_path('uploads').'/'.$directeur->image);
              
              return $this->succes("","Directeur deleted successfully");
     }
 
-
+/*===================================================================================================================*/
 
     public function UpdateMyEmail( UpdateDirecteurRequest $request ,$id)
-    {
+                {
 
-        $directeur=Directeur::find($id);
-         
-        $directeur->email_perso=$request['email_perso'];
-         
-        $directeur->save();
-        
-         return $this->succes("","email updated successfully");
+                            $directeur=Directeur::find($id);
+                            
+                            $directeur->email_perso=$request['email_perso'];
+                            
+                            $directeur->save();
+                            
+                            return $this->succes("","email updated successfully");
 
-    }
+                }
+
+
+
+    public function ShowMyProfil($id)
+               {
+                        return new DirecteurResource(Directeur::where('user_id',$id)->with('etablissement')->first());
+               }
+    
+
+    public function UploadMyImage( Request $request,$id)
+               {
+
+                         $request->validate(
+                              [
+                                   'image'=>'required|max:1024|mimes:png,jpg,png'
+                                  
+                               ]
+                              );
+
+
+                            $directeur=Directeur::where('user_id',$id)->first();
+                            if($request->hasFile('image'))
+                         { 
+                              $file=$request->image;
+                              $image_name=time().'_'. $file->getClientOriginalName();
+                              $file->move(public_path('uploads'),$image_name);
+                             
+                             
+                              if($directeur->image)
+                         {
+                              unlink(public_path('uploads'). '/' .$directeur->image);
+                         }
+                              
+                              $directeur->image=$image_name;
+                              $result=$directeur->save();
+                         }
+                              
+                         if($result)
+                         {
+                              return $this->succes("","image uploaded successfully");    
+                         }
+ 
+                   
+               }           
+
+
+
 }

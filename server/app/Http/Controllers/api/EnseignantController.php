@@ -121,11 +121,13 @@ class EnseignantController extends Controller
                 { 
                                 // findorfail send a error msg in case of the entry of invalid id
                                 $ens= Enseignant::FindOrfail($id);
+                                
                                 unlink(public_path('uploads').'/'.$ens->image);
+                                
                                 $ens->delete();
                         
                                 // success msg 
-                                return response()->json(["message"=>"Enseignant deleted successfuly"]);
+                                return $this->succes("","enseignant deleted successfully");
                 
                 }
 

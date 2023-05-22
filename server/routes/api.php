@@ -56,6 +56,13 @@ route::apiResource('pay',PaiementsController::class);
 route::apiResource('etab',EtablissementController::class);
 
 route::apiResource('dir',DirecteurController::class);
+route::POST('ens/{ens}/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
+route::get('ens/{ens}/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
+route::PATCH('ens/{ens}/UpdateMyEmail',[EnseignantController::class,'UpdateMyEmail']);
+
+
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
