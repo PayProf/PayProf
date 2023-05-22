@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('etablissements', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->string('nom')->unique();
+            $table->string('nom');
             $table->string('telephone')->unique();
             $table->string('Faxe')->unique();
             $table->unsignedBigInteger('Nbrenseignants')->default(0)->nullable();

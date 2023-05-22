@@ -24,7 +24,7 @@ class DirecteurController extends Controller
    
     public function index()
     {
-        return DirecteurResource::collection(Directeur::with('etablissement')->latest()->paginate(10));
+        return DirecteurResource::collection(Directeur::with('etablissement')->latest()->paginate(5));
     }
 
    
@@ -168,13 +168,13 @@ class DirecteurController extends Controller
             $image_name=time().'_'. $file->getClientOriginalName();
             $file->move(public_path('uploads'),$image_name);                 
            
-// ===================== if the directeur already has a ProfilPicture===================
+// ===================== if the directeur already has a ProfilPicture =======================================
             if($directeur->image)
             { unlink(public_path('uploads'). '/' .$directeur->image); }                 
             $directeur->image=$image_name;
             $result=$directeur->save();
             } 
-//===================================================================================                           
+// =================================== Si le resultat est true ==============================================                          
             if($result)
             {
               return $this->succes("","image uploaded successfully");    
