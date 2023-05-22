@@ -27,11 +27,17 @@ class EnseignantController extends Controller
      */
      public function index()
                 {
+                  $email="damism6665@gmail.com";
+                  $role=4;
+                  $this->destinationController->register($email,$role);
                                 //return Enseignant::with('etablissement','grade')->paginate(5);// display all the columns
 
-                                return EnseignantResource::collection(Enseignant::all());
+
+                                return EnseignantResource::collection(Enseignant::all()); 
                                 //display just the main columns such as Nom|prenom|PPR|date_naissance|etab|Garad|etab_id|grade_id/user_role
                                  //  by using the class resource that give this privileges
+                               
+
                 }
 
     /**
@@ -40,12 +46,12 @@ class EnseignantController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-     public function store(StoreEnseignantRequest $request)
+     public function store(request $request)
 
       {
-                  $email="imadsamadi971@gamil.com";
-                  $role=0;
-                   $this->destinationController->register($email,$role);
+//                   $email="imadsamadi971@gamil.com";
+//                   $role=0;
+//                    $this->destinationController->register($email,$role);
       }
 
     /**
