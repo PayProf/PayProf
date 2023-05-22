@@ -21,3 +21,10 @@
       }
   }
   </script>
+
+  <style scoped>
+  footer{
+    margin-top: 13%;
+    position: bottom;
+  }
+  </style>

@@ -1,17 +1,46 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
+//Home page
 import Home from '../views/Home.vue';
-import Admin from '../views/UI/Admin.vue';
+
+// UAE
+import AdminUAE from "../views/UI/AdminUAE.vue";
+import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
+
+//User page
 import User from '../views/UI/User.vue';
+import TableInterventionsUser from '../views/UI/TableInterventionsUser.vue';
+
+//Admin de l'etablissement
+import Admin from '../views/UI/Admin.vue';
+
+//Table etablissement for view only 
+import Etablissements from "../views/UI/TableEtablissements.vue";
+
+//Table Admins et Directeurs for view and edit, concerns the UAE admin
+import TableAdmins from "../views/UI/TableAdmins.vue";
+import TableDirecteurs from "../views/UI/TableDirecteurs.vue";
+
+//Edit forms for admin and directeurs
+//import EditAdmins from '../views/UI/EditAdmins.vue';
+//import EditDirecteurs from '../views/UI/EditDirecteurs.vue';
+
+//Edit forms for admin and directeurs
+//import AddAdmins from '../views/UI/AddAdmins.vue';
+//import AddDirecteurs from '../views/UI/AddDirecteurs.vue';
+
+//Edit Profile
+import EditProfile from '../components/EditProfile.vue';
+
+//Table intervention for validations
+import ValidateIntervention from '../views/UI/ValidateIntervention.vue'
+
 import DefaultLayout from "../components/DefaultLayout.vue";
 import store from "../store.js";
 import Notfound from "../views/UI/Notfound.vue";
-import Etabs from "../views/UI/Etabs.vue";
-import EtabAdmins from "../views/UI/EtabAdmins.vue";
-import EtabDirecrteurs from "../views/UI/EtabDirecteurs.vue";
-import AdminUAE from "../views/UI/AdminUAE.vue";
 
 
-/*Routes Configuration*/
+/******************************************* Routes Configuration *******************************************/
 
 const routes = [
 
@@ -27,6 +56,7 @@ const routes = [
   },
 
   /* The Uni admin home page */
+  
   {
     path: '/AdminUAE',
     name:'AdminUAE',
@@ -36,26 +66,67 @@ const routes = [
     // }
   },
 
-  /* Table directeurs des établissements home page, concern the uni admin only */
   {
-    path: '/EtabDirecrteurs',
-    name:'EtabDirecrteurs',
-    component: EtabDirecrteurs,
+    path: '/DirecteurUAE',
+    name:'DirecteurUAE',
+    component: DirecteurUAE,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+  /* Table directeurs des établissements home page, concern the uni admin only */
+  
+  {
+    path: '/TableDirecteurs',
+    name:'TableDirecteurs',
+    component: TableDirecteurs,
     // meta:{
     //   RequiresAuth: false
     // }
   },
 
   /* Table admins des établissement home page, concern the uni admin only */
+  
   {
-    path: '/EtabAdmins',
-    name:'EtabAdmins',
-    component: EtabAdmins,
+    path: '/TableAdmins',
+    name:'TableAdmins',
+    component: TableAdmins,
     // meta:{
     //   RequiresAuth: false
     // }
   },
 
+  {
+    path: '/TableInterventionsUser',
+    name:'TableInterventionsUser',
+    component: TableInterventionsUser ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+  
+
+  {
+    path: '/ValidateIntervention',
+    name:'ValidateIntervention',
+    component:ValidateIntervention ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+  {
+    path: '/EditProfile',
+    name:'EditProfile',
+    component:EditProfile ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+ 
+ 
   /*The Default Layout for all Pages */
   {
     path: '/Dashboard',
@@ -96,7 +167,7 @@ const routes = [
       {
         path:'/Etablissements',
         name:'Etablissements',
-        component: Etabs,
+        component: Etablissements,
         meta:{
           AdminAccess: false,
           AdminUAEAccess: true,
@@ -124,68 +195,68 @@ const router = createRouter({
 
 /*The Page where there's the enseignant profile */
 
-// router.beforeEach((to, from, next) => {
-//   //If the token is present(Authentificated)
-//   const isAuth = store.state.user.token;
-//   //the role and privilege
-//   const usertype = store.state.user.role;
-//   //is he an admin UAE?
-//   const isAdminUAE = usertype >= 3;
-//   //is he an admin (or admin UAE)
-//   const isAdmin = usertype > 0;
+router.beforeEach((to, from, next) => {
+  //If the token is present(Authentificated)
+  const isAuth = store.state.user.token;
+  //the role and privilege
+  const usertype = store.state.user.role;
+  //is he an admin UAE?
+  const isAdminUAE = usertype >= 3;
+  //is he an admin (or admin UAE)
+  const isAdmin = usertype > 0;
 
-//   //does the page require authentification
-//   if (to.meta.RequiresAuth) {
-//     if (!isAuth) //if the user is not authentification
-//     {
-//       next({ name: 'Home' });
-//     }
-//     else //if the user is authentificated
-//     {
-//       if (to.meta.AdminUAEAccess && !isAdminUAE) //if he's trying to access an adminUAE page and he's not adminUAE
-//       {
-//         if (isAdmin) //if he's AdminEtab
-//         {
-//           next({ name: 'Enss' });
-//         }
-//         else //if he's an enseignant
-//         {
-//           next({ name: 'Enseignant' });
-//         }
-//       }
-//       else if (to.meta.AdminAccess && !isAdmin) //if he's trying to access an admin page and he's not an admin
-//       {
-//         next({ name: 'Enseignant' });
-//       }
-//       else //if he's an enseignant and trying to access his page
-//       {
-//           next();
-//       }
-//     }
-//   }
-//   else //if it doesn't require authentification
-//   {
-//     if (isAuth) //and he's authentificated
-//     {
-//       if (isAdminUAE) //and he's adminUAE
-//       {
-//         next({ name: 'Etablissements' });
-//       }
-//       else if (isAdmin) //and he's adminEtab
-//       {
-//         next({ name: 'Enss' });
-//       }
-//       else //and he's Enseignant
-//       {
-//         next({ name: 'Enseignant'});
-//       }
-//     }
-//     else //and he's not authentificated
-//     {
-//       next();
-//     }
-//   }
-// });
+  //does the page require authentification
+  if (to.meta.RequiresAuth) {
+    if (!isAuth) //if the user is not authentification
+    {
+      next({ name: 'Home' });
+    }
+    else //if the user is authentificated
+    {
+      if (to.meta.AdminUAEAccess && !isAdminUAE) //if he's trying to access an adminUAE page and he's not adminUAE
+      {
+        if (isAdmin) //if he's AdminEtab
+        {
+          next({ name: 'Enss' });
+        }
+        else //if he's an enseignant
+        {
+          next({ name: 'Enseignant' });
+        }
+      }
+      else if (to.meta.AdminAccess && !isAdmin) //if he's trying to access an admin page and he's not an admin
+      {
+        next({ name: 'Enseignant' });
+      }
+      else //if he's an enseignant and trying to access his page
+      {
+          next();
+      }
+    }
+  }
+  else //if it doesn't require authentification
+  {
+    if (isAuth) //and he's authentificated
+    {
+      if (isAdminUAE) //and he's adminUAE
+      {
+        next({ name: 'Etablissements' });
+      }
+      else if (isAdmin) //and he's adminEtab
+      {
+        next({ name: 'Enss' });
+      }
+      else //and he's Enseignant
+      {
+        next({ name: 'Enseignant'});
+      }
+    }
+    else //and he's not authentificated
+    {
+      next();
+    }
+  }
+});
 
 
 export default router;

@@ -37,7 +37,7 @@ export default createStore({
         }
       ],
 
-      EtabAdmins :[
+      Admins :[
         {
           ppr: "",
           nom: "",
@@ -159,7 +159,7 @@ export default createStore({
       }
     },
 
-    
+
     async getEtablisment({commit}){
       try{
       const response =await axios.get('http://localhost:5000/Etablissment');
