@@ -24,6 +24,10 @@ export default {
     ]),
   },
 
+  /*Right after the creation of the view
+    I verify the validity of the token if the token expired
+    I refresh it*/
+
   async created(){
     if(store.state.user.token && this.IsExpired)
     {

@@ -80,10 +80,14 @@ const store = createStore({
 
     },
 
+    /*Resets the state*/
+
     ResetCurrentUser(state){
       localStorage.clear();
       state.user.token=null;
     },
+
+    /*Manages the state of the access token and refresh token*/
 
     RefreshToken(state,payload){
       state.user.token=payload.token;
@@ -142,7 +146,7 @@ const store = createStore({
     // },
     /*
     This is where the login request is made it gets the token
-    the user data and stores it in the state Abcd314!
+    the user data and stores it in the state
      */
     async login({commit},FormData){
       try {
