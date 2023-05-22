@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDirecteurRequest;
 use App\Http\Requests\UpdateDirecteurRequest;
-use App\Http\Requests\UpdateGradeRequest;
+
 use App\Http\Resources\DirecteurResource;
 use App\Models\Directeur;
 use Illuminate\Http\Request;
