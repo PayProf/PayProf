@@ -56,9 +56,9 @@ route::apiResource('pay',PaiementsController::class);
 route::apiResource('etab',EtablissementController::class);
 
 route::apiResource('dir',DirecteurController::class);
-route::POST('ens/{ens}/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
-route::get('ens/{ens}/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
-route::PATCH('ens/{ens}/UpdateMyEmail',[EnseignantController::class,'UpdateMyEmail']);
+route::POST('dir/{dir}/UploadMyImage',[DirecteurController::class,'UploadMyImage']);
+route::get('dir/{dir}/ShowMyProfil',[DirecteurController::class,'ShowMyProfil']);
+route::PATCH('dir/{dir}/UpdateMyEmail',[DirecteurController::class,'UpdateMyEmail']);
 
 
 

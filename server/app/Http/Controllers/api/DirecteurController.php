@@ -62,7 +62,7 @@ class DirecteurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateGradeRequest $request, $id)
+    public function update(UpdateDirecteurRequest $request, $id)
     {    
 
        $directeur=Directeur::find($id);
@@ -99,7 +99,7 @@ class DirecteurController extends Controller
     public function UpdateMyEmail( UpdateDirecteurRequest $request ,$id)
                 {
 
-                            $directeur=Directeur::find($id);
+                            $directeur=Directeur::where('user_id',$id)->first();
                             
                             $directeur->email_perso=$request['email_perso'];
                             

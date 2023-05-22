@@ -218,7 +218,7 @@ class EnseignantController extends Controller
                public function UpdateMyEmail( UpdateEnseignantRequest $request ,$id)
                {
 
-                    $ens=Enseignant::find($id);
+                    $ens=Enseignant::where('user_id',$id)->first();
                     
                     $ens->email_perso=$request['email_perso'];
                     
