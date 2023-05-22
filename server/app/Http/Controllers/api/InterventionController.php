@@ -10,7 +10,9 @@ use App\Http\Resources\InterventionShowMoreResource;
 
 use App\Models\Intervention;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
+use App\Traits\HttpResponses;
 
 class InterventionController extends Controller
 {
@@ -19,6 +21,7 @@ class InterventionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    use HttpResponses;
     public function index()
             {    //return Intervention ::all();
                  return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(5));
@@ -40,23 +43,21 @@ class InterventionController extends Controller
                 //  {
                 //     return response()->json(["message"=>"added successfuly"]);
                 //  }
-                       $intervention=new Intervention();
-                      $enseignant = DB::table('enseignants')
-                      ->select('id')
-                      ->where('PPR', $request['PPR'])
-                      ->first();
-                      $etablissement=       //auth()->user()->administrateur->etablissement_id;
+                        $intervention=new Intervention();
+                        $enseignant=$intervention->IdEnseignant($request['PPR']);
+                        $etablissement=       //auth()->user()->administrateur->etablissement_id;
+                        $intervention-> intitule_intervention= $request['IntituleIntervention'];
+                        $intervention-> annee_univ= $request['AnneeUniv'];
+                        $intervention-> semestre= $request['Semestre'];
+                        $intervention-> date_debut= $request['DateDebut'];
+                        $intervention->Nbr_heures= $request['NbrHeures'];
+                        $intervention->date_fin= $request['DateFin'];
+                        $intervention->enseignant_id=$enseignant ;
+                        $intervention->etablissement_id= $etablissement ;
 
-                     $intervention-> intitule_intervention= $request['IntituleIntervention'];
-                     $intervention-> annee_univ= $request['AnneeUniv'];
-                     $intervention-> semestre= $request['Semestre'];
-                     $intervention-> date_debut= $request['DateDebut'];
-                     $intervention->Nbr_heures= $request['NbrHeures'];
-                     $intervention->date_fin= $request['DateFin'];
-                     $intervention->enseignant_id=$enseignant ;
-                     $intervention->etablissement_id= $etablissement ;
-
-                     $intervention->save();
+                        $intervention->save();
+                       
+                        return $this->succes("","Intervention added successfully");
 
                 
             }
@@ -69,7 +70,7 @@ class InterventionController extends Controller
      */
     public function show($id)
     {
-              return new InterventionResource(Intervention::with('enseignant','etablissement')->find($id));
+              return new InterventionResource(Intervention::with('enseignant','etablissement')->findOrFail($id));
 
     }
 
@@ -80,11 +81,28 @@ class InterventionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-  
-    {
-        
+    public function update(UpdateInterventionRequest $request, $id)
 
+  
+    {                 $intervention=Intervention::FindOrFail($id);
+                    
+                     
+                     $enseignant=$intervention->IdEnseignant($request['PPR']);
+                     // $etablissement= 1; //auth()->user()->administrateur->etablissement_id;
+                   
+                      $intervention->intitule_intervention=$request['IntituleIntervention'];
+                      $intervention->annee_univ = $request['AnneeUniv'] ;
+                      $intervention->semestre = $request['Semestre'];
+                      $intervention->date_debut = $request['DateDebut'] ;
+                      $intervention->date_fin = $request['DateFin'] ;
+                      $intervention->Nbr_heures = $request['NbrHeures'] ;
+                      $intervention->enseignant_id=$enseignant;
+                      //$intervention->etablissement_id=$etablissement;
+          
+                      $intervention->save();
+                      
+
+                      return $this->succes("","Intervention updated successfully");
     }
 
     /**
@@ -100,7 +118,7 @@ class InterventionController extends Controller
        if($intervention)
        {
         $intervention->delete();
-        return response()->json(["message"=>"deleted successfuly"]);
+        return $this->succes("","intervention deleted successfully");
        }
 
     }
@@ -113,13 +131,29 @@ class InterventionController extends Controller
 
     public function activeVisaUae(UpdateInterventionRequest $request,$id)
     {
-             intervention::find($id)->update($request->all());
-
+           //  intervention::find($id)->update($request->all());
+           $intervention =Intervention::find($id);
+           $intervention->visa_uae=$request['VisaUae'];
+           $intervention->save();
+              
     }
 
         public function activeVisaEtab(UpdateInterventionRequest $request,$id)
     {
-             intervention::find($id)->update($request->all());
+             //intervention::find($id)->update($request->all());
+             $intervention =Intervention::find($id);
+             $intervention->visa_etab=$request['VisaEtab'];
+             $intervention->save();
 
     }
-}
+
+
+        public function ShowMyEtabInterventions()
+        {  
+              $etab_id=1; //auth()->user()->administrateur->etablissement_id;
+             return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5));
+           
+
+
+        }
+}   

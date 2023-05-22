@@ -13,4 +13,9 @@ public function user()
     return $this->belongsTo(User::class);
 }
 
+public function etablissement()
+{
+    return $this->belongsTo(Etablissement::class);
+}
+
 }

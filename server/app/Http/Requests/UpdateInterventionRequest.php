@@ -23,9 +23,9 @@ class UpdateInterventionRequest extends FormRequest
      */
     public function rules()
     {  
-         $method=$this->method;
+         $method=$this->method();
        
-        if($method=="PUT"){
+        if($method == "PUT"){
             return [          
                 
                 //all the fields will be sent to the db (also the the fields unchanged )
@@ -36,14 +36,12 @@ class UpdateInterventionRequest extends FormRequest
                 'DateDebut'=> ['required'],
                 'DateFin'=>['required'],
                 'NbrHeures'=>['required'],
-                'VisaUae',
-                'VisaEtab',
-                'IdProf'=> ['required'],
-                'IdEtab'=>['required'],
+                'PPR'=>['required'],
+               
                 ];
         }
 
-        else // if the method is PATCH
+        else       // if the method is PATCH
         { 
 
             return [                 
@@ -56,13 +54,13 @@ class UpdateInterventionRequest extends FormRequest
             ];
         }
 }
-protected function prepareForValidation()
+// protected function prepareForValidation()
 
-    {           if ($this->VisaUae)   {$this->merge(['visa_uae'=> ucfirst($this->VisaUae),]);}
-                if ($this->VisaEtab)   {$this->merge(['visa_etab'=> ucfirst($this->VisaEtab),]);}
+//     {           if ($this->VisaUae)   {$this->merge(['visa_uae'=> ucfirst($this->VisaUae),]);}
+//                 if ($this->VisaEtab)   {$this->merge(['visa_etab'=> ucfirst($this->VisaEtab),]);}
 
                 
-    }
+//     }
     
 }
 

@@ -14,14 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('directeurs', function (Blueprint $table) {
+           
             $table->id();
             $table->unsignedInteger('PPR')->unique(); //combinaisonde 7chiffres 
             $table->string('nom');
             $table->string('prenom');
             $table->string('email_perso');
+            $table->date('date_naissance');
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->nullable();
-
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->string('image')->nullable(); 
             $table->timestamps();
         });
     }

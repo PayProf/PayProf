@@ -6,6 +6,7 @@ use App\Http\Controllers\api\EtablissementController;
 use App\Http\Controllers\api\GradeController;
 use App\Http\Controllers\api\InterventionController;
 use App\Http\Controllers\api\PaiementsController;
+use App\Http\Controllers\api\DirecteurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,10 @@ route::POST('ens/{ens}/UploadMyImage',[EnseignantController::class,'UploadMyImag
 
 //route of ShowMyProfil
 route::get('ens/{ens}/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
+//route MyHours
+route::get('ens/{ens}/MyHours',[EnseignantController::class,'MyHours']);
+//route UpdateMyEmail
+route::PATCH('ens/{ens}/UpdateMyEmail',[EnseignantController::class,'UpdateMyEmail']);
 
 route::apiResource('adm',AdministrateurController::class);
 
@@ -43,12 +48,14 @@ route::get('int/{int}/showmore',[InterventionController::class ,'ShowMore']);
 route::PATCH('int/{int}/visauae',[InterventionController::class ,'activeVisaUae']);
 //route of the activation of the visETAb
 route::PATCH('int/{int}/visaetab',[InterventionController::class ,'activeVisaEtab']);
+//route of the ShowMyEtabInterventions
+route::get('ShowMyEtabInterventions',[InterventionController::class ,'ShowMyEtabInterventions']);
 
 route::apiResource('pay',PaiementsController::class);
 
 route::apiResource('etab',EtablissementController::class);
 
-
+route::apiResource('dir',DirecteurController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

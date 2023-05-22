@@ -1,11 +1,14 @@
 <?php
+namespace App\Http\Controllers\api;
 
-namespace App\Http\Controllers;
-
-use App\Models\Directeur;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDirecteurRequest;
 use App\Http\Requests\UpdateDirecteurRequest;
-
+use App\Http\Requests\UpdateGradeRequest;
+use App\Http\Resources\DirecteurResource;
+use App\Models\Directeur;
+use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
 class DirecteurController extends Controller
 {
     /**
@@ -13,74 +16,94 @@ class DirecteurController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    use HttpResponses;
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return DirecteurResource::collection(Directeur::with('etablissement')->latest()->paginate(10));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreDirecteurRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreDirecteurRequest $request)
     {
-        //
+           $directeur=new Directeur();
+            $request['IdEtablissement']=1;// auth()->user()->administrateur->etablissement_id
+           $directeur->PPR = $request['PPR'];
+           $directeur->nom = $request['nom'];
+           $directeur->prenom = $request['prenom'];
+           $directeur->date_naissance = $request['DateNaissance'];
+           $directeur->etablissement_id = $request['IdEtablissement'];
+        //$directeur->user_id = $request['IdUser'];
+           $directeur->email_perso=$request['email_perso'];
+           $directeur->save();
+            return $this->succes("","added successfully");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Directeur  $directeur
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Directeur $directeur)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Directeur  $directeur
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Directeur $directeur)
-    {
-        //
+             return new DirecteurResource(Directeur::with('etablissement')->FindOrFail($id));
+   
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateDirecteurRequest  $request
-     * @param  \App\Models\Directeur  $directeur
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDirecteurRequest $request, Directeur $directeur)
-    {
-        //
+    public function update(UpdateGradeRequest $request, $id)
+    {    
+
+       $directeur=Directeur::find($id);
+       $directeur->PPR = $request['PPR'];
+       $directeur->nom = $request['nom'];
+       $directeur->prenom = $request['prenom'];
+       $directeur->date_naissance = $request['DateNaissance'];
+       $directeur->email_perso=$request['email_perso'];
+       $directeur->save();
+       return $this->succes("","updated successfully");
+       
+   
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Directeur  $directeur
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Directeur $directeur)
+    public function destroy($id)
     {
-        //
+             $directeur=Directeur::FindOrfail($id);
+             
+             $directeur->delete();
+             
+             return $this->succes("","Directeur deleted successfully");
+    }
+
+
+
+    public function UpdateMyEmail( UpdateDirecteurRequest $request ,$id)
+    {
+
+        $directeur=Directeur::find($id);
+         
+        $directeur->email_perso=$request['email_perso'];
+         
+        $directeur->save();
+        
+         return $this->succes("","email updated successfully");
+
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Intervention extends Model
 {
@@ -22,6 +23,27 @@ class Intervention extends Model
         'visa_etab',
      ];
 
+    
+    public function IdEnseignant($prof)
+    {
+        $enseignant = DB::table('enseignants')
+                      ->select('id')
+                      ->where('PPR', $prof)
+                      ->first();
+        return $enseignant->id;
+
+    }
+
+    // public function IdEtablissement($etab)
+    // {
+    //     $etablissement = DB::table('etablissements')
+    //                   ->select('id')
+    //                   ->where('nom', $etab)
+    //                   ->first();
+    //     return $etablissement->id;
+
+    // }
+
 
     public function etablissement()
     {
@@ -34,5 +56,7 @@ class Intervention extends Model
         return $this->belongsTo(Enseignant::class );
       
     }
+
+
 
 }

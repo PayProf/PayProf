@@ -13,7 +13,7 @@ class UpdateGradeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,35 @@ class UpdateGradeRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $method=$this->method(); // to check the http method 
+           
+        if($method=="PUT"){
+                return [          
+                    
+                    //all the fields will be sent to the db (also the the fields unchanged )
+
+                        'PPR'=>['required','unique:directeurs'],
+                        'nom'=>['required'],
+                        'prenom'=>['required'],
+                        'DateNaissance'=>['required','date'],
+                        //  'Etablissement'=>['required'],
+                        'email_perso'=>['required','email','unique:directeurs'],
+                      // 'IdUser',
+                       
+                    ];
+            }
+
+            else // if the method is PATCH
+            { 
+                
+                return
+                 [                 
+                    
+                    // only the specified fileds will be modified and sent to the db
+                    'email_perso'=>['sometimes','required','email','unique:enseignants'],
+                 ];
+                
+            }
     }
+    
 }

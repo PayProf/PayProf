@@ -8,6 +8,8 @@ use App\Http\Requests\StoreEnseignantRequest;
 use App\Http\Requests\UpdateEnseignantRequest;
 use App\Http\Resources\EnseignantInterventionResource;
 use App\Models\Enseignant;
+
+
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
@@ -47,7 +49,7 @@ class EnseignantController extends Controller
                                     $grade_id=$enseignant->IdGrade($request['Grade']);
                                     $request['IdEtablissement']=1;//soit $request[id] soit auth()->user()->administrateur->etablissement_id
                                // return new EnseignantResource(Enseignant::create($request->all()));
-                                    $enseignant = new Enseignant();
+                                   //  $enseignant = new Enseignant();
                                     $enseignant->PPR = $request['PPR'];
                                     $enseignant->nom = $request['nom'];
                                     $enseignant->prenom = $request['prenom'];
@@ -72,7 +74,7 @@ class EnseignantController extends Controller
                                 
                                 // display  the main  columns of Enseignant 
                                 
-                     return new EnseignantResource(Enseignant::with('etablissement','grade')->find($id));
+                     return new EnseignantResource(Enseignant::with('etablissement','grade')->FindOrFail($id));
 
                                 
                                 // display all the columns of enseignant 
@@ -96,7 +98,7 @@ class EnseignantController extends Controller
                                //the class UpdateEnseignantRequest handles both PUT and Patch Request(for more details check the class  ) 
                       
                                    $enseignant=Enseignant::find($id);
-                                   $grade_id=$enseignant->IdGrade($request->Grade);
+                                   $grade_id=$enseignant->IdGrade($request['Grade']);  
                                    $enseignant->PPR = $request['PPR'];
                                    $enseignant->nom = $request['nom'];
                                    $enseignant->prenom = $request['prenom'];
@@ -136,7 +138,7 @@ class EnseignantController extends Controller
                                 //this method display all the interventions of a specified prof
                                 // attention  10 doit etre remplacée par  atttttttention  auth()->user()->id
                                      //  auth()->user()->id  
-                                return  EnseignantInterventionResource::collection (Enseignant::where('user_id','=',$id)->with('interventions.etablissement')->get());
+                                return  EnseignantInterventionResource::collection (Enseignant::where('user_id',$id)->with('interventions.etablissement')->get());
                                                                                                 //  auth()->user()->id                          
                               // return response()->json(  dd(Enseignant::with('interventions.etablissement')->where('user_id','=',4))));
                               // return Enseignant::where('user_id','=',4)->with('interventions.etablissement')->get();
@@ -145,7 +147,7 @@ class EnseignantController extends Controller
 
                 public function ShowMyPayments($id)
                 {            //  auth()->user()->id ;
-                      $ens=Enseignant::where('user_id','=',$id)->with('paiements')->get();
+                      $ens=Enseignant::where('user_id',$id)->with('paiements')->get();
                                            
                       return response()->json($ens);
 
@@ -165,11 +167,12 @@ class EnseignantController extends Controller
                          $request->validate(
                               [
                                    'image'=>'required|max:1024|mimes:png,jpg,png'
-                              ]
+                                  
+                               ]
                               );
 
 
-                            $ens=Enseignant::where('user_id','=',$id)->first();
+                            $ens=Enseignant::where('user_id',$id)->first();
                             if($request->hasFile('image'))
                          { 
                               $file=$request->image;
@@ -197,7 +200,30 @@ class EnseignantController extends Controller
 
                public function ShowMyProfil($id)
                {
-                    return new EnseignantResource(Enseignant::where('user_id','=',$id)->with('etablissement','grade')->first());
+                    return new EnseignantResource(Enseignant::where('user_id',$id)->with('etablissement','grade')->first());
+               }
+
+              
+               public function MyHours ($id)
+               {
+                    $ens=DB::table('interventions')->where('enseignant_id',$id)->sum('Nbr_heures');
+                    
+                    return response()->json(["hours"=>$ens]);
+               }
+
+
+
+               public function UpdateMyEmail( UpdateEnseignantRequest $request ,$id)
+               {
+
+                    $ens=Enseignant::find($id);
+                    
+                    $ens->email_perso=$request['email_perso'];
+                    
+                    $ens->save();
+                   
+                    return $this->succes("","email updated successfully");
+
                }
 
                 

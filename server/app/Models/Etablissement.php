@@ -25,4 +25,9 @@ class Etablissement extends Model
         return $this->hasMany(Paiements::class);
     }
 
+    public function directeur()
+    {
+        return $this->hasOne(Directeur::class);
+    }
+
 }
