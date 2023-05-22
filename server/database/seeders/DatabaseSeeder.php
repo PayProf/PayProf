@@ -36,9 +36,8 @@ class DatabaseSeeder extends Seeder
         Grade::factory(10)->create();
         Enseignant::factory(10)->create();
         Administrateur::factory(10)->create();
-        Intervention::factory(10)->create();
-       
         Paiements::factory(10)->create();
+        Intervention::factory(10)->create();
         Directeur:: factory(10)->create();
        
     }

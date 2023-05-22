@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 class DirecteurController extends Controller
 {
+    // A class that handles the success and error messages
     use HttpResponses;
    
     
@@ -19,7 +20,7 @@ class DirecteurController extends Controller
     /**
      * Indexe() it's a methode that serve to display all the directors with there etablissement.
      * I used in this method DirecteurResource that serve to filter the data .
-     * @return mixed the important data such as :(Nom|prenom|etablissement......) .
+     * @return mixed the important data of all directeurs such as :(Nom|prenom|etablissement......) .
     */
    
     public function index()
@@ -98,7 +99,7 @@ class DirecteurController extends Controller
     /**
      * Destroy() this method serve to remove a specified directeur.
      * @param  int  $id IDDIRECTEUR !!!!!!
-     * @return \Illuminate\Http\Response
+     * @return ///a success message that mean the directeur was successfully deleted. 
      */
       
      public function destroy($id)
@@ -150,9 +151,10 @@ class DirecteurController extends Controller
       
    
     /**
-     * ShowMyProfil this method serve to display the informations of a specified directeur.
+     * UploadMyImage this method serve to upload the Profil picture of a specified directeur.
      * @param  int  $id User_id of the directeur  !!!!!!
      * I used in this method DirecteurResource that serve to filter the data .
+     * @return //success message that mean the picture was successfully uploaded .
      */
 
         public function UploadMyImage( Request $request,$id)
@@ -184,5 +186,10 @@ class DirecteurController extends Controller
          }           
 
 
+//================================================ SMEH LINA A KHOYA REDA SBER M3ANA ==========================================
 
+
+
+
+// ======================================================= YOUSSEF HARRAK ===========================================
 }

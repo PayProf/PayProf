@@ -16,13 +16,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class EnseignantController extends Controller
 {
-    
+     // A class that handles the success and error messages
+     use HttpResponses;
+//=========================================================== ==============================================
+     
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-        use HttpResponses;
+       
      public function index()
                 {    //this methode is for the adminUae and also Admin Etab
                               //  return Enseignant::with('etablissement','grade')->paginate(5);// display all the columns

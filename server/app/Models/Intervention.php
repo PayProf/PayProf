@@ -21,6 +21,7 @@ class Intervention extends Model
         'etablissement_id',
         'visa_uae',
         'visa_etab',
+        'paiement_id'
      ];
 
     
@@ -57,6 +58,10 @@ class Intervention extends Model
       
     }
 
-
+    public function paiement()
+    {
+        return $this->belongsTo(Paiements::class );
+      
+    }
 
 }
