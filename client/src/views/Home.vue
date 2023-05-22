@@ -11,19 +11,19 @@
           <label class="label">
             <span class="label-text">Email</span>
           </label>
-          <input v-model="FormData.email" type="text" placeholder="email" class="input input-bordered" />
+          <input v-model="FormData.email" type="email" placeholder="email" class="input input-bordered" />
         </div>
         <div class="form-control">
           <label class="label">
             <span class="label-text">Password</span>
           </label>
-          <input v-model="FormData.password" type="text" placeholder="password" class="input input-bordered" />
+          <input v-model="FormData.password" type="password" placeholder="password" class="input input-bordered" />
           <label class="label">
-            <a href="#" class="label-text-alt link link-hover">Forgot password?</a>
+<!--            <a href="#" class="label-text-alt link link-hover">Forgot password?</a>-->
           </label>
         </div>
         <div class="form-control mt-6">
-          <button @click="login" class="btn btn-primary">Login</button>
+          <button @click="login" :disabled="!ToggleLogin" class="btn btn-primary">Login</button>
         </div>
       </div>
     </div>
@@ -46,16 +46,6 @@ export default{
       
     },
 
-  // setup(){
-  //     const toast=useToast();
-  //     toast.success('3la slamtk',{
-  //       timeout: 2000
-  //     });
-  //
-  //     return {toast}
-  //
-  // },
-
   /* Here there's the data we get from
   the form
   */
@@ -72,9 +62,42 @@ export default{
   /*Here's the methods that are used in this component
    */
 
+  computed:{
+    ToggleLogin(){
+      if(this.FormData.email.length<1 || this.FormData.password.length<1)
+      {
+        return false
+      }
+      else return true;
+    },
+  },
+
   methods:{
+
+    isValidMail(email){
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    },
+    validate(email,password){
+      const toast=useToast();
+      if(!this.isValidMail(email))
+      {
+        toast.warning('Invalid Email');
+        return false;
+      }
+      if(password.length>20)
+      {
+        toast.warning('Password too long');
+        return false;
+      }
+      return true;
+    },
     async login(){
-      await this.$store.dispatch('login',this.FormData);
+      const isvalid = this.validate(this.FormData.email,this.FormData.password);
+      if(isvalid)
+      {
+        await this.$store.dispatch('login',this.FormData);
+      }
     },
   }
 
