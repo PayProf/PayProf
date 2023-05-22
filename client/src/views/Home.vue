@@ -73,6 +73,9 @@ export default{
   },
 
   methods:{
+    ...mapActions([
+        'login',
+    ]),
 
     isValidMail(email){
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

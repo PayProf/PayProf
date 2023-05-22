@@ -1,10 +1,9 @@
 import { createStore } from 'vuex';
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 import { useToast } from "vue-toastification";
 import router from "./router/index.js";
 
-export default createStore({
+const store = createStore({
   state: {
 
     //What we receive from enseignant table we store it here
@@ -25,6 +24,7 @@ export default createStore({
         email:localStorage.getItem('EMAIL'),
         role:localStorage.getItem('ROLE'),
         token:localStorage.getItem('TOKEN'),
+        token_exp:localStorage.getItem('EXPIRATION')
       },
       Interventions:[
         {
@@ -45,6 +45,16 @@ export default createStore({
 
   },
   getters: {
+
+    IsExpired(state){
+      const Exp = new Date(state.user.token_exp);
+
+      const current = new Date();
+
+      return Exp<current;
+
+
+    }
    
   },
   mutations: {
@@ -56,13 +66,41 @@ export default createStore({
     SetCurrentUser(state,payload){
       state.user.token=payload.token;
       localStorage.setItem('TOKEN',payload.token);
-      state.user.role=payload.user.role;
+      state.user.role=payload.role;
       localStorage.setItem('ROLE',payload.role);
+
+      //get the current date
+      const currentDate= new Date();
+      //Add hours till expiration to it
+      const Exp = new Date(currentDate.getTime() + (10));//2 * 60 * 60 * 1000
+
+      //storing the date as a string
+      state.user.token_exp=Exp.toISOString();
+      localStorage.setItem('EXPIRATION',Exp.toISOString());
+
     },
+
+    /*Resets the state*/
 
     ResetCurrentUser(state){
       localStorage.clear();
       state.user.token=null;
+    },
+
+    /*Manages the state of the access token and refresh token*/
+
+    RefreshToken(state,payload){
+      state.user.token=payload.token;
+      localStorage.setItem('TOKEN',payload.token)
+
+      //get the current date
+      const currentDate= new Date();
+      //Add hours till expiration to it
+      const Exp = new Date(currentDate.getTime() + (2 * 60 * 60 * 1000));
+
+      //storing the date as a string
+      state.user.token_exp=Exp.toISOString();
+      localStorage.setItem('EXPIRATION',Exp.toISOString());
     },
 
 
@@ -77,48 +115,48 @@ export default createStore({
     },
   },
   actions: {
-    async addEnseignant({ commit }, enseignants) {
-      try {
-        const response = await axios.post('http://localhost:5000/enseignants', enseignant);
-        commit('addEnseignant', response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getInterventions({commit}){
-      try{
-      const response =await axios.get('http://localhost:5000/Interventions');
-      console.log(response.data);
-      commit('setInterventions',response.data)
-      console.log(this.state.Interventions);
-
-      }
-      catch(error){
-        console.log(error)
-      }
-    },
-    async getEnseignants({commit}){
-      try{
-      const response =await axios.get('http://localhost:5000/enseignants');
-      commit('setEnseignants',response.data)
-      }
-      catch(error){
-        console.log(error)
-      }
-    },
+    // async addEnseignant({ commit }, enseignants) {
+    //   try {
+    //     const response = await axios.post('http://localhost:5000/enseignants', enseignant);
+    //     commit('addEnseignant', response.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    // async getInterventions({commit}){
+    //   try{
+    //   const response =await axios.get('http://localhost:5000/Interventions');
+    //   console.log(response.data);
+    //   commit('setInterventions',response.data)
+    //   console.log(this.state.Interventions);
+    //
+    //   }
+    //   catch(error){
+    //     console.log(error)
+    //   }
+    // },
+    // async getEnseignants({commit}){
+    //   try{
+    //   const response =await axios.get('http://localhost:5000/enseignants');
+    //   commit('setEnseignants',response.data)
+    //   }
+    //   catch(error){
+    //     console.log(error)
+    //   }
+    // },
     /*
     This is where the login request is made it gets the token
-    the user data and stores it in the state Abcd314!
+    the user data and stores it in the state
      */
     async login({commit},FormData){
       try {
         const response = await axios.post('login',FormData);
         commit('SetCurrentUser',response.data.data)
-        router.push('/Dashboard')
+        await router.push('/Dashboard')
       }
       catch (error){
         console.log(error)
-        router.push('/')
+        await router.push('/')
         const toast=useToast();
         toast.error('Invalid Credentials',{
           timeout:3000,
@@ -134,27 +172,52 @@ export default createStore({
     async logout({commit}){
       try{
         const token = localStorage.getItem('TOKEN'); // Here i used localstorage but later will change it to state
-        console.log(token)
         const config = {
           headers: {Authorization: `Bearer ${token}`}
         };
-        const response = await axios.post('logout',null,config);
-        console.log(response)
+        await axios.get('logout',config);
         commit('ResetCurrentUser')
-        console.log('Reset Succesful')
-        router.push('/');
+        await router.push('/');
       }
       catch(error){
         console.log(error)
         if (error.response && error.response.status === 401){
           commit('ResetCurrentUser');
-          router.push('/');
+          await router.push('/');
         }
         const toast=useToast();
         toast.error("Something's Wrong :(",{
           timeout:3000,
         });
       }
+    },
+    /* it's time for refresh token, when the user's token is no longer
+    valid he automatically gets his token refreshed
+     */
+    async RefreshToken({commit}){
+      try{
+        const token = store.state.user.token;
+        const config = {
+          headers: {Authorization: `Bearer ${token}`}
+        }
+        const response = await axios.get('refrech',config)
+        commit('RefreshToken',response.data.data)
+      }
+      catch(error){
+        console.log(error)
+        if (error.response && error.response.status === 401){
+          commit('ResetCurrentUser');
+          await router.push('/');
+        }
+        const toast=useToast();
+        toast.error("Something's Wrong :(",{
+          timeout:3000,
+        });
+
+      }
     }
   },
 });
+
+
+export default store;

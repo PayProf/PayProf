@@ -44,6 +44,5 @@ route::post('/login',[AuthController::class,'login']);
 route::group(['middleware'=>['auth:sanctum']],function(){
     route::get('/logout',[AuthController::class,'logout']);
     route::get('/refrech',[AuthController::class,'refreshToken']);
-    
 }
 );
