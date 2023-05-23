@@ -44,6 +44,7 @@ class InterventionController extends Controller
      */
     
        public function store(StoreInterventionRequest $request)
+
           {
               
                  $intervention=new Intervention();
@@ -62,45 +63,52 @@ class InterventionController extends Controller
 
                 
           }
+        
+//========================================== The access is retricted for:AdminUAE||President =======================================================          
+
+     
+    
+    /**
+     * Show() this method serve to display a specified intervention .
+     * @param  int  $id it's ID Intervention!!!!!!
+     * @return   // error message in case of invalid InterventionrId
+     */
+   
+       public function show($id)
+
+          {
+                 return new InterventionResource(Intervention::with('enseignant','etablissement')->findOrFail($id));
+
+          }
+
+//=========================================== The access is retricted for:AdminEtab ==========================================================          
+ 
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update() this method serve to update the information of a specified intervention.
+     * @param  UpdateInterventionRequest contain the validation rules of the data .
+     * @param  int  $id ID intervention !!!!!!!!!!!
+     * @return  //a success message that mean the data of theintervention  was successfully updated. 
      */
-    public function show($id)
-    {
-              return new InterventionResource(Intervention::with('enseignant','etablissement')->findOrFail($id));
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateInterventionRequest $request, $id)
+    
+       public function update(UpdateInterventionRequest $request, $id)
 
   
-    {                 $intervention=Intervention::FindOrFail($id);
+          {                
+                 $intervention=Intervention::FindOrFail($id);
                     
                      
-                     $enseignant=$intervention->IdEnseignant($request['PPR']);
-                     // $etablissement= 1; //auth()->user()->administrateur->etablissement_id;
-                   
-                      $intervention->intitule_intervention=$request['IntituleIntervention'];
-                      $intervention->annee_univ = $request['AnneeUniv'] ;
-                      $intervention->semestre = $request['Semestre'];
-                      $intervention->date_debut = $request['DateDebut'] ;
-                      $intervention->date_fin = $request['DateFin'] ;
-                      $intervention->Nbr_heures = $request['NbrHeures'] ;
-                      $intervention->enseignant_id=$enseignant;
-                      //$intervention->etablissement_id=$etablissement;
-          
-                      $intervention->save();
+                 $enseignant=$intervention->IdEnseignant($request['PPR']);                               //it's a method that return the id of the enseignant 
+                 // $etablissement= 1; //auth()->user()->administrateur->etablissement_id; 
+                 $intervention->intitule_intervention=$request['IntituleIntervention'];
+                 $intervention->annee_univ = $request['AnneeUniv'] ;
+                 $intervention->semestre = $request['Semestre'];
+                 $intervention->date_debut = $request['DateDebut'] ;
+                 $intervention->date_fin = $request['DateFin'] ;
+                 $intervention->Nbr_heures = $request['NbrHeures'] ;
+                 $intervention->enseignant_id=$enseignant;
+                 //$intervention->etablissement_id=$etablissement;
+                 $intervention->save();
                       
 
                       return $this->succes("","Intervention updated successfully");
