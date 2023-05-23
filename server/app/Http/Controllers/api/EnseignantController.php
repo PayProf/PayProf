@@ -109,7 +109,7 @@ class EnseignantController extends Controller
                                 
                         
                 }
-                /////////////////////////////////////////// should be added////////////////////////////////////////
+                /////////////////////////////////////////// should be added  and also the class EnseignantPaymentsResource////////////////////////////////////////
 
                 public function ShowMyPayments($id)
                 {
