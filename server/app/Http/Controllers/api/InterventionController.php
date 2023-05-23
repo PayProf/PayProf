@@ -39,38 +39,30 @@ class InterventionController extends Controller
     /**
      * Store() it's a method that serve to add a new intervention.
      * @param  StoreInterventionrRequest / it's a class that serve to validate the data before the insert.
-     * @return  / a success message that mean the  new intervention was successfully inserted 
+     * @return  / a success message that mean the new intervention was successfully inserted 
      * Attention the comments in this method must be respected 
      */
     
-    public function store(StoreInterventionRequest $request)
-            {
-                //  $intervention=new InterventionResource(Intervention::create($request->all()));
-                 
-                 
-                //  if($intervention)
-                 
-                //  {
-                //     return response()->json(["message"=>"added successfuly"]);
-                //  }
-                        $intervention=new Intervention();
-                        $enseignant=$intervention->IdEnseignant($request['PPR']);
-                        $etablissement=       //auth()->user()->administrateur->etablissement_id;
-                        $intervention-> intitule_intervention= $request['IntituleIntervention'];
-                        $intervention-> annee_univ= $request['AnneeUniv'];
-                        $intervention-> semestre= $request['Semestre'];
-                        $intervention-> date_debut= $request['DateDebut'];
-                        $intervention->Nbr_heures= $request['NbrHeures'];
-                        $intervention->date_fin= $request['DateFin'];
-                        $intervention->enseignant_id=$enseignant ;
-                        $intervention->etablissement_id= $etablissement ;
-
-                        $intervention->save();
+       public function store(StoreInterventionRequest $request)
+          {
+              
+                 $intervention=new Intervention();
+                 $enseignant=$intervention->IdEnseignant($request['PPR']);
+                 $etablissement=1;     //auth()->user()->administrateur->etablissement_id;
+                 $intervention-> intitule_intervention= $request['IntituleIntervention'];
+                 $intervention-> annee_univ= $request['AnneeUniv'];
+                 $intervention-> semestre= $request['Semestre'];
+                 $intervention-> date_debut= $request['DateDebut'];
+                 $intervention->Nbr_heures= $request['NbrHeures'];
+                 $intervention->date_fin= $request['DateFin'];
+                 $intervention->enseignant_id=$enseignant ;
+                 $intervention->etablissement_id= $etablissement ;
+                 $intervention->save();
                        
                         return $this->succes("","Intervention added successfully");
 
                 
-            }
+          }
 
     /**
      * Display the specified resource.
@@ -98,7 +90,13 @@ class InterventionController extends Controller
                     
                      
                      $enseignant=$intervention->IdEnseignant($request['PPR']);
-                     // $etablissement= 1; //auth()->user()->administrateur->etablissement_id;
+                     // $etablissement= 1; //
+                    $role=auth()->user()->role;
+                    if($role==1)
+                    {
+                        $etablissement=auth()->user()->administrateur->etablissement_id;
+                    }
+                    
                    
                       $intervention->intitule_intervention=$request['IntituleIntervention'];
                       $intervention->annee_univ = $request['AnneeUniv'] ;
