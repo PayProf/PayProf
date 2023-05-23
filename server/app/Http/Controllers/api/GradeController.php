@@ -62,7 +62,7 @@ class GradeController extends Controller
           }
 
 
-//========================================================================================= The access is retricted for : AdminUAE| AdminEtab  ============================================================        
+//========================================================================================= The access is retricted for : AdminUAE | AdminEtab  ============================================================        
 
     /**
      * Update this method serve to update the information of a specified Grade.
@@ -76,9 +76,13 @@ class GradeController extends Controller
                  Grade::findOrFail($id)->update($request->all());
                  return response()->json(["message"=>" Updated successfully"]);
           }
-//================================================================== ==================================================
+
+
+//================================================================== The access is retricted for : AdminUAE| AdminEtab ====================================================================
+
+
     /**
-     * Remove the specified resource from storage.
+     * destroy th specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -93,3 +97,4 @@ class GradeController extends Controller
             }
         }
 }
+
