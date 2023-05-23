@@ -64,7 +64,7 @@ class InterventionController extends Controller
                 
           }
         
-//========================================== The access is retricted for:AdminUAE||President =======================================================          
+//============================================= The access is retricted for:AdminUAE||President =======================================================          
 
      
     
@@ -82,7 +82,7 @@ class InterventionController extends Controller
           }
 
 
-//=========================================== The access is retricted for:AdminEtab ==========================================================          
+//=================================================== The access is retricted for:AdminEtab ==========================================================          
  
 
     /**
@@ -113,7 +113,7 @@ class InterventionController extends Controller
 
 
 
-//=========================================The access is retricted for:AdminEtab =================================================================          
+//==================================================== The access is retricted for:AdminEtab =================================================================          
 
    
     /**
@@ -124,10 +124,8 @@ class InterventionController extends Controller
      
        public function destroy($id)
 
-
           {
                  $intervention= Intervention::find($id);
-     
                  if($intervention)
                  {
                  $intervention->delete();
@@ -138,44 +136,64 @@ class InterventionController extends Controller
 
 
 
-//==========================================  =============================== 
+//============================================= The access is retricted for:AdminEtab|President|directeur|AdminUAE  =============================== 
 
 
 
     /**
      * ShowMore this method serve to display more information about a specified intervention.
-     * @param  int  $id ID Intervention !!!!!!
-     * @return ///a success message that means the directeur was successfully deleted. 
+     * the goal of the this function it's to give a nice appearance of the interventions because we can't display all the fields in a table 
+     * so i suggest to create like interface where we can display all the details of an intervention 
+     * @param  int  $id ID Intervention !!!!!! 
      */         
 
 
-    public function ShowMore($id)
-    {    // the goal of the this function it's to give a nice appearance of the interventions 
-        //because we can't display all the fields in a table so i suggest to create like interface where we can display all the details of the intervention 
-             return new InterventionShowMoreResource(Intervention::with('enseignant','etablissement')->find($id));
+       public function ShowMore($id)
 
-    }
-//=================================== ==============================================================
+          {    
+                 return new InterventionShowMoreResource(Intervention::with('enseignant','etablissement')->find($id));
+          }
 
 
 
-    public function activeVisaUae(UpdateInterventionRequest $request,$id)
-    {
-           //  intervention::find($id)->update($request->all());
-           $intervention =Intervention::find($id);
-           $intervention->visa_uae=$request['VisaUae'];
-           $intervention->save();
-              
-    }
+//=============================================  The access is retricted for : President  ===============================================================
 
-        public function activeVisaEtab(UpdateInterventionRequest $request,$id)
-    {
-             //intervention::find($id)->update($request->all());
-             $intervention =Intervention::find($id);
-             $intervention->visa_etab=$request['VisaEtab'];
-             $intervention->save();
 
-    }
+
+    /**
+     * activeVisaUae this method serve to active the visaUae of a specified intervention.
+     * @param UpdateInterventionRequest  contain the validation rules of the data .
+     * @param  int  $id ID Intervention !!!!!! 
+     */         
+
+
+       public function activeVisaUae(UpdateInterventionRequest $request,$id)
+          {
+                 $intervention =Intervention::find($id);
+                 $intervention->visa_uae=$request['VisaUae'];
+                 $intervention->save();
+          }
+
+
+//================================================== The access is retricted for : DirecteurEtab  =========================================   
+
+
+    /**
+     *activeVisaUae this method serve to active the visaEtab of a specified intervention.
+     *@param UpdateInterventionRequest  contain the validation rules of the data .
+     * @param  int  $id ID Intervention !!!!!! 
+     */         
+
+
+       public function activeVisaEtab(UpdateInterventionRequest $request,$id)
+          {
+                 $intervention =Intervention::find($id);
+                 $intervention->visa_etab=$request['VisaEtab'];
+                 $intervention->save();
+          }
+
+
+
 
 //=====================================  ===================================================================
         public function ShowMyEtabInterventions()
