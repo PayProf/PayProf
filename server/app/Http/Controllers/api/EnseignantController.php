@@ -18,77 +18,70 @@ class EnseignantController extends Controller
 {
      // A class that handles the success and error messages
      use HttpResponses;
-//=========================================================== ==============================================
-     
-
+//=========================================================== The access is retricted for:AdminUae|President ==============================================
+        
+ 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-       
-     public function index()
-                {    //this methode is for the adminUae and also Admin Etab
-                              //  return Enseignant::with('etablissement','grade')->paginate(5);// display all the columns
+     * Index() it's a methode that serve to display all the profs with there etablissement and grade.
+     * I used in this method EnseignantResource that serve to filter the data .
+     * @return mixed the important data of all PROFS such as :(Nom|prenom|etablissement|grade.......) .
+    */
+   
+       public function index()
+          {   
                        
-                                return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10)); 
+                 return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10)); 
                                 
-                                //display just the main columns such as Nom|prenom|PPR|date_naissance|etab|Garad|etab_id|grade_id/user_role
-                                 //  by using the class resource that give this privileges
-                }
+          }
+
+//============================================================== The access is retricted for:AdminUEtab ========================================================          
+
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Store() it's a method that serve to add a new enseignant.
+     * @param StoreEnseignantRequest / it's a class that serve to validate the data before the insert.
+     * @return / a success message that mean the new enseignant was successfully inserted.
+     * Attention the comments in this method must be respected.
      */
-     public function store(StoreEnseignantRequest $request)
+     
+       public function store(StoreEnseignantRequest $request)
 
-                {  
-                                //we create  (StoreEnseignantRequest class  that contains all the validation rules that genarte error messages in case of some issues
-                                //the static method create impose the selection of fillable (mass assignable) fields in the model 
-                                //$grade_id= 
-                                    $enseignant=new Enseignant();
-                                    $grade_id=$enseignant->IdGrade($request['Grade']);
-                                    $request['IdEtablissement']=1;//soit $request[id] soit auth()->user()->administrateur->etablissement_id
-                               // return new EnseignantResource(Enseignant::create($request->all()));
-                                   //  $enseignant = new Enseignant();
-                                    $enseignant->PPR = $request['PPR'];
-                                    $enseignant->nom = $request['nom'];
-                                    $enseignant->prenom = $request['prenom'];
-                                    $enseignant->date_naissance = $request['DateNaissance'];
-                                    $enseignant->etablissement_id = $request['IdEtablissement'];
-                                    $enseignant->grade_id =$grade_id;  //
-                                   // $enseignant->user_id = $request['IdUser'];
-                                    $enseignant->email_perso=$request['email_perso'];
-                                    $enseignant->save();
-                                   return $this->succes("","added successfully");
+          {  
 
-                }
+                 $enseignant=new Enseignant();
+                 $grade_id=$enseignant->IdGrade($request['Grade']);//IdGrade() it's a method that return the id of the grade 
+                 $etablissement_id=1;//auth()->user()->administrateur->etablissement_id // //the security developper should approuve it
+                 $enseignant->PPR = $request['PPR'];
+                 $enseignant->nom = $request['nom'];
+                 $enseignant->prenom = $request['prenom'];
+                 $enseignant->date_naissance = $request['DateNaissance'];
+                 $enseignant->etablissement_id = $etablissement_id;
+                 $enseignant->grade_id =$grade_id;  //
+                 // $enseignant->user_id = $request['IdUser'];// i talked with the postgres admin to add a trigger for this  ;
+                 $enseignant->email_perso=$request['email_perso'];
+                 $enseignant->save();
+                 return $this->succes("","added successfully");
+                 // return new EnseignantResource(Enseignant::create($request->all()));it's another method but we should know the etab_id 
 
+          }
+//======================================================= The access is retricted for:AdminUEtab|AdminUae|DireteurEtab|President ==================================================
+     
+    
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Show() this method serve to display a specified teacher with the name and the city of his etablissement and also his  grade  .
+     * @param  int  $id it's IDEnseignant!!!!!!
+     * @return   // error message in case of invalid enseignantid
      */
-      public function show($id)
-                 {
-                                
-                                // display  the main  columns of Enseignant 
-                                
-                     return new EnseignantResource(Enseignant::with('etablissement','grade')->FindOrFail($id));
-
-                                
-                                // display all the columns of enseignant 
-                                        
-                                //$ens= Enseignant::with('grade','etablissement')->where('id',$id)->get();
-                               //return response()->json($ens);
-                 }
+   
+       public function show($id)
+          {                                    
+                 return new EnseignantResource(Enseignant::with('etablissement','grade')->FindOrFail($id));                    
+                 //$ens= Enseignant::with('grade','etablissement')->where('id',$id)->get();
+                 //return response()->json($ens);
+          }
         
      
-
+//=========================================================== The access is retricted for:AdminUEtab|AdminUae===============================================
     /**
      * Update the specified resource in storage.
      *

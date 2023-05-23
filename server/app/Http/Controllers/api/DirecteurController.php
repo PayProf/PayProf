@@ -43,7 +43,7 @@ class DirecteurController extends Controller
      
      {
             $directeur=new Directeur();
-            $request['IdEtablissement']=1;// auth()->user()->administrateur->etablissement_id//the security developer should approuve it
+            $request['IdEtablissement']=1;// auth()->user()->administrateur->etablissement_id//the security developper should approuve it
             $directeur->PPR = $request['PPR'];
             $directeur->nom = $request['nom'];
             $directeur->prenom = $request['prenom'];
