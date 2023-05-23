@@ -12,7 +12,9 @@ use Illuminate\Http\Request;
 class GradeController extends Controller
 {
 //=====================================================The access is retricted for :AdminUAE| AdminEtab| President | DirecteurEtab ======================================================
-    
+ 
+
+
     /**
      * Index() this methode serve to display all the grades.
      *
@@ -24,10 +26,13 @@ class GradeController extends Controller
                  return GradeResource::collection(Grade::latest()->paginate(10));
           }
 
-//======================================================================= The access is retricted for :AdminUAE| AdminEtab =============================================================================================          
+
+//======================================================================= The access is retricted for :AdminUAE| AdminEtab =============================================================================================   
+
+
     /**
      * Store it's a method taht serve to add a new grade .
-     * @param 
+     * @param StoreGradeRequest it's a class that contains the validation rules. 
      * @return / a success message which mean the grade was successfully added
      */
        public function store(StoreGradeRequest $request)
@@ -40,18 +45,24 @@ class GradeController extends Controller
                  }
           }
 
+
+//================================================================================== The access is retricted for :AdminUAE| AdminEtab  ============================================
+
+
     /**
-     * Display the specified resource.
+     * show this method serve to display the data of a  specified grade.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
         {   
-            //generate a error msg in case of we enter the incorrect id 
+            
             return new GradeResource(Grade::findOrFail($id));
         
         }
+
+//========================================================================================= ============================================================        
 
     /**
      * Update the specified resource in storage.
