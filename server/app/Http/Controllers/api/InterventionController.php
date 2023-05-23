@@ -149,6 +149,7 @@ class InterventionController extends Controller
 
 
         public function ShowMyEtabInterventions()
+        
         {  
               $etab_id=1; //auth()->user()->administrateur->etablissement_id;
              return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5));
@@ -156,4 +157,14 @@ class InterventionController extends Controller
 
 
         }
+
+
+       public function EnseignantInterventions($id)
+       {
+
+        return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
+
+       }
+
+
 }   

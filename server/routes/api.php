@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 //====================================Enseignant API ==================================================
 route::apiResource('Enseignant',EnseignantController::class);
 //route of  ShowMyInterventions
@@ -44,15 +45,16 @@ route::apiResource('grd',GradeController::class);
 
 
 route::apiResource('int',InterventionController::class);
-//route of showmore details about an intervention
+//route of showmore
 route::get('int/{int}/showmore',[InterventionController::class ,'ShowMore']);
-//route of the activation of the visUAE
+//route of the activation of the visaUAE
 route::PATCH('int/{int}/visauae',[InterventionController::class ,'activeVisaUae']);
-//route of the activation of the visETAb
+//route of the activation of the visaETAb
 route::PATCH('int/{int}/visaetab',[InterventionController::class ,'activeVisaEtab']);
 //route of the ShowMyEtabInterventions
 route::get('ShowMyEtabInterventions',[InterventionController::class ,'ShowMyEtabInterventions']);
-
+//route of EnseignantInterventions
+route::get('int/{int}/EnseignantInterventions',[InterventionController::class,'EnseignantInterventions']);
 
 
 route::apiResource('pay',PaiementsController::class);
