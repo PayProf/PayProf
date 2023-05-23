@@ -37,8 +37,4 @@ export default {
 table{
    margin-top: 10% ;
 }
-.button{
-    margin-top: 10% ;
-    padding-right: 5%;
-}
 </style>

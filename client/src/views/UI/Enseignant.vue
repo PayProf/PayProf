@@ -23,7 +23,7 @@
 
 
   <div class="overflow-x-auto" style="margin-left: 20px; margin-right: 50px;">
-    <h1 style=" margin-top: 0px;">Table Intervention :</h1>
+    <h1 style=" margin-top: 0;">Table Intervention :</h1>
     <div class="search-bar-container">
 
       <input type="text" class="search-bar" v-model="searchText" placeholder="Search" @input="filterTable">
@@ -87,7 +87,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import PFintervention from '../../components/PFintervention.vue';
-import BarChart from '/src/components/chart.vue'
+import BarChart from '../../components/chart.vue'
 
 export default {
   name: 'User',
@@ -96,9 +96,7 @@ export default {
     BarChart,
   },
   methods: {
-    ...mapActions([
-      'getInterventions'
-    ]),
+
   },
   computed: {
     ...mapState([
@@ -114,7 +112,6 @@ export default {
 
 <style scoped>
 .delete-btn,
-.add-btn,
 .inspect-btn {
   position: relative;
   display: inline-block;

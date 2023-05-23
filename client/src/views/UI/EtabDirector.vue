@@ -1,7 +1,7 @@
 <template>
 
   <div class="overflow-x-auto" style="margin-left: 20px; margin-right: 50px;">
-    <h1 style=" margin-top: 0px;">Table Enseignaint :</h1>
+    <h1 style=" margin-top: 0;">Table Enseignaint :</h1>
     <div class="search-bar-container">
 
       <input type="text" class="search-bar" v-model="searchText" placeholder="Search" @input="filterTable">
@@ -50,8 +50,7 @@
 
 <script>
 import {mapState,mapActions} from 'vuex'
-import axios from "axios"
-import axiosinstance from "../../axios.js";
+
 export default {
   name: "Director",
   data(){
@@ -70,11 +69,6 @@ export default {
     ...mapActions([
        'getuser',
     ]),
-    async getuser(){
-      await this.$store.dispatch('getuser').then(console.log(this.user.nom)
-      ,this.done=true)
-
-    }
   }
 }
 </script>

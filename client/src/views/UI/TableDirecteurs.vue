@@ -23,12 +23,8 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import PFintervention from '../../components/PFintervention.vue';
-import BarChart from '/src/components/chart.vue'
+import BarChart from '../../components/chart.vue'
 export default {
 
 }
 </script>
-
-<style>
-
-</style>

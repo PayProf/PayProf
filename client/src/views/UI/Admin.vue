@@ -16,7 +16,7 @@
 </div>
 
 <div class="overflow-x-auto" style="margin-left: 20px; margin-right: 50px;">
-    <h1 style=" margin-top: 0px;">Table Enseignaint :</h1>
+    <h1 style=" margin-top: 0;">Table Enseignaint :</h1>
     <div class="form-control">
   <div class="input-group">
     <input type="text" placeholder="Search…" class="input input-bordered" />
@@ -73,7 +73,7 @@
   
 
 <script>
-import PopupForm from '/src/components/PopupForm.vue';
+import PopupForm from '../../components/PopupForm.vue';
 import {mapActions,mapState} from 'vuex';
 export default {
   name: 'Admin',
@@ -109,16 +109,6 @@ export default {
 <style scoped>
   .delete-btn,
   .add-btn,
-  .inspect-btn {
-    position: relative;
-    display: inline-block;
-    padding: 0;
-    border: none;
-    background: none;
-    cursor: pointer;
-    margin-right: 10px;
-    
-  }
 
   .tooltip {
     position: absolute;
@@ -148,16 +138,6 @@ export default {
     top: -25px;
     left: 50%;
     transform: translateX(-50%);
-  }
-  .search-bar-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-  }
-  
-  .search-bar {
-    width: 200px;
-    margin-left: 10px;
   }
 
 </style>
