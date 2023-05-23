@@ -27,9 +27,17 @@ route::get('ens/{ens}/pay',[EnseignantController::class,'ShowMyPayments']);
 
 route::apiResource('adm',AdministrateurController::class);
 
-route::apiResource('grd',GradeController::class);
+//========================================= Grade API =====================================================
+
+route::apiResource('Grade',GradeController::class);
+
+//=========================================================================================================
+
+
+
 
 route::apiResource('int',InterventionController::class);
+
 
 route::apiResource('pay',PaiementsController::class);
 
