@@ -33,7 +33,7 @@ class InterventionController extends Controller
           }
 
 
-//===========================================  The access is retricted for:AdminUAE||President ================================================== 
+//===========================================  The access is retricted for:AdminEtab ================================================== 
     
 
     /**
@@ -58,8 +58,7 @@ class InterventionController extends Controller
                  $intervention->enseignant_id=$enseignant ;
                  $intervention->etablissement_id= $etablissement ;
                  $intervention->save();
-                       
-                        return $this->succes("","Intervention added successfully");
+                 return $this->succes("","Intervention added successfully");
 
                 
           }
@@ -90,13 +89,7 @@ class InterventionController extends Controller
                     
                      
                      $enseignant=$intervention->IdEnseignant($request['PPR']);
-                     // $etablissement= 1; //
-                    $role=auth()->user()->role;
-                    if($role==1)
-                    {
-                        $etablissement=auth()->user()->administrateur->etablissement_id;
-                    }
-                    
+                     // $etablissement= 1; //auth()->user()->administrateur->etablissement_id;
                    
                       $intervention->intitule_intervention=$request['IntituleIntervention'];
                       $intervention->annee_univ = $request['AnneeUniv'] ;
@@ -159,7 +152,20 @@ class InterventionController extends Controller
         public function ShowMyEtabInterventions()
         
         {  
-              $etab_id=1; //auth()->user()->administrateur->etablissement_id;
+           
+              /* should be approved By the security developper */
+            //    $role=auth()->user()->role;
+            //    if($role==1)
+            //    {
+            //     $etab_id=auth()->user()->administrateur->etablissement_id;
+            //    }
+            //    elseif($role==2)
+            //    {
+            //     $etab_id=auth()->user()->directeur->etablissement_id;
+                    
+            //    }
+             $etab_id=1;
+              
              return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5));
            
 
