@@ -9,6 +9,8 @@ use App\Http\Controllers\api\PaiementsController;
 use App\Http\Controllers\api\DirecteurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DirecteurController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +45,7 @@ route::PATCH('Enseignant/{Enseignant}/UpdateMyEmail',[EnseignantController::clas
 route::apiResource('adm',AdministrateurController::class);
 
 route::apiResource('grd',GradeController::class);
+route::apiResource('direct',DirecteurController::class);
 
 
 
@@ -68,6 +71,7 @@ route::apiResource('etab',EtablissementController::class);
 
 
 
+
 //============================================ Directeur API ============================================
 
 route::apiResource('Directeur',DirecteurController::class);
@@ -83,6 +87,14 @@ route::PATCH('Directeur/{Directeur}/UpdateMyEmail',[DirecteurController::class,'
 
 
 
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+route::post('/login',[AuthController::class,'login']);
+
+route::group(['middleware'=>['auth:sanctum']],function(){
+    route::get('/logout',[AuthController::class,'logout']);
+    route::get('/refrech',[AuthController::class,'refreshToken']);
+}
+);

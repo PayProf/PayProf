@@ -20,6 +20,4 @@ trait HttpResponses{
 
         }
 
-
-
 }
