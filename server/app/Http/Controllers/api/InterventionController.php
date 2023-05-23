@@ -81,6 +81,7 @@ class InterventionController extends Controller
 
           }
 
+
 //=========================================== The access is retricted for:AdminEtab ==========================================================          
  
 
@@ -95,10 +96,8 @@ class InterventionController extends Controller
 
   
           {                
-                 $intervention=Intervention::FindOrFail($id);
-                    
-                     
-                 $enseignant=$intervention->IdEnseignant($request['PPR']);                               //it's a method that return the id of the enseignant 
+                 $intervention=Intervention::FindOrFail($id);   
+                 $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant 
                  // $etablissement= 1; //auth()->user()->administrateur->etablissement_id; 
                  $intervention->intitule_intervention=$request['IntituleIntervention'];
                  $intervention->annee_univ = $request['AnneeUniv'] ;
@@ -107,30 +106,39 @@ class InterventionController extends Controller
                  $intervention->date_fin = $request['DateFin'] ;
                  $intervention->Nbr_heures = $request['NbrHeures'] ;
                  $intervention->enseignant_id=$enseignant;
-                 //$intervention->etablissement_id=$etablissement;
+                 //$intervention->etablissement_id=$etablissement;                                        // we will not use it because when he update the etablissement_id remain the same 
                  $intervention->save();
-                      
+                 return $this->succes("","Intervention updated successfully");
+          }
 
-                      return $this->succes("","Intervention updated successfully");
-    }
+          
 
+//=========================================The access is retricted for:AdminEtab =================================================================          
+
+   
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Destroy() this method serve to remove a specified intervention.
+     * @param  int  $id ID Intervention !!!!!!
+     * @return ///a success message that means the directeur was successfully deleted. 
      */
-    public function destroy($id)
-    {
-       $intervention= Intervention::find($id);
      
-       if($intervention)
-       {
-        $intervention->delete();
-        return $this->succes("","intervention deleted successfully");
-       }
+       public function destroy($id)
 
-    }
+
+          {
+                 $intervention= Intervention::find($id);
+     
+                 if($intervention)
+                 {
+                 $intervention->delete();
+                 return $this->succes("","intervention deleted successfully");
+                 }
+
+          }
+
+
+
+//==========================================  ===============================          
 
     public function ShowMore($id)
     {    // the goal of the this function it's to give a nice appearance of the interventions 

@@ -99,7 +99,7 @@ class DirecteurController extends Controller
     /**
      * Destroy() this method serve to remove a specified directeur.
      * @param  int  $id IDDIRECTEUR !!!!!!
-     * @return ///a success message that mean the directeur was successfully deleted. 
+     * @return ///a success message that means the directeur was successfully deleted. 
      */
       
      public function destroy($id)
