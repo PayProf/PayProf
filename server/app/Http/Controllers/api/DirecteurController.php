@@ -18,7 +18,7 @@ class DirecteurController extends Controller
    
  
     /**
-     * Indexe() it's a methode that serve to display all the directors with there etablissement.
+     * Index() it's a methode that serve to display all the directors with there etablissement.
      * I used in this method DirecteurResource that serve to filter the data .
      * @return mixed the important data of all directeurs such as :(Nom|prenom|etablissement......) .
     */

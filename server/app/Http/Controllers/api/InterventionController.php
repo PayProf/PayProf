@@ -17,26 +17,32 @@ class InterventionController extends Controller
     use HttpResponses;
    
    
-//=========================================The access is retricted for:AdminUAE||President ================================================
+//========================================= The access is retricted for:AdminUAE||President ================================================
    
  
     /**
-     * Indexe() it's a methode that serve to display all the directors with there etablissement.
-     * I used in this method DirecteurResource that serve to filter the data .
-     * @return mixed the important data of all directeurs such as :(Nom|prenom|etablissement......) .
+     * Indexe() it's a methode that serve to display all the interventions with the name of the etablissement and also name of Enseiganant.
+     * I used  InterventionResource class  that serve to filter  data .
+     * @return mixed the important data of all interventions.
     */
 
-    public function index()
-            {    //return Intervention ::all();
+       public function index()
+
+          {   
                  return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(5));
-            }
+          }
+
+
+//===========================================  The access is retricted for:AdminUAE||President ================================================== 
+    
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Store() it's a method that serve to add a new intervention.
+     * @param  StoreInterventionrRequest / it's a class that serve to validate the data before the insert.
+     * @return  / a success message that mean the  new intervention was successfully inserted 
+     * Attention the comments in this method must be respected 
      */
+    
     public function store(StoreInterventionRequest $request)
             {
                 //  $intervention=new InterventionResource(Intervention::create($request->all()));
