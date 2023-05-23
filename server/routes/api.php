@@ -30,16 +30,18 @@ route::get('Enseignant/{Enseignant}/MyPayments',[EnseignantController::class,'Sh
 route::POST('Enseignant/{Enseignant}/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
 //route of ShowMyProfil
 route::get('Enseignant/{Enseignant}/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
-//route MyHours
+//route of MyHours
 route::get('Enseignant/{Enseignant}/MyHours',[EnseignantController::class,'MyHours']);
-//route UpdateMyEmail
+//route of UpdateMyEmail
 route::PATCH('Enseignant/{Enseignant}/UpdateMyEmail',[EnseignantController::class,'UpdateMyEmail']);
 
-//============================================ ====================================================
+//=====================================================================================================
 
 route::apiResource('adm',AdministrateurController::class);
 
 route::apiResource('grd',GradeController::class);
+
+
 
 route::apiResource('int',InterventionController::class);
 //route of showmore details about an intervention
@@ -51,15 +53,24 @@ route::PATCH('int/{int}/visaetab',[InterventionController::class ,'activeVisaEta
 //route of the ShowMyEtabInterventions
 route::get('ShowMyEtabInterventions',[InterventionController::class ,'ShowMyEtabInterventions']);
 
+
+
 route::apiResource('pay',PaiementsController::class);
 
 route::apiResource('etab',EtablissementController::class);
 
+
+
+//============================================ Diresteur API ============================================
 route::apiResource('dir',DirecteurController::class);
+//route of UploadMyImage
 route::POST('dir/{dir}/UploadMyImage',[DirecteurController::class,'UploadMyImage']);
+//route of ShowMyProfil
 route::get('dir/{dir}/ShowMyProfil',[DirecteurController::class,'ShowMyProfil']);
+//route of UpdateMyEmail
 route::PATCH('dir/{dir}/UpdateMyEmail',[DirecteurController::class,'UpdateMyEmail']);
 
+//=======================================================================================================
 
 
 
