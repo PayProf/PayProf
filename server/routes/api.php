@@ -20,22 +20,22 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-route::apiResource('ens',EnseignantController::class);
+//====================================Enseignant API ==================================================
+route::apiResource('Enseignant',EnseignantController::class);
 //route of  ShowMyInterventions
-route::get('ens/{ens}/MyIntervention',[EnseignantController::class,'ShowMyInterventions']);
+route::get('Enseignant/{Enseignant}/MyIntervention',[EnseignantController::class,'ShowMyInterventions']);
 //route of  ShowMyPayments
-route::get('ens/{ens}/MyPayments',[EnseignantController::class,'ShowMyPayments']);
+route::get('Enseignant/{Enseignant}/MyPayments',[EnseignantController::class,'ShowMyPayments']);
 //route of UploadMyImage
-route::POST('ens/{ens}/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
-
-//route::get('MyEtabProf',[EnseignantController::class,'MyEtabProf']);
-
+route::POST('Enseignant/{Enseignant}/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
 //route of ShowMyProfil
-route::get('ens/{ens}/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
+route::get('Enseignant/{Enseignant}/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
 //route MyHours
-route::get('ens/{ens}/MyHours',[EnseignantController::class,'MyHours']);
+route::get('Enseignant/{Enseignant}/MyHours',[EnseignantController::class,'MyHours']);
 //route UpdateMyEmail
-route::PATCH('ens/{ens}/UpdateMyEmail',[EnseignantController::class,'UpdateMyEmail']);
+route::PATCH('Enseignant/{Enseignant}/UpdateMyEmail',[EnseignantController::class,'UpdateMyEmail']);
+
+//============================================ ====================================================
 
 route::apiResource('adm',AdministrateurController::class);
 
