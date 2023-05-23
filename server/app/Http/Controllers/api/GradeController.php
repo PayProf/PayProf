@@ -69,7 +69,7 @@ class GradeController extends Controller
      *
      * @param  UpdateGradeRequest this class contains the validation rules.
      * @param  int  $id IDGRADE !!!!!!
-     * @return // an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated succefully
+     * @return // an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
      */
        public function update(UpdateGradeRequest $request, $id)
           {
@@ -82,19 +82,26 @@ class GradeController extends Controller
 
 
     /**
-     * destroy th specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * destroy serve to remove the specified grade from storage.
+     * @param  int  $id IDGRADE!!!!!
+     * @return /// an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
      */
-    public function destroy($id)
-        {
-            $grade=Grade::FindOrFail($id);
-            if($grade)
-            {
-                $grade->delete();
-                return response()->json(["message"=>"deleted successfuly"]);
-            }
-        }
+       public function destroy($id)
+          {
+                 $grade=Grade::FindOrFail($id);
+                 if($grade)
+                 {
+                 $grade->delete();
+                 return response()->json(["message"=>"deleted successfuly"]);
+                 }
+          }
 }
+
+
+//================================================ SMEH LINA A KHOYA REDA SBER M3ANA ================================================================
+
+
+
+
+// ======================================================= YOUSSEF HARRAK =========================================================================
 
