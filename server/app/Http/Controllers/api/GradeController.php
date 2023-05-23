@@ -11,32 +11,34 @@ use Illuminate\Http\Request;
 
 class GradeController extends Controller
 {
+//=====================================================The access is retricted for :AdminUAE| AdminEtab| President | DirecteurEtab ======================================================
+    
     /**
-     * Display a listing of the resource.
+     * Index() this methode serve to display all the grades.
      *
-     * @return \Illuminate\Http\Response
+     * @return /all the information of all  grades 
      */
-    public function index()
-        {
-            //display all the grades with a pigination of 10 grades/page 
-             return GradeResource::collection(Grade::latest()->paginate(10));
-        }
 
+       public function index()
+          {
+                 return GradeResource::collection(Grade::latest()->paginate(10));
+          }
+
+//======================================================================= The access is retricted for :AdminUAE| AdminEtab =============================================================================================          
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Store it's a method taht serve to add a new grade .
+     * @param 
+     * @return / a success message which mean the grade was successfully added
      */
-    public function store(StoreGradeRequest $request)
-        {
-            //this method store the data entered by the admin
-            $grade= new GradeResource(Grade::create($request->all()));
-            if($grade)
-            {
-                return response()->json(["message"=>"added successfuly"]);
-            }
-        }
+       public function store(StoreGradeRequest $request)
+          {
+            
+                 $grade= new GradeResource(Grade::create($request->all()));
+                 if($grade)
+                 {
+                 return response()->json(["message"=>"added successfuly"]);
+                 }
+          }
 
     /**
      * Display the specified resource.

@@ -109,7 +109,7 @@ class EnseignantController extends Controller
                                 
                         
                 }
-                /////////////////////////////////////////// should br added
+                /////////////////////////////////////////// should be added////////////////////////////////////////
 
                 public function ShowMyPayments($id)
                 {
