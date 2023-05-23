@@ -111,7 +111,7 @@ class InterventionController extends Controller
                  return $this->succes("","Intervention updated successfully");
           }
 
-          
+
 
 //=========================================The access is retricted for:AdminEtab =================================================================          
 
@@ -138,13 +138,26 @@ class InterventionController extends Controller
 
 
 
-//==========================================  ===============================          
+//==========================================  =============================== 
+
+
+
+    /**
+     * ShowMore this method serve to display more information about a specified intervention.
+     * @param  int  $id ID Intervention !!!!!!
+     * @return ///a success message that means the directeur was successfully deleted. 
+     */         
+
 
     public function ShowMore($id)
     {    // the goal of the this function it's to give a nice appearance of the interventions 
         //because we can't display all the fields in a table so i suggest to create like interface where we can display all the details of the intervention 
              return new InterventionShowMoreResource(Intervention::with('enseignant','etablissement')->find($id));
+
     }
+//=================================== ==============================================================
+
+
 
     public function activeVisaUae(UpdateInterventionRequest $request,$id)
     {
@@ -164,7 +177,7 @@ class InterventionController extends Controller
 
     }
 
-
+//=====================================  ===================================================================
         public function ShowMyEtabInterventions()
         
         {  
