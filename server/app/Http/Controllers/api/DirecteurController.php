@@ -131,11 +131,11 @@ class DirecteurController extends Controller
         }
 
 
-//==============================================The access is retricted for:Directeur=====================================
+//==============================================The access is retricted for:Directeur =====================================
    
    
     /**
-     * ShowMyProfil this method serve to display the informations of a specified directeur.
+     * ShowMyProfil this method serve to display the informations of the directeur Who just logged in.
      * @param  int  $id User_id of the directeur  !!!!!!
      * I used in this method DirecteurResource that serve to filter the data .
      */
@@ -151,9 +151,8 @@ class DirecteurController extends Controller
       
    
     /**
-     * UploadMyImage this method serve to upload the Profil picture of a specified directeur.
+     * UploadMyImage this method serve to upload the Profil picture of the directeur Who just logged inr.
      * @param  int  $id User_id of the directeur  !!!!!!
-     * I used in this method DirecteurResource that serve to filter the data .
      * @return //success message that mean the picture was successfully uploaded .
      */
 

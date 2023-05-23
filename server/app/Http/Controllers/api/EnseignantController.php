@@ -160,49 +160,42 @@ class EnseignantController extends Controller
           }
    
 
-//=============================================== The access is retricted for:Enseignant  =====================================================              
-          //this method is specially for the adminEtab
-//                 public function MyEtabProf()
-//                 { 
-//                   $id=7;                       //auth()->user()->administrateur->etablissement_id;
-//                   return EnseignantResource::collection(Enseignant::where('etablissement_id','=',$id)->with('etablissement','grade')->latest()->paginate(10)); 
+//============================================ The access is retricted for:Enseignant  =====================================================              
+        
+   
+    /**
+     * UploadMyImage this method serve to upload the Profil picture of the enseignant Who just logged inr.
+     * @param  int  $id User_id of the Enseignant  !!!!!!
+     * @return //success message that mean the picture was successfully uploaded .
+     */
+  
+       public function UploadMyImage( Request $request,$id)
+       
+          {
 
-//                 }
-               public function UploadMyImage( Request $request,$id)
-               {
+                 $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
 
-                         $request->validate(
-                              [
-                                   'image'=>'required|max:1024|mimes:png,jpg,png'
-                                  
-                               ]
-                              );
+                 $enseignant=Enseignant::where('user_id',$id)->first();
+                 if($request->hasFile('image'))
+                 {
+                 $file=$request->image;
+                 $image_name=time().'_'. $file->getClientOriginalName();
+                 $file->move(public_path('uploads'),$image_name);                 
+        
+// ===================== if the enseignant already has a ProfilPicture =======================================
+                 if($enseignant->image)
+                 { unlink(public_path('uploads'). '/' .$enseignant->image); }                 
+                 $enseignant->image=$image_name;
+                 $result=$enseignant->save();
+                 } 
+// =================================== Si le resultat est true ==============================================                          
+                 if($result)
+                 {
+                 return $this->succes("","image uploaded successfully");    
+                 }
 
-
-                            $ens=Enseignant::where('user_id',$id)->first();
-                            if($request->hasFile('image'))
-                         { 
-                              $file=$request->image;
-                              $image_name=time().'_'. $file->getClientOriginalName();
-                              $file->move(public_path('uploads'),$image_name);
-                             
-                             
-                              if($ens->image)
-                         {
-                              unlink(public_path('uploads'). '/' .$ens->image);
-                         }
-                              
-                              $ens->image=$image_name;
-                              $result=$ens->save();
-                         }
-                              
-                         if($result)
-                         {
-                              return $this->succes("","image uploaded successfully");    
-                         }
- 
-                   
-               }
+//==================================== The access is retricted for:Enseignant   ============================================================                
+           }
 
 
                public function ShowMyProfil($id)
