@@ -18,9 +18,26 @@ class Enseignant extends Model
         'etablissement_id',
         'grade_id',
         'user_id',
+        'image',
+        'email_perso'
 
     ];
 
+
+       public function IdGrade($designation)
+           {
+                 $grade_id=DB::table('grades')
+                 ->select('id')
+                 ->where('designation', $designation)
+                 ->first();
+                 return $grade_id->id;
+           }
+       public function Hours($id)
+          {
+                
+                 $hours=DB::table('interventions')->where('enseignant_id',$id)->sum('Nbr_heures'); 
+                 return $hours;
+          }
 
 
 

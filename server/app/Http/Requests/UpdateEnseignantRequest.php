@@ -33,38 +33,34 @@ class UpdateEnseignantRequest extends FormRequest
                         'PPR'=>['required'],
                         'nom'=>['required'],
                         'prenom'=>['required'],
-                        'DateNaissancee'=>['required','date'],
-                        'IdEtablissemen'=>['required'],
-                        'IdGrade'=>['required'],
-                        'IdUser'=>['required'],
+                        'DateNaissance'=>['required','date'],
+                      //  'Etablissement'=>['required'],
+                        'Grade'=>['required'],
+                       // 'email_perso'=>['required','email','unique:enseignants'],
+                       // 'IdUser',
+                       
                     ];
             }
 
             else // if the method is PATCH
             { 
-
-                return [                 
+                
+                return
+                 [                 
                     
                     // only the specified fileds will be modified and sent to the db
-
-                    'PPR'=>['sometimes','required'],
-                    'nom'=>['sometimes','required'],
-                    'prenom'=>['sometimes','required'],
-                    'DateNaissancee'=>['sometimes','required','date'],
-                    'IdEtablissemen'=>['sometimes','required'],
-                    'IdGrade'=>['sometimes','required'],
-                    'IdUser'=>['sometimes','required'],
-
-                ];
+                    'email_perso'=>['sometimes','required','email','unique:enseignants'],
+                 ];
+                
             }
     }
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'date_naissance'=> ucfirst($this->DateNaissance),
-            'etablissement_id'=>ucfirst($this->IdEtablissement),
-            'grade_id'=>ucfirst($this->IdGrade),
-            'user_id'=>ucfirst($this->IdUser),
-        ]);
-    }
+    // protected function prepareForValidation()
+    // {
+    //     $this->merge([
+    //         'date_naissance'=> ucfirst($this->DateNaissance),
+    //        // 'etablissement_id'=>ucfirst($this->IdEtablissement),
+    //         'grade_id'=>ucfirst($this->IdGrade),
+    //        // 'user_id'=>ucfirst($this->IdUser),
+    //     ]);
+    // }
 }

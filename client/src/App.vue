@@ -1,9 +1,11 @@
 <template>
 
+
 <Header/>
 <router-view/>
 <Footer/>
       
+
 
   
 </template>
@@ -18,6 +20,8 @@ import EtabDirecrteurs from './views/UI/TableDirecteurs.vue';
 import EtabAdmins from './views/UI/TableAdmins.vue';
 import AdminUAE from './views/UI/AdminUAE.vue';
 import DirecteurUAE from './views/UI/DirecteurUAE.vue';
+import store from "./store.js";
+
 
 
 export default{
@@ -38,9 +42,8 @@ export default{
       type:String,
       default:'ERR',
     }
-  }
+  },
+
+
 }
 </script>
-<style scoped>
-
-</style>

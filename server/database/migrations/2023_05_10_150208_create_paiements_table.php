@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->integer('VH');
             $table->integer('Taux_H');
             $table->unsignedFloat('Brut');
-            $table->unsignedFloat('IR')->default(0,05);
+            $table->unsignedFloat('IR')->default(0,3);
             $table->unsignedFloat('Net');
             $table->string('Annee_univ')->default('2022/2023');
             $table->string('Semestre')->default('S2');
