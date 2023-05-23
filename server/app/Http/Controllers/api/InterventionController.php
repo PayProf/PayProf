@@ -29,7 +29,7 @@ class InterventionController extends Controller
        public function index()
 
           {   
-                 return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(5));
+                 return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(10));
           }
 
 
@@ -197,6 +197,12 @@ class InterventionController extends Controller
 
 //=========================================  The access is retricted for : DirecteurEtab|AdminEtab   ===================================================================
        
+     /**
+     * ShowMyEtabInterventions  this method serve to display the interventions of the AdminEatblissement Or DirecteurEtablissement.
+     
+     * the comments should be respected and approved by the security developper 
+
+     */  
 
 
 
@@ -206,6 +212,7 @@ class InterventionController extends Controller
           {  
            
                 /* should be approved By the security developper */
+
                 //    $role=auth()->user()->role;
                 //    if($role==1)
                 //    {
@@ -217,20 +224,35 @@ class InterventionController extends Controller
                         
                 //    }
                  $etab_id=1;
-                 return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5));
+                 return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(10));
            
 
 
           }
 
-          
+//========================================================  The access is retricted for : DirecteurEtab|AdminEtab|President|AdminUAE    =================================================================         
+   
+     /**
+     * EnseignantInterventions this method serve to display the interventions of a specified enseignant.
+     * @param $id Id Enseignant !!!!!!!! 
+     */  
 
+
+       
        public function EnseignantInterventions($id)
-       {
+          {
 
-        return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
+                 return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
 
-       }
+          }
 
 
+
+          
+//================================================ SMEH LINA A KHOYA REDA SBER M3ANA ==========================================
+
+
+
+
+// ======================================================= YOUSSEF HARRAK ===========================================
 }   

@@ -137,8 +137,8 @@ class EnseignantController extends Controller
 
           {                
                 
-                 return  EnseignantInterventionResource::collection (Enseignant::where('user_id',$id)->with('interventions.etablissement')->get());
-                                          
+                 return  EnseignantInterventionResource::collection (Enseignant::where('user_id',$id)->with('interventions.etablissement')->paginate(10));
+                                       
        
           }
 //======================================================== The access is retricted for:Enseignant ===================================================

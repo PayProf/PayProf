@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //====================================Enseignant API ==================================================
+
 route::apiResource('Enseignant',EnseignantController::class);
 //route of  ShowMyInterventions
 route::get('Enseignant/{Enseignant}/MyIntervention',[EnseignantController::class,'ShowMyInterventions']);
@@ -38,24 +39,28 @@ route::PATCH('Enseignant/{Enseignant}/UpdateMyEmail',[EnseignantController::clas
 
 //=====================================================================================================
 
+
 route::apiResource('adm',AdministrateurController::class);
 
 route::apiResource('grd',GradeController::class);
 
 
 
-route::apiResource('int',InterventionController::class);
+//====================================== Intervention API ===========================================
+
+route::apiResource('Intervention',InterventionController::class);
 //route of showmore
-route::get('int/{int}/showmore',[InterventionController::class ,'ShowMore']);
+route::get('Intervention/{Intervention}/showmore',[InterventionController::class ,'ShowMore']);
 //route of the activation of the visaUAE
-route::PATCH('int/{int}/visauae',[InterventionController::class ,'activeVisaUae']);
+route::PATCH('Intervention/{Intervention}/visauae',[InterventionController::class ,'activeVisaUae']);
 //route of the activation of the visaETAb
-route::PATCH('int/{int}/visaetab',[InterventionController::class ,'activeVisaEtab']);
+route::PATCH('Intervention/{Intervention}/visaetab',[InterventionController::class ,'activeVisaEtab']);
 //route of the ShowMyEtabInterventions
 route::get('ShowMyEtabInterventions',[InterventionController::class ,'ShowMyEtabInterventions']);
 //route of EnseignantInterventions
-route::get('int/{int}/EnseignantInterventions',[InterventionController::class,'EnseignantInterventions']);
+route::get('Interventiont/{Intervention}/EnseignantInterventions',[InterventionController::class,'EnseignantInterventions']);
 
+//======================================================================================================
 
 route::apiResource('pay',PaiementsController::class);
 
@@ -63,14 +68,15 @@ route::apiResource('etab',EtablissementController::class);
 
 
 
-//============================================ Diresteur API ============================================
-route::apiResource('dir',DirecteurController::class);
+//============================================ Directeur API ============================================
+
+route::apiResource('Directeur',DirecteurController::class);
 //route of UploadMyImage
-route::POST('dir/{dir}/UploadMyImage',[DirecteurController::class,'UploadMyImage']);
+route::POST('Directeur/{Directeur}/UploadMyImage',[DirecteurController::class,'UploadMyImage']);
 //route of ShowMyProfil
-route::get('dir/{dir}/ShowMyProfil',[DirecteurController::class,'ShowMyProfil']);
+route::get('Directeur/{Directeur}/ShowMyProfil',[DirecteurController::class,'ShowMyProfil']);
 //route of UpdateMyEmail
-route::PATCH('dir/{dir}/UpdateMyEmail',[DirecteurController::class,'UpdateMyEmail']);
+route::PATCH('Directeur/{Directeur}/UpdateMyEmail',[DirecteurController::class,'UpdateMyEmail']);
 
 //=======================================================================================================
 
