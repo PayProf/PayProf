@@ -195,30 +195,35 @@ class InterventionController extends Controller
 
 
 
-//=====================================  ===================================================================
-        public function ShowMyEtabInterventions()
+//=========================================  The access is retricted for : DirecteurEtab|AdminEtab   ===================================================================
+       
+
+
+
+       public function ShowMyEtabInterventions()
+
         
-        {  
+          {  
            
-              /* should be approved By the security developper */
-            //    $role=auth()->user()->role;
-            //    if($role==1)
-            //    {
-            //     $etab_id=auth()->user()->administrateur->etablissement_id;
-            //    }
-            //    elseif($role==2)
-            //    {
-            //     $etab_id=auth()->user()->directeur->etablissement_id;
-                    
-            //    }
-             $etab_id=1;
-              
-             return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5));
+                /* should be approved By the security developper */
+                //    $role=auth()->user()->role;
+                //    if($role==1)
+                //    {
+                //     $etab_id=auth()->user()->administrateur->etablissement_id;
+                //    }
+                //    elseif($role==2)
+                //    {
+                //     $etab_id=auth()->user()->directeur->etablissement_id;
+                        
+                //    }
+                 $etab_id=1;
+                 return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5));
            
 
 
-        }
+          }
 
+          
 
        public function EnseignantInterventions($id)
        {
