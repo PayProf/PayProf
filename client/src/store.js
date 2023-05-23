@@ -25,6 +25,7 @@ export default createStore({
         role:0,//sessionStorage.getItem('ROLE'),
         token:123//sessionStorage.getItem('TOKEN'),
       },
+      
       Interventions:[
         {
           
@@ -37,7 +38,41 @@ export default createStore({
           Date_Fin: "",
           Nombre_heures: ""
         }
+      ],
+
+      Admins :[
+        {
+          ppr: "",
+          nom: "",
+          prenom: "",
+          email: "",
+          role: 2
+        }
+      ],
+
+      EtabDirecteurs: [
+        {
+          ppr: "",
+          nom: "",
+          prenom: "",
+          email: "",
+          role: 1,
+
+        }
+      ],
+
+      Etablisment:[
+        {
+          code: "",
+          nom: "",
+          telephone:"",
+          fax:"",
+          nbreenseignants:"",
+
+        }
       ]
+
+
 
 
 
@@ -47,6 +82,7 @@ export default createStore({
    
   },
   mutations: {
+
 
     /*
     Here's the mutation that changes the current state when logged in
@@ -65,25 +101,49 @@ export default createStore({
     },
 
 
+    /*Set Enseignants */
+    
     setEnseignants (state,payload){
       state.enseignants=payload;
     },
+
+    /* Set Interventions */
     setInterventions (state,payload){
       state.Interventions=payload;
     },
-    addEnseignant(state, enseignants){
+
+    /* Add Enseignant */
+    addEnseignant(state, enseignants) {
+  
       state.enseignants.push(enseignants);
+    },
+
+    /* Add Etablisment */
+    addEtablisment(state, Etablisment){
+      state.Etablisment.push(Etablisment);
+    },
+
+    /* Set Etablisment */
+    setEtablisment(state,payload){
+      state.enseignants=payload;
+    },
+
+    /* Set Enseignant */
+    setEnseignants (state,payload){
+      state.enseignants=payload;
     },
   },
   actions: {
+
     async addEnseignant({ commit }, enseignants) {
       try {
-        const response = await axios.post('http://localhost:5000/enseignants', enseignant);
+        const response = await axios.post('http://localhost:5000/enseignants', enseignants);
         commit('addEnseignant', response.data);
       } catch (error) {
         console.log(error);
       }
     },
+
     async getInterventions({commit}){
       try{
       const response =await axios.get('http://localhost:5000/Interventions');
@@ -96,10 +156,33 @@ export default createStore({
         console.log(error)
       }
     },
+
+
     async getEnseignants({commit}){
       try{
       const response =await axios.get('http://localhost:5000/enseignants');
       commit('setEnseignants',response.data)
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
+
+
+    async addEtablisment({ commit }, Etablisment) {
+      try {
+        const response = await axios.post('http://localhost:5000/Etablissment', Etablisment);
+        commit('addEtablisment', response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+
+    async getEtablisment({commit}){
+      try{
+      const response =await axios.get('http://localhost:5000/Etablissment');
+      commit('setEtablissment',response.data)
       }
       catch(error){
         console.log(error)

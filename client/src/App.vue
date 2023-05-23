@@ -1,19 +1,23 @@
 <template>
-  
-<div class="flex flex-row"><Header title="PayProf"/></div>
 
-  <RouterView></RouterView>
+<Header/>
+<router-view/>
+<Footer/>
+      
 
-  <Footer/>
   
 </template>
-<!-- test -->
+
 <script >
 import {RouterView,RouterLink} from "vue-router"
 import { def } from '@vue/shared';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-
+import Etabs from './views/UI/TableEtablissements.vue';
+import EtabDirecrteurs from './views/UI/TableDirecteurs.vue';
+import EtabAdmins from './views/UI/TableAdmins.vue';
+import AdminUAE from './views/UI/AdminUAE.vue';
+import DirecteurUAE from './views/UI/DirecteurUAE.vue';
 
 
 export default{
@@ -21,9 +25,13 @@ export default{
   components:{
     Header,
     Footer,
-    // Home
-    
-    
+    Etabs,
+    EtabDirecrteurs,
+    AdminUAE,
+    EtabAdmins,
+    AdminUAE, 
+    DirecteurUAE,
+
 },
   props:{
     title:{
