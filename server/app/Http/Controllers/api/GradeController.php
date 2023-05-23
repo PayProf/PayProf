@@ -51,35 +51,32 @@ class GradeController extends Controller
 
     /**
      * show this method serve to display the data of a  specified grade.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id GradeID !!!!
+     * @return /the information of the specified Grade.
      */
-    public function show($id)
-        {   
+       public function show($id)
+          {   
             
-            return new GradeResource(Grade::findOrFail($id));
+                 return new GradeResource(Grade::findOrFail($id));
         
-        }
+          }
 
-//========================================================================================= ============================================================        
+
+//========================================================================================= The access is retricted for : AdminUAE| AdminEtab  ============================================================        
 
     /**
-     * Update the specified resource in storage.
+     * Update this method serve to update the information of a specified Grade.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  UpdateGradeRequest this class contains the validation rules.
+     * @param  int  $id IDGRADE !!!!!!
+     * @return // an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated succefully
      */
-    public function update(UpdateGradeRequest $request, $id)
-        {
-            
-            //the class UpdateGradeRequest handles both PUT and Patch Request(for more details check the class  )
-            //the error msg will appear in case of incorrect identifier
-            Grade::findOrFail($id)->update($request->all());
-
-        }
-
+       public function update(UpdateGradeRequest $request, $id)
+          {
+                 Grade::findOrFail($id)->update($request->all());
+                 return response()->json(["message"=>" Updated successfully"]);
+          }
+//================================================================== ==================================================
     /**
      * Remove the specified resource from storage.
      *
