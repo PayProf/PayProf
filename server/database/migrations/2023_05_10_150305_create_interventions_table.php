@@ -13,9 +13,11 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('interventions', function (Blueprint $table) {
+
             $table->id();
             $table->foreignId('enseignant_id')->constrained()->onDelete('cascade');
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
+            $table->foreignId('paiement_id')->nullable()->constrained();
             $table->string('intitule_intervention');
             $table->string('annee_univ')->default('2022/2023');
             $table->string('semestre')->default('S2');
@@ -24,7 +26,6 @@ return new class extends Migration {
             $table->boolean('visa_uae')->default(0);
             $table->boolean('visa_etab')->default(0);
             $table->unsignedInteger('Nbr_heures');
-
             $table->timestamps();
         });
     }

@@ -22,26 +22,31 @@ class StoreEnseignantRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
+    {                               
+        
         return [
-            'PPR'=>['required'],
+            'PPR'=>['required','max:255','unique:enseignants'],
             'nom'=>['required'],
             'prenom'=>['required'],
             'DateNaissance'=>['required','date'],
-            'IdEtablissement'=>['required'],
-            'IdGrade'=>['required'],
-            'IdUser'=>['required'],
+            //'IdEtablissement'=>['default:1'],
+            'Grade'=>['required'],
+            'email_perso'=>['required','email','unique:enseignants'],
+            
+            
+           // 'IdUser'=>['required'],
         ];
     }
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'date_naissance'=> ucfirst($this->DateNaissance),
-            'etablissement_id'=>ucfirst($this->IdEtablissement),
-            'grade_id'=>ucfirst($this->IdGrade),
-            'user_id'=>ucfirst($this->IdUser),
-        ]);
-    }
+    // protected function prepareForValidation()
+    // {
+    //     $this->merge([
+    //         'date_naissance'=> ucfirst($this->DateNaissance),
+    //         'etablissement_id'=>ucfirst($this->IdEtablissement),
+    //         'grade_id'=>ucfirst($this->IdGrade),
+    //        // 'email_perso'=>ucfirst($this->Email),
+    //        // 'user_id'=>ucfirst($this->IdUser),
+    //     ]);
+    // }
 
      
     

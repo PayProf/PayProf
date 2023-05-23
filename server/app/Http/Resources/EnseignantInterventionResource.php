@@ -18,6 +18,7 @@ class EnseignantInterventionResource extends JsonResource
        
            
         return [
+            'PPR'=>$this->PPR,
             "interventions" => $this->interventions->map(function ($intervention) {
                 return [
                     "IntituleIntervention" => $intervention->intitule_intervention,

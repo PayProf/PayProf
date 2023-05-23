@@ -17,12 +17,14 @@ class DirecteurFactory extends Factory
     public function definition()
     {
         return [
-            'PPR' => fake()->numberBetween(),
-            'nom' => fake()->lastName(),
-            'prenom' => fake()->firstName(),
-            'etablissement_id' => fake()->numberBetween(1, 10),
-            'user_id' => fake()->numberBetween(1, 10),
-            'email_perso' => fake()->email(),
+            'PPR'=>fake()->numberBetween(),
+            'nom'=>fake()->lastName(),
+            'prenom'=>fake()->firstName(),
+            'date_naissance' =>fake()->date(),
+            'etablissement_id'=>fake()->numberBetween(1,10),
+            'user_id'=>fake()->numberBetween(1,10),
+            'email_perso'=>fake()->email(),
+
         ];
     }
 }

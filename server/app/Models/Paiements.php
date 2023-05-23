@@ -20,4 +20,9 @@ class Paiements extends Model
         return $this->belongsTo(Enseignant::class );
       
     }
+
+    public function intervention()
+    {
+        return $this->hasOne(Intervention::class);
+    }
 }

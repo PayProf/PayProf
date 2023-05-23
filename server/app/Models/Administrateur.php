@@ -13,4 +13,8 @@ class Administrateur extends Model
         return $this->belongsTo(Etablissement::class);
       
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
