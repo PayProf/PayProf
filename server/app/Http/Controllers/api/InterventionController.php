@@ -7,21 +7,25 @@ use App\Http\Requests\StoreInterventionRequest;
 use App\Http\Requests\UpdateInterventionRequest;
 use App\Http\Resources\InterventionResource;
 use App\Http\Resources\InterventionShowMoreResource;
-
 use App\Models\Intervention;
-use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\DB;
 use App\Traits\HttpResponses;
 
 class InterventionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // A class that handles the success and error messages
     use HttpResponses;
+   
+   
+//=========================================The access is retricted for:AdminUAE||President ================================================
+   
+ 
+    /**
+     * Indexe() it's a methode that serve to display all the directors with there etablissement.
+     * I used in this method DirecteurResource that serve to filter the data .
+     * @return mixed the important data of all directeurs such as :(Nom|prenom|etablissement......) .
+    */
+
     public function index()
             {    //return Intervention ::all();
                  return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(5));
