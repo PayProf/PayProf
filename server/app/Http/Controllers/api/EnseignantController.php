@@ -28,6 +28,7 @@ class EnseignantController extends Controller
     */
    
        public function index()
+
           {   
                        
                  return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10)); 
@@ -49,15 +50,15 @@ class EnseignantController extends Controller
           {  
 
                  $enseignant=new Enseignant();
-                 $grade_id=$enseignant->IdGrade($request['Grade']);//IdGrade() it's a method that return the id of the grade 
-                 $etablissement_id=1;//auth()->user()->administrateur->etablissement_id // //the security developper should approuve it
+                 $grade_id=$enseignant->IdGrade($request['Grade']);                                       //IdGrade() it's a method that return the id of the grade 
+                 $etablissement_id=1;//auth()->user()->administrateur->etablissement_id                  //the security developper should approuve it
                  $enseignant->PPR = $request['PPR'];
                  $enseignant->nom = $request['nom'];
                  $enseignant->prenom = $request['prenom'];
                  $enseignant->date_naissance = $request['DateNaissance'];
                  $enseignant->etablissement_id = $etablissement_id;
                  $enseignant->grade_id =$grade_id;  //
-                 // $enseignant->user_id = $request['IdUser'];// i talked with the postgres admin to add a trigger for this  ;
+                 // $enseignant->user_id = $request['IdUser'];                                           // i talked with the postgres admin to add a trigger for this  ;
                  $enseignant->email_perso=$request['email_perso'];
                  $enseignant->save();
                  return $this->succes("","added successfully");
@@ -74,59 +75,65 @@ class EnseignantController extends Controller
      */
    
        public function show($id)
+
           {                                    
                  return new EnseignantResource(Enseignant::with('etablissement','grade')->FindOrFail($id));                    
-                 //$ens= Enseignant::with('grade','etablissement')->where('id',$id)->get();
-                 //return response()->json($ens);
+                 
           }
         
      
-//=========================================================== The access is retricted for:AdminUEtab|AdminUae===============================================
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-      public function update( UpdateEnseignantRequest $request, $id)
-                {   
-                
-                               //the class UpdateEnseignantRequest handles both PUT and Patch Request(for more details check the class  ) 
-                      
-                                   $enseignant=Enseignant::find($id);
-                                   $grade_id=$enseignant->IdGrade($request['Grade']);  
-                                   $enseignant->PPR = $request['PPR'];
-                                   $enseignant->nom = $request['nom'];
-                                   $enseignant->prenom = $request['prenom'];
-                                   $enseignant->date_naissance = $request['DateNaissance'];
-                                   $enseignant->grade_id=$grade_id;
-                                   $enseignant->email_perso=$request['email_perso'];
-                                   //dd($enseignant);
-                                   $enseignant->save();
-                                   return $this->succes("","updated successfully");
-                              
-                }
+//=========================================================== The access is retricted for:AdminUEtab ===============================================
+   
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update() this method serve to update the information of a specified enseignant.
+     * @param UpdateEnseignantRequest contain the validation rules of the data  //the class UpdateEnseignantRequest handles both PUT and Patch Request(for more details check the class  ) .
+     * @param  int  $id ID Enseignant !!!!!!!!
+     * @return  //a success message that mean the data of the enseignant was successfully updated.
      */
-                public function destroy($id)
-                { 
-                                // findorfail send a error msg in case of the entry of invalid id
-                                $ens= Enseignant::FindOrfail($id);
-                                
-                                unlink(public_path('uploads').'/'.$ens->image);
-                                
-                                $ens->delete();
-                        
-                                // success msg 
-                                return $this->succes("","enseignant deleted successfully");
-                
-                }
+       public function update( UpdateEnseignantRequest $request, $id)
+
+          {               
+                      
+                 $enseignant=Enseignant::find($id);
+                 $grade_id=$enseignant->IdGrade($request['Grade']);  
+                 $enseignant->PPR = $request['PPR'];
+                 $enseignant->nom = $request['nom'];
+                 $enseignant->prenom = $request['prenom'];
+                 $enseignant->date_naissance = $request['DateNaissance'];
+                 $enseignant->grade_id=$grade_id;
+                 $enseignant->email_perso=$request['email_perso'];
+                 $enseignant->save();
+                 return $this->succes("","updated successfully");
+                              
+          }
+//======================================= The access is retricted for:AdminEtab ==============================================
+    
+
+    /**
+     * Destroy() this method serve to remove a specified enseignant.
+     * @param  int  $id ID Enseignant !!!!!!
+     * @return ///a success message that mean the enseignant was successfully deleted. 
+     */
+
+       public function destroy($id)
+
+          {                
+                 $ens= Enseignant::FindOrfail($id);              
+                 unlink(public_path('uploads').'/'.$ens->image);                                         //destroy the appropriate image .       
+                 $ens->delete();              
+                 return $this->succes("","enseignant deleted successfully");  
+          }
+
+//=============================================== The access is retricted for:Enseignant ===========================================================================                
+   
+
+    /**
+     * Destroy() this method serve to remove a specified enseignant.
+     * @param  int  $id ID Enseignant !!!!!!
+     * @return ///a success message that mean the enseignant was successfully deleted. 
+     */
+
 
                 public function ShowMyInterventions($id)
 

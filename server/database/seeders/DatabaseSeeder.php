@@ -11,7 +11,6 @@ use App\Models\Etablissement;
 use App\Models\Grade;
 use App\Models\Intervention;
 use App\Models\Paiements;
-use App\Models\TypeUser;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 

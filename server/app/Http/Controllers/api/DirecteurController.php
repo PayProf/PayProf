@@ -43,13 +43,13 @@ class DirecteurController extends Controller
      
      {
             $directeur=new Directeur();
-            $request['IdEtablissement']=1;// auth()->user()->administrateur->etablissement_id//the security developper should approuve it
+            $request['IdEtablissement']=1;                                                                  // auth()->user()->administrateur->etablissement_id//the security developper should approuve it
             $directeur->PPR = $request['PPR'];
             $directeur->nom = $request['nom'];
             $directeur->prenom = $request['prenom'];
             $directeur->date_naissance = $request['DateNaissance'];
             $directeur->etablissement_id = $request['IdEtablissement'];
-            //$directeur->user_id = $request['IdUser'] // i talked with the postgres admin to add a trigger for this  ;
+            //$directeur->user_id = $request['IdUser']                                                      // i talked with the postgres admin to add a trigger for this  ;
             $directeur->email_perso=$request['email_perso'];
             $directeur->save();
             return $this->succes("","added successfully");
@@ -106,7 +106,7 @@ class DirecteurController extends Controller
     {
         $directeur=Directeur::FindOrfail($id);   
         $directeur->delete();
-        unlink(public_path('uploads').'/'.$directeur->image);//destroy the appropriate image .     
+        unlink(public_path('uploads').'/'.$directeur->image);                                               //destroy the appropriate image .     
         return $this->succes("","Directeur deleted successfully");
     }
 
