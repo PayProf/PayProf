@@ -129,38 +129,39 @@ class EnseignantController extends Controller
    
 
     /**
-     * Destroy() this method serve to remove a specified enseignant.
-     * @param  int  $id ID Enseignant !!!!!!
-     * @return ///a success message that mean the enseignant was successfully deleted. 
+     * ShowMyInterventions() this method serve to display the intervention of the enseignant Who just logged in .
+     * @param  int  $id User_id de l'Enseignant !!!!!!
+     * @return /// all the interventions of the enseignant Who just logged in  
      */
 
+       public function ShowMyInterventions($id)
 
-                public function ShowMyInterventions($id)
-
-                {                //I think this methods will make the process or the tasks much more easier to the manager of security 
-                                //$ensint=Enseignant::with('interventions.etablissement')->find($id);
-                                //return response()->json($ensint);
+          {                
                 
-                                //this method display all the interventions of a specified prof
-                                // attention  10 doit etre remplacée par  atttttttention  auth()->user()->id
-                                     //  auth()->user()->id  
-                                return  EnseignantInterventionResource::collection (Enseignant::where('user_id',$id)->with('interventions.etablissement')->get());
-                                                                                                //  auth()->user()->id                          
-                              // return response()->json(  dd(Enseignant::with('interventions.etablissement')->where('user_id','=',4))));
-                              // return Enseignant::where('user_id','=',4)->with('interventions.etablissement')->get();
-                        
-                }
+                 return  EnseignantInterventionResource::collection (Enseignant::where('user_id',$id)->with('interventions.etablissement')->get());
+                                          
+       
+          }
+//======================================================== The access is retricted for:Enseignant ===================================================
+      
 
-                public function ShowMyPayments($id)
-                {            //  auth()->user()->id ;
-                      $ens=Enseignant::where('user_id',$id)->with('paiements')->get();
-                                           
-                      return response()->json($ens);
+    /**
+     * ShowMyPaymentsthis method serve to display the payments of the enseignant Who just logged in .
+     * @param  int  $id User_id de l'Enseignant !!!!!! we can use auth()->user()->id ;
+     * @return /// all the payments of the enseignant Who just logged in  
+     */
+           
+       public function ShowMyPayments($id)
 
-                }
+          {      
+
+                 $ens=Enseignant::where('user_id',$id)->with('paiements')->get();                          
+                 return response()->json($ens);
+          }
    
 
-               //this method is specially for the adminEtab
+//=============================================== The access is retricted for:Enseignant  =====================================================              
+          //this method is specially for the adminEtab
 //                 public function MyEtabProf()
 //                 { 
 //                   $id=7;                       //auth()->user()->administrateur->etablissement_id;
