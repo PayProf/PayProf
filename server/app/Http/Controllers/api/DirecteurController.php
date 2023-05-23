@@ -115,7 +115,7 @@ class DirecteurController extends Controller
 
    
     /**
-     * UpdateMyEmail() this method serve to update the email of a specified directeur.
+     * UpdateMyEmail() this method serve to update the email of the directeur Who just logged in.
      * @param  int  $id User_id of the directeur  !!!!!!
      * @param  UpdateDirecteurRequest contain the validation rules of the data .
      * @return //a success message that mean the email of the directeur was successfully updated.
@@ -160,26 +160,26 @@ class DirecteurController extends Controller
        
         {
 
-            $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
+             $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
 
-            $directeur=Directeur::where('user_id',$id)->first();
-            if($request->hasFile('image'))
-            {
-            $file=$request->image;
-            $image_name=time().'_'. $file->getClientOriginalName();
-            $file->move(public_path('uploads'),$image_name);                 
+             $directeur=Directeur::where('user_id',$id)->first();
+             if($request->hasFile('image'))
+             {
+             $file=$request->image;
+             $image_name=time().'_'. $file->getClientOriginalName();
+             $file->move(public_path('uploads'),$image_name);                 
            
 // ===================== if the directeur already has a ProfilPicture =======================================
-            if($directeur->image)
-            { unlink(public_path('uploads'). '/' .$directeur->image); }                 
-            $directeur->image=$image_name;
-            $result=$directeur->save();
-            } 
+             if($directeur->image)
+             { unlink(public_path('uploads'). '/' .$directeur->image); }                 
+             $directeur->image=$image_name;
+             $result=$directeur->save();
+             } 
 // =================================== Si le resultat est true ==============================================                          
-            if($result)
-            {
-              return $this->succes("","image uploaded successfully");    
-            }
+             if($result)
+             {
+             return $this->succes("","image uploaded successfully");    
+             }
  
                    
          }           

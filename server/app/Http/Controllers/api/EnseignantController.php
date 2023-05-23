@@ -13,7 +13,6 @@ use App\Models\Enseignant;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\DB;
 class EnseignantController extends Controller
 {
      // A class that handles the success and error messages
@@ -21,7 +20,7 @@ class EnseignantController extends Controller
 //=========================================================== The access is retricted for:AdminUae|President ==============================================
         
  
-    /**
+     /**
      * Index() it's a methode that serve to display all the profs with there etablissement and grade.
      * I used in this method EnseignantResource that serve to filter the data .
      * @return mixed the important data of all PROFS such as :(Nom|prenom|etablissement|grade.......) .
@@ -38,7 +37,7 @@ class EnseignantController extends Controller
 //============================================================== The access is retricted for:AdminUEtab ========================================================          
 
 
-    /**
+     /**
      * Store() it's a method that serve to add a new enseignant.
      * @param StoreEnseignantRequest / it's a class that serve to validate the data before the insert.
      * @return / a success message that mean the new enseignant was successfully inserted.
@@ -68,7 +67,7 @@ class EnseignantController extends Controller
 //======================================================= The access is retricted for:AdminUEtab|AdminUae|DireteurEtab|President ==================================================
      
     
-    /**
+     /**
      * Show() this method serve to display a specified teacher with the name and the city of his etablissement and also his  grade  .
      * @param  int  $id it's IDEnseignant!!!!!!
      * @return   // error message in case of invalid enseignantid
@@ -85,7 +84,7 @@ class EnseignantController extends Controller
 //=========================================================== The access is retricted for:AdminUEtab ===============================================
    
 
-    /**
+     /**
      * Update() this method serve to update the information of a specified enseignant.
      * @param UpdateEnseignantRequest contain the validation rules of the data  //the class UpdateEnseignantRequest handles both PUT and Patch Request(for more details check the class  ) .
      * @param  int  $id ID Enseignant !!!!!!!!
@@ -110,7 +109,7 @@ class EnseignantController extends Controller
 //======================================= The access is retricted for:AdminEtab ==============================================
     
 
-    /**
+     /**
      * Destroy() this method serve to remove a specified enseignant.
      * @param  int  $id ID Enseignant !!!!!!
      * @return ///a success message that mean the enseignant was successfully deleted. 
@@ -128,7 +127,7 @@ class EnseignantController extends Controller
 //=============================================== The access is retricted for:Enseignant ===========================================================================                
    
 
-    /**
+     /**
      * ShowMyInterventions() this method serve to display the intervention of the enseignant Who just logged in .
      * @param  int  $id User_id de l'Enseignant !!!!!!
      * @return /// all the interventions of the enseignant Who just logged in  
@@ -145,7 +144,7 @@ class EnseignantController extends Controller
 //======================================================== The access is retricted for:Enseignant ===================================================
       
 
-    /**
+     /**
      * ShowMyPaymentsthis method serve to display the payments of the enseignant Who just logged in .
      * @param  int  $id User_id de l'Enseignant !!!!!! we can use auth()->user()->id ;
      * @return /// all the payments of the enseignant Who just logged in  
@@ -163,7 +162,7 @@ class EnseignantController extends Controller
 //============================================ The access is retricted for:Enseignant  =====================================================              
         
    
-    /**
+     /**
      * UploadMyImage this method serve to upload the Profil picture of the enseignant Who just logged inr.
      * @param  int  $id User_id of the Enseignant  !!!!!!
      * @return //success message that mean the picture was successfully uploaded .
@@ -193,38 +192,54 @@ class EnseignantController extends Controller
                  {
                  return $this->succes("","image uploaded successfully");    
                  }
-
+          }
 //==================================== The access is retricted for:Enseignant   ============================================================                
-           }
+           
+   
+     /**
+     * ShowMyProfil this method serve to display the informations of the enseignant Who just logged in.
+     * @param  int  $id User_id of the Enseignant !!!!!!
+     * I used  EnseignantResource class that serve to filter the data .
+     */
+
+       public function ShowMyProfil($id)
+          {
+                 return new EnseignantResource(Enseignant::where('user_id',$id)->with('etablissement','grade')->first());
+          }
+
+//======================================= The access is retricted for:Enseignant ======================================= 
 
 
-               public function ShowMyProfil($id)
-               {
-                    return new EnseignantResource(Enseignant::where('user_id',$id)->with('etablissement','grade')->first());
-               }
+     /**
+     * MyHours this method serve count The hours worked for a specified enseignant .
+     * @param  int  $id  ID Enseignant !!!!!!
+     * I used  EnseignantResource class that serve to filter the data .
+     */
+       public function MyHours ($id)
 
-              
-               public function MyHours ($id)
-               {
-                    $ens=DB::table('interventions')->where('enseignant_id',$id)->sum('Nbr_heures');
-                    
-                    return response()->json(["hours"=>$ens]);
-               }
+          {
+                 $enseignant=new Enseignant();
+                 return response()->json($enseignant->Hours($id));
+          }
+
+//==================================== The access is retricted for:Enseignant ============================================
 
 
+     /**
+     * UpdateMyEmail() this method serve to update the email of the enseignant Who just logged in.
+     * @param  int  $id User_id of the directeur  !!!!!!
+     * @param  UpdateEnseignantRequest contain the validation rules of the data .
+     * @return //a success message that mean the email of the enseignant was successfully updated.
+     */
 
-               public function UpdateMyEmail( UpdateEnseignantRequest $request ,$id)
-               {
+       public function UpdateMyEmail( UpdateEnseignantRequest $request ,$id)
 
-                    $ens=Enseignant::where('user_id',$id)->first();
-                    
-                    $ens->email_perso=$request['email_perso'];
-                    
-                    $ens->save();
-                   
-                    return $this->succes("","email updated successfully");
-
-               }
+          {
+                 $enseignant=Enseignant::where('user_id',$id)->first();  
+                 $enseignant->email_perso=$request['email_perso'];   
+                 $enseignant->save();  
+                 return $this->succes("","email updated successfully");
+          }
 
                 
 // 
