@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEnseignantRequest;
 use App\Http\Requests\UpdateEnseignantRequest;
 use App\Http\Resources\EnseignantInterventionResource;
+use App\Http\Resources\EnseignantPaymentsResource;
 use App\Models\Enseignant;
 use Illuminate\Http\Request;
 
@@ -108,11 +109,11 @@ class EnseignantController extends Controller
                                 
                         
                 }
+                /////////////////////////////////////////// should br added
 
                 public function ShowMyPayments($id)
                 {
-                      $ens=  Enseignant::with('paiements')->find($id);
-                      return response()->json($ens);
+                     return EnseignantPaymentsResource::collection(Enseignant::with('paiements.etablissement')->find($id));
 
                 }
    
