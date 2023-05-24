@@ -94,6 +94,7 @@ route::post('/login',[AuthController::class,'login']);
 
 route::group(['middleware'=>['auth:sanctum']],function(){
     route::get('/logout',[AuthController::class,'logout']);
-    route::get('/refrech',[AuthController::class,'refreshToken']);
+    // @AnasChatt : changed /refrech to /refresh (typing error c -> s)
+    route::get('/refresh',[AuthController::class,'refreshToken']);
 }
 );

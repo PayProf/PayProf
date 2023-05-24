@@ -155,9 +155,6 @@ AUXdate_S2 date;
 AUXdate_fin date;
 
 begin
-
-		
-		
 		SELECT (string_to_array(NEW.annee_univ, '/'))[1] into annee1;
 		SELECT (string_to_array(NEW.annee_univ, '/'))[2] into annee2;
 		
