@@ -88,7 +88,7 @@ class UserTest extends TestCase
             'password' => 'oussama2020'
         ]);
         // we log the dummy user out using his proper token
-        $res = $this->json('POST', 'api/logout', [], [
+        $res = $this->json('GET', 'api/logout', [], [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $response->getData()->data->token
@@ -114,7 +114,7 @@ class UserTest extends TestCase
         *  Hint : if the test passes it means that the user cannot logout without a token
         */
         // we try to logout without a token
-        $res = $this->json('POST', 'api/logout', [], [
+        $res = $this->json('GET', 'api/logout', [], [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ]);
