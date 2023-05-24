@@ -20,16 +20,20 @@
     </tbody>
   </table>
 </div>
- 
+<PopupForm />
+
 </template>
 
 <script>
+import PopupForm from '/src/components/PopupForm.vue';
 import { mapState } from 'vuex'
+
 
 export default {
 
   name: 'Etablissements',
   components: {
+    PopupForm
 
   },
 
