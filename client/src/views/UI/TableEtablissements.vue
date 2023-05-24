@@ -5,12 +5,12 @@
   <table class="table w-screen botrder">
     <!-- head -->
     <thead>
-      <tr >
+      <tr v-for="(etablissement,id) in etablissements" :key="id">
         <th></th>
-        <th>PPR</th>
         <th>Nom</th>
-        <th>Prénom</th>
-        <th>Email Personnel</th>
+        <th>Télephone</th>
+        <th>Fax</th>
+        <th>Ville</th>
         <th>Nombre enseignants</th>
         <th>Actions</th>
       </tr>
@@ -26,7 +26,7 @@
 
 <script>
 import PopupForm from '/src/components/PopupForm.vue';
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 
 export default {
@@ -34,14 +34,29 @@ export default {
   name: 'Etablissements',
   components: {
     PopupForm
-
   },
+  data(){
+    return{
+      etablissements: [
+        {
+          id:"",
+          nom:"",
+          telephone:"",
+          fax:"",
+          ville:"",
+          nbrEnseignants:"",
 
+        }
+      ],
+    }
+  },
+  mounted(){
+    this.$store.dispatch('getEtablissements')
+  },
   computed: {
-    ...mapState([
-      'user',
-
-    ])
+    ...mapGetters({
+      etablissements: 'etablissements'
+    })
   }
 
 }

@@ -88,9 +88,8 @@ const store = createStore({
       const current = new Date();
 
       return Exp < current;
-
-
-    }
+    
+    },
 
   },
   mutations: {
@@ -159,11 +158,11 @@ const store = createStore({
     },
 
     /* Add Etablisment */
-    addEtablisment(state, Etablisment) {
-      state.Etablisment.push(Etablisment);
+    addEtablisment(state, playload) {
+      state.Etablisment = playload;
     },
 
-    /* Set Etablisment */
+    /* Set Etablissement */
     setEtablisment(state, payload) {
       state.enseignants = payload;
     },
@@ -197,8 +196,28 @@ const store = createStore({
           timeout:3000,
         });
       }
+    },
 
-    }
+    async getEtablisment({ commit } , playload) {
+      try{
+        let url='get-etablissement';
+        await axios.post(url,playload).then(result=>{
+          commit('setEtablisment',result.data)
+        })
+      }catch(error){
+        console.log(error)
+        await router.push('/TableEtablissements')
+        const toast = useToast();
+        toast.error('Error fetching', {
+          timeout: 3000,
+        });
+      }
+      
+
+    },
+
+
+
     // async getInterventions({commit}){
     //   try{
     //   const response =await axios.get('http://localhost:5000/Interventions');
