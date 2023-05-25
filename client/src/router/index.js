@@ -8,7 +8,6 @@ import AdminUAE from "../views/UI/AdminUAE.vue";
 import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
 
 //User page
-import User from '../views/UI/User.vue';
 import TableInterventionsUser from '../views/TablesEtab/TableInterventionsUser.vue';
 
 //Admin de l'etablissement
@@ -26,12 +25,12 @@ import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
 //import EditDirecteurs from '../views/UI/EditDirecteurs.vue';
 
 //Edit forms for admin and directeurs
-import AddInterventions from '../components/AddInterventions.vue';
-import AddEnseignants from '../components/AddEnseignants.vue';
+import AddIntervention from "../components/AddIntervention.vue";
+import PopupForm from "../components/PopupForm.vue";
 
 //Edit forms for directeurs et admin etab
-import AddAdmins from '../components/AddAdmins.vue';
-import AddDirecteurs from '../components/AddDirecteurs.vue';
+import AddAdmin from "../components/AddAdmin.vue";
+import AddDirecteur from "../components/AddDirecteur.vue";
 
 //Edit Profile
 import EditProfile from '../components/EditProfile.vue';
@@ -43,6 +42,8 @@ import DefaultLayout from "../components/DefaultLayout.vue";
 import store from "../store.js";
 import Notfound from "../views/UI/Notfound.vue";
 import { useToast } from "vue-toastification";
+import Enseignant from "../views/UI/Enseignant.vue";
+import TableInterventionsEnseignant from "../views/UI/TableInterventionsEnseignant.vue";
 
 /******************************************* Routes Configuration *******************************************/
 
@@ -57,17 +58,6 @@ const routes = [
     meta:{
       RequiresAuth: false
     }
-  },
-
-  /* The Uni admin home page */
-  
-  {
-    path: '/AdminUAE',
-    name:'AdminUAE',
-    component: AdminUAE,
-    // meta:{
-    //   RequiresAuth: false
-    // }
   },
 
   {
@@ -97,23 +87,23 @@ const routes = [
     name:'TableAdmins',
     component: TableAdmins,
     // meta:{
-    //   RequiresAuth: false
+    //   RequiresAuth: false :id
     // }
   },
 
   {
-    path: '/TableInterventionsUser',
-    name:'TableInterventionsUser',
-    component: TableInterventionsUser ,
+    path: '/TableInterventionsEnseignant/',
+    name:'TableInterventionsEnseignant',
+    component: TableInterventionsEnseignant ,
     // meta:{
     //   RequiresAuth: false
     // }
   },
 
-  
+  // idE: Enseignant Id,idI: Intervention Id :idE/:idI
 
   {
-    path: '/ValidateIntervention',
+    path: '/ValidateIntervention/',
     name:'ValidateIntervention',
     component:ValidateIntervention ,
     // meta:{
@@ -121,8 +111,10 @@ const routes = [
     // }
   },
 
+    //Edit Profile :id
+
   {
-    path: '/EditProfile',
+    path: '/EditProfile/',
     name:'EditProfile',
     component:EditProfile ,
     // meta:{
@@ -135,7 +127,7 @@ const routes = [
   {
     path: '/AddAdmins',
     name:'AddAdmins',
-    component:AddAdmins ,
+    component:AddAdmin ,
     // meta:{
     //   RequiresAuth: false
     // }
@@ -145,7 +137,7 @@ const routes = [
   {
     path: '/AddDirecteurs',
     name:'AddDirecteurs',
-    component:AddDirecteurs ,
+    component:AddDirecteur ,
     // meta:{
     //   RequiresAuth: false
     // }
@@ -155,7 +147,7 @@ const routes = [
   {
     path: '/AddInterventions',
     name:'AddInterventions',
-    component:AddInterventions ,
+    component:AddIntervention ,
     // meta:{
     //   RequiresAuth: false
     // }
@@ -164,7 +156,7 @@ const routes = [
   {
     path: '/AddEnseignants',
     name:'AddEnseignants',
-    component:AddEnseignants ,
+    component:PopupForm ,
     // meta:{
     //   RequiresAuth: false
     // }
@@ -194,8 +186,8 @@ const routes = [
       {
         /*The Page where there's all enseignants */
 
-        path:'/Enss',
-        name:'Enss',
+        path:'/Admin/:Etab',
+        name:'Admin',
         component: Admin,
         meta:{
           AdminAccess: true,
@@ -204,12 +196,12 @@ const routes = [
         }
       },
 
-      /*The Page where there's the enseignant profile */
+      /*The Page where there's the enseignant profile :id */
 
       {
-        path:'/Enseignant',
+        path:'/Enseignant/',
         name:'Enseignant',
-        component: User,
+        component: Enseignant,
         meta:{
           AdminAccess: false,
           AdminUAEAccess: false,
@@ -220,9 +212,9 @@ const routes = [
       /*The Page where there's All the Etablissements for Admin */
 
       {
-        path:'/Etablissements',
-        name:'Etablissements',
-        component: Etablissements,
+        path:'/Adminuae',
+        name:'AdminUAE',
+        component: AdminUAE,
         meta:{
           AdminAccess: false,
           AdminUAEAccess: true,
@@ -260,87 +252,85 @@ function ALreadyConnected(toast){
 
 /*The Page where there's the enseignant profile */
 
-// router.beforeEach((to, from, next) => {
-//   //If the token is present(Authentificated)
-//   const isAuth = store.state.user.token;
-//   //the role and privilege
-//   const usertype = store.state.user.role;
-//   //is he an admin UAE?
-//   const isAdminUAE = usertype >= 3;
-//   //is he an admin (or admin UAE)
-//   const isAdmin = usertype > 0;
-//   const toast = useToast();
+router.beforeEach((to, from, next) => {
+  //If the token is present(Authentificated)
+  const isAuth = store.state.user.token;
+  //the role and privilege
+  const usertype = store.state.user.role;
+  //is he an admin UAE?
+  const isAdminUAE = usertype >= 3;
+  //is he an admin (or admin UAE)
+  const isAdmin = usertype > 0;
+  const toast = useToast();
 
+  //does the page require authentification
+  if (to.meta.RequiresAuth) {
+    if (!isAuth) //if the user is not authentification
+    {
+      next({ name: 'Home' });
+      AccessDenied(toast);//This one shows notification of access denied
+    }
+    else //if the user is authentificated
+    {
+      if(to.name==='Dashboard')
+      {
+        if(isAdminUAE)
+          next({ name: 'AdminUAE' });
+        else if(isAdmin)
+          next({ name: 'Admin' });
+        else
+          next({ name: 'Enseignant' });
+      }
+      else{
+      if (to.meta.AdminUAEAccess && !isAdminUAE) //if he's trying to access an adminUAE page and he's not adminUAE
+      {
+        if (isAdmin) //if he's AdminEtab
+        {
+          next({ name: 'Admin' });
+          AccessDenied(toast);
 
-
-//   //does the page require authentification
-//   if (to.meta.RequiresAuth) {
-//     if (!isAuth) //if the user is not authentification
-//     {
-//       next({ name: 'Home' });
-//       AccessDenied(toast);//This one shows notification of access denied
-//     }
-//     else //if the user is authentificated
-//     {
-//       if(to.name==='Dashboard')
-//       {
-//         if(isAdminUAE)
-//           next({ name: 'Etablissements' });
-//         else if(isAdmin)
-//           next({ name: 'Enss' });
-//         else
-//           next({ name: 'Enseignant' });
-//       }
-//       else{
-//       if (to.meta.AdminUAEAccess && !isAdminUAE) //if he's trying to access an adminUAE page and he's not adminUAE
-//       {
-//         if (isAdmin) //if he's AdminEtab
-//         {
-//           next({ name: 'Enss' });
-//           AccessDenied(toast);
-
-//         }
-//         else //if he's an enseignant
-//         {
-//           next({ name: 'Enseignant' });
-//           AccessDenied(toast);
-//         }
-//       }
-//       else if (to.meta.AdminAccess && !isAdmin) //if he's trying to access an admin page and he's not an admin
-//       {
-//         next({ name: 'Enseignant' });
-//         AccessDenied(toast);
-//       }
-//       else //if he's an enseignant and trying to access his page
-//       {
-//           next();
-//       }
-//       }
-//     }
-//   }
-//   else //if it doesn't require authentification
-//   {
-//     if (isAuth) //and he's authentificated
-//     {
-//       if (isAdminUAE) //and he's adminUAE
-//       {
-//         next({ name: 'Etablissements' });
-//       }
-//       else if (isAdmin) //and he's adminEtab
-//       {
-//         next({ name: 'Enss' });
-//       }
-//       else //and he's Enseignant
-//       {
-//         next({ name: 'Enseignant'});
-//       }
-//     }
-//     else //and he's not authentificated
-//     {
-//       next();
-//     }
-//   }
-// });
+        }
+        else //if he's an enseignant
+        {
+          next({ name: 'Enseignant' });
+          AccessDenied(toast);
+        }
+      }
+      else if (to.meta.AdminAccess && !isAdmin) //if he's trying to access an admin page and he's not an admin
+      {
+        next({ name: 'Enseignant' });
+        AccessDenied(toast);
+      }
+      else //if he's an enseignant and trying to access his page
+      {
+          next();
+      }
+      }
+    }
+  }
+  else //if it doesn't require authentification
+  {
+    if (isAuth) //and he's authentificated
+    {
+      if (isAdminUAE) //and he's adminUAE
+      {
+        next({ name: 'AdminUAE' });
+      }
+      else if (isAdmin) //and he's adminEtab
+      {
+        next({ name: 'Admin' });
+      }
+      else //and he's Enseignant
+      {
+        next({ name: 'Enseignant'});
+      }
+    }
+    else //and he's not authentificated
+    {
+      next();
+    }
+  }
+});
 
 
 export default router;

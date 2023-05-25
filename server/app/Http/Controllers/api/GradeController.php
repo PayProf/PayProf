@@ -3,62 +3,105 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreGradeRequest;
+use App\Http\Requests\UpdateGradeRequest;
+use App\Http\Resources\GradeResource;
+use App\Models\Grade;
 use Illuminate\Http\Request;
 
 class GradeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+//=====================================================The access is retricted for :AdminUAE| AdminEtab| President | DirecteurEtab ======================================================
+ 
+
 
     /**
-     * Store a newly created resource in storage.
+     * Index() this methode serve to display all the grades.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return /all the information of all  grades 
      */
-    public function store(Request $request)
-    {
-        //
-    }
+
+       public function index()
+          {
+                 return GradeResource::collection(Grade::latest()->paginate(10));
+          }
+
+
+//======================================================================= The access is retricted for :AdminUAE| AdminEtab =============================================================================================   
+
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Store it's a method taht serve to add a new grade .
+     * @param StoreGradeRequest it's a class that contains the validation rules. 
+     * @return / a success message which mean the grade was successfully added
      */
-    public function show($id)
-    {
-        //
-    }
+       public function store(StoreGradeRequest $request)
+          {
+            
+                 $grade= new GradeResource(Grade::create($request->all()));
+                 if($grade)
+                 {
+                 return response()->json(["message"=>"added successfuly"]);
+                 }
+          }
+
+
+//================================================================================== The access is retricted for :AdminUAE| AdminEtab  ============================================
+
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * show this method serve to display the data of a  specified grade.
+     * @param  int  $id GradeID !!!!
+     * @return /the information of the specified Grade.
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+       public function show($id)
+          {   
+            
+                 return new GradeResource(Grade::findOrFail($id));
+        
+          }
+
+
+//========================================================================================= The access is retricted for : AdminUAE | AdminEtab  ============================================================        
 
     /**
-     * Remove the specified resource from storage.
+     * Update this method serve to update the information of a specified Grade.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  UpdateGradeRequest this class contains the validation rules.
+     * @param  int  $id IDGRADE !!!!!!
+     * @return // an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
      */
-    public function destroy($id)
-    {
-        //
-    }
+       public function update(UpdateGradeRequest $request, $id)
+          {
+                 Grade::findOrFail($id)->update($request->all());
+                 return response()->json(["message"=>" Updated successfully"]);
+          }
+
+
+//================================================================== The access is retricted for : AdminUAE| AdminEtab ====================================================================
+
+
+    /**
+     * destroy serve to remove the specified grade from storage.
+     * @param  int  $id IDGRADE!!!!!
+     * @return /// an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
+     */
+       public function destroy($id)
+          {
+                 $grade=Grade::FindOrFail($id);
+                 if($grade)
+                 {
+                 $grade->delete();
+                 return response()->json(["message"=>"deleted successfuly"]);
+                 }
+          }
 }
+
+
+//================================================ SMEH LINA A KHOYA REDA SBER M3ANA ================================================================
+
+
+
+
+// ======================================================= YOUSSEF HARRAK =========================================================================
+

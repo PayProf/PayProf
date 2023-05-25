@@ -42,14 +42,40 @@
             </div>
         </div>
     </div>
-
   </template>
   
 
 <script>
+import PopupForm from '../../components/PopupForm.vue';
+import {mapActions,mapState} from 'vuex';
+export default {
+  name: 'Admin',
+  components: {
+    PopupForm,
+  },
+  data() {
+    return {
+      showPopupForm: false,
+    };
+  },
+  methods: {
+    ...mapActions([
+      'getEnseignants'
+  ]),
+    showPopup() {
+      this.showPopupForm = true;
+    },
+  },
+  computed:{
+    ...mapState([
+        'enseignants',
+    ])
+  },
+  async created(){
+    await this.$store.dispatch('getEnseignants');
+  }
+};
+
 
 </script>
 
-<style scoped>
-  
-</style>

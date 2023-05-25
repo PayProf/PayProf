@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('code')->unique();
             $table->string('nom');
             $table->string('telephone')->unique();
-            $table->string('Faxe')->unique();
+            $table->string('FAX');
             $table->unsignedBigInteger('Nbrenseignants')->default(0)->nullable();
             $table->string('ville');
             $table->timestamps();

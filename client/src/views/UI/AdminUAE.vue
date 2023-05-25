@@ -3,7 +3,7 @@
         <div class="p-4 border-2 border-gray-200  rounded-lg ">
             <div class="flex items-center justify-center h-60 mb-6 mt-10 rounded bg-gray-50 ">
                 <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                    <figure><img src=""  /></figure>
+                    <figure><img src="" alt=""  /></figure>
                     <div class="card-body">
                         <h2 class="card-title">Table des administrateurs</h2>
                         <p>If a dog chews shoes whose shoes does he choose?</p>
@@ -17,7 +17,7 @@
             <div class="grid grid-cols-2 gap-6 mb-4 pt-6">
                 <div class="flex items-center justify-center rounded bg-gray-50 h-40 ">
                     <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                        <figure><img src=""  /></figure>
+                        <figure><img src="" alt=""  /></figure>
                         <div class="card-body">
                             <h2 class="card-title">Tables des directeurs</h2>
                             <p>If a dog chews shoes whose shoes does he choose?</p>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="flex items-center justify-center rounded bg-gray-50 h-40 ">
                     <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                        <figure><img src=""  /></figure>
+                        <figure><img src="" alt=""  /></figure>
                         <div class="card-body">
                             <h2 class="card-title">tables des etablissements</h2>
                             <p>If a dog chews shoes whose shoes does he choose?</p>

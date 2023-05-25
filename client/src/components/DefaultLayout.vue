@@ -1,9 +1,11 @@
 <template>
+<!--  <Header/>-->
 <router-view></router-view>
 </template>
 
 <script>
 import {mapGetters, mapActions, mapState} from "vuex";
+import Header from "./Header.vue";
 import store from "../store.js";
 
 export default {

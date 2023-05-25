@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Intervention;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreInterventionRequest;
 use App\Http\Requests\UpdateInterventionRequest;
 use App\Http\Resources\InterventionResource;
 use App\Http\Resources\InterventionShowMoreResource;
-use App\Models\Intervention;
 use Illuminate\Support\Facades\DB;
 use App\Traits\HttpResponses;
 
@@ -21,17 +22,14 @@ class InterventionController extends Controller
    
  
     /**
-     * Indexe() it's a methode that serve to display all the interventions with the name of the etablissement and also name of Enseiganant.
-     * I used  InterventionResource class  that serve to filter  data .
-     * @return mixed the important data of all interventions.
-    */
-
-       public function index()
-
-          {   
-                 return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(10));
-          }
-
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10)); 
+    }
 
 //===========================================  The access is retricted for:AdminEtab ================================================== 
     

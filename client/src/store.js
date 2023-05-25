@@ -296,8 +296,8 @@ const store = createStore({
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         }
-        const response = await axios.get('refrech', config)
-        commit('RefreshToken', response.data.data)
+        const response = await axios.get('refresh',config)
+        commit('RefreshToken',response.data.data)
       }
       catch (error) {
         console.log(error)

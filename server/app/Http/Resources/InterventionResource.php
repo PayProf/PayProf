@@ -28,7 +28,6 @@ class InterventionResource extends JsonResource
         'PPRProf'=> $this->enseignant->PPR,
         'NomEtab'=>$this->etablissement->nom,
 
-           
        ];
     }
 }

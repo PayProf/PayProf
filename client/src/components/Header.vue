@@ -20,7 +20,7 @@
       <a class="btn btn-ghost normal-case text-xl" href="https://www.uae.ma/website/node/41">PayProf</a>
     </div>
     <div class="navbar-end">
-      <button class="btn btn-ghost btn-circle">
+      <button class="btn btn-ghost btn-circle" @click="Logout">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -32,7 +32,7 @@
     <div class="dropdown dropdown-end">
       <label tabindex="0" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
-          <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+          <img src="" />
         </div>
       </label>
         <ul tabindex="0" class="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
@@ -48,6 +48,7 @@
 <script>
 import router from '../router';
 import Etabs from '../views/TablesUAE/TableEtablissements.vue';
+import {mapActions} from "vuex";
 
 export default {
   name: 'Header',
@@ -58,6 +59,9 @@ export default {
     title: String,
   },
   methods: {
+    ...mapActions([
+       'logout'
+    ]),
 
 
     //redirect to table des enseingants
@@ -80,6 +84,10 @@ export default {
     toggleDir() {
       router.push('/EtabDirecrteurs')
     },
+
+    async Logout(){
+      this.$store.dispatch('logout');
+    }
   },
 };
 </script>

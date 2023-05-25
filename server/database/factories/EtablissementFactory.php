@@ -21,7 +21,7 @@ class EtablissementFactory extends Factory
            'code'=>fake()->countryCode(),
             'nom' =>fake()->name(),
             'telephone' =>fake()->phoneNumber(),
-            'Faxe' =>fake()->numberBetween(),
+            'FAX' =>fake()->numberBetween(),
             'ville' => fake()->city(),
             'Nbrenseignants'=> fake()->numberBetween(20,100),
 

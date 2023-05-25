@@ -13,7 +13,7 @@ class StoreGradeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,21 @@ class StoreGradeRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+
+            'Designation'=>['required'],
+            'ChargeStatutaire'=>['required'],
+            'TauxHoraireVacation'=>['required'],
+            
         ];
+    }
+    protected function prepareForValidation()
+    {
+        $this->merge([
+
+            'designation'=>ucfirst($this->Designation),
+            'charge_statutaire'=>ucfirst($this->ChargeStatutaire),
+            'Taux_horaire_vacation'=>ucfirst($this->TauxHoraireVacation),
+           
+        ]);
     }
 }
