@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Paiements extends Model
 {
     use HasFactory;
+    protected $fillable =[
+        'enseignant_id',
+        'etablissement_id',
+        'VH',
+        'Taux_H',
+        'Brut',
+        'IR',
+        'Net',
+        'Annee_univ',
+        'Semestre',
+    ];
 
     public function etablissement()
     {
@@ -20,9 +31,10 @@ class Paiements extends Model
         return $this->belongsTo(Enseignant::class );
       
     }
-
     public function intervention()
     {
-        return $this->hasOne(Intervention::class);
+        return $this->hasOne(Intervention::class );
+      
     }
+
 }

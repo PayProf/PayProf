@@ -31,9 +31,5 @@ public function etablissement()
   
 }
 
-public function etablissement()
-{
-    return $this->belongsTo(Etablissement::class);
-}
 
 }

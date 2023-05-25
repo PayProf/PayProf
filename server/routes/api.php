@@ -86,7 +86,21 @@ route::PATCH('Directeur/{Directeur}/UpdateMyEmail',[DirecteurController::class,'
 
 //=======================================================================================================
 
+route::apiResource('admins',AdministrateurController::class);
 
+route::apiResource('paiements',PaiementsController::class);
+
+route::apiResource('etablissements',EtablissementController::class);
+
+route::get('paiements/{id}/enseignant',[PaiementsController::class,'Show_paiements_enseignant']);
+
+route::get('admins/{user_id}/myprofile',[AdministrateurController::class,'Show_Myprofile']);
+
+route::put('admins/{user_id}/updateemail',[AdministrateurController::class,'Update_email']);
+
+route::get('etablissements/{user_id}/{role}/myetablissement',[EtablissementController::class,'Show_Myetablissement']);
+
+route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 
 
