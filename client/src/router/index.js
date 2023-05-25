@@ -9,17 +9,17 @@ import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
 
 //User page
 import User from '../views/UI/User.vue';
-import TableInterventionsUser from '../views/UI/TableInterventionsUser.vue';
+import TableInterventionsUser from '../views/TablesEtab/TableInterventionsUser.vue';
 
 //Admin de l'etablissement
 import Admin from '../views/UI/Admin.vue';
 
 //Table etablissement for view only 
-import Etablissements from "../views/UI/TableEtablissements.vue";
+import Etablissements from "../views/TablesUAE/TableEtablissements.vue";
 
 //Table Admins et Directeurs for view and edit, concerns the UAE admin
-import TableAdmins from "../views/UI/TableAdmins.vue";
-import TableDirecteurs from "../views/UI/TableDirecteurs.vue";
+import TableAdmins from "../views/TablesUAE/TableAdmins.vue";
+import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
 
 //Edit forms for admin and directeurs
 //import EditAdmins from '../views/UI/EditAdmins.vue';
@@ -33,7 +33,7 @@ import TableDirecteurs from "../views/UI/TableDirecteurs.vue";
 import EditProfile from '../components/EditProfile.vue';
 
 //Table intervention for validations
-import ValidateIntervention from '../views/UI/ValidateIntervention.vue'
+import ValidateIntervention from '../views/TablesEtab/ValidateIntervention.vue'
 
 import DefaultLayout from "../components/DefaultLayout.vue";
 import store from "../store.js";
@@ -205,87 +205,87 @@ function ALreadyConnected(toast){
 
 /*The Page where there's the enseignant profile */
 
-router.beforeEach((to, from, next) => {
-  //If the token is present(Authentificated)
-  const isAuth = store.state.user.token;
-  //the role and privilege
-  const usertype = store.state.user.role;
-  //is he an admin UAE?
-  const isAdminUAE = usertype >= 3;
-  //is he an admin (or admin UAE)
-  const isAdmin = usertype > 0;
-  const toast = useToast();
+// router.beforeEach((to, from, next) => {
+//   //If the token is present(Authentificated)
+//   const isAuth = store.state.user.token;
+//   //the role and privilege
+//   const usertype = store.state.user.role;
+//   //is he an admin UAE?
+//   const isAdminUAE = usertype >= 3;
+//   //is he an admin (or admin UAE)
+//   const isAdmin = usertype > 0;
+//   const toast = useToast();
 
 
 
-  //does the page require authentification
-  if (to.meta.RequiresAuth) {
-    if (!isAuth) //if the user is not authentification
-    {
-      next({ name: 'Home' });
-      AccessDenied(toast);//This one shows notification of access denied
-    }
-    else //if the user is authentificated
-    {
-      if(to.name==='Dashboard')
-      {
-        if(isAdminUAE)
-          next({ name: 'Etablissements' });
-        else if(isAdmin)
-          next({ name: 'Enss' });
-        else
-          next({ name: 'Enseignant' });
-      }
-      else{
-      if (to.meta.AdminUAEAccess && !isAdminUAE) //if he's trying to access an adminUAE page and he's not adminUAE
-      {
-        if (isAdmin) //if he's AdminEtab
-        {
-          next({ name: 'Enss' });
-          AccessDenied(toast);
+//   //does the page require authentification
+//   if (to.meta.RequiresAuth) {
+//     if (!isAuth) //if the user is not authentification
+//     {
+//       next({ name: 'Home' });
+//       AccessDenied(toast);//This one shows notification of access denied
+//     }
+//     else //if the user is authentificated
+//     {
+//       if(to.name==='Dashboard')
+//       {
+//         if(isAdminUAE)
+//           next({ name: 'Etablissements' });
+//         else if(isAdmin)
+//           next({ name: 'Enss' });
+//         else
+//           next({ name: 'Enseignant' });
+//       }
+//       else{
+//       if (to.meta.AdminUAEAccess && !isAdminUAE) //if he's trying to access an adminUAE page and he's not adminUAE
+//       {
+//         if (isAdmin) //if he's AdminEtab
+//         {
+//           next({ name: 'Enss' });
+//           AccessDenied(toast);
 
-        }
-        else //if he's an enseignant
-        {
-          next({ name: 'Enseignant' });
-          AccessDenied(toast);
-        }
-      }
-      else if (to.meta.AdminAccess && !isAdmin) //if he's trying to access an admin page and he's not an admin
-      {
-        next({ name: 'Enseignant' });
-        AccessDenied(toast);
-      }
-      else //if he's an enseignant and trying to access his page
-      {
-          next();
-      }
-      }
-    }
-  }
-  else //if it doesn't require authentification
-  {
-    if (isAuth) //and he's authentificated
-    {
-      if (isAdminUAE) //and he's adminUAE
-      {
-        next({ name: 'Etablissements' });
-      }
-      else if (isAdmin) //and he's adminEtab
-      {
-        next({ name: 'Enss' });
-      }
-      else //and he's Enseignant
-      {
-        next({ name: 'Enseignant'});
-      }
-    }
-    else //and he's not authentificated
-    {
-      next();
-    }
-  }
-});
+//         }
+//         else //if he's an enseignant
+//         {
+//           next({ name: 'Enseignant' });
+//           AccessDenied(toast);
+//         }
+//       }
+//       else if (to.meta.AdminAccess && !isAdmin) //if he's trying to access an admin page and he's not an admin
+//       {
+//         next({ name: 'Enseignant' });
+//         AccessDenied(toast);
+//       }
+//       else //if he's an enseignant and trying to access his page
+//       {
+//           next();
+//       }
+//       }
+//     }
+//   }
+//   else //if it doesn't require authentification
+//   {
+//     if (isAuth) //and he's authentificated
+//     {
+//       if (isAdminUAE) //and he's adminUAE
+//       {
+//         next({ name: 'Etablissements' });
+//       }
+//       else if (isAdmin) //and he's adminEtab
+//       {
+//         next({ name: 'Enss' });
+//       }
+//       else //and he's Enseignant
+//       {
+//         next({ name: 'Enseignant'});
+//       }
+//     }
+//     else //and he's not authentificated
+//     {
+//       next();
+//     }
+//   }
+// });
 
 
 export default router;

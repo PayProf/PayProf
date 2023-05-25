@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button @click="showPopup" class="btn btn-primary" style="float: right; margin-right: 30px; margin-bottom: 30px; border-radius: 10px;">Add</button>
     <div v-if="isPopupVisible" class="popup">
       <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <div class="card-body">
@@ -37,7 +38,7 @@
             </div>
 
             <div class="form-control mt-6">
-              <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="showPopup">Add
+              <button type="submit" class="btn btn-primary p-4" style="border-radius: 10px;" @click="showPopup">Add
                 etablissement</button>
               <button @click="close" class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
 
