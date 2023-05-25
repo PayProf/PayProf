@@ -13,7 +13,7 @@ class StoreEtablissementRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return True;
     }
 
     /**
@@ -22,9 +22,17 @@ class StoreEtablissementRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
+    { 
+        //return an array of validation rules for the form fields.
         return [
-            //
+            
+            'nom'=>['required'],
+            'code'=>['required'],
+            'telephone'=>['required'],
+            'FAX'=>['required'],
+            'Nbrenseignants'=>['required'],
+            'ville'=>['required'],
         ];
+            
     }
 }

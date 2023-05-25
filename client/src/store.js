@@ -17,61 +17,62 @@ const store = createStore({
     ],
     //the current user connected
     user:
+    {
+      nom: "",
+      prenom: "",
+      id: localStorage.getItem('USERID'),
+      email: localStorage.getItem('EMAIL'),
+      role: localStorage.getItem('ROLE'),
+      token: localStorage.getItem('TOKEN'),
+      token_exp: localStorage.getItem('EXPIRATION')
+    },
+
+    Interventions: [
       {
-        nom:"",
-        prenom:"",
-        id:localStorage.getItem('USERID'),
-        email:localStorage.getItem('EMAIL'),
-        role:localStorage.getItem('ROLE'),
-        token:localStorage.getItem('TOKEN'),
-        token_exp:localStorage.getItem('EXPIRATION')
-      },
-      
-      Interventions:[
-        {
-          
-          Id_Intr: "",
-          Etablisment: "",
-          Intitule_Intervention: "",
-          Annee_universitaire: "",
-          Semester: "",
-          Date_Debut: "",
-          Date_Fin: "",
-          Nombre_heures: ""
-        }
-      ],
 
-      Admins :[
-        {
-          ppr: "",
-          nom: "",
-          prenom: "",
-          email: "",
-          role: 2
-        }
-      ],
+        Id_Intr: "",
+        Etablisment: "",
+        Intitule_Intervention: "",
+        Annee_universitaire: "",
+        Semester: "",
+        Date_Debut: "",
+        Date_Fin: "",
+        Nombre_heures: ""
+      }
+    ],
 
-      EtabDirecteurs: [
-        {
-          ppr: "",
-          nom: "",
-          prenom: "",
-          email: "",
-          role: 1,
+    Admins: [
+      {
+        ppr: "",
+        nom: "",
+        prenom: "",
+        email: "",
+        role: 2
+      }
+    ],
 
-        }
-      ],
+    EtabDirecteurs: [
+      {
+        ppr: "",
+        nom: "",
+        prenom: "",
+        email: "",
+        role: 1,
 
-      Etablisment:[
-        {
-          code: "",
-          nom: "",
-          telephone:"",
-          fax:"",
-          nbreenseignants:"",
+      }
+    ],
 
-        }
-      ]
+    Etablisment: [
+      {
+        code: "",
+        nom: "",
+        telephone: "",
+        fax: "",
+        ville: "",
+        nbrEnseignant: "",
+
+      }
+    ]
 
 
 
@@ -81,16 +82,15 @@ const store = createStore({
   },
   getters: {
 
-    IsExpired(state){
+    IsExpired(state) {
       const Exp = new Date(state.user.token_exp);
 
       const current = new Date();
 
-      return Exp<current;
+      return Exp < current;
+    
+    },
 
-
-    }
-   
   },
   mutations: {
 
@@ -98,87 +98,126 @@ const store = createStore({
     /*
     Here's the mutation that changes the current state when logged in
      */
-    
-    SetCurrentUser(state,payload){
-      state.user.token=payload.token;
-      localStorage.setItem('TOKEN',payload.token);
-      state.user.role=payload.role;
-      localStorage.setItem('ROLE',payload.role);
+
+    SetCurrentUser(state, payload) {
+      state.user.token = payload.token;
+      localStorage.setItem('TOKEN', payload.token);
+      state.user.role = payload.role;
+      localStorage.setItem('ROLE', payload.role);
 
       //get the current date
-      const currentDate= new Date();
+      const currentDate = new Date();
       //Add hours till expiration to it
       const Exp = new Date(currentDate.getTime() + (10));//2 * 60 * 60 * 1000
 
       //storing the date as a string
-      state.user.token_exp=Exp.toISOString();
-      localStorage.setItem('EXPIRATION',Exp.toISOString());
+      state.user.token_exp = Exp.toISOString();
+      localStorage.setItem('EXPIRATION', Exp.toISOString());
 
     },
 
     /*Resets the state*/
 
-    ResetCurrentUser(state){
+    ResetCurrentUser(state) {
       localStorage.clear();
-      state.user.token=null;
+      state.user.token = null;
     },
 
     /*Manages the state of the access token and refresh token*/
 
-    RefreshToken(state,payload){
-      state.user.token=payload.token;
-      localStorage.setItem('TOKEN',payload.token)
+    RefreshToken(state, payload) {
+      state.user.token = payload.token;
+      localStorage.setItem('TOKEN', payload.token)
 
       //get the current date
-      const currentDate= new Date();
+      const currentDate = new Date();
       //Add hours till expiration to it
       const Exp = new Date(currentDate.getTime() + (2 * 60 * 60 * 1000));
 
       //storing the date as a string
-      state.user.token_exp=Exp.toISOString();
-      localStorage.setItem('EXPIRATION',Exp.toISOString());
+      state.user.token_exp = Exp.toISOString();
+      localStorage.setItem('EXPIRATION', Exp.toISOString());
     },
 
 
     /*Set Enseignants */
-    
-    setEnseignants (state,payload){
-      state.enseignants=payload;
+
+    setEnseignants(state, payload) {
+      state.enseignants = payload;
     },
 
     /* Set Interventions */
-    setInterventions (state,payload){
-      state.Interventions=payload;
+    setInterventions(state, payload) {
+      state.Interventions = payload;
     },
 
     /* Add Enseignant */
     addEnseignant(state, enseignants) {
-  
+
       state.enseignants.push(enseignants);
     },
 
     /* Add Etablisment */
-    addEtablisment(state, Etablisment){
-      state.Etablisment.push(Etablisment);
+    addEtablisment(state, playload) {
+      state.Etablisment = playload;
     },
 
-    /* Set Etablisment */
-    setEtablisment(state,payload){
-      state.enseignants=payload;
+    /* Set Etablissement */
+    setEtablisment(state, payload) {
+      state.enseignants = payload;
     },
 
-    
+
   },
   actions: {
 
-    // async addEnseignant({ commit }, enseignants) {
-    //   try {
-    //     const response = await axios.post('http://localhost:5000/enseignants', enseignant);
-    //     commit('addEnseignant', response.data);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
+    async addEnseignant({ commit }, enseignants) {
+      try {
+        const response = await axios.post('http://localhost:5000/enseignants', enseignants);
+        commit('addEnseignant', response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+
+    async addEtablisment({ commit }, payload) {
+      try {
+        let url = '/save-etablissemnt';
+        await axios.post(url, payload).then(result => {
+          commit('addEtablisment', result.data);
+        })
+
+      } catch(error) {
+        console.log(error)
+        await router.push('/')
+        const toast=useToast();
+        toast.error('Something went wrong',{
+          timeout:3000,
+        });
+      }
+    },
+
+    async getEtablisment({ commit } , playload) {
+      try{
+        let url='get-etablissement';
+        await axios.post(url,playload).then(result=>{
+          commit('setEtablisment',result.data)
+        })
+      }catch(error){
+        console.log(error)
+        await router.push('/TableEtablissements')
+        const toast = useToast();
+        toast.error('Error fetching', {
+          timeout: 3000,
+        });
+      }
+      
+
+    },
+
+
+
     // async getInterventions({commit}){
     //   try{
     //   const response =await axios.get('http://localhost:5000/Interventions');
@@ -205,18 +244,18 @@ const store = createStore({
     This is where the login request is made it gets the token
     the user data and stores it in the state
      */
-    async login({commit},FormData){
+    async login({ commit }, FormData) {
       try {
-        const response = await axios.post('login',FormData);
-        commit('SetCurrentUser',response.data.data)
+        const response = await axios.post('login', FormData);
+        commit('SetCurrentUser', response.data.data)
         await router.push('/Dashboard')
       }
-      catch (error){
+      catch (error) {
         console.log(error)
         await router.push('/')
-        const toast=useToast();
-        toast.error('Invalid Credentials',{
-          timeout:3000,
+        const toast = useToast();
+        toast.error('Invalid Credentials', {
+          timeout: 3000,
         });
 
       }
@@ -226,52 +265,49 @@ const store = createStore({
     if the user is not authentificated it directly log him out, if he's authentificated
     it logs him out and resets the state
      */
-    async logout({commit}){
-      try{
+    async logout({ commit }) {
+      try {
         const token = localStorage.getItem('TOKEN'); // Here i used localstorage but later will change it to state
         const config = {
-          headers: {Authorization: `Bearer ${token}`}
+          headers: { Authorization: `Bearer ${token}` }
         };
-        await axios.get('logout',config);
+        await axios.get('logout', config);
         commit('ResetCurrentUser')
         await router.push('/');
       }
-      catch(error){
+      catch (error) {
         console.log(error)
-        if (error.response && error.response.status === 401){
+        if (error.response && error.response.status === 401) {
           commit('ResetCurrentUser');
           await router.push('/');
         }
-        const toast=useToast();
-        toast.error("Something's Wrong :(",{
-          timeout:3000,
+        const toast = useToast();
+        toast.error("Something's Wrong :(", {
+          timeout: 3000,
         });
       }
     },
     /* it's time for refresh token, when the user's token is no longer
     valid he automatically gets his token refreshed
      */
-    async RefreshToken({commit}){
-      try{
+    async RefreshToken({ commit }) {
+      try {
         const token = store.state.user.token;
         const config = {
-          headers: {Authorization: `Bearer ${token}`}
+          headers: { Authorization: `Bearer ${token}` }
         }
-        console.log(token)
-        const response = await axios.get('refrech',config)
+        const response = await axios.get('refresh',config)
         commit('RefreshToken',response.data.data)
-        console.log('success')
-        console.log(store.state.user.token)
       }
-      catch(error){
+      catch (error) {
         console.log(error)
-        if (error.response && error.response.status === 401){
+        if (error.response && error.response.status === 401) {
           commit('ResetCurrentUser');
           await router.push('/');
         }
-        const toast=useToast();
-        toast.error("Something's Wrong :(",{
-          timeout:3000,
+        const toast = useToast();
+        toast.error("Something's Wrong :(", {
+          timeout: 3000,
         });
 
       }
