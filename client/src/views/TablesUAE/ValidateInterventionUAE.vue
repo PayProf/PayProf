@@ -5,7 +5,7 @@
             <thead>
               <tr>
                 <th></th>
-                <th>PPR</th>
+                <th>ID</th>
                 <th>Etablissement</th>
                 <th>Ville</th>
                 <th>Intetule Intervention</th>
@@ -54,12 +54,12 @@
 
 <script>
 export default {
-  name: 'Interventions',
+  name: 'InterventionsUAE',
   data() {
     return {
-      showProfile=true,
-      showTable=false ,
-      Intervention: []
+      showProfile: true,
+      showTable: false ,
+      Interventions: []
     }
   },
 
@@ -86,7 +86,7 @@ export default {
 
 
 }
-}
+
 </script>
 
 <style>

@@ -5,7 +5,7 @@
             <thead>
               <tr>
                 <th></th>
-                <th>PPR</th>
+                <th>Code</th>
                 <th>Etablissement</th>
                 <th>Ville</th>
                 <th>Intetule Intervention</th>

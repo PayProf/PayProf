@@ -1,116 +1,122 @@
 <template>
-  <div>
-    <button @click="showPopup" class="btn btn-primary" style="float: right; margin-right: 30px; margin-bottom: 30px; border-radius: 10px;">Add</button>
-    <div v-if="isPopupVisible" class="popup">
-      <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-        <div class="card-body">
-          <form @submit.prevent="addEtablissement" href="formName">
-            <!-- Form fields for adding an enseignant -->
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Nom</span>
-              </label>
-              <input type="text" v-model="nom" placeholder="Nom" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Telephone</span>
-              </label>
-              <input type="number" v-model="telephone" placeholder="Télephone" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Fax</span>
-              </label>
-              <input type="number" v-model="fax" placeholder="Fax" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Ville</span>
-              </label>
-              <input type="text" v-model="ville" placeholder="Ville" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Nombre enseignants</span>
-              </label>
-              <input type="number" v-model="nbrEnseignant" placeholder="Nombre enseignants" class="input input-bordered" />
-            </div>
+  <div class="ml-30 my-20">
+    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 justify-center">
+      <div class="card-body">
+        <form>
+          <!-- Form fields for adding an enseignant -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Nom</span>
+            </label>
+            <input type="text" v-model="model.Etablissement.Nom" placeholder="Nom" class="input input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Ville</span>
+            </label>
+            <input type="text" v-model="model.Etablissement.Ville" placeholder="Ville" class="input input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">telephone</span>
+            </label>
+            <input type="text" v-model="model.Etablissement.telephone" placeholder="telephone" class="input input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Fax</span>
+            </label>
+            <input type="email" v-model="model.Etablissement.Fax" placeholder="Fax" class="input input-bordered" />
+          </div>
 
-            <div class="form-control mt-6">
-              <button type="submit" class="btn btn-primary p-4" style="border-radius: 10px;" @click="showPopup">Add
-                etablissement</button>
-              <button @click="close" class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">NbrEnseingant</span>
+            </label>
+            <input type="email" v-model="model.Etablissement.NbrEnseingant" placeholder="NbrEnseingant" class="input input-bordered" />
+          </div>
 
-            </div>
-          </form>
-        </div>
+          <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="saveEtablissement(),RedirectTable()">Add
+              Etablissement</button>
+            <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
+          </div>
+        </form>
       </div>
-
     </div>
+
+
   </div>
 </template>
-
+  
 <script>
+import axios from 'axios';
 export default {
+  name: 'AddEtablissement',
   data() {
     return {
-      isPopupVisible: false,
+      errorsList:"",
       model: {
-        nom: '',
-        prenom: '',
-        telephone: '',
-        fax: '',
-        ville: '',
-        nbrEnseignant: '',
-      },
-      rules: {
-
-      },
-
-    };
-  },
-  methods: {
-    showPopup() {
-      this.isPopupVisible = true;
-    },
-    close() {
-      this.isPopupVisible = false;
-    },
-    savefrom(formName){
-      this.$refs[formName].validate((valid)=>{
-        if(valid){
-          this.$store.dispatch('addEtablissement',this.model)
-
+        Etablissement: {
+          Nom: "",
+          Ville: "",
+          telephone: "",
+          Fax: "",
+          NbrEnseingant: ""
         }
-      })
+      }
+    }
+  },
+
+  methods: {
+    saveEtablissement() {
+
+      var myThis = this;
+      axios.post('http://127.0.0.1/api/AddEtablissements', this.model.Etablissement)
+        .then(result => {
+          console.log(result.data)
+          this.model.Etablissement = {
+            PPR: "",
+            Nom: "",
+            Prenom: "",
+            EmailPerso: "",
+            Etablissement: ""
+          }
+
+        }).catch(function (error) {
+
+          if (error.response) {
+
+            if(error.response.status == 422){
+
+              //if you don't specify "myThis" an undefined error will be shown
+              myThis.errorsList = error.response.data.errors;
+            }
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+           
+            console.log(error.request);
+          } else {
+
+            console.log('Error', error.message);
+          }
+
+        });
     },
-    addEtablissement() {
-      const etablissement = {
-        ppr: this.ppr,
-        nom: this.nom,
-        prenom: this.prenom,
-        email: this.email,
-      };
+    
+    //Redirect to table view
+    RedirectTable() {
+      this.$router.push('/TableEtablissements')
+    }
 
-      // Dispatch the action to add the enseignant
-      this.$store.dispatch('addEtablissement', etablissement);
-
-      // Reset form fields
-      this.ppr = '';
-      this.nom = '';
-      this.prenom = '';
-      this.email = '';
-
-      // Hide the popup
-      this.isPopupVisible = false;
-    },
   },
 
 
 };
 </script>
-
+  
 <style>
 .popup {
   position: fixed;
