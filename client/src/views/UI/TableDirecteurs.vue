@@ -21,9 +21,6 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
-import PFintervention from '../../components/PFintervention.vue';
-import BarChart from '../../components/chart.vue'
 export default {
 
 }

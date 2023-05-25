@@ -6,39 +6,39 @@
           <!-- Form fields for adding an enseignant -->
           <div class="form-control">
             <label class="label">
-              <span class="label-text">PPR</span>
-            </label>
-            <input type="text" v-model="model.Directeur.PPR" placeholder="PPR" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label">
               <span class="label-text">Nom</span>
             </label>
-            <input type="text" v-model="model.Directeur.Nom" placeholder="Nom" class="input input-bordered" />
+            <input type="text" v-model="model.Etablissement.Nom" placeholder="Nom" class="input input-bordered" />
           </div>
           <div class="form-control">
             <label class="label">
-              <span class="label-text">Prénom</span>
+              <span class="label-text">Ville</span>
             </label>
-            <input type="text" v-model="model.Directeur.Prenom" placeholder="Prénom" class="input input-bordered" />
+            <input type="text" v-model="model.Etablissement.Ville" placeholder="Ville" class="input input-bordered" />
           </div>
           <div class="form-control">
             <label class="label">
-              <span class="label-text">Email</span>
+              <span class="label-text">telephone</span>
             </label>
-            <input type="email" v-model="model.Directeur.EmailPerso" placeholder="Email" class="input input-bordered" />
+            <input type="text" v-model="model.Etablissement.telephone" placeholder="telephone" class="input input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Fax</span>
+            </label>
+            <input type="email" v-model="model.Etablissement.Fax" placeholder="Fax" class="input input-bordered" />
           </div>
 
           <div class="form-control">
             <label class="label">
-              <span class="label-text">Etablissement</span>
+              <span class="label-text">NbrEnseingant</span>
             </label>
-            <input type="email" v-model="model.Directeur.Etablissement" placeholder="Etablissement" class="input input-bordered" />
+            <input type="email" v-model="model.Etablissement.NbrEnseingant" placeholder="NbrEnseingant" class="input input-bordered" />
           </div>
 
           <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="saveDirecteur(),RedirectTable()">Add
-              Directeur</button>
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="saveEtablissement(),RedirectTable()">Add
+              Etablissement</button>
             <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
           </div>
         </form>
@@ -52,30 +52,30 @@
 <script>
 import axios from 'axios';
 export default {
-  name: 'AddDirecteur',
+  name: 'AddEtablissement',
   data() {
     return {
       errorsList:"",
       model: {
-        Directeur: {
-          PPR: "",
+        Etablissement: {
           Nom: "",
-          Prenom: "",
-          EmailPerso: "",
-          Etablissement: ""
+          Ville: "",
+          telephone: "",
+          Fax: "",
+          NbrEnseingant: ""
         }
       }
     }
   },
 
   methods: {
-    saveDirecteur() {
+    saveEtablissement() {
 
       var myThis = this;
-      axios.post('http://127.0.0.1/api/Directeurs', this.model.Directeur)
+      axios.post('http://127.0.0.1/api/AddEtablissements', this.model.Etablissement)
         .then(result => {
           console.log(result.data)
-          this.model.Directeur = {
+          this.model.Etablissement = {
             PPR: "",
             Nom: "",
             Prenom: "",
@@ -92,19 +92,14 @@ export default {
               //if you don't specify "myThis" an undefined error will be shown
               myThis.errorsList = error.response.data.errors;
             }
-
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
           } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
+           
             console.log(error.request);
           } else {
-            // Something happened in setting up the request that triggered an Error
+
             console.log('Error', error.message);
           }
 
@@ -113,7 +108,7 @@ export default {
     
     //Redirect to table view
     RedirectTable() {
-      this.$router.push('/TableDirecteurs')
+      this.$router.push('/TableEtablissements')
     }
 
   },

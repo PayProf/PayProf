@@ -8,32 +8,35 @@ import AdminUAE from "../views/UI/AdminUAE.vue";
 import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
 
 //User page
-import User from '../views/UI/Enseignant.vue';
-import TableInterventionsUser from '../views/UI/TableInterventionsEnseignant.vue';
+import TableInterventionsUser from '../views/TablesEtab/TableInterventionsUser.vue';
 
 //Admin de l'etablissement
 import Admin from '../views/UI/Admin.vue';
 
 //Table etablissement for view only 
-import Etablissements from "../views/UI/TableEtablissements.vue";
+import Etablissements from "../views/TablesUAE/TableEtablissements.vue";
 
 //Table Admins et Directeurs for view and edit, concerns the UAE admin
-import TableAdmins from "../views/UI/TableAdmins.vue";
-import TableDirecteurs from "../views/UI/TableDirecteurs.vue";
+import TableAdmins from "../views/TablesUAE/TableAdmins.vue";
+import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
 
 //Edit forms for admin and directeurs
 //import EditAdmins from '../views/UI/EditAdmins.vue';
 //import EditDirecteurs from '../views/UI/EditDirecteurs.vue';
 
 //Edit forms for admin and directeurs
-//import AddAdmins from '../views/UI/AddAdmins.vue';
-//import AddDirecteurs from '../views/UI/AddDirecteurs.vue';
+import AddIntervention from "../components/AddIntervention.vue";
+import PopupForm from "../components/PopupForm.vue";
+
+//Edit forms for directeurs et admin etab
+import AddAdmin from "../components/AddAdmin.vue";
+import AddDirecteur from "../components/AddDirecteur.vue";
 
 //Edit Profile
 import EditProfile from '../components/EditProfile.vue';
 
 //Table intervention for validations
-import ValidateIntervention from '../views/UI/ValidateIntervention.vue'
+import ValidateIntervention from '../views/TablesEtab/ValidateIntervention.vue'
 
 import DefaultLayout from "../components/DefaultLayout.vue";
 import store from "../store.js";
@@ -119,6 +122,57 @@ const routes = [
     // }
   },
  
+  // Adding forms 
+
+  {
+    path: '/AddAdmins',
+    name:'AddAdmins',
+    component:AddAdmin ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+
+  {
+    path: '/AddDirecteurs',
+    name:'AddDirecteurs',
+    component:AddDirecteur ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+
+  {
+    path: '/AddInterventions',
+    name:'AddInterventions',
+    component:AddIntervention ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+  {
+    path: '/AddEnseignants',
+    name:'AddEnseignants',
+    component:PopupForm ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+
+
+
+
+
+
+
+
+
+
+
  
   /*The Default Layout for all Pages */
   {
@@ -208,8 +262,6 @@ router.beforeEach((to, from, next) => {
   //is he an admin (or admin UAE)
   const isAdmin = usertype > 0;
   const toast = useToast();
-
-
 
   //does the page require authentification
   if (to.meta.RequiresAuth) {

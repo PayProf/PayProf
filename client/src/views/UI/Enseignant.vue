@@ -65,8 +65,6 @@
               <i class="fas fa-edit"></i>
               <span class="tooltip" data-tooltip="Inspect">modify intervention </span>
             </button>
-
-
             <button class="btn btn-danger btn-sm">
               <i class="fa fa-trash" aria-hidden="true"></i>
             </button>

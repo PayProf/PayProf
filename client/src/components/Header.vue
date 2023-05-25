@@ -47,7 +47,7 @@
 
 <script>
 import router from '../router';
-import Etabs from '../views/UI/TableEtablissements.vue';
+import Etabs from '../views/TablesUAE/TableEtablissements.vue';
 import {mapActions} from "vuex";
 
 export default {
