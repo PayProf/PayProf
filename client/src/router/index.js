@@ -26,8 +26,12 @@ import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
 //import EditDirecteurs from '../views/UI/EditDirecteurs.vue';
 
 //Edit forms for admin and directeurs
-//import AddAdmins from '../views/UI/AddAdmins.vue';
-//import AddDirecteurs from '../views/UI/AddDirecteurs.vue';
+import AddInterventions from '../components/AddInterventions.vue';
+import AddEnseignants from '../components/AddEnseignants.vue';
+
+//Edit forms for directeurs et admin etab
+import AddAdmins from '../components/AddAdmins.vue';
+import AddDirecteurs from '../components/AddDirecteurs.vue';
 
 //Edit Profile
 import EditProfile from '../components/EditProfile.vue';
@@ -126,6 +130,57 @@ const routes = [
     // }
   },
  
+  // Adding forms 
+
+  {
+    path: '/AddAdmins',
+    name:'AddAdmins',
+    component:AddAdmins ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+
+  {
+    path: '/AddDirecteurs',
+    name:'AddDirecteurs',
+    component:AddDirecteurs ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+
+  {
+    path: '/AddInterventions',
+    name:'AddInterventions',
+    component:AddInterventions ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+  {
+    path: '/AddEnseignants',
+    name:'AddEnseignants',
+    component:AddEnseignants ,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+
+
+
+
+
+
+
+
+
+
+
  
   /*The Default Layout for all Pages */
   {
