@@ -13,7 +13,7 @@ class UpdateAdministrateurRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,25 @@ class UpdateAdministrateurRequest extends FormRequest
      */
     public function rules()
     {
+        $method=$this->method();
+        if($method=='PUT'){
         return [
-            //
-        ];
+            'PPR'=>['required'],
+            'nom'=>['required'],
+            'prenom'=>['required'],
+            'etablissement_id'=>['required'],
+            'user_id'=>['required'],
+            'email_perso'=>['required','email'],
+            ];
+        }else{
+            return [
+                'PPR'=>['sometimes','required'],
+                'nom'=>['sometimes','required'],
+                'prenom'=>['sometimes','required'],
+                'etablissement_id'=>['sometimes','required'],
+                'user_id'=>['sometimes','required'],
+                'email_perso'=>['sometimes','required','email'],
+                ];
+        }
     }
 }

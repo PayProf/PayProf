@@ -13,7 +13,7 @@ class StoreAdministrateurRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,13 @@ class StoreAdministrateurRequest extends FormRequest
     public function rules()
     {
         return [
-            //
-        ];
+            'PPR'=>['required'],
+            'nom'=>['required'],
+            'prenom'=>['required'],
+            'etablissement_id'=>['required'],
+            // 'user_id'=>['required'],
+            'email_perso'=>['required','email'],
+          //  'Email'=>['required','email'],
+            ];
     }
 }

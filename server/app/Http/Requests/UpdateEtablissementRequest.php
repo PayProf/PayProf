@@ -13,7 +13,7 @@ class UpdateEtablissementRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return True;
     }
 
     /**
@@ -23,8 +23,30 @@ class UpdateEtablissementRequest extends FormRequest
      */
     public function rules()
     {
+        //return an array of validation rules for the form fields.
+        $method=$this->method();
+        if($method=='PUT'){
         return [
-            //
+            'nom'=>['required'],
+            'code'=>['required'],
+            'telephone'=>['required'],
+            'FAX'=>['required'],
+            'Nbrenseignants'=>['required'],
+            'ville'=>['required'],
+        ];
+    }else{
+        //'sometimes'=>allow a field to be optional.
+        return [
+            'nom'=>['sometimes','required'],
+            'code'=>['sometimes','required'],
+            'telephone'=>['sometimes','required'],
+            'FAX'=>['sometimes','required'],
+            'Nbrenseignants'=>['sometimes','required'],
+            'ville'=>['sometimes','required'],
         ];
     }
+
+
+    }
+
 }
