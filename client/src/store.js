@@ -26,6 +26,7 @@ const store = createStore({
         token:localStorage.getItem('TOKEN'),
         token_exp:localStorage.getItem('EXPIRATION')
       },
+      
       Interventions:[
         {
           
@@ -38,7 +39,41 @@ const store = createStore({
           Date_Fin: "",
           Nombre_heures: ""
         }
+      ],
+
+      Admins :[
+        {
+          ppr: "",
+          nom: "",
+          prenom: "",
+          email: "",
+          role: 2
+        }
+      ],
+
+      EtabDirecteurs: [
+        {
+          ppr: "",
+          nom: "",
+          prenom: "",
+          email: "",
+          role: 1,
+
+        }
+      ],
+
+      Etablisment:[
+        {
+          code: "",
+          nom: "",
+          telephone:"",
+          fax:"",
+          nbreenseignants:"",
+
+        }
       ]
+
+
 
 
 
@@ -58,6 +93,7 @@ const store = createStore({
    
   },
   mutations: {
+
 
     /*
     Here's the mutation that changes the current state when logged in
@@ -104,17 +140,37 @@ const store = createStore({
     },
 
 
+    /*Set Enseignants */
+    
     setEnseignants (state,payload){
       state.enseignants=payload;
     },
+
+    /* Set Interventions */
     setInterventions (state,payload){
       state.Interventions=payload;
     },
-    addEnseignant(state, enseignants){
+
+    /* Add Enseignant */
+    addEnseignant(state, enseignants) {
+  
       state.enseignants.push(enseignants);
     },
+
+    /* Add Etablisment */
+    addEtablisment(state, Etablisment){
+      state.Etablisment.push(Etablisment);
+    },
+
+    /* Set Etablisment */
+    setEtablisment(state,payload){
+      state.enseignants=payload;
+    },
+
+    
   },
   actions: {
+
     // async addEnseignant({ commit }, enseignants) {
     //   try {
     //     const response = await axios.post('http://localhost:5000/enseignants', enseignant);
@@ -144,6 +200,7 @@ const store = createStore({
     //     console.log(error)
     //   }
     // },
+
     /*
     This is where the login request is made it gets the token
     the user data and stores it in the state

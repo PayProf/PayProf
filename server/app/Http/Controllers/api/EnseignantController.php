@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEnseignantRequest;
 use App\Http\Requests\UpdateEnseignantRequest;
 use App\Http\Resources\EnseignantInterventionResource;
+use App\Http\Resources\EnseignantPaymentsResource;
 use App\Models\Enseignant;
 
 
@@ -139,10 +140,15 @@ class EnseignantController extends Controller
        public function ShowMyInterventions($id)
           {                
                 
-                 return  EnseignantInterventionResource::collection (Enseignant::where('user_id',$id)->with('interventions.etablissement')->paginate(10));
-                                       
-       
-          }
+                                //this method display all the interventions of a specified prof
+                               return new EnseignantInterventionResource(Enseignant::with('interventions.etablissement')->find($id));
+                                
+                        
+                }
+                /////////////////////////////////////////// should be added  and also the class EnseignantPaymentsResource////////////////////////////////////////
+
+                
+
 //======================================================== The access is retricted for:Enseignant ===================================================
       
 
@@ -151,13 +157,10 @@ class EnseignantController extends Controller
      * @param  int  $id User_id de l'Enseignant !!!!!! we can use auth()->user()->id ;
      * @return /// all the payments of the enseignant Who just logged in  
      */
-           
-       public function ShowMyPayments($id)
-
-          {      
-
-                 $ens=Enseignant::where('user_id',$id)->with('paiements')->get();                          
-                 return response()->json($ens);
+          public function ShowMyPayments($id)
+          {
+                     return EnseignantPaymentsResource::collection(Enseignant::where('user_id',$id)->with('paiements.etablissement'));
+       
           }
    
 
