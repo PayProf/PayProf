@@ -41,10 +41,12 @@ route::PATCH('Enseignant/{Enseignant}/UpdateMyEmail',[EnseignantController::clas
 //=====================================================================================================
 
 
-route::apiResource('adm',AdministrateurController::class);
+//========================================= Grade API =====================================================
 
-route::apiResource('grd',GradeController::class);
-route::apiResource('direct',DirecteurController::class);
+route::apiResource('Grade',GradeController::class);
+
+//=========================================================================================================
+
 
 
 
@@ -63,6 +65,7 @@ route::get('ShowMyEtabInterventions',[InterventionController::class ,'ShowMyEtab
 route::get('Interventiont/{Intervention}/EnseignantInterventions',[InterventionController::class,'EnseignantInterventions']);
 
 //======================================================================================================
+
 
 route::apiResource('pay',PaiementsController::class);
 
