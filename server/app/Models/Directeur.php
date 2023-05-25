@@ -31,9 +31,9 @@ public function etablissement()
   
 }
 
-public function etablissement()
-{
-    return $this->belongsTo(Etablissement::class);
-}
+// public function etablissement()
+// {
+//     return $this->belongsTo(Etablissement::class);
+// }
 
 }
