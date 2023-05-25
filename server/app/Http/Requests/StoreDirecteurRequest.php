@@ -13,7 +13,7 @@ class StoreDirecteurRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,14 @@ class StoreDirecteurRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'PPR'=>['required','max:10','unique:directeurs'],
+            'nom'=>['required'],
+            'prenom'=>['required'],
+            'DateNaissance'=>['required','date'],
+            'email_perso'=>['required','email','unique:directeurs'],
+            
+            
+           // 'IdUser'=>['required'],
         ];
     }
 }

@@ -1,19 +1,39 @@
 {
-  "name": "appfrontend",
-  "version": "0.0.0",
+  "name": "payprof",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backend": "json-server --watch db.json --port 5000",
+    "sass": "node-sass input.scss output.css",
+  "sass:watch": "node-sass input.scss output.css --watch"
   },
   "dependencies": {
-    "vue": "^3.2.47",
-    "vue-router": "^4.1.6",
-    "vuex": "^4.0.2"
+    "@canvasjs/charts": "^3.7.7",
+    "axios": "^1.4.0",
+    "chart.js": "^4.3.0",
+    "daisyui": "^2.51.6",
+    "date-fns": "^2.30.0",
+    "json-server": "^0.17.3",
+    "jwt-decode": "^3.1.2",
+    "router": "^2.0.0-beta.1",
+    "vue": "^3.2.36",
+    "vue-chartjs": "^5.2.0",
+    "vue-router": "^4.0.13",
+    "vue-toastification": "^2.0.0-rc.5",
+    "vue3-charts": "^1.1.33",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.2.1",
-    "vite": "^4.3.4"
+    "@vitejs/plugin-vue": "^4.1.0",
+    "autoprefixer": "^10.4.14",
+    "node-sass": "^9.0.0",
+    "postcss": "^8.4.23",
+    "sass": "^1.62.1",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.3.2"
   }
 }

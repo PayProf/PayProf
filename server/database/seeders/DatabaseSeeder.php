@@ -11,7 +11,6 @@ use App\Models\Etablissement;
 use App\Models\Grade;
 use App\Models\Intervention;
 use App\Models\Paiements;
-use App\Models\TypeUser;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -36,9 +35,8 @@ class DatabaseSeeder extends Seeder
         Grade::factory(10)->create();
         Enseignant::factory(10)->create();
         Administrateur::factory(10)->create();
-        Intervention::factory(10)->create();
-       
         Paiements::factory(10)->create();
+        Intervention::factory(10)->create();
         Directeur:: factory(10)->create();
        
     }
