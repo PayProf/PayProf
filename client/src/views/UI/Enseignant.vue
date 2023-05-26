@@ -79,18 +79,15 @@
     <button class="btn">3</button>
     <button class="btn">4</button>
   </div>
-  <PFintervention />
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import PFintervention from '../../components/PFintervention.vue';
 import BarChart from '../../components/chart.vue'
 
 export default {
   name: 'User',
   components: {
-    PFintervention,
     BarChart,
   },
   methods: {
