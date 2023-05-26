@@ -46,7 +46,7 @@
   
 
 <script>
-import PopupForm from '../../components/PopupForm.vue';
+import PopupForm from '../../components/AddEnseignant.vue';
 import {mapActions,mapState} from 'vuex';
 export default {
   name: 'Admin',

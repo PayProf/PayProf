@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import PopupForm from '/src/components/PopupForm.vue';
+import PopupForm from '/src/components/AddEnseignant.vue';
 import { mapActions, mapState } from 'vuex';
 export default {
     name: 'Admin',

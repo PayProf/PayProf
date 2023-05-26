@@ -37,7 +37,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import PopupForm from '../../components/PopupForm.vue';
+// import PopupForm from '@/src/components/AddEnseignant.vue';
 import BarChart from '/src/components/chart.vue'
 export default {
   data() {

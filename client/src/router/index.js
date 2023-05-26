@@ -26,7 +26,7 @@ import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
 
 //Edit forms for admin and directeurs
 import AddIntervention from "../components/AddIntervention.vue";
-import PopupForm from "../components/PopupForm.vue";
+import PopupForm from "../components/AddEnseignant.vue";
 
 //Edit forms for directeurs et admin etab
 import AddAdmin from "../components/AddAdmin.vue";
@@ -42,7 +42,7 @@ import DefaultLayout from "../components/DefaultLayout.vue";
 import store from "../store.js";
 import Notfound from "../views/UI/Notfound.vue";
 import { useToast } from "vue-toastification";
-import Enseignant from "../views/UI/Enseignant.vue";
+import Enseignant from "../views/UI/User.vue";
 import TableInterventionsEnseignant from "../views/UI/TableInterventionsEnseignant.vue";
 
 /******************************************* Routes Configuration *******************************************/
@@ -94,7 +94,7 @@ const routes = [
   {
     path: '/TableInterventionsEnseignant/',
     name:'TableInterventionsEnseignant',
-    component: TableInterventionsEnseignant ,
+    component: TableInterventionsEnseignant.vue ,
     // meta:{
     //   RequiresAuth: false
     // }
