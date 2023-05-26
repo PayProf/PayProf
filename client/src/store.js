@@ -71,8 +71,8 @@ const store = createStore({
         ville: "",
         nbrEnseignant: "",
 
-      }
-    ]
+      },
+    ],
 
 
 
