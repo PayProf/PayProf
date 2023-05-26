@@ -1,178 +1,163 @@
 <template>
-  <div class="ml-30 my-20">
-    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 justify-center">
-      <div class="card-body">
-        <form>
-          <!-- Form fields for adding an enseignant -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Code</span>
-            </label>
-            <input type="text" v-model="model.Intervention.Code" placeholder="Code" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Etablissement</span>
-            </label>
-            <input type="text" v-model="model.Intervention.Etablissement" placeholder="Etablissement"
-              class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Ville</span>
-            </label>
-            <input type="text" v-model="model.Intervention.Ville" placeholder="Ville" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Intetule Intervention</span>
-            </label>
-            <input type="email" v-model="model.Intervention.Intetule" placeholder="Intetule"
-              class="input input-bordered" />
-          </div>
+  <div>
+    <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
+    <div v-if="showPopup" class="popup">
+      <div class="popup-content card w-96 bg-neutral text-neutral-content">
+        <div class="card-body items-center text-center">
+          <h2 class="card-title">Add Intervention</h2>
+          <form @submit.prevent="saveIntervention(); showPopup = false">
+            <!-- Form fields for adding an intervention -->
+            <div class="grid grid-cols-2 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Code</span>
+                </label>
+                <input type="text" v-model="model.Intervention.Code" placeholder="Code" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Etablissement</span>
+                </label>
+                <input type="text" v-model="model.Intervention.Etablissement" placeholder="Etablissement"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Ville</span>
+                </label>
+                <input type="text" v-model="model.Intervention.Ville" placeholder="Ville" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Intitule Intervention</span>
+                </label>
+                <input type="text" v-model="model.Intervention.Intitule" placeholder="Intitule"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Année universitaire</span>
+                </label>
+                <input type="text" v-model="model.Intervention.Annee" placeholder="Année universitaire"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Semestre</span>
+                </label>
+                <select v-model="model.Intervention.Semestre" class="select select-bordered">
+                  <option value="1">1st Semester</option>
+                  <option value="2">2nd Semester</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Date début</span>
+                </label>
+                <input type="date" v-model="model.Intervention.DateDebut" placeholder="Date début"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Date fin</span>
+                </label>
+                <input type="date" v-model="model.Intervention.DateFin" placeholder="Date fin"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Nombre d'heure</span>
+                </label>
+                <input type="text" v-model="model.Intervention.NombreHeures" placeholder="Nombre d'heure"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control col-span-2">
+                <label class="label">
+                  <span class="label-text">Visa_etb</span>
+                </label>
+                <input type="checkbox" v-model="model.Intervention.Checkbox1" class="checkbox checkbox-primary" />
+              </div>
+              
+            </div>
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Année universitaire</span>
-            </label>
-            <input type="email" v-model="model.Intervention.Année" placeholder="Année universitaire"
-              class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Semestre</span>
-            </label>
-            <input type="email" v-model="model.Intervention.Semestre" placeholder="Semestre"
-              class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Date début</span>
-            </label>
-            <input type="email" v-model="model.Intervention.Année" placeholder="Année universitaire"
-              class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Date début</span>
-            </label>
-            <input type="email" v-model="model.Intervention.DateD" placeholder="Date début"
-              class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Date fin</span>
-            </label>
-            <input type="email" v-model="model.Intervention.DateF" placeholder="Date fin" class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Nombre d'heure</span>
-            </label>
-            <input type="email" v-model="model.Intervention.Heures" placeholder="Nombre d'heure"
-              class="input input-bordered" />
-          </div>
-
-          <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px;"
-              @click="saveIntervention(), RedirectTable()">Add
-              Intervention</button>
-            <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
-          </div>
-        </form>
+            <div class="form-control mt-6">
+              <button type="submit" class="btn btn-primary rounded" style="margin-bottom: 5px;">
+                Add Intervention
+              </button>
+              <button type="button" class="btn btn-primary rounded" @click="showPopup = false">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-
-
   </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
 export default {
   name: 'AddIntervention',
   data() {
     return {
-      errorsList: "",
+      showPopup: false,
       model: {
         Intervention: {
-          Code: "",
-          Etablissement: "",
-          Ville: "",
-          Intetule: "",
-          Annee: "",
-          Semestre: "",
-          DateD: "",
-          DateF: "",
-          Heures: ""
+          Code: '',
+          Etablissement: '',
+          Ville: '',
+          Intitule: '',
+          Annee: '',
+          Semestre: '',
+          DateDebut: '',
+          DateFin: '',
+          NombreHeures: '',
+          Checkbox1: false,
+          Checkbox2: false
         }
       }
-    }
+    };
   },
-
   methods: {
     saveIntervention() {
-
-      var myThis = this;
-      axios.post('http://127.0.0.1/api/AddInterventions', this.model.Intervention)
+      axios
+        .post('http://127.0.0.1/api/AddInterventions', this.model.Intervention)
         .then(result => {
-          console.log(result.data)
+          console.log(result.data);
           this.model.Intervention = {
-            Code: "",
-            Etablissement: "",
-            Ville: "",
-            Intetule: "",
-            Annee: "",
-            Semestre: "",
-            DateD: "",
-            DateF: "",
-            Heures: ""
-          }
-
-        }).catch(function (error) {
-
+            Code: '',
+            Etablissement: '',
+            Ville: '',
+            Intitule: '',
+            Annee: '',
+            Semestre: '',
+            DateDebut: '',
+            DateFin: '',
+            NombreHeures: '',
+            Checkbox1: false,
+            Checkbox2: false
+          };
+        })
+        .catch(error => {
           if (error.response) {
-
             if (error.response.status == 422) {
-
-              //if you don't specify "myThis" an undefined error will be shown
-              myThis.errorsList = error.response.data.errors;
+              this.errorsList = error.response.data.errors;
             }
-
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
           } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
             console.log(error.request);
           } else {
-            // Something happened in setting up the request that triggered an Error
             console.log('Error', error.message);
           }
-
         });
-    },
-
-    //Redirect to table view
-    RedirectTable() {
-      this.$router.push('/TableInterventions')
     }
-
-  },
-
-
+  }
 };
 </script>
-  
+
 <style>
 .popup {
   position: fixed;
@@ -189,4 +174,5 @@ export default {
 .popup-content {
   background-color: #fff;
   padding: 20px;
-}</style>
+}
+</style>

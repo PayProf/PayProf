@@ -35,11 +35,10 @@
     </div>
   </div>
 </div>
-
-
 </template>
 
 <script>
+
 import {mapActions, mapState} from "vuex";
 import { useToast } from "vue-toastification";
 
