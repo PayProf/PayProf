@@ -33,6 +33,8 @@ export default {
   async created(){
     if(store.state.user.token && this.IsExpired)
     {
+      console.log(this.IsExpired)
+      console.log(store.state.user.token)
       await this.$store.dispatch('RefreshToken');
       console.log('success')
     }

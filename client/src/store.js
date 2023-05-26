@@ -23,7 +23,7 @@ const store = createStore({
       id: localStorage.getItem('USERID'),
       email: localStorage.getItem('EMAIL'),
       role: 0,//localStorage.getItem('ROLE'),
-      token: 123,//localStorage.getItem('TOKEN'),
+      token: localStorage.getItem('TOKEN'),
       token_exp: localStorage.getItem('EXPIRATION')
     },
 
@@ -132,7 +132,7 @@ const store = createStore({
       //get the current date
       const currentDate = new Date();
       //Add hours till expiration to it
-      const Exp = new Date(currentDate.getTime() + (2 * 60 * 60 * 1000));
+      const Exp = new Date(currentDate.getTime() + (60 * 60 * 1000) + (59 * 60 * 1000));
 
       //storing the date as a string
       state.user.token_exp = Exp.toISOString();

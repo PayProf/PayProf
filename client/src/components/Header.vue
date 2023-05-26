@@ -7,19 +7,24 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
           </svg>
         </label>
-        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+        <ul v-if="IsAuth" tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+
           <li><a @click="toggleProfile()">Profile</a></li>
           <!-- to show them only if he is logged in  -->
           <li><a @click="toggleEtab()">Table etablissment</a></li>
           <li><a @click="toggleAdm()">Table admins</a></li>
           <li><a @click="toggleDir()">table directeurs</a></li>
         </ul>
+        <ul v-else tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+          <li><a @click="">About Us</a></li>
+        </ul>
+
       </div>
     </div>
     <div class="navbar-center">
       <a class="btn btn-ghost normal-case text-xl" href="https://www.uae.ma/website/node/41">PayProf</a>
     </div>
-    <div class="navbar-end">
+    <div class="navbar-end" v-if="IsAuth">
       <button class="btn btn-ghost btn-circle" @click="Logout">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="w-6 h-6">
@@ -29,7 +34,7 @@
       </button>
       
     </div>
-    <div class="dropdown dropdown-end">
+    <div class="dropdown dropdown-end" v-if="IsAuth">
       <label tabindex="0" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
           <img src="" />
@@ -41,12 +46,13 @@
           <router-link :to="{name:'EditProfile'}"> <li><a href="">Editer le profile</a></li> </router-link>
         </ul>
       </div>
-  </div>
+    </div>
   <Etabs ref="etabsComponent" v-if="false" />
 </template>
 
 <script>
 import router from '../router';
+import store from '../store.js';
 import Etabs from '../views/TablesUAE/TableEtablissements.vue';
 import {mapActions} from "vuex";
 
@@ -58,7 +64,14 @@ export default {
   props: {
     title: String,
   },
+  computed:{
+    IsAuth(){
+      return store.state.user.token;
+    },
+  },
   methods: {
+
+
     ...mapActions([
        'logout'
     ]),
