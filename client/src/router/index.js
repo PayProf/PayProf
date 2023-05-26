@@ -7,22 +7,19 @@ import Home from '../views/Home.vue';
 import AdminUAE from "../views/UI/AdminUAE.vue";
 import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
 
-//User page
-import TableInterventionsUser from '../views/TablesEtab/TableInterventionsUser.vue';
+
 
 //Admin de l'etablissement
 import Admin from '../views/UI/Admin.vue';
 
-//Table etablissement for view only 
-import Etablissements from "../views/TablesUAE/TableEtablissements.vue";
+//Directeur de l'etablissement
+import EtabDirector from "../views/UI/EtabDirector.vue";
+
 
 //Table Admins et Directeurs for view and edit, concerns the UAE admin
 import TableAdmins from "../views/TablesUAE/TableAdmins.vue";
 import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
 
-//Edit forms for admin and directeurs
-//import EditAdmins from '../views/UI/EditAdmins.vue';
-//import EditDirecteurs from '../views/UI/EditDirecteurs.vue';
 
 //Edit forms for admin and directeurs
 import AddIntervention from "../components/AddIntervention.vue";
@@ -42,8 +39,8 @@ import DefaultLayout from "../components/DefaultLayout.vue";
 import store from "../store.js";
 import Notfound from "../views/UI/Notfound.vue";
 import { useToast } from "vue-toastification";
-import Enseignant from "../views/UI/User.vue";
 import TableInterventionsEnseignant from "../views/UI/TableInterventionsEnseignant.vue";
+import User from "../views/UI/User.vue";
 
 /******************************************* Routes Configuration *******************************************/
 
@@ -59,120 +56,6 @@ const routes = [
       RequiresAuth: false
     }
   },
-
-  {
-    path: '/DirecteurUAE',
-    name:'DirecteurUAE',
-    component: DirecteurUAE,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-  /* Table directeurs des établissements home page, concern the uni admin only */
-  
-  {
-    path: '/TableDirecteurs',
-    name:'TableDirecteurs',
-    component: TableDirecteurs,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-  /* Table admins des établissement home page, concern the uni admin only */
-  
-  {
-    path: '/TableAdmins',
-    name:'TableAdmins',
-    component: TableAdmins,
-    // meta:{
-    //   RequiresAuth: false :id
-    // }
-  },
-
-  {
-    path: '/TableInterventionsEnseignant/',
-    name:'TableInterventionsEnseignant',
-    component: TableInterventionsEnseignant.vue ,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-  // idE: Enseignant Id,idI: Intervention Id :idE/:idI
-
-  {
-    path: '/ValidateIntervention/',
-    name:'ValidateIntervention',
-    component:ValidateIntervention ,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-    //Edit Profile :id
-
-  {
-    path: '/EditProfile/',
-    name:'EditProfile',
-    component:EditProfile ,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
- 
-  // Adding forms 
-
-  {
-    path: '/AddAdmins',
-    name:'AddAdmins',
-    component:AddAdmin ,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-
-  {
-    path: '/AddDirecteurs',
-    name:'AddDirecteurs',
-    component:AddDirecteur ,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-
-  {
-    path: '/AddInterventions',
-    name:'AddInterventions',
-    component:AddIntervention ,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-  {
-    path: '/AddEnseignants',
-    name:'AddEnseignants',
-    component:PopupForm ,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-
-
-
-
-
-
-
-
-
-
-
  
   /*The Default Layout for all Pages */
   {
@@ -184,15 +67,171 @@ const routes = [
     },
     children:[
       {
+        path: '/DirecteurUAE',
+        name:'DirecteurUAE',
+        component: DirecteurUAE,
+        meta:{
+        AdminAccess: false,
+        AdminUAEAccess: false,
+        UserAccess: false,
+        DirectorUAEAccess: true,
+        DirectorAccess:false,
+        }
+      },
+
+      {
+        path: '/Directeur',
+        name:'Directeur',
+        component: EtabDirector,
+        meta:{
+        AdminAccess: false,
+        AdminUAEAccess: false,
+        UserAccess: false,
+        DirectorUAEAccess: false,
+        DirectorAccess:true,
+        }
+      },
+
+      /* Table directeurs des établissements home page, concern the uni admin only */
+
+      {
+        path: '/TableDirecteurs',
+        name:'TableDirecteurs',
+        component: TableDirecteurs,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
+
+      /* Table admins des établissement home page, concern the uni admin only */
+
+      {
+        path: '/TableAdmins',
+        name:'TableAdmins',
+        component: TableAdmins,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
+
+      {
+        path: '/TableInterventionsEnseignant/',
+        name:'TableInterventionsEnseignant',
+        component: TableInterventionsEnseignant ,
+        meta:{
+          AdminAccess: true,
+          AdminUAEAccess: true,
+          UserAccess: true,
+          DirectorUAEAccess: true,
+          DirectorAccess:true,
+        }
+      },
+
+      // idE: Enseignant Id,idI: Intervention Id :idE/:idI
+
+      {
+        path: '/ValidateIntervention/',
+        name:'ValidateIntervention',
+        component:ValidateIntervention ,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: false,
+          UserAccess: false,
+          DirectorUAEAccess: true,
+          DirectorAccess:true,
+        }
+      },
+
+      //Edit Profile :id
+
+      {
+        path: '/EditProfile/',
+        name:'EditProfile',
+        component:EditProfile ,
+        meta:{
+          AdminAccess: true,
+          AdminUAEAccess: true,
+          UserAccess: true,
+          DirectorUAEAccess: true,
+          DirectorAccess:true,
+        }
+      },
+
+      // Adding forms
+
+      {
+        path: '/AddAdmins',
+        name:'AddAdmins',
+        component:AddAdmin ,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
+
+
+      {
+        path: '/AddDirecteurs',
+        name:'AddDirecteurs',
+        component:AddDirecteur ,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
+
+
+      {
+        path: '/AddInterventions',
+        name:'AddInterventions',
+        component:AddIntervention ,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: false,
+          UserAccess: true,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
+
+      {
+        path: '/AddEnseignants',
+        name:'AddEnseignants',
+        component:PopupForm ,
+        meta:{
+          AdminAccess: true,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
         /*The Page where there's all enseignants */
 
-        path:'/Admin/:Etab',
+      {
+        path:'/Admin/',
         name:'Admin',
         component: Admin,
         meta:{
           AdminAccess: true,
           AdminUAEAccess: false,
           UserAccess: false,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
         }
       },
 
@@ -201,11 +240,13 @@ const routes = [
       {
         path:'/Enseignant/',
         name:'Enseignant',
-        component: Enseignant,
+        component: User,
         meta:{
-          AdminAccess: false,
-          AdminUAEAccess: false,
+          AdminAccess: true,
+          AdminUAEAccess: true,
           UserAccess: true,
+          DirectorUAEAccess: true,
+          DirectorAccess:true,
         }
       },
 
@@ -219,6 +260,8 @@ const routes = [
           AdminAccess: false,
           AdminUAEAccess: true,
           UserAccess: false,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
         }
       }
     ]
@@ -246,8 +289,10 @@ function AccessDenied(toast){
   });
 }
 
-function ALreadyConnected(toast){
-  toast.success('')
+function AlreadyConnected(toast){
+  toast.success('Already Connected',{
+    timeout:3000,
+  });
 }
 
 /*The Page where there's the enseignant profile */
@@ -258,9 +303,12 @@ router.beforeEach((to, from, next) => {
   //the role and privilege
   const usertype = store.state.user.role;
   //is he an admin UAE?
-  const isAdminUAE = usertype >= 3;
+  const isAdminUAE = (parseInt(usertype)===4);
+  const isDirectorUAE = (parseInt(usertype)===3);
   //is he an admin (or admin UAE)
-  const isAdmin = usertype > 0;
+  const isAdmin = (parseInt(usertype)===2);
+  const isDirector = ((parseInt(usertype)===1));
+  const isEnseignant = ((parseInt(usertype)===0));
   const toast = useToast();
 
   //does the page require authentification
@@ -278,33 +326,43 @@ router.beforeEach((to, from, next) => {
           next({ name: 'AdminUAE' });
         else if(isAdmin)
           next({ name: 'Admin' });
+        else if(isDirector)
+          next({ name: 'Directeur'});
+        else if(isDirectorUAE)
+          next({ name: 'DirecteurUAE'})
         else
           next({ name: 'Enseignant' });
       }
       else{
-      if (to.meta.AdminUAEAccess && !isAdminUAE) //if he's trying to access an adminUAE page and he's not adminUAE
-      {
-        if (isAdmin) //if he's AdminEtab
+        if (isAdminUAE && !to.meta.AdminUAEAccess) //if he's trying to access an adminUAE page and he's not adminUAE
         {
-          next({ name: 'Admin' });
-          AccessDenied(toast);
-
-        }
-        else //if he's an enseignant
-        {
-          next({ name: 'Enseignant' });
+          next({name:'Dashboard'});
           AccessDenied(toast);
         }
-      }
-      else if (to.meta.AdminAccess && !isAdmin) //if he's trying to access an admin page and he's not an admin
-      {
-        next({ name: 'Enseignant' });
-        AccessDenied(toast);
-      }
-      else //if he's an enseignant and trying to access his page
-      {
-          next();
-      }
+        else if (isAdmin && !to.meta.AdminAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else if (isDirectorUAE && !to.meta.DirectorUAEAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else if (isDirector && !to.meta.DirectorAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else if (isEnseignant && !to.meta.UserAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else //if he's an enseignant and trying to access his page
+        {
+            next();
+        }
       }
     }
   }
@@ -312,18 +370,8 @@ router.beforeEach((to, from, next) => {
   {
     if (isAuth) //and he's authentificated
     {
-      if (isAdminUAE) //and he's adminUAE
-      {
-        next({ name: 'AdminUAE' });
-      }
-      else if (isAdmin) //and he's adminEtab
-      {
-        next({ name: 'Admin' });
-      }
-      else //and he's Enseignant
-      {
-        next({ name: 'Enseignant'});
-      }
+      next({name:'Dashboard'});
+      AlreadyConnected(toast);
     }
     else //and he's not authentificated
     {

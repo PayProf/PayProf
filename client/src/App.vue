@@ -1,7 +1,6 @@
 <template>
 
   <Header/>
-
 <RouterView></RouterView>
 <Footer/>
       

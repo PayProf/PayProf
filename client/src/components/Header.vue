@@ -14,13 +14,18 @@
           <svg class="swap-on fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"/></svg>
 
         </label>
-        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+        <ul v-if="IsAuth" tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+
           <li><a @click="toggleProfile()">Profile</a></li>
           <!-- to show them only if he is logged in  -->
           <li><a @click="toggleEtab()">Table etablissment</a></li>
           <li><a @click="toggleAdm()">Table admins</a></li>
           <li><a @click="toggleDir()">table directeurs</a></li>
         </ul>
+        <ul v-else tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+          <li><a @click="">About Us</a></li>
+        </ul>
+
       </div>
     </div>
     <div class="navbar-center">
@@ -29,6 +34,7 @@
 
 
     <div class="navbar-end">
+    <div class="navbar-end" v-if="IsAuth">
       <button class="btn btn-ghost btn-circle" @click="Logout">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="w-6 h-6">
@@ -39,7 +45,7 @@
 
     </div>
 
-    <div class="dropdown dropdown-end">
+    <div class="dropdown dropdown-end" v-if="IsAuth">
   <label @click="showdrop" tabindex="0" class="btn btn-ghost btn-circle avatar">
     <div class="avatar online placeholder">
       <div class="bg-neutral-focus text-neutral-content rounded-full w-10">
@@ -47,13 +53,6 @@
       </div>
     </div>
   </label>
-
-  <!-- <div v-show="dropdownOpen" class="absolute right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20" style="width: 20rem;">
-    <div class="py-2">
-      <p></p>
-
-    </div>
-  </div> -->
   <div  v-show="dropdownOpen" class="absolute right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-primary text-primary-content">
   <div class="card-body">
     <h2 class="card-title">M/Mme : {{ user.nom }} {{ user.prenom }}</h2>
@@ -65,16 +64,16 @@
   </div>
 </div>
 </div>
+    </div>
 
 
       </div>
-
-  <!--  -->
   <Etabs ref="etabsComponent" v-if="false" />
 </template>
 
 <script>
 import router from '../router';
+import store from '../store.js';
 import Etabs from '../views/TablesUAE/TableEtablissements.vue';
 import {mapActions,mapState} from "vuex";
 
@@ -92,6 +91,8 @@ return{
     title: String,
   },
   methods: {
+
+
     ...mapActions([
        'logout'
     ]),
@@ -135,6 +136,9 @@ this.dropdownOpen=!this.dropdownOpen;
         return `${firstLetter}${lastLetter}`;
       }
       return '';
+    },
+    IsAuth(){
+      return store.state.user.token;
     },
     getRole() {
   if (this.user.role) {
