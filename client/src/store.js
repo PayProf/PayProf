@@ -18,10 +18,11 @@ const store = createStore({
     //the current user connected
     user:
     {
-      nom: "",
-      prenom: "",
+      nom: "mouad",
+      prenom: "hayaoui",
       id: localStorage.getItem('USERID'),
       email: localStorage.getItem('EMAIL'),
+
       role: 0,//localStorage.getItem('ROLE'),
       token: localStorage.getItem('TOKEN'),
       token_exp: localStorage.getItem('EXPIRATION')
