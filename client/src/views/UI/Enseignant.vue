@@ -99,7 +99,7 @@ export default {
     ])
   },
   async created() {
-    await this.$store.dispatch('getInterventions');
+    // await this.$store.dispatch('getInterventions');
   }
 }
 </script>
