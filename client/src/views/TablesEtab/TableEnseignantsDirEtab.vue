@@ -1,63 +1,78 @@
 <template>
-    <table class="table table-zebra w-full">
-      <!-- head -->
-      <thead>
-      <tr>
-        <th><input type="checkbox" /></th>
-        <th>PPR</th>
-        <th>Nom</th>
-        <th>Prenom</th>
-        <th>Email</th>
-        <th>Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- This import the users from store.state in the table -->
-      <tr v-for="(enseignant,index) in $store.state.enseignants " :key="index">
-        <th><input type="checkbox" /></th>
-        <td>{{ enseignant.ppr }}</td>
-        <td>{{  enseignant.nom  }}</td>
-        <td>{{ enseignant.prenom }}</td>
-        <td>{{enseignant.email }}</td>
-        <td><button class="delete-btn" ><i class="fas fa-trash"></i></button><button class="inspect-btn"><i class="fas fa-search"></i></button><button class="add-btn" @click="showPopupForm = true"><i class="fas fa-plus"></i></button></td>
-
-
-      </tr>
-      </tbody>
+  <div class="mt-10">
+   <table class="table table-zebra w-full">
+        <!-- head -->
+        <thead>
+            <tr>
+                <th></th>
+                <th>PPR</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Grade</th>
+                <th>Email</th>
+                <th>Etablissement</th>
+                <th>Date naissance</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+              <tr v-for="(Enseignant,index) in this.Enseignants.data" :key="index">
+                
+                <td>{{ Enseignant.id }}</td>
+                <td>{{ Enseignant.PPR }}</td>
+                <td>{{ Enseignant.nom }}</td>
+                <td>{{ Enseignant.prenom }}</td>
+                <td>{{ Enseignant.Grade }}</td>
+                <td>{{ Enseignant.DateNaissance }}</td>
+                <td>{{ Enseignant.Email }}</td>
+                <td>{{ Enseignant.Email }}</td>
+                <td>
+                    <button class="add-btn" >
+                        <i class="fas fa-search"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
     </table>
+  </div>
+    
+
 </template>
 
 <script>
-import {mapState,mapActions} from 'vuex'
-import axios from "axios"
-import axiosinstance from "../../axios.js";
+import axios from 'axios';
 export default {
-  name: "Director",
-  data(){
+    name: 'TableEnseignants',
+    data() {
     return {
-      done:false,
+        Enseignants: []
     }
-
-  },
-  computed:{
-    ...mapState([
-        'user',
-    ])
   },
 
-  methods:{
-    ...mapActions([
-       'getuser',
-    ]),
-    async getuser(){
-      await this.$store.dispatch('getuser').then(console.log(this.user.nom)
-      ,this.done=true)
+  mounted() {
+    this.getEnseignants();
 
+
+  },
+  methods: {
+    async getEnseignants() {
+      try {
+        await axios.get('http://127.0.0.1:8000/api/Enseignant').then(result=>{
+          this.Enseignants = result.data
+
+        })
+        console.log(this.Enseignants.data)
+
+      }
+      catch (error) {
+        console.log(error)
+      }
     }
-  }
-}
+  },
+};
+
+
 </script>
-
 <style scoped>
 .delete-btn,
 .add-btn,

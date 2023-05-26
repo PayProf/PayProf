@@ -10,20 +10,22 @@
         <th>Prénom</th>
         <th>Etablissement</th>
         <th>Email Personnel</th>
+        <th>Date Naissance</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(Directeur, id) in this.Directeurs" :key="id">
+      <tr v-for="(Directeur, id) in this.Directeurs.data" :key="id">
           <td></td>
           <td>{{ Directeur.PPR }}</td>
-          <td>{{ Directeur.Nom }}</td>
-          <td>{{ Directeur.Prenom }}</td>
-          <td>{{ Directeur.Telephone }}</td>
-          <td>{{ Directeur.Etablissement }}</td>
+          <td>{{ Directeur.nom }}</td>
+          <td>{{ Directeur.prenom }}</td>
+          <td>{{ Directeur.NomEtab }}</td>
           <td>{{ Directeur.Email }}</td>
+          <td>{{ Directeur.DateNaissance }}</td>
+          
           <td>
-            <button class="add-btn px-2" @click="showPopupForm = true">
+            <button class="add-btn px-2" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
@@ -31,14 +33,13 @@
         </tr> 
     </tbody>
   </table>
+  <button class="btn btn-outline btn-success" @click="RedirectAdd()" >Ajouter un Directeur</button>
 </div>
-<PopupForm/>
+
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
-// import PopupForm from '@/src/components/AddEnseignant.vue';
-import BarChart from '/src/components/chart.vue'
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -55,10 +56,10 @@ export default {
   methods: {
     async getDirecteurs() {
       try {
-        axios.get('http://127.0.0.1/api/Directeurs').then(result => {
+        await axios.get('http://127.0.0.1:8000/api/Directeur').then(result => {
           this.Directeurs = result.data
         })
-        console.log(response.data)
+        console.log(this.Directeurs.data)
       }
       catch (error) {
         console.log(error)

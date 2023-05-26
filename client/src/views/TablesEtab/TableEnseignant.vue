@@ -1,65 +1,80 @@
 <template>
+    <div class="mt-10">
     <table class="table table-zebra w-full">
         <!-- head -->
         <thead>
             <tr>
-                <th><input type="checkbox" /></th>
+                <th></th>
                 <th>PPR</th>
                 <th>Nom</th>
                 <th>Prenom</th>
+                <th>Grade</th>
                 <th>Email</th>
+                <th>Etablissement</th>
+                <th>Date naissance</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            <!-- This import the users from store.state in the table -->
-            <tr v-for="(enseignant) in enseignants" :key="enseignant.ppr">
-                <td><input type="checkbox" /></td>
-                <td>{{ enseignant.ppr }}</td>
-                <td>{{ enseignant.nom }}</td>
-                <td>{{ enseignant.prenom }}</td>
-                <td>{{ enseignant.email }}</td>
+              <tr v-for="(Enseignant,index) in this.Enseignants.data" :key="index">
+                
+                <td>{{ Enseignant.id }}</td>
+                <td>{{ Enseignant.PPR }}</td>
+                <td>{{ Enseignant.nom }}</td>
+                <td>{{ Enseignant.prenom }}</td>
+                <td>{{ Enseignant.Grade }}</td>
+                <td>{{ Enseignant.DateNaissance }}</td>
+                <td>{{ Enseignant.Email }}</td>
+                <td>{{ Enseignant.Email }}</td>
                 <td>
-                    <button class="add-btn" @click="showInterventions()">
+                    <button class="add-btn" >
                         <i class="fas fa-search"></i>
+                    </button>
+                    <button class="edit-btn" >
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" >
+                      <i class="fas fa-trash-alt"></i>
                     </button>
                 </td>
             </tr>
         </tbody>
     </table>
-    <PopupForm />
+  </div>
+    
+
 </template>
 
 <script>
-import PopupForm from '/src/components/AddEnseignant.vue';
-import { mapActions, mapState } from 'vuex';
+import axios from 'axios';
 export default {
-    name: 'Admin',
-    components: {
-        PopupForm,
-    },
+    name: 'TableEnseignants',
     data() {
-        return {
-            showPopupForm: false,
-        };
-    },
-    methods: {
-
-        ...mapActions([
-            'getEnseignants'
-        ]),
-        showPopup() {
-            this.showPopupForm = true;
-        },
-    },
-    computed: {
-        ...mapState([
-            'enseignants',
-        ])
-    },
-    async created() {
-        await this.$store.dispatch('getEnseignants');
+    return {
+        Enseignants: []
     }
+  },
+
+  mounted() {
+    this.getEnseignants();
+
+
+  },
+  methods: {
+    async getEnseignants() {
+      try {
+        await axios.get('http://127.0.0.1:8000/api/Enseignant').then(result=>{
+          this.Enseignants = result.data
+
+        })
+        console.log(this.Enseignants.data)
+
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
+  },
 };
 
 

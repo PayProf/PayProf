@@ -19,6 +19,7 @@ import EtabDirector from "../views/UI/EtabDirector.vue";
 //Table Admins et Directeurs for view and edit, concerns the UAE admin
 import TableAdmins from "../views/TablesUAE/TableAdmins.vue";
 import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
+import TableEnseignants from "../views/TablesEtab/TableEnseignant.vue";
 
 
 //Edit forms for admin and directeurs
@@ -55,6 +56,19 @@ const routes = [
     meta:{
       RequiresAuth: false
     }
+  },
+
+  
+
+  
+
+  {
+    path: '/TableEnseignants',
+    name:'TableEnseignants',
+    component: TableEnseignants,
+    // meta:{
+    //   RequiresAuth: false
+    // }
   },
  
   /*The Default Layout for all Pages */
@@ -93,7 +107,6 @@ const routes = [
       },
 
       /* Table directeurs des établissements home page, concern the uni admin only */
-
       {
         path: '/TableDirecteurs',
         name:'TableDirecteurs',
@@ -106,9 +119,9 @@ const routes = [
           DirectorAccess:false,
         }
       },
+     
 
       /* Table admins des établissement home page, concern the uni admin only */
-
       {
         path: '/TableAdmins',
         name:'TableAdmins',
@@ -121,6 +134,7 @@ const routes = [
           DirectorAccess:false,
         }
       },
+     
 
       {
         path: '/TableInterventionsEnseignant/',
