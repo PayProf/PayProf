@@ -34,7 +34,7 @@
 import PopupForm from '/src/components/AddEnseignant.vue';
 import { mapActions, mapState } from 'vuex';
 export default {
-    name: 'Admin',
+    name: 'TableEnseignants',
     components: {
         PopupForm,
     },
@@ -45,9 +45,9 @@ export default {
     },
     methods: {
 
-        ...mapActions([
-            'getEnseignants'
-        ]),
+        // ...mapActions([
+        //     'getEnseignants'
+        // ]),
         showPopup() {
             this.showPopupForm = true;
         },
@@ -57,9 +57,9 @@ export default {
             'enseignants',
         ])
     },
-    async created() {
-        await this.$store.dispatch('getEnseignants');
-    }
+    // async created() {
+    //     await this.$store.dispatch('getEnseignants');
+    // }
 };
 
 

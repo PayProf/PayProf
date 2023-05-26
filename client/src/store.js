@@ -23,7 +23,7 @@ const store = createStore({
       id: localStorage.getItem('USERID'),
       email: localStorage.getItem('EMAIL'),
 
-      role: 0,//localStorage.getItem('ROLE'),
+      role:localStorage.getItem('ROLE'),
       token: localStorage.getItem('TOKEN'),
       token_exp: localStorage.getItem('EXPIRATION')
     },
@@ -172,14 +172,14 @@ const store = createStore({
   },
   actions: {
 
-    async addEnseignant({ commit }, enseignants) {
-      try {
-        const response = await axios.post('http://localhost:5000/enseignants', enseignants);
-        commit('addEnseignant', response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async addEnseignant({ commit }, enseignants) {
+    //   try {
+    //     const response = await axios.post('http://localhost:5000/enseignants', enseignants);
+    //     commit('addEnseignant', response.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
 
 
     async addEtablisment({ commit }, payload) {
