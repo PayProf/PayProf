@@ -13,7 +13,7 @@ class StorePaiementsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return True;
     }
 
     /**
@@ -23,8 +23,19 @@ class StorePaiementsRequest extends FormRequest
      */
     public function rules()
     {
+       
         return [
-            //
+            'enseignant_id'=>['required'],
+            'etablissement_id'=>['required'],
+            'VH'=>['required'],
+            'Taux_H'=>['required'],
+            'Brut'=>['required'],
+            'IR'=>['required'],
+            'Net'=>['required'],
+            'Annee_univ'=>['required'],
+            'Semestre'=>['required']
+
         ];
+    
     }
 }

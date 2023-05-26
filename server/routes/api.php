@@ -41,10 +41,12 @@ route::PATCH('Enseignant/{Enseignant}/UpdateMyEmail',[EnseignantController::clas
 //=====================================================================================================
 
 
-route::apiResource('adm',AdministrateurController::class);
+//========================================= Grade API =====================================================
 
-route::apiResource('grd',GradeController::class);
-route::apiResource('direct',DirecteurController::class);
+route::apiResource('Grade',GradeController::class);
+
+//=========================================================================================================
+
 
 
 
@@ -63,6 +65,7 @@ route::get('ShowMyEtabInterventions',[InterventionController::class ,'ShowMyEtab
 route::get('Interventiont/{Intervention}/EnseignantInterventions',[InterventionController::class,'EnseignantInterventions']);
 
 //======================================================================================================
+
 
 route::apiResource('pay',PaiementsController::class);
 
@@ -83,7 +86,21 @@ route::PATCH('Directeur/{Directeur}/UpdateMyEmail',[DirecteurController::class,'
 
 //=======================================================================================================
 
+route::apiResource('admins',AdministrateurController::class);
 
+route::apiResource('paiements',PaiementsController::class);
+
+route::apiResource('etablissements',EtablissementController::class);
+
+route::get('paiements/{id}/enseignant',[PaiementsController::class,'Show_paiements_enseignant']);
+
+route::get('admins/{user_id}/myprofile',[AdministrateurController::class,'Show_Myprofile']);
+
+route::put('admins/{user_id}/updateemail',[AdministrateurController::class,'Update_email']);
+
+route::get('etablissements/{user_id}/{role}/myetablissement',[EtablissementController::class,'Show_Myetablissement']);
+
+route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 
 
@@ -94,6 +111,7 @@ route::post('/login',[AuthController::class,'login']);
 
 route::group(['middleware'=>['auth:sanctum']],function(){
     route::get('/logout',[AuthController::class,'logout']);
-    route::get('/refrech',[AuthController::class,'refreshToken']);
+    // @AnasChatt : changed /refrech to /refresh (typing error c -> s)
+    route::get('/refresh',[AuthController::class,'refreshToken']);
 }
 );

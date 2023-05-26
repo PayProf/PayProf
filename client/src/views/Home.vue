@@ -1,5 +1,11 @@
 <template>
-<div class="hero min-h-screen bg-base-200">
+  <div class="hero min-h-screen bg-base-200" v-if="Loading">
+    <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status">
+  <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+    </div>
+  </div>
+<div class="hero min-h-screen bg-base-200" v-else @keyup.enter="login">
   <div class="hero-content flex-col lg:flex-row-reverse">
     <div class="text-center lg:text-left">
       <h1 class="text-5xl font-bold">Bienvenu sur la platforme PlayProf</h1>
@@ -22,7 +28,7 @@
 <!--            <a href="#" class="label-text-alt link link-hover">Forgot password?</a>-->
           </label>
         </div>
-        <div class="form-control mt-6">
+        <div class="form-control mt-6" >
           <button @click="login" :disabled="!ToggleLogin" class="btn btn-primary">Login</button>
         </div>
       </div>
@@ -34,7 +40,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import { useToast } from "vue-toastification";
 
 export default{
@@ -55,7 +61,8 @@ export default{
         FormData:{
           email:"",
           password:""
-        }
+        },
+        Loading:false,
       }
   },
 
@@ -63,12 +70,19 @@ export default{
    */
 
   computed:{
+
+    ...mapState([
+        'progress'
+    ]),
     ToggleLogin(){
       if(this.FormData.email.length<1 || this.FormData.password.length<1)
       {
-        return false
+        return false;
       }
-      else return true;
+      else
+      {
+        return true;
+      }
     },
   },
 
@@ -99,7 +113,9 @@ export default{
       const isvalid = this.validate(this.FormData.email,this.FormData.password);
       if(isvalid)
       {
+        this.Loading=true;
         await this.$store.dispatch('login',this.FormData);
+        this.Loading=false;
       }
     },
   }

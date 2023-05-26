@@ -13,7 +13,7 @@ class UpdatePaiementsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,34 @@ class UpdatePaiementsRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+        if ($method == 'PUT') {
+            return [
+                'enseignant_id' => ['required'],
+                'etablissement_id' => ['required'],
+                'VH' => ['required'],
+                'Taux_H' => ['required'],
+                'Brut' => ['required'],
+                'IR' => ['required'],
+                'Net' => ['required'],
+                'Annee_univ' => ['required'],
+                'Semestre' => ['required']
+
+            ];
+        } else {
+            //'sometimes'=>allow a field to be optional.
+            return [
+                'enseignant_id' => ['sometimes', 'required'],
+                'etablissement_id' => ['sometimes', 'required'],
+                'VH' => ['sometimes', 'required'],
+                'Taux_H' => ['sometimes', 'required'],
+                'Brut' => ['sometimes', 'required'],
+                'IR' => ['sometimes', 'required'],
+                'Net' => ['sometimes', 'required'],
+                'Annee_univ' => ['sometimes', 'required'],
+                'Semestre' => ['sometimes', 'required']
+
+            ];
+        }
     }
 }

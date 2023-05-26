@@ -1,76 +1,124 @@
 <template>
-  <div>
-    <button @click="showPopup" class="btn btn-primary"
-      style="float: right; margin-right: 30px; margin-bottom: 30px; border-radius: 10px;">Add</button>
+  <div class="ml-30 my-20">
+    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 justify-center">
+      <div class="card-body">
+        <form>
+          <!-- Form fields for adding an enseignant -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">PPR</span>
+            </label>
+            <input type="text" v-model="model.Directeur.PPR" placeholder="PPR" class="input input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Nom</span>
+            </label>
+            <input type="text" v-model="model.Directeur.Nom" placeholder="Nom" class="input input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Prénom</span>
+            </label>
+            <input type="text" v-model="model.Directeur.Prenom" placeholder="Prénom" class="input input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Email</span>
+            </label>
+            <input type="email" v-model="model.Directeur.EmailPerso" placeholder="Email" class="input input-bordered" />
+          </div>
 
-    <div v-if="isPopupVisible" class="popup">
-      <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-        <div class="card-body">
-          <form @submit.prevent="addAdmins">
-            <!-- Form fields for adding an enseignant -->
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">PPR</span>
-              </label>
-              <!--------------------- PPR input ------------------------>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Etablissement</span>
+            </label>
+            <input type="email" v-model="model.Directeur.Etablissement" placeholder="Etablissement" class="input input-bordered" />
+          </div>
 
-              <input type="text" v-model="ppr" placeholder="PPR" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Nom</span>
-              </label>
-              <!----------------------- NAME input ----------------------->
-              <input type="text" v-model="nom" placeholder="Nom" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Prénom</span>
-              </label>
-              <!----------------------- Prenom input ----------------------->
-              <input type="text" v-model="prenom" placeholder="Prénom" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Email</span>
-              </label>
-              <!----------------------- Email Input ----------------------->
-              <input type="email" v-model="email" placeholder="Email" class="input input-bordered" />
-            </div>
-
-            <div class="form-control mt-6">
-              <button type="submit" class="btn btn-primary" style="border-radius: 10px;">Add admin</button>
-              <button @click="close" class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
-
-            </div>
-          </form>
-        </div>
+          <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="saveDirecteur(),RedirectTable()">Add
+              Directeur</button>
+            <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
+          </div>
+        </form>
       </div>
-
     </div>
+
+
   </div>
 </template>
   
 <script>
+import axios from 'axios';
 export default {
-  name: "AjouterAdmins",
+  name: 'AddDirecteur',
   data() {
     return {
-      isPopupVisible: false,
-      ppr: '',
-      nom: '',
-      prenom: '',
-      email: '',
-    };
-  },
-  methods: {
-    showPopup() {
-      this.isPopupVisible = true;
-    },
-    close() {
-      this.isPopupVisible = false;
+      errorsList:"",
+      model: {
+        Directeur: {
+          PPR: "",
+          Nom: "",
+          Prenom: "",
+          EmailPerso: "",
+          Etablissement: ""
+        }
+      }
     }
-  }
+  },
+
+  methods: {
+    saveDirecteur() {
+
+      var myThis = this;
+      axios.post('http://127.0.0.1/api/Directeurs', this.model.Directeur)
+        .then(result => {
+          console.log(result.data)
+          this.model.Directeur = {
+            PPR: "",
+            Nom: "",
+            Prenom: "",
+            EmailPerso: "",
+            Etablissement: ""
+          }
+
+        }).catch(function (error) {
+
+          if (error.response) {
+
+            if(error.response.status == 422){
+
+              //if you don't specify "myThis" an undefined error will be shown
+              myThis.errorsList = error.response.data.errors;
+            }
+
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+
+        });
+    },
+    
+    //Redirect to table view
+    RedirectTable() {
+      this.$router.push('/TableDirecteurs')
+    }
+
+  },
+
+
 };
 </script>
   
@@ -92,4 +140,3 @@ export default {
   padding: 20px;
 }
 </style>
-  

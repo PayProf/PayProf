@@ -65,8 +65,6 @@
               <i class="fas fa-edit"></i>
               <span class="tooltip" data-tooltip="Inspect">modify intervention </span>
             </button>
-
-
             <button class="btn btn-danger btn-sm">
               <i class="fa fa-trash" aria-hidden="true"></i>
             </button>
@@ -81,18 +79,15 @@
     <button class="btn">3</button>
     <button class="btn">4</button>
   </div>
-  <PFintervention />
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import PFintervention from '../../components/PFintervention.vue';
 import BarChart from '../../components/chart.vue'
 
 export default {
   name: 'User',
   components: {
-    PFintervention,
     BarChart,
   },
   methods: {
@@ -104,7 +99,7 @@ export default {
     ])
   },
   async created() {
-    await this.$store.dispatch('getInterventions');
+    // await this.$store.dispatch('getInterventions');
   }
 }
 </script>

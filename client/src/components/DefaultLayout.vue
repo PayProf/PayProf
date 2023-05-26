@@ -34,7 +34,6 @@ export default {
     if(store.state.user.token && this.IsExpired)
     {
       await this.$store.dispatch('RefreshToken');
-      console.log('success')
     }
   }
 
