@@ -24,10 +24,24 @@
           <td>{{ Etablissement.ville }}</td>
           <td>{{ Etablissement.Nombre_des_enseignants }}</td>
           <td>
-            <button class="add-btn px-2">
+            <router-link :to="{ path: '/EditEtablissement/'+Etablissement.id }">
+              <button class="add-btn px-4" >
+              <i class="fas fa-pen" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            </router-link>
+
+            <button class="add-btn px-4" @click="deleteEtablissement(Etablissement.id)" >
+              <i class="fas fa-trash" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            <!-- This page isn't created yet !!!! -->
+            <router-link :to="{ path: '/Etablissement/'+Etablissement.id }">
+              <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
+            </router-link>
           </td>
         </tr>
       </tbody>
@@ -65,6 +79,13 @@ export default {
       catch (error) {
         console.log(error)
       }
+    },
+    deleteEtablissement(EtablissementId){
+      axios.delete(`http://127.0.0.1:8000/api/etablissements/${EtablissementId}`)
+      .then(res=>{
+        console.log(res.data)
+        this.getAdmins()
+      })
     }
   },
  

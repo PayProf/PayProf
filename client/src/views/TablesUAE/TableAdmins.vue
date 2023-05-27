@@ -35,11 +35,14 @@
               <i class="fas fa-trash" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
-
-            <button class="add-btn px-4" >
+            <!-- This page isn't created yet !!!! -->
+            <router-link :to="{ path: '/Admin/'+Admin.id }">
+              <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
+            </router-link>
+            
             
           </td>
         </tr>  

@@ -27,15 +27,24 @@
                 <td>{{ Enseignant.Email }}</td>
                 <td>{{ Enseignant.Email }}</td>
                 <td>
-                    <button class="add-btn" >
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <button class="edit-btn" >
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn" >
-                      <i class="fas fa-trash-alt"></i>
-                    </button>
+                  <router-link :to="{ path: '/EditEnseignant/'+Enseignant.id }">
+              <button class="add-btn px-4" >
+              <i class="fas fa-pen" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            </router-link>
+
+            <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" >
+              <i class="fas fa-trash" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            <!-- This page isn't created yet !!!! -->
+            <router-link :to="{ path: '/Enseignant/'+Enseignant.id }">
+              <button class="add-btn px-4" >
+              <i class="fas fa-eye" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            </router-link>
                 </td>
             </tr>
         </tbody>
@@ -57,8 +66,6 @@ export default {
 
   mounted() {
     this.getEnseignants();
-
-
   },
   methods: {
     async getEnseignants() {
@@ -73,7 +80,15 @@ export default {
       catch (error) {
         console.log(error)
       }
+    },
+    deleteEnseignant(EnseignantId){
+      axios.delete(`http://127.0.0.1:8000/api/admins/${AdminId}`)
+      .then(res=>{
+        console.log(res.data)
+        this.getAdmins()
+      })
     }
+
   },
 };
 

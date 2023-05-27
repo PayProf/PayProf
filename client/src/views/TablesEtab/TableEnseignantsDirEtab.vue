@@ -1,67 +1,66 @@
 <template>
   <div class="mt-10">
-   <table class="table table-zebra w-full">
-        <!-- head -->
-        <thead>
-            <tr>
-                <th></th>
-                <th>PPR</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Grade</th>
-                <th>Email</th>
-                <th>Etablissement</th>
-                <th>Date naissance</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-              <tr v-for="(Enseignant,index) in this.Enseignants.data" :key="index">
-                
-                <td>{{ Enseignant.id }}</td>
-                <td>{{ Enseignant.PPR }}</td>
-                <td>{{ Enseignant.nom }}</td>
-                <td>{{ Enseignant.prenom }}</td>
-                <td>{{ Enseignant.Grade }}</td>
-                <td>{{ Enseignant.DateNaissance }}</td>
-                <td>{{ Enseignant.Email }}</td>
-                <td>{{ Enseignant.Email }}</td>
-                <td>
-                    <button class="add-btn" >
-                        <i class="fas fa-search"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
+    <table class="table table-zebra w-full">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th></th>
+          <th>Code</th>
+          <th>Nom</th>
+          <th>Télephone</th>
+          <th>Fax</th>
+          <th>Nombre Etablissements</th>
+          <!-- Consulter la table des Etablissements de cet etablissement -->
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(Etablissement, index) in this.Etablissements.data" :key="index">
+
+          <td>{{ Etablissement.id }}</td>
+          <td>{{ Etablissement.code }}</td>
+          <td>{{ Etablissement.Nom }}</td>
+          <td>{{ Etablissement.Telephone }}</td>
+          <td>{{ Etablissement.ville }}</td>
+          <td>{{ Etablissement.Nombre_des_Etablissements }}</td>
+
+          <td>
+            <router-link :to="{ path: '/Etablissement/' + Etablissement.id }">
+              <button class="add-btn px-4">
+                <i class="fas fa-eye"></i>
+                <span class="tooltip" data-tooltip="inspect"></span>
+              </button>
+            </router-link>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
-    
-
 </template>
 
 <script>
 import axios from 'axios';
 export default {
-    name: 'TableEnseignants',
-    data() {
+  name: 'TableEtablissements',
+  data() {
     return {
-        Enseignants: []
+      Etablissements: []
     }
   },
 
   mounted() {
-    this.getEnseignants();
+    this.getEtablissements();
 
 
   },
   methods: {
-    async getEnseignants() {
+    async getEtablissements() {
       try {
-        await axios.get('http://127.0.0.1:8000/api/Enseignant').then(result=>{
-          this.Enseignants = result.data
+        await axios.get('http://127.0.0.1:8000/api/Etablissement').then(result => {
+          this.Etablissements = result.data
 
         })
-        console.log(this.Enseignants.data)
+        console.log(this.Etablissements.data)
 
       }
       catch (error) {
@@ -116,6 +115,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
 }
+
 .search-bar-container {
   display: flex;
   justify-content: flex-end;
