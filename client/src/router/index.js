@@ -14,6 +14,7 @@ import Admin from '../views/UI/Admin.vue';
 
 //Directeur de l'etablissement
 import EtabDirector from "../views/UI/EtabDirector.vue";
+import TableEtablissement from "../views/TablesUAE/TableEtablissements.vue"
 
 
 //Table Admins et Directeurs for view and edit, concerns the UAE admin
@@ -32,6 +33,7 @@ import AddDirecteur from "../components/AddDirecteur.vue";
 
 //Edit Profile
 import EditProfile from '../components/EditProfile.vue';
+import EditAdmin from '../components/EditAdmin.vue'
 
 //Table intervention for validations
 import ValidateIntervention from '../views/TablesEtab/ValidateIntervention.vue'
@@ -59,13 +61,32 @@ const routes = [
   },
 
   
-
   
+  
+  {
+    path: '/EditAdmin/:id ',
+    name:'EditAdmin ',
+    component: EditAdmin,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+
 
   {
     path: '/TableEnseignants',
     name:'TableEnseignants',
     component: TableEnseignants,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+  {
+    path: '/TableEtablissement',
+    name:'TableEtablissement',
+    component: TableEtablissement,
     // meta:{
     //   RequiresAuth: false
     // }

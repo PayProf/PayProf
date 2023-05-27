@@ -16,15 +16,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(Etablissement, id) in this.Etablissements" :key="id">
-          <td></td>
-          <td>{{ Etablissement.Code }}</td>
+        <tr v-for="(Etablissement, id) in this.Etablissements.data" :key="id">
+          <td>{{ Etablissement.id }}</td>
+          <td>{{ Etablissement.code }}</td>
           <td>{{ Etablissement.Nom }}</td>
           <td>{{ Etablissement.Telephone }}</td>
-          <td>{{ Etablissement.Fax }}</td>
-          <td>{{ Etablissement.Nombre_enseignants }}</td>
+          <td>{{ Etablissement.ville }}</td>
+          <td>{{ Etablissement.Nombre_des_enseignants }}</td>
           <td>
-            <button class="add-btn px-2" @click="showPopupForm = true">
+            <button class="add-btn px-2">
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
@@ -37,13 +37,10 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { mapActions, mapState } from 'vuex';
-import { onMounted } from 'vue'
-
+import axios from 'axios';
 export default {
 
-  name: 'Etablissements',
+  name: 'TableEtablissement',
   data() {
     return {
       Etablissements: []
@@ -59,10 +56,11 @@ export default {
   methods: {
     async getEtablissements() {
       try {
-        axios.get('http://127.0.0.1/api/Etablissement').then(result=>{
+        await axios.get('http://127.0.0.1:8000/api/etablissements').then(result=>{
+          console.log('test axios')
           this.Etablissements = result.data
         })
-        console.log(response.data)
+        console.log(this.Etablissements)
       }
       catch (error) {
         console.log(error)

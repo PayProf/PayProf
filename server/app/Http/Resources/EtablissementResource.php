@@ -22,7 +22,7 @@ class EtablissementResource extends JsonResource
             'ville'=>$this->ville,
             'Telephone'=>$this->telephone,
             'FAX'=>$this->FAX,
-            'Nombre des enseignants'=>$this->Nbrenseignants,
+            'Nombre_des_enseignants'=>$this->Nbrenseignants,
             'Enseignants'=>EnseignantResource::collection($this->whenLoaded('Enseignants')),
             //allows you to specify an action to be taken on a related model
             // if it has been loaded. 

@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       <tr v-for="(Directeur, id) in this.Directeurs.data" :key="id">
-          <td></td>
+          <td>{{ id + 1 }}</td>
           <td>{{ Directeur.PPR }}</td>
           <td>{{ Directeur.nom }}</td>
           <td>{{ Directeur.prenom }}</td>

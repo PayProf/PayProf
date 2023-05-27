@@ -17,17 +17,30 @@
     </thead>
     <tbody>
       <tr v-for="(Admin, id) in this.Admins.data" :key="id">
-          <td>{{ id + 1 }}</td>
+          <td>{{ Admin.id}}</td>
           <td>{{ Admin.PPR }}</td>
           <td>{{ Admin.nom }}</td>
           <td>{{ Admin.prenom }}</td>
           <td>{{ Admin.etablissement_id }}</td>
           <td>{{ Admin.email_perso }}</td>
           <td>
-            <button class="add-btn px-2" >
+            <router-link :to="{ path: '/EditAdmin/'+Admin.id }">
+              <button class="add-btn px-4" >
+              <i class="fas fa-pen" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            </router-link>
+
+            <button class="add-btn px-4" @click="deleteAdmin(Admin.id)" >
+              <i class="fas fa-trash" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+
+            <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
+            
           </td>
         </tr>  
     </tbody>
@@ -68,6 +81,13 @@ export default {
     },
     RedirectAdd() {
       this.$router.push('/AddAdmin')
+    },
+    deleteAdmin(AdminId){
+      axios.delete(`http://127.0.0.1:8000/api/admins/${AdminId}`)
+      .then(res=>{
+        console.log(res.data)
+        this.getAdmins()
+      })
     }
   }
    
