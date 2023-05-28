@@ -14,11 +14,13 @@ import Admin from '../views/UI/Admin.vue';
 
 //Directeur de l'etablissement
 import EtabDirector from "../views/UI/EtabDirector.vue";
+import TableEtablissement from "../views/TablesUAE/TableEtablissements.vue"
 
 
 //Table Admins et Directeurs for view and edit, concerns the UAE admin
 import TableAdmins from "../views/TablesUAE/TableAdmins.vue";
 import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
+import TableEnseignants from "../views/TablesEtab/TableEnseignant.vue";
 
 
 //Edit forms for admin and directeurs
@@ -31,6 +33,7 @@ import AddDirecteur from "../components/AddDirecteur.vue";
 
 //Edit Profile
 import EditProfile from '../components/EditProfile.vue';
+import EditAdmin from '../components/EditAdmin.vue'
 
 //Table intervention for validations
 import ValidateIntervention from '../views/TablesEtab/ValidateIntervention.vue'
@@ -55,6 +58,38 @@ const routes = [
     meta:{
       RequiresAuth: false
     }
+  },
+
+  
+  
+  
+  {
+    path: '/EditAdmin/:id ',
+    name:'EditAdmin ',
+    component: EditAdmin,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+
+
+  {
+    path: '/TableEnseignants',
+    name:'TableEnseignants',
+    component: TableEnseignants,
+    // meta:{
+    //   RequiresAuth: false
+    // }
+  },
+
+  {
+    path: '/TableEtablissement',
+    name:'TableEtablissement',
+    component: TableEtablissement,
+    // meta:{
+    //   RequiresAuth: false
+    // }
   },
  
   /*The Default Layout for all Pages */
@@ -93,7 +128,6 @@ const routes = [
       },
 
       /* Table directeurs des établissements home page, concern the uni admin only */
-
       {
         path: '/TableDirecteurs',
         name:'TableDirecteurs',
@@ -106,9 +140,9 @@ const routes = [
           DirectorAccess:false,
         }
       },
+     
 
       /* Table admins des établissement home page, concern the uni admin only */
-
       {
         path: '/TableAdmins',
         name:'TableAdmins',
@@ -121,6 +155,7 @@ const routes = [
           DirectorAccess:false,
         }
       },
+     
 
       {
         path: '/TableInterventionsEnseignant/',

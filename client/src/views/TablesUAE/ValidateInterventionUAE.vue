@@ -72,7 +72,7 @@ export default {
   methods: {
     async getInterventions() {
       try {
-        axios.get('http://127.0.0.1/api/Interventions').then(result => {
+        axios.get('http://127.0.0.1:8000/api/Intervention').then(result => {
           this.Interventions = result.data
         })
         console.log(response.data)

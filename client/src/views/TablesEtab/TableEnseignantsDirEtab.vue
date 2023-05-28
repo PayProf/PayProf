@@ -1,63 +1,77 @@
 <template>
+  <div class="mt-10">
     <table class="table table-zebra w-full">
       <!-- head -->
       <thead>
-      <tr>
-        <th><input type="checkbox" /></th>
-        <th>PPR</th>
-        <th>Nom</th>
-        <th>Prenom</th>
-        <th>Email</th>
-        <th>Action</th>
-      </tr>
+        <tr>
+          <th></th>
+          <th>Code</th>
+          <th>Nom</th>
+          <th>Télephone</th>
+          <th>Fax</th>
+          <th>Nombre Etablissements</th>
+          <!-- Consulter la table des Etablissements de cet etablissement -->
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody>
-      <!-- This import the users from store.state in the table -->
-      <tr v-for="(enseignant,index) in $store.state.enseignants " :key="index">
-        <th><input type="checkbox" /></th>
-        <td>{{ enseignant.ppr }}</td>
-        <td>{{  enseignant.nom  }}</td>
-        <td>{{ enseignant.prenom }}</td>
-        <td>{{enseignant.email }}</td>
-        <td><button class="delete-btn" ><i class="fas fa-trash"></i></button><button class="inspect-btn"><i class="fas fa-search"></i></button><button class="add-btn" @click="showPopupForm = true"><i class="fas fa-plus"></i></button></td>
+        <tr v-for="(Etablissement, index) in this.Etablissements.data" :key="index">
 
+          <td>{{ Etablissement.id }}</td>
+          <td>{{ Etablissement.code }}</td>
+          <td>{{ Etablissement.Nom }}</td>
+          <td>{{ Etablissement.Telephone }}</td>
+          <td>{{ Etablissement.ville }}</td>
+          <td>{{ Etablissement.Nombre_des_Etablissements }}</td>
 
-      </tr>
+          <td>
+            <router-link :to="{ path: '/Etablissement/' + Etablissement.id }">
+              <button class="add-btn px-4">
+                <i class="fas fa-eye"></i>
+                <span class="tooltip" data-tooltip="inspect"></span>
+              </button>
+            </router-link>
+          </td>
+        </tr>
       </tbody>
     </table>
+  </div>
 </template>
 
 <script>
-import {mapState,mapActions} from 'vuex'
-import axios from "axios"
-import axiosinstance from "../../axios.js";
+import axios from 'axios';
 export default {
-  name: "Director",
-  data(){
+  name: 'TableEtablissements',
+  data() {
     return {
-      done:false,
+      Etablissements: []
     }
-
-  },
-  computed:{
-    ...mapState([
-        'user',
-    ])
   },
 
-  methods:{
-    ...mapActions([
-       'getuser',
-    ]),
-    async getuser(){
-      await this.$store.dispatch('getuser').then(console.log(this.user.nom)
-      ,this.done=true)
+  mounted() {
+    this.getEtablissements();
 
+
+  },
+  methods: {
+    async getEtablissements() {
+      try {
+        await axios.get('http://127.0.0.1:8000/api/Etablissement').then(result => {
+          this.Etablissements = result.data
+
+        })
+        console.log(this.Etablissements.data)
+
+      }
+      catch (error) {
+        console.log(error)
+      }
     }
-  }
-}
+  },
+};
+
+
 </script>
-
 <style scoped>
 .delete-btn,
 .add-btn,
@@ -101,6 +115,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
 }
+
 .search-bar-container {
   display: flex;
   justify-content: flex-end;

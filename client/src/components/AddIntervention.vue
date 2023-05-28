@@ -122,7 +122,7 @@ export default {
   methods: {
     saveIntervention() {
       axios
-        .post('http://127.0.0.1/api/AddInterventions', this.model.Intervention)
+        .post('http://127.0.0.1:8000/api/Intervention', this.model.Intervention)
         .then(result => {
           console.log(result.data);
           this.model.Intervention = {

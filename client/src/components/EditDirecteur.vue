@@ -9,35 +9,35 @@
               <label class="label">
                 <span class="label-text">PPR</span>
               </label>
-              <input type="text" v-model="model.Admins.PPR" placeholder="PPR" class="input input-bordered" />
+              <input type="text" v-model="model.Directeurs.PPR" placeholder="PPR" class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Nom</span>
               </label>
-              <input type="text" v-model="model.Admins.nom" placeholder="Nom" class="input input-bordered" />
+              <input type="text" v-model="model.Directeurs.nom" placeholder="Nom" class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Prénom</span>
               </label>
-              <input type="text" v-model="model.Admins.prenom" placeholder="Prénom" class="input input-bordered" />
+              <input type="text" v-model="model.Directeurs.prenom" placeholder="Prénom" class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Email</span>
               </label>
-              <input type="email" v-model="model.Admins.email_perso" placeholder="Email" class="input input-bordered" />
+              <input type="email" v-model="model.Directeurs.email_perso" placeholder="Email" class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Etablissement</span>
               </label>
-              <input type="number" v-model="model.Admins.etablissement_id" placeholder="Email"
+              <input type="number" v-model="model.Directeurs.etablissement_id" placeholder="Email"
                 class="input input-bordered" />
             </div>
             <div class="form-control mt-6">
-              <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="updateAdmin()">Save</button>
+              <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="updateDirecteur()">Save</button>
               <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
 
             </div>
@@ -52,37 +52,37 @@
 <script>
 import axios from 'axios';
 export default {
-  name: 'EditAdmin',
+  name: 'EditDirecteur',
   data() {
     return {
-      AdminId:"",
+      DirecteurId:"",
       model: {
-        Admins: {
+        Directeurs: {
           PPR: "",
-          email_perso: "",
-          etablissement_id: "",
-          id: "",
           nom: "",
-          prenom: ""
+          prenom: "",
+          NomEtab: "",
+          Email: "",
+          DateNaissance: ""
         }
       }
     }
   },
   mounted() {
-    this.AdminId = this.$route.params.id;
-    this.getAdminData(this.$route.params.id);
+    this.DirecteurId = this.$route.params.id;
+    this.getDirecteurData(this.$route.params.id);
   },
 
   methods: {
-    getAdminData(AdminId) {
-      axios.get(`http://localhost:8000/api/admins/${AdminId}`).then(result => {
-        this.model.Admins = result.data.Admins
+    getDirecteurData(DirecteurId) {
+      axios.get(`http://localhost:8000/api/Directeurs/${DirecteurId}`).then(result => {
+        this.model.Directeurs = result.data.Directeurs
       })
 
     },
-    async updateAdmin() {
+    async updateDirecteur() {
       var myThis = this;
-      await axios.put(`http://localhost:8000/api/admins/${this.AdminId}`, this.model.Admins)
+      await axios.put(`http://localhost:8000/api/Directeurs/${this.DirecteurId}`, this.model.Directeurs)
         .then(result => {
           console.log(result.data);
         })

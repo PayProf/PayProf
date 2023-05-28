@@ -23,7 +23,7 @@
           <li><a @click="toggleDir()">table directeurs</a></li>
         </ul>
         <ul v-else tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-          <li><a @click="">About Us</a></li>
+          <li><a @click="toggleDir()">About Us</a></li>
         </ul>
 
       </div>
@@ -96,6 +96,7 @@ return{
     ...mapActions([
        'logout'
     ]),
+    
     showdrop(){
 this.dropdownOpen=!this.dropdownOpen;
     },

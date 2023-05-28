@@ -8,39 +8,53 @@
             <label class="label">
               <span class="label-text">PPR</span>
             </label>
-            <input type="text" v-model="model.Directeur.PPR" placeholder="PPR" class="input input-bordered" />
+            <input type="number" v-model="model.Directeur.PPR" placeholder="PPR" class="input input-bordered" />
           </div>
+
           <div class="form-control">
             <label class="label">
               <span class="label-text">Nom</span>
             </label>
-            <input type="text" v-model="model.Directeur.Nom" placeholder="Nom" class="input input-bordered" />
+            <input type="text" v-model="model.Directeur.nom" placeholder="Nom" class="input input-bordered" />
           </div>
+
           <div class="form-control">
             <label class="label">
               <span class="label-text">Prénom</span>
             </label>
-            <input type="text" v-model="model.Directeur.Prenom" placeholder="Prénom" class="input input-bordered" />
+            <input type="text" v-model="model.Directeur.prenom" placeholder="Prénom" class="input input-bordered" />
           </div>
+
           <div class="form-control">
             <label class="label">
               <span class="label-text">Email</span>
             </label>
-            <input type="email" v-model="model.Directeur.EmailPerso" placeholder="Email" class="input input-bordered" />
+            <input type="email" v-model="model.Directeur.Email" placeholder="Email" class="input input-bordered" />
           </div>
 
           <div class="form-control">
             <label class="label">
               <span class="label-text">Etablissement</span>
             </label>
-            <input type="email" v-model="model.Directeur.Etablissement" placeholder="Etablissement" class="input input-bordered" />
+            <input type="text" v-model="model.Directeur.NomEtab" placeholder="Etablissement"
+              class="input input-bordered" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Date Naissance</span>
+            </label>
+            <input type="date" v-model="model.Directeur.DateNaissance" placeholder="Etablissement"
+              class="input input-bordered" />
           </div>
 
           <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="saveDirecteur(),RedirectTable()">Add
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px;"
+              @click="saveDirecteur(), RedirectTable()">Add
               Directeur</button>
             <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
           </div>
+
         </form>
       </div>
     </div>
@@ -55,14 +69,15 @@ export default {
   name: 'AddDirecteur',
   data() {
     return {
-      errorsList:"",
+      errorsList: "",
       model: {
         Directeur: {
           PPR: "",
-          Nom: "",
-          Prenom: "",
-          EmailPerso: "",
-          Etablissement: ""
+          nom: "",
+          prenom: "",
+          Email: "",
+          NomEtab: "",
+          DateNaissance: ""
         }
       }
     }
@@ -77,17 +92,18 @@ export default {
           console.log(result.data)
           this.model.Directeur = {
             PPR: "",
-            Nom: "",
-            Prenom: "",
-            EmailPerso: "",
-            Etablissement: ""
+            nom: "",
+            prenom: "",
+            Email: "",
+            NomEtab: "",
+            DateNaissance: ""
           }
 
         }).catch(function (error) {
 
           if (error.response) {
 
-            if(error.response.status == 422){
+            if (error.response.status == 422) {
 
               //if you don't specify "myThis" an undefined error will be shown
               myThis.errorsList = error.response.data.errors;
@@ -110,7 +126,7 @@ export default {
 
         });
     },
-    
+
     //Redirect to table view
     RedirectTable() {
       this.$router.push('/TableDirecteurs')
@@ -138,5 +154,4 @@ export default {
 .popup-content {
   background-color: #fff;
   padding: 20px;
-}
-</style>
+}</style>
