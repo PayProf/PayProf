@@ -60,37 +60,6 @@ const routes = [
     }
   },
 
-  
-  
-  
-  {
-    path: '/EditAdmin/:id ',
-    name:'EditAdmin ',
-    component: EditAdmin,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-
-
-  {
-    path: '/TableEnseignants',
-    name:'TableEnseignants',
-    component: TableEnseignants,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
-
-  {
-    path: '/TableEtablissement',
-    name:'TableEtablissement',
-    component: TableEtablissement,
-    // meta:{
-    //   RequiresAuth: false
-    // }
-  },
  
   /*The Default Layout for all Pages */
   {
@@ -136,7 +105,7 @@ const routes = [
           AdminAccess: false,
           AdminUAEAccess: true,
           UserAccess: false,
-          DirectorUAEAccess: false,
+          DirectorUAEAccess: true,
           DirectorAccess:false,
         }
       },
@@ -225,6 +194,41 @@ const routes = [
           AdminUAEAccess: true,
           UserAccess: false,
           DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
+
+
+
+      {
+        path: '/EditAdmin/:id ',
+        name:'EditAdmin ',
+        component: EditAdmin,
+        // meta:{
+        //   RequiresAuth: false
+        // }
+      },
+
+
+
+      {
+        path: '/TableEnseignants',
+        name:'TableEnseignants',
+        component: TableEnseignants,
+        // meta:{
+        //   RequiresAuth: false
+        // }
+      },
+
+      {
+        path: '/TableEtablissement',
+        name:'TableEtablissement',
+        component: TableEtablissement,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: true,
           DirectorAccess:false,
         }
       },

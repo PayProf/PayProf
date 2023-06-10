@@ -37,7 +37,7 @@ export default {
     name: "DirecteurUAE",
     methods:{
         redirectTableIntervention(){
-            this.$router.push('/ValidateIntervention')
+            this.$router.push('/ValidateInterventionUAE')
         },
         redirectTableDirecteur(){
             this.$router.push('/TableDirecteurs')

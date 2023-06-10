@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: 'Interventions',
   data() {
@@ -75,7 +76,7 @@ export default {
         axios.get('http://127.0.0.1:8000/api/Intervention').then(result => {
           this.Interventions = result.data
         })
-        console.log(response.data)
+        console.log(this.Interventions.data)
       }
       catch (error) {
         console.log(error)
