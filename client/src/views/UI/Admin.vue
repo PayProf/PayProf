@@ -9,7 +9,7 @@
                         <p>If a dog chews shoes whose shoes does he choose?</p>
                         <div class="card-actions justify-end">
                             
-                            <button class="btn btn-primary" @click="redirectTableAdmin()">Consulter</button>
+                            <button class="btn btn-primary" @click="">Consulter</button>
                         </div>
                     </div>
                 </div>
@@ -48,6 +48,7 @@
 <script>
 import PopupForm from '../../components/AddEnseignant.vue';
 import {mapActions,mapState} from 'vuex';
+import Router from "../../router/index.js";
 export default {
   name: 'Admin',
   components: {
