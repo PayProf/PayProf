@@ -23,7 +23,7 @@ const store = createStore({
       id: localStorage.getItem('USERID'),
       email: localStorage.getItem('EMAIL'),
 
-      role: 1,//localStorage.getItem('ROLE'),
+      role: 2,//localStorage.getItem('ROLE'),
       token: 123,//localStorage.getItem('TOKEN'),
       token_exp: localStorage.getItem('EXPIRATION')
     },
