@@ -100,9 +100,9 @@ route::put('admins/{user_id}/updateemail',[AdministrateurController::class,'Upda
 
 route::get('etablissements/{user_id}/{role}/myetablissement',[EtablissementController::class,'Show_Myetablissement']);
 
-route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
+// route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
-
+Route::get('admins/{user_id}/showenseignants',[AdministrateurController::class,'All_Enseignants']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

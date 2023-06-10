@@ -64,7 +64,7 @@ class EtablissementController extends Controller
             // Check if the 'with' value is one of the allowed relationships.
             if (in_array($value, $array)) {
                 // Load the specified relationship for the Etablissement
-                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value));
+                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value)->latest()->paginate(10));
             } else {
                  // Return an error response if the specified relationship is not found.
                 return $this->error('', 'the fild that you enter is not found', 400);

@@ -8,7 +8,10 @@ use App\Http\Requests\StoreAdministrateurRequest;
 use App\Http\Requests\UpdateAdministrateurRequest;
 use App\Http\Requests\UpdateEmailRequest;
 use App\Http\Resources\AdministrateurResource;
+use App\Http\Resources\EtablissementResource;
 use App\Models\Administrateur;
+use App\Models\Enseignant;
+use App\Models\Etablissement;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
@@ -155,4 +158,18 @@ class AdministrateurController extends Controller
         // Return a success response
         return $this->succes('', 'SUCCESSLY CHANGED');
     }
+    public function All_Enseignants($user_id){
+        $user=Administrateur::where('user_id', $user_id)->first();
+        if($user){
+            $etablissement_id=$user->etablissement_id;
+            $data = new EtablissementResource(Etablissement::findOrFail($etablissement_id)->loadMissing('Enseignants')->latest()->paginate(10));
+            if($data){
+               return $this->succes($data,"DISPLAY");
+            }else{
+                return $this->error("","NO DATA FOUND",404);
+            }
+        }else{
+            return $this->error("","NO DATA FOUND",404);
+    }
+}
 }
