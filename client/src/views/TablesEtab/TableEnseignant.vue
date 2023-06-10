@@ -30,34 +30,40 @@
                   <router-link :to="{ path: '/EditEnseignant/'+Enseignant.id }">
               <button class="add-btn px-4" >
               <i class="fas fa-pen" ></i>
-              <span class="tooltip" data-tooltip="inspect"></span>
+              <span class="tooltip" data-tooltip="inspect">modifier</span>
             </button>
             </router-link>
 
             <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" >
               <i class="fas fa-trash" ></i>
-              <span class="tooltip" data-tooltip="inspect"></span>
+              <span class="tooltip" data-tooltip="inspect">supprimer</span>
             </button>
             <!-- This page isn't created yet !!!! -->
             <router-link :to="{ path: '/Enseignant/'+Enseignant.id }">
               <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
-              <span class="tooltip" data-tooltip="inspect"></span>
+              <span class="tooltip" data-tooltip="inspect"> inspecter </span>
             </button>
             </router-link>
                 </td>
             </tr>
         </tbody>
     </table>
-  </div>
+    <AddEnseignantVue/>
+  </div> 
+
     
 
 </template>
 
 <script>
 import axios from 'axios';
+import AddEnseignantVue from '../../components/AddEnseignant.vue';
 export default {
     name: 'TableEnseignants',
+    components:{
+      AddEnseignantVue,
+    },
     data() {
     return {
         Enseignants: []

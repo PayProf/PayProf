@@ -1,8 +1,10 @@
 <template>
-  <div class="ml-30 my-20">
-    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 justify-center">
-      <div class="card-body">
-        <form>
+  <div>
+    <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
+    <div v-if="showPopup" class="popup">
+      <div class="popup-content">
+        <h2 class="card-title">Add Intervention</h2>
+        <form @submit.prevent="saveIntervention(); showPopup = false">
           <!-- Form fields for adding an enseignant -->
           <div class="form-control">
             <label class="label">
@@ -34,41 +36,41 @@
 
           <div class="form-control">
             <label class="label">
-              <span class="label-text">Etablissement</span>
+              <span class="label-text">Grade</span>
             </label>
-            <input type="text" v-model="model.Enseignant.NomEtab" placeholder="Etablissement"
-              class="input input-bordered" />
+            <select v-model="model.Enseignant.Grade" class="select select-bordered">
+              <option value="">Select Grade</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
           </div>
 
           <div class="form-control">
             <label class="label">
               <span class="label-text">Date Naissance</span>
             </label>
-            <input type="date" v-model="model.Enseignant.DateNaissance" placeholder="Etablissement"
-              class="input input-bordered" />
+            <input type="date" v-model="model.Enseignant.DateNaissance" placeholder="Date Naissance" class="input input-bordered" />
           </div>
 
           <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px;"
-              @click="saveEnseignant(), RedirectTable()">Add
-              Enseignant</button>
-            <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="saveEnseignant(), RedirectTable()">Add Enseignant</button>
+            <button class="btn btn-primary" style="border-radius: 10px; margin-top: 10px;" @click="showPopup = false">Cancel</button>
           </div>
-
         </form>
       </div>
     </div>
-
-
   </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
+
 export default {
   name: 'AddEnseignant',
   data() {
     return {
+      showPopup: false,
       errorsList: "",
       model: {
         Enseignant: {
@@ -85,7 +87,6 @@ export default {
 
   methods: {
     saveEnseignant() {
-
       var myThis = this;
       axios.post('http://127.0.0.1/api/Enseignant', this.model.Enseignant)
         .then(result => {
@@ -98,46 +99,30 @@ export default {
             Grade: "",
             DateNaissance: ""
           }
-
-        }).catch(function (error) {
-
+        })
+        .catch(function (error) {
           if (error.response) {
-
             if (error.response.status == 422) {
-
-              //if you don't specify "myThis" an undefined error will be shown
               myThis.errorsList = error.response.data.errors;
             }
-
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
           } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
             console.log(error.request);
           } else {
-            // Something happened in setting up the request that triggered an Error
             console.log('Error', error.message);
           }
-
         });
     },
 
-    //Redirect to table view
     RedirectTable() {
-      this.$router.push('/TableEnseignants')
+      this.$router.push('/TableEnseignants');
     }
-
-  },
-
-
+  }
 };
 </script>
-  
+
 <style>
 .popup {
   position: fixed;
@@ -154,5 +139,7 @@ export default {
 .popup-content {
   background-color: #fff;
   padding: 20px;
+  max-width: 500px; /* Adjust the value as needed */
+  width: 90%;
 }
 </style>

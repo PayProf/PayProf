@@ -5,11 +5,11 @@
                 <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
                     <figure><img src=""  /></figure>
                     <div class="card-body">
-                        <h2 class="card-title">Table des enseignants</h2>
+                        <h2 class="card-title">Profile</h2>
                         <p>If a dog chews shoes whose shoes does he choose?</p>
                         <div class="card-actions justify-end">
                             
-                            <button class="btn btn-primary" @click="">Consulter</button>
+                            <button class="btn btn-primary" @click="showProfile">Consulter</button>
                         </div>
                     </div>
                 </div>
@@ -19,10 +19,10 @@
                     <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
                         <figure><img src=""  /></figure>
                         <div class="card-body">
-                            <h2 class="card-title">Tables des directeurs</h2>
+                            <h2 class="card-title">Table des enseignants</h2>
                             <p>If a dog chews shoes whose shoes does he choose?</p>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="redirectTableDirecteur()">Consulter</button>
+                                <button class="btn btn-primary" @click="showEns">Consulter</button>
                             </div>
                         </div>
                     </div>
@@ -34,29 +34,41 @@
                             <h2 class="card-title">tables des interventions</h2>
                             <p>If a dog chews shoes whose shoes does he choose?</p>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="redirectTableEtablissement()">Consulter</button>
+                                <button class="btn btn-primary" @click="ShowAllint">Consulter</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+      <TableEnseignant v-if="OpenEns"/>
+      <ValidateIntervention v-if="OpenInt"/>
     </div>
   </template>
   
 
 <script>
+import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
+import TableDirecteurs from '../TablesUAE/TableDirecteurs.vue';
+import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
 import {mapActions,mapState} from 'vuex';
 import Router from "../../router/index.js";
 export default {
   name: 'Admin',
   components: {
+    TableEnseignant,
     PopupForm,
+    TableDirecteurs,
+    ValidateIntervention,
+
   },
   data() {
     return {
       showPopupForm: false,
+      OpenEns:false,
+      OpenProfile:false,
+      OpenInt:false,
     };
   },
   methods: {
@@ -66,6 +78,15 @@ export default {
     showPopup() {
       this.showPopupForm = true;
     },
+    showEns(){
+      this.OpenEns = !this.OpenEns;
+    },
+    showProfile(){
+      this.OpenDir = !this.OpenDir;
+    },
+    ShowAllint(){
+      this.OpenInt = !this.OpenInt;
+    }
   },
   computed:{
     ...mapState([
