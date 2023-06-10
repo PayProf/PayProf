@@ -9,7 +9,7 @@
                         <p>If a dog chews shoes whose shoes does he choose?</p>
                         <div class="card-actions justify-end">
                             
-                            <button class="btn btn-primary" @click="">Consulter</button>
+                            <button class="btn btn-primary" @click="showEnseignatsA">Consulter</button>
                         </div>
                     </div>
                 </div>
@@ -19,10 +19,10 @@
                     <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
                         <figure><img src=""  /></figure>
                         <div class="card-body">
-                            <h2 class="card-title">Tables des directeurs</h2>
-                            <p>If a dog chews shoes whose shoes does he choose?</p>
+                            <h2 class="card-title">Statique Des profs</h2>
+                            <p>...</p>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="redirectTableDirecteur()">Consulter</button>
+                                <button class="btn btn-primary" @click="showStats">Consulter</button>
                             </div>
                         </div>
                     </div>
@@ -34,47 +34,59 @@
                             <h2 class="card-title">tables des interventions</h2>
                             <p>If a dog chews shoes whose shoes does he choose?</p>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="redirectTableEtablissement()">Consulter</button>
+                                <button class="btn btn-primary" @click="showInterventionsA">Consulter</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+      <TableEnseignats v-if="OpenEnseignants"/>
+
     </div>
   </template>
   
 
 <script>
 import PopupForm from '../../components/AddEnseignant.vue';
+import TableEnseignats from '../../views/TablesEtab/TableEnseignant.vue'
 import {mapActions,mapState} from 'vuex';
 import Router from "../../router/index.js";
 export default {
   name: 'Admin',
   components: {
     PopupForm,
+    TableEnseignats,
   },
   data() {
     return {
       showPopupForm: false,
+      OpenStats:false,
+      OpenEnseignants:false,
+      OpenInterventions:false,
+      
     };
   },
   methods: {
-    ...mapActions([
-      'getEnseignants'
-  ]),
-    showPopup() {
-      this.showPopupForm = true;
+  //   ...mapActions([
+  //     'getEnseignants'
+  // ]),
+  showStats() {
+      this.OpenStats = !this.OpenStats;
+    },
+    showEnseignatsA() {
+      this.OpenEnseignants = !this.OpenEnseignants;
+    },
+    showInterventionsA() {
+      this.OpenInterventions = !this.OpenInterventions;
     },
   },
   computed:{
-    ...mapState([
-        'enseignants',
-    ])
+   
   },
-  async created(){
-    await this.$store.dispatch('getEnseignants');
-  }
+  // async created(){
+  //   await this.$store.dispatch('getEnseignants');
+  // }
 };
 
 

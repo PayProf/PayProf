@@ -93,14 +93,13 @@
     </div>
   </div>
 </div>
-  <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto" style="margin-left: 20px; margin-right: 50px;">
+  <!-- <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto" style="margin-left: 20px; margin-right: 50px;">
     <h1 style=" margin-top: 0;">Table Intervention :</h1>
     <div class="search-bar-container">
 
       <input type="text" class="search-bar" v-model="searchText" placeholder="Search" @input="filterTable">
-    </div>
-    <table class="table table-zebra w-full">
-      <!-- head -->
+    </div> -->
+    <!-- <table class="table table-zebra w-full">
       <thead>
         <tr>
           <th><input type="checkbox" /></th>
@@ -115,7 +114,6 @@
           <th>Action</th>
         </tr>
       </thead>
-      <!-- body -->
       <tbody>
         <tr v-for="(intervention) in Interventions" :key="intervention.Id_Intr">
           <td><input type="checkbox" /></td>
@@ -128,7 +126,6 @@
           <td>{{ intervention.Date_Fin }}</td>
           <td>{{ intervention.Nombre_heures }}</td>
           <td>
-            <!-- supIntervention(intervention.Id_Intr) -->
             <button @click="showDeleteW" class="delete-btn">
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
@@ -150,21 +147,23 @@
     <button class="btn btn-active">2</button>
     <button class="btn">3</button>
     <button class="btn">4</button>
-  </div>
+  </div> -->
 
-  </div>
+  <!-- </div> -->
+  <TableInterventionsUserVue v-if="OpenInterventions"/>
   <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200">
       <BarChart />
     </div>
  
   
-  <!--  -->
+  
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 import AddIntervention from '../../components/AddIntervention.vue';
 import BarChart from '../../components/chart.vue'
+import TableInterventionsUserVue from '../TablesEtab/TableInterventionsUser.vue';
 
 export default {
   name: 'User',
@@ -180,6 +179,7 @@ export default {
     // PFintervention,
     BarChart,
     AddIntervention,
+    TableInterventionsUserVue,
   },
   methods: {
     showInterventions(){
@@ -204,9 +204,9 @@ export default {
     ]),
     
   },
-  async created() {
-    await this.$store.dispatch('getInterventions');
-  }
+  // async created() {
+  //   await this.$store.dispatch('getInterventions');
+  // }
 }
 </script>
 

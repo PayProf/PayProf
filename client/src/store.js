@@ -172,14 +172,14 @@ const store = createStore({
   },
   actions: {
 
-    async addEnseignant({ commit }, enseignants) {
-      try {
-        const response = await axios.post('http://localhost:5000/enseignants', enseignants);
-        commit('addEnseignant', response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async addEnseignant({ commit }, enseignants) {
+    //   try {
+    //     const response = await axios.post('http://localhost:5000/enseignants', enseignants);
+    //     commit('addEnseignant', response.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
 
 
     async addEtablisment({ commit }, payload) {
