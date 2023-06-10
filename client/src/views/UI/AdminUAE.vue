@@ -55,7 +55,7 @@ export default {
             this.$router.push('/TableDirecteurs')
         },
         redirectTableEtablissement(){
-            this.$router.push('/Etablissements')
+            this.$router.push('/TableEtablissement')
         }
 
     }

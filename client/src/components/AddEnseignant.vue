@@ -57,41 +57,94 @@
         </div>
       </div>
     </div>
+
+
   </div>
 </template>
 
-
 <script>
 import axios from 'axios';
-
+  
+<script>
+import axios from 'axios';
 export default {
+  name: 'AddEnseignant',
   data() {
     return {
       isPopupVisible: false,
+      errorsList: "",
       model: {
         Enseignant: {
-          Nom: '',
-          Prenom: '',
-          Email: '',
-          Grade: '',
-          DateNaissance: ''
+          PPR: "",
+          nom: "",
+          prenom: "",
+          Email: "",
+          Grade: "",
+          DateNaissance: ""
         }
       }
-    };
+    }
   },
+
   methods: {
     showPopup() {
       this.isPopupVisible = !this.isPopupVisible;
     },
     
-    
-   
+
+    saveEnseignant() {
+
+      var myThis = this;
+      axios.post('http://127.0.0.1/api/Enseignant', this.model.Enseignant)
+        .then(result => {
+          console.log(result.data)
+          this.model.Enseignant = {
+            PPR: "",
+            nom: "",
+            prenom: "",
+            Email: "",
+            Grade: "",
+            DateNaissance: ""
+          }
+
+        }).catch(function (error) {
+
+          if (error.response) {
+
+            if (error.response.status == 422) {
+
+              //if you don't specify "myThis" an undefined error will be shown
+              myThis.errorsList = error.response.data.errors;
+            }
+
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+
+        });
+    },
+
+    //Redirect to table view
+    RedirectTable() {
+      this.$router.push('/TableEnseignants')
+    }
   },
 
 
 };
 </script>
-
+  
 <style>
 .popup {
   position: fixed;

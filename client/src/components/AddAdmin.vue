@@ -8,36 +8,44 @@
             <label class="label">
               <span class="label-text">PPR</span>
             </label>
-            <input type="text" v-model="model.Admin.PPR" placeholder="PPR" class="input input-bordered" />
+            <input type="number" v-model="model.Admin.PPR" placeholder="PPR" class="input input-bordered" />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Nom</span>
             </label>
-            <input type="text" v-model="model.Admin.Nom" placeholder="Nom" class="input input-bordered" />
+            <input type="text" v-model="model.Admin.PPR" placeholder="Nom" class="input input-bordered" />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Prénom</span>
             </label>
-            <input type="text" v-model="model.Admin.Prenom" placeholder="Prénom" class="input input-bordered" />
+            <input type="text" v-model="model.Admin.nom" placeholder="Prénom" class="input input-bordered" />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Email</span>
             </label>
-            <input type="email" v-model="model.Admin.EmailPerso" placeholder="Email" class="input input-bordered" />
+            <input type="email" v-model="model.Admin.prenom" placeholder="Email" class="input input-bordered" />
           </div>
 
           <div class="form-control">
             <label class="label">
               <span class="label-text">Etablissement</span>
             </label>
-            <input type="email" v-model="model.Admin.Etablissement" placeholder="Email" class="input input-bordered" />
+            <input type="email" v-model="model.Admin.etablissement_id" placeholder="Email" class="input input-bordered" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Etablissement</span>
+            </label>
+            <input type="email" v-model="model.Admin.email_perso" placeholder="Email" class="input input-bordered" />
           </div>
 
           <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="saveAdmin(),RedirectTable()">Add
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px;"
+              @click="saveAdmin(), RedirectTable()">Add
               Admin</button>
             <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
           </div>
@@ -55,14 +63,14 @@ export default {
   name: 'AddAdmin',
   data() {
     return {
-      errorsList:"",
+      errorsList: "",
       model: {
         Admin: {
           PPR: "",
-          Nom: "",
-          Prenom: "",
-          EmailPerso: "",
-          Etablissement: ""
+          nom: "",
+          prenom: "",
+          email_perso: "",
+          etablissement_id: ""
         }
       }
     }
@@ -77,17 +85,17 @@ export default {
           console.log(result.data)
           this.model.Admin = {
             PPR: "",
-            Nom: "",
-            Prenom: "",
-            EmailPerso: "",
-            Etablissement: ""
+            nom: "",
+            prenom: "",
+            email_perso: "",
+            etablissement_id: ""
           }
 
         }).catch(function (error) {
 
           if (error.response) {
 
-            if(error.response.status == 422){
+            if (error.response.status == 422) {
 
               //if you don't specify "myThis" an undefined error will be shown
               myThis.errorsList = error.response.data.errors;
@@ -110,7 +118,7 @@ export default {
 
         });
     },
-    
+
     //Redirect to table view
     RedirectTable() {
       this.$router.push('/TableAdmins')

@@ -51,6 +51,7 @@
 import PopupForm from '../../components/AddEnseignant.vue';
 import TableEnseignats from '../../views/TablesEtab/TableEnseignant.vue'
 import {mapActions,mapState} from 'vuex';
+import Router from "../../router/index.js";
 export default {
   name: 'Admin',
   components: {

@@ -6,7 +6,7 @@
       <input type="text" class="search-bar" v-model="searchText" placeholder="Search" @input="filterTable">
     </div>
    <div class="overflow-x-auto ml-20 ">
-          <table class="table table-zebra w-80 border border-slate-500 ">
+    <table class="table table-zebra w-full  ">
             <!-- head -->
             <thead>
               <tr>
@@ -85,10 +85,9 @@ export default {
   methods: {
     async getInterventions() {
       try {
-        axios.get('http://127.0.0.1/api/Interventions').then(result=>{
+        await axios.get('http://127.0.0.1:8000/api/Intervention').then(result=>{
           this.Interventions = result.data
         })
-        console.log(response.data)
       }
       catch (error) {
         console.log(error)
