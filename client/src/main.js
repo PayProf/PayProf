@@ -7,6 +7,7 @@ import axios from 'axios'
 import Setdefaults from './axios.js'
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import drag from "v-drag";
 
 const app = createApp(App);
 
@@ -19,6 +20,7 @@ createApp(App)
     .use(router)
     .use(store)
     .use(Toast)
+    .use(drag)
     .mount('#app');
 
 Setdefaults();

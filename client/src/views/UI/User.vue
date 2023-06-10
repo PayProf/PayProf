@@ -1,68 +1,47 @@
 <template>
-  <!-- <div class="w-screen h-70vh" style="margin-bottom: 40px;">
-    <div class="flex items-start justify-start mt-200" style="margin-top: 200px; margin-left: 20px;">
-      <div class="w-1/2">
-        <div class="bg-gray-200 p-4">
-          <h1 class="text-2xl font-bold">Profile enseignat : Mouad Hayaoui</h1>
-          <p class="py-2"><strong>PPR :</strong> 123456</p>
-          <p class="py-2"><strong>Nom:</strong> Hayaoui</p>
-          <p class="py-2"><strong>Prenom :</strong> Mouad</p>
-          <p class="py-2"><strong>Email :</strong> johndoe@example.com</p>
-          <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p>
-
-
-        </div>
-      </div>
-    </div>
-    <div class="w-200 h-200 bg-gray-200">
-      <BarChart />
-    </div>
-  </div> -->
-
-  <div class="p-4 mt-20 sm:mx-30">
-        <div class="p-4 border-2 border-gray-200  rounded-lg ">
-            <div class="flex items-center justify-center h-60 mb-6 mt-10 rounded bg-gray-50 ">
-                <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                    <figure><img src="" alt=""  /></figure>
-                    <div class="card-body">
-                        <h2 class="card-title">Table des Interventions</h2>
-                        <p>Afficher les informations detailees des intervention dans cette annee</p>
-                        <div class="card-actions justify-end">
-                            
-                            <button class="btn btn-primary" @click="showInterventions" href="#interventiontable">Consulter</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-6 mb-4 pt-6">
-                <div class="flex items-center justify-center rounded bg-gray-50 h-40 ">
-                    <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                        <figure><img src="" alt=""  /></figure>
-                        <div class="card-body">
-                            <h2 class="card-title">Graphes des nombres d'heures travaille cette annee</h2>
-                            <p>...</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="showGraphe">Consulter</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center rounded bg-gray-50 h-40 ">
-                    <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                        <figure><img src="" alt=""  /></figure>
-                        <div class="card-body">
-                            <h2 class="card-title">Afficher tous les informations de l'enseignant</h2>
-                            <p>....</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn btn-primary mb-3" @click="showProfile" href="#profilecard">Consulter</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
+    <div class="col-span-1">
+    <ul class="menu bg-base-200 rounded-box mt-6 w-12" v-drag:y>
+      <li @click="showProfile" v-if="OpenProfile" class="bg-gray-500">
+        <i class="fa-solid fa-user"></i>
+        <a class="tooltip" data-tip="Profile">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        </a>
+      </li>
+      <li @click="showProfile" v-else>
+        <i class="fa-solid fa-user"></i>
+        <a class="tooltip" data-tip="Profile">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        </a>
+      </li>
+      <li @click="showInterventions" v-if="OpenInterventions" class="bg-gray-500">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <a class="tooltip" data-tip="Interventions">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </a>
+      </li>
+      <li @click="showInterventions" v-else>
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <a class="tooltip" data-tip="Interventions">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </a>
+      </li>
+      <li @click="showGraphe" v-if="OpenGraphe" class="bg-gray-500">
+        <i class="fa-sharp fa-solid fa-signal"></i>
+        <span class="tooltip" data-tip="Stats">
+<!--          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>-->
+        </span>
+      </li>
+      <li @click="showGraphe" v-else>
+        <i class="fa-sharp fa-solid fa-signal"></i>
+        <span class="tooltip" data-tip="Stats">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+        </span>
+      </li>
+    </ul>
     </div>
     <!-- delete card accepting -->
+    <div class="col-span-11">
     <div>
     <div v-if="OpenDelete"  id="profilecard" class="popup-overlay">
       <div class="popup-container">
@@ -93,7 +72,7 @@
     </div>
   </div>
 </div>
-  <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto" style="margin-left: 20px; margin-right: 50px;">
+  <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto mt-5" style="margin-left: 20px; margin-right: 50px;">
     <h1 style=" margin-top: 0;">Table Intervention :</h1>
     <div class="search-bar-container">
 
@@ -129,16 +108,17 @@
           <td>{{ intervention.Nombre_heures }}</td>
           <td>
             <!-- supIntervention(intervention.Id_Intr) -->
-            <button @click="showDeleteW" class="delete-btn">
+            <button class="inspect-btn">
+              <i class="fa-solid fa-eye"></i>
+              <span class="tooltip" data-tooltip="Inspect">Inspect intervention </span>
+            </button>
+            <button @click="showDeleteW" class="delete-btn" v-if="IsAdmin">
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
             </button>
-            <button class="inspect-btn">
+            <button class="add-btn" v-if="IsAdmin">
               <i class="fas fa-edit"></i>
-              <span class="tooltip" data-tooltip="Inspect">modify intervention </span>
-            </button>
-            <button class="btn btn-danger btn-sm">
-              <i class="fa fa-trash" aria-hidden="true"></i>
+              <span class="tooltip" data-tooltip="Edit">Edit intervention </span>
             </button>
           </td>
         </tr>
@@ -153,27 +133,31 @@
   </div>
 
   </div>
-  <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200">
+  <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 ">
+    <div class="flex justify-end">
+    </div>
       <BarChart />
     </div>
- 
-  
-  <!--  -->
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 import AddIntervention from '../../components/AddIntervention.vue';
 import BarChart from '../../components/chart.vue'
+import store from "../../store.js";
+import axios from "axios";
 
 export default {
   name: 'User',
   data(){
     return{
       OpenInterventions:false,
-      OpenProfile:false,
+      OpenProfile:true,
       OpenGraphe:false,
       OpenDelete:false,
+      IsAdmin:store.state.user.role===2,
     }
   },
   components: {
@@ -196,6 +180,19 @@ export default {
     },
     showDeleteW(){
       this.OpenDelete =!this.OpenDelete;
+    },
+    async getInterventions() {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention')
+        //     .then(result=>{
+        //   this.Interventions = result.data
+        // })
+        console.log(store.state.user.id)
+        console.log(response.data)
+      }
+      catch (error) {
+        console.log(error)
+      }
     }
   },
   computed: {
@@ -204,9 +201,12 @@ export default {
     ]),
     
   },
-  async created() {
-    await this.$store.dispatch('getInterventions');
-  }
+  mounted() {
+
+    this.getInterventions();
+    console.log('test axios')
+
+  },
 }
 </script>
 

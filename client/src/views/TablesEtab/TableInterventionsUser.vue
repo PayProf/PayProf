@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import store from "../../store.js";
+
 export default {
   name: 'Interventions',
   data() {
@@ -63,7 +65,7 @@ export default {
   methods: {
     async getInterventions() {
       try {
-        await axios.get('http://127.0.0.1:8000/api/Intervention').then(result=>{
+        await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention').then(result=>{
           this.Interventions = result.data
         })
       }
