@@ -1,9 +1,11 @@
 <template>
+<!--  <Header/>-->
 <router-view></router-view>
 </template>
 
 <script>
 import {mapGetters, mapActions, mapState} from "vuex";
+import Header from "./Header.vue";
 import store from "../store.js";
 
 export default {
@@ -28,13 +30,12 @@ export default {
     I verify the validity of the token if the token expired
     I refresh it*/
 
-  async created(){
-    if(store.state.user.token && this.IsExpired)
-    {
-      await this.$store.dispatch('RefreshToken');
-      console.log('success')
-    }
-  }
+  // async created(){
+  //   if(store.state.user.token && this.IsExpired)
+  //   {
+  //     await this.$store.dispatch('RefreshToken');
+  //   }
+  // }
 
 }
 </script>

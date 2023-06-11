@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateEnseignantRequest extends FormRequest
 {
@@ -23,9 +24,10 @@ class UpdateEnseignantRequest extends FormRequest
      */
     public function rules()
     {
-        $method=$this->method(); // to check the http method 
+        $method=$this->method();        // to check the http method 
            
-        if($method=="PUT"){
+        if($method=='PUT')
+            {
                 return [          
                     
                     //all the fields will be sent to the db (also the the fields unchanged )
@@ -42,7 +44,7 @@ class UpdateEnseignantRequest extends FormRequest
                     ];
             }
 
-            else // if the method is PATCH
+            else    // if the method is PATCH
             { 
                 
                 return
@@ -54,13 +56,14 @@ class UpdateEnseignantRequest extends FormRequest
                 
             }
     }
-    // protected function prepareForValidation()
-    // {
-    //     $this->merge([
-    //         'date_naissance'=> ucfirst($this->DateNaissance),
-    //        // 'etablissement_id'=>ucfirst($this->IdEtablissement),
-    //         'grade_id'=>ucfirst($this->IdGrade),
-    //        // 'user_id'=>ucfirst($this->IdUser),
-    //     ]);
-    // }
+    protected function prepareForValidation()
+    {      
+        
+              if($this->DateNaissance)   { $this->merge([ 'date_naissance'=> ucfirst($this->DateNaissance)]);}
+              if($this->dEtablissement)  { $this->merge([ 'etablissement_i'=> ucfirst($this->IdEtablissement)]);}
+              if($this->IdGrade)         { $this->merge([ 'grade_id'=> ucfirst($this->IdGrade)]);}
+              if($this->IdUser)          { $this->merge([ 'user_id'=> ucfirst($this->IdUser)]);}
+              
+  
+    }
 }

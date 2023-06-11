@@ -9,7 +9,7 @@ use App\Http\Controllers\api\PaiementsController;
 use App\Http\Controllers\api\DirecteurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +41,12 @@ route::PATCH('Enseignant/ens/UpdateMyEmail',[EnseignantController::class,'Update
 //=====================================================================================================
 
 
-route::apiResource('adm',AdministrateurController::class);
+//========================================= Grade API =====================================================
 
-route::apiResource('grd',GradeController::class);
-route::apiResource('direct',DirecteurController::class);
+route::apiResource('Grade',GradeController::class);
+
+//=========================================================================================================
+
 
 
 
@@ -63,6 +65,7 @@ route::get('Intervention/int/ShowMyEtabInterventions',[InterventionController::c
 route::get('Intervention/{Intervention}/EnseignantInterventions',[InterventionController::class,'EnseignantInterventions']);
 
 //======================================================================================================
+
 
 route::apiResource('pay',PaiementsController::class);
 
@@ -83,9 +86,29 @@ route::PATCH('Directeur/dir/UpdateMyEmail',[DirecteurController::class,'UpdateMy
 
 //=======================================================================================================
 
+//============================================ ETABLISSEMENT API ============================================
+
+route::apiResource('etablissements',EtablissementController::class);
+
+route::get('etablissements/{user_id}/{role}/myetablissement',[EtablissementController::class,'Show_Myetablissement']);
+
+//=======================================================================================================
+
+route::get('paiements/{id}/enseignant',[PaiementsController::class,'Show_paiements_enseignant']);
+
+route::get('admins/{user_id}/myprofile',[AdministrateurController::class,'Show_Myprofile']);
+
+route::put('admins/{user_id}/updateemail',[AdministrateurController::class,'Update_email']);
 
 
 
+// route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
+
+Route::get('admins/{user_id}/showenseignants',[AdministrateurController::class,'All_Enseignants']);
+
+route::apiResource('admins',AdministrateurController::class);
+
+route::apiResource('paiements',PaiementsController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -94,6 +117,7 @@ route::post('/login',[AuthController::class,'login']);
 
 route::group(['middleware'=>['auth:sanctum']],function(){
     route::get('/logout',[AuthController::class,'logout']);
-    route::get('/refrech',[AuthController::class,'refreshToken']);
+    // @AnasChatt : changed /refrech to /refresh (typing error c -> s)
+    route::get('/refresh',[AuthController::class,'refreshToken']);
 }
 );

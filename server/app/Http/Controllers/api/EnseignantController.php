@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEnseignantRequest;
 use App\Http\Requests\UpdateEnseignantRequest;
 use App\Http\Resources\EnseignantInterventionResource;
+use App\Http\Resources\EnseignantPaymentsResource;
 use App\Models\Enseignant;
 use App\Models\Intervention;
 use App\Models\Paiements;
@@ -135,6 +136,7 @@ class EnseignantController extends Controller
      * ShowMyInterventions() this method serve to display the intervention of the enseignant Who just logged in .
      * @return /// all the interventions of the enseignant Who just logged in  
      */
+
 
        public function ShowMyInterventions()
 
