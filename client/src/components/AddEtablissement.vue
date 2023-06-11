@@ -14,30 +14,33 @@
             <label class="label">
               <span class="label-text">Ville</span>
             </label>
-            <input type="text" v-model="model.Etablissement.Ville" placeholder="Ville" class="input input-bordered" />
+            <input type="text" v-model="model.Etablissement.ville" placeholder="Ville" class="input input-bordered" />
           </div>
           <div class="form-control">
             <label class="label">
-              <span class="label-text">telephone</span>
+              <span class="label-text">Telephone</span>
             </label>
-            <input type="text" v-model="model.Etablissement.telephone" placeholder="telephone" class="input input-bordered" />
+            <input type="number" v-model="model.Etablissement.Telephone" placeholder="telephone"
+              class="input input-bordered" />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Fax</span>
             </label>
-            <input type="email" v-model="model.Etablissement.Fax" placeholder="Fax" class="input input-bordered" />
+            <input type="number" v-model="model.Etablissement.code" placeholder="Fax" class="input input-bordered" />
           </div>
 
           <div class="form-control">
             <label class="label">
-              <span class="label-text">NbrEnseingant</span>
+              <span class="label-text">Nbr Enseingant</span>
             </label>
-            <input type="email" v-model="model.Etablissement.NbrEnseingant" placeholder="NbrEnseingant" class="input input-bordered" />
+            <input type="number" v-model="model.Etablissement.Nombre_des_enseignants" placeholder="NbrEnseingant"
+              class="input input-bordered" />
           </div>
 
           <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px;" @click="saveEtablissement(),RedirectTable()">Add
+            <button type="submit" class="btn btn-primary" style="border-radius: 10px;"
+              @click="saveEtablissement(), RedirectTable()">Add
               Etablissement</button>
             <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
           </div>
@@ -55,14 +58,14 @@ export default {
   name: 'AddEtablissement',
   data() {
     return {
-      errorsList:"",
+      errorsList: "",
       model: {
         Etablissement: {
+          code: "",
+          ville: "",
+          Telephone: "",
           Nom: "",
-          Ville: "",
-          telephone: "",
-          Fax: "",
-          NbrEnseingant: ""
+          Nombre_des_enseignants: ""
         }
       }
     }
@@ -72,22 +75,22 @@ export default {
     saveEtablissement() {
 
       var myThis = this;
-      axios.post('http://127.0.0.1/api/AddEtablissements', this.model.Etablissement)
+      axios.post('http://127.0.0.1:8000/api/etablissements', this.model.Etablissement)
         .then(result => {
           console.log(result.data)
           this.model.Etablissement = {
-            PPR: "",
+            code: "",
+            ville: "",
+            Telephone: "",
             Nom: "",
-            Prenom: "",
-            EmailPerso: "",
-            Etablissement: ""
+            Nombre_des_enseignants: ""
           }
 
         }).catch(function (error) {
 
           if (error.response) {
 
-            if(error.response.status == 422){
+            if (error.response.status == 422) {
 
               //if you don't specify "myThis" an undefined error will be shown
               myThis.errorsList = error.response.data.errors;
@@ -96,7 +99,7 @@ export default {
             console.log(error.response.status);
             console.log(error.response.headers);
           } else if (error.request) {
-           
+
             console.log(error.request);
           } else {
 
@@ -105,7 +108,7 @@ export default {
 
         });
     },
-    
+
     //Redirect to table view
     RedirectTable() {
       this.$router.push('/TableEtablissements')
@@ -133,5 +136,4 @@ export default {
 .popup-content {
   background-color: #fff;
   padding: 20px;
-}
-</style>
+}</style>

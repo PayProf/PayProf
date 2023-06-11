@@ -51,7 +51,7 @@ class UpdateEnseignantRequest extends FormRequest
                  [                 
                     
                     // only the specified fileds will be modified and sent to the db
-                    'email_perso'=>['sometimes','required','email','unique:enseignants'],
+                    'email_perso'=>['sometimes','required','email','unique:enseignants,email'],
                  ];
                 
             }

@@ -1,95 +1,147 @@
 <template>
   <div>
-    <button @click="showPopup" class="btn btn-primary"
-      style="float: right; margin-right: 30px; margin-bottom: 30px; border-radius: 10px;">Add</button>
-
+    <button class="btn btn-primary rounded mb-4" @click="showPopup">ADD</button>
     <div v-if="isPopupVisible" class="popup">
-      <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-        <div class="card-body">
-          <form @submit.prevent="addEnseignant">
-            <!-- Form fields for adding an enseignant -->
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">PPR</span>
-              </label>
-              <input type="text" v-model="ppr" placeholder="PPR" class="input input-bordered" />
+      <div class="popup-content card w-96 bg-neutral text-neutral-content">
+        <div class="card-body items-center text-center">
+          <h2 class="card-title">Add Intervention</h2>
+          <form @submit.prevent="saveIntervention();">
+            <!-- Form fields for adding an intervention -->
+            <div class="grid grid-cols-2 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">PPR</span>
+                </label>
+                <input type="text" v-model="model.Enseignant.Code" placeholder="PPR" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Nom</span>
+                </label>
+                <input type="text" v-model="model.Enseignant.Nom" placeholder="Nom" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Prénom</span>
+                </label>
+                <input type="text" v-model="model.Enseignant.Prenom" placeholder="Prénom" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Email</span>
+                </label>
+                <input type="email" v-model="model.Enseignant.Email" placeholder="Email" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Grade</span>
+                </label>
+                <input type="text" v-model="model.Enseignant.Grade" placeholder="Grade" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Date de naissance</span>
+                </label>
+                <input type="date" v-model="model.Enseignant.DateNaissance" class="input input-bordered" />
+              </div>
             </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Nom</span>
-              </label>
-              <input type="text" v-model="nom" placeholder="Nom" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Prénom</span>
-              </label>
-              <input type="text" v-model="prenom" placeholder="Prénom" class="input input-bordered" />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Email</span>
-              </label>
-              <input type="email" v-model="email" placeholder="Email" class="input input-bordered" />
-            </div>
-
             <div class="form-control mt-6">
-              <button type="submit" class="btn btn-primary" style="border-radius: 10px;">Add Enseignant</button>
-              <button @click="close" class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
-
+              <button @click="ADDEnse" class="btn btn-primary rounded" style="margin-bottom: 5px;">
+                Add Enseignant
+              </button>
+              <button type="button" class="btn btn-primary rounded" @click="showPopup = false">
+                Cancel
+              </button>
             </div>
           </form>
         </div>
       </div>
-
     </div>
+
+
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
+  name: 'AddEnseignant',
   data() {
     return {
       isPopupVisible: false,
-      ppr: '',
-      nom: '',
-      prenom: '',
-      email: '',
-    };
+      errorsList: "",
+      model: {
+        Enseignant: {
+          PPR: "",
+          nom: "",
+          prenom: "",
+          Email: "",
+          Grade: "",
+          DateNaissance: ""
+        }
+      }
+    }
   },
+
   methods: {
     showPopup() {
-      this.isPopupVisible = true;
+      this.isPopupVisible = !this.isPopupVisible;
     },
-    close() {
-      this.isPopupVisible = false;
+    
+
+    saveEnseignant() {
+
+      var myThis = this;
+      axios.post('http://127.0.0.1/api/Enseignant', this.model.Enseignant)
+        .then(result => {
+          console.log(result.data)
+          this.model.Enseignant = {
+            PPR: "",
+            nom: "",
+            prenom: "",
+            Email: "",
+            Grade: "",
+            DateNaissance: ""
+          }
+
+        }).catch(function (error) {
+
+          if (error.response) {
+
+            if (error.response.status == 422) {
+
+              //if you don't specify "myThis" an undefined error will be shown
+              myThis.errorsList = error.response.data.errors;
+            }
+
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+
+        });
     },
-    addEnseignant() {
-      const enseignant = {
-        ppr: this.ppr,
-        nom: this.nom,
-        prenom: this.prenom,
-        email: this.email,
-      };
 
-      // Dispatch the action to add the enseignant
-      this.$store.dispatch('addEnseignant', enseignant);
-
-      // Reset form fields
-      this.ppr = '';
-      this.nom = '';
-      this.prenom = '';
-      this.email = '';
-
-      // Hide the popup
-      this.isPopupVisible = false;
-    },
+    //Redirect to table view
+    RedirectTable() {
+      this.$router.push('/TableEnseignants')
+    }
   },
 
 
 };
 </script>
-
+  
 <style>
 .popup {
   position: fixed;

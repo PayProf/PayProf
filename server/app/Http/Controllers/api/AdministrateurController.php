@@ -10,7 +10,10 @@ use App\Http\Requests\StoreAdministrateurRequest;
 use App\Http\Requests\UpdateAdministrateurRequest;
 use App\Http\Requests\UpdateEmailRequest;
 use App\Http\Resources\AdministrateurResource;
+use App\Http\Resources\EtablissementResource;
 use App\Models\Administrateur;
+use App\Models\Enseignant;
+use App\Models\Etablissement;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Gate;
@@ -62,14 +65,11 @@ class AdministrateurController extends Controller
         $admin->etablissement_id=$request->input('etablissement_id');
         $admin->email_perso=$request->input('email_perso');
 
-        $admin->save();
          $id=event (new storeuser($request->input('email_perso'),1,$request->input('nom'),$request->input('prenom')));
         
          $admin->user_id = $id[0];
          $admin->save();
-         
-        
-        
+
         $data=new AdministrateurResource(Administrateur::find($admin->id));
     
    
@@ -197,4 +197,18 @@ class AdministrateurController extends Controller
         return $this->error('','ACCES INTERDIT ',403);
        
     }
+    public function All_Enseignants($user_id){
+        $user=Administrateur::where('user_id', $user_id)->first();
+        if($user){
+            $etablissement_id=$user->etablissement_id;
+            $data = new EtablissementResource(Etablissement::findOrFail($etablissement_id)->loadMissing('Enseignants')->latest()->paginate(10));
+            if($data){
+               return $this->succes($data,"DISPLAY");
+            }else{
+                return $this->error("","NO DATA FOUND",404);
+            }
+        }else{
+            return $this->error("","NO DATA FOUND",404);
+    }
+}
 }

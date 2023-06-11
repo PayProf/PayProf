@@ -90,15 +90,15 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { ref } from "vue"
-export  {
+export  default{
   name: 'Interventions',
   data() {
     return {
-      showProfile=true,
-      showTable=false ,
-      Intervention: []
+      showProfile:true,
+      showTable:false ,
+      Interventions: []
     }
   },
 
@@ -111,7 +111,7 @@ export  {
   methods: {
     async getInterventions() {
       try {
-        axios.get('http://127.0.0.1/api/Interventions').then(result => {
+        await axios.get('http://127.0.0.1/api/Interventions').then(result => {
           this.Interventions = result.data
         })
         console.log(response.data)

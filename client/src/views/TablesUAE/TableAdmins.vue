@@ -10,38 +10,52 @@
         <th>PPR</th>
         <th>Nom</th>
         <th>Prénom</th>
+        <th>Etablissement</th>
         <th>Email Personnel</th>
-        <th>Prénom</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(Admin, id) in this.Admins" :key="id">
-          <td></td>
+      <tr v-for="(Admin, id) in this.Admins.data" :key="id">
+          <td>{{ Admin.id}}</td>
           <td>{{ Admin.PPR }}</td>
-          <td>{{ Admin.Nom }}</td>
-          <td>{{ Admin.Prenom }}</td>
-          <td>{{ Admin.Telephone }}</td>
-          <td>{{ Admin.Etablissement }}</td>
-          <td>{{ Admin.Email }}</td>
+          <td>{{ Admin.nom }}</td>
+          <td>{{ Admin.prenom }}</td>
+          <td>{{ Admin.etablissement_id }}</td>
+          <td>{{ Admin.email_perso }}</td>
           <td>
-            <button class="add-btn px-2" @click="showPopupForm = true">
+            <router-link :to="{ path: '/EditAdmin/'+Admin.id }">
+              <button class="add-btn px-4" >
+              <i class="fas fa-pen" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            </router-link>
+
+            <button class="add-btn px-4" @click="deleteAdmin(Admin.id)" >
+              <i class="fas fa-trash" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            <!-- This page isn't created yet !!!! -->
+            <router-link :to="{ path: '/Admin/'+Admin.id }">
+              <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
+            </router-link>
+            
+            
           </td>
-        </tr> 
-      
+        </tr>  
     </tbody>
   </table>
 </div>
 
-<button class="btn btn-outline btn-success ">Ajouter un admin</button>
-  
+<button class="btn btn-outline btn-success" @click="RedirectAdd()" >Ajouter un admin</button>
   
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     name: 'EtabAdmins',
     data() {
@@ -59,10 +73,10 @@ export default {
   methods: {
     async getAdmins() {
       try {
-        axios.get('http://127.0.0.1/api/Admins').then(result => {
+        await axios.get('http://127.0.0.1:8000/api/admins').then(result => {
           this.Admins = result.data
         })
-        console.log(response.data)
+        console.log(this.Admins.data)
       }
       catch (error) {
         console.log(error)
@@ -70,6 +84,13 @@ export default {
     },
     RedirectAdd() {
       this.$router.push('/AddAdmin')
+    },
+    deleteAdmin(AdminId){
+      axios.delete(`http://127.0.0.1:8000/api/admins/${AdminId}`)
+      .then(res=>{
+        console.log(res.data)
+        this.getAdmins()
+      })
     }
   }
    

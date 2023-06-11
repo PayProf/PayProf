@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\Gate;
 
 class GradeController extends Controller
 {
-//=====================================================The access is retricted for :AdminUAE| AdminEtab| President | DirecteurEtab ======================================================
- 
+       //=====================================================The access is retricted for :AdminUAE| AdminEtab| President | DirecteurEtab ======================================================
 
 
-    /**
-     * Index() this methode serve to display all the grades.
-     *
-     * @return /all the information of all  grades 
-     */
+
+       /**
+        * Index() this methode serve to display all the grades.
+        *
+        * @return /all the information of all  grades 
+        */
 
        public function index()
           {
@@ -32,14 +32,14 @@ class GradeController extends Controller
           }
 
 
-//======================================================================= The access is retricted for :AdminUAE| AdminEtab =============================================================================================   
+       //======================================================================= The access is retricted for :AdminUAE| AdminEtab =============================================================================================   
 
 
-    /**
-     * Store it's a method taht serve to add a new grade .
-     * @param StoreGradeRequest it's a class that contains the validation rules. 
-     * @return / a success message which mean the grade was successfully added
-     */
+       /**
+        * Store it's a method taht serve to add a new grade .
+        * @param StoreGradeRequest it's a class that contains the validation rules. 
+        * @return / a success message which mean the grade was successfully added
+        */
        public function store(StoreGradeRequest $request)
           {
               
@@ -54,14 +54,20 @@ class GradeController extends Controller
           }
 
 
-//================================================================================== The access is retricted for :AdminUAE| AdminEtab  ============================================
+              if ($grade) {
+                     return response()->json(["message" => "added successfuly"]);
+              }
+       }
 
 
-    /**
-     * show this method serve to display the data of a  specified grade.
-     * @param  int  $id GradeID !!!!
-     * @return /the information of the specified Grade.
-     */
+       //================================================================================== The access is retricted for :AdminUAE| AdminEtab  ============================================
+
+
+       /**
+        * show this method serve to display the data of a  specified grade.
+        * @param  int  $id GradeID !!!!
+        * @return /the information of the specified Grade.
+        */
        public function show($id)
           {   
               if (Gate::allows('check_role', [0,1])) { 
@@ -92,14 +98,15 @@ class GradeController extends Controller
           }
 
 
-//================================================================== The access is retricted for : AdminUAE| AdminEtab ====================================================================
+
+       //================================================================== The access is retricted for : AdminUAE| AdminEtab ====================================================================
 
 
-    /**
-     * destroy serve to remove the specified grade from storage.
-     * @param  int  $id IDGRADE!!!!!
-     * @return /// an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
-     */
+       /**
+        * destroy serve to remove the specified grade from storage.
+        * @param  int  $id IDGRADE!!!!!
+        * @return /// an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
+        */
        public function destroy($id)
           {
               if (Gate::allows('check_role', [0,1])) { 
@@ -112,6 +119,7 @@ class GradeController extends Controller
               }
               return $this->error('','ACCES INTERDIT ',403);
           }
+
 }
 
 
@@ -121,4 +129,3 @@ class GradeController extends Controller
 
 
 // ======================================================= YOUSSEF HARRAK =========================================================================
-

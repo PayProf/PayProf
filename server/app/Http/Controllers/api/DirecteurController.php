@@ -22,7 +22,7 @@ class DirecteurController extends Controller
    
  
     /**
-     * Index() it's a methode that serve to display all the directors with there etablissement.
+     * Index() it's a methode that serve to display all the ENSEIGNANT with there etablissement.
      * I used in this method DirecteurResource that serve to filter the data .
      * @return mixed the important data of all directeurs such as :(Nom|prenom|etablissement......) .
     */
@@ -52,8 +52,7 @@ class DirecteurController extends Controller
      
     {   
         if (Gate::allows('check_role', [1])) { 
-            $directeur=new Directeur();
-                
+            $directeur=new Directeur();             
             $directeur->etablissement_id= auth()->user()->administrateur->etablissement_id   ;                                                          
              $directeur->PPR = $request['PPR'];
              $directeur->nom = $request['nom'];
@@ -137,6 +136,7 @@ class DirecteurController extends Controller
         unlink(public_path('uploads').'/'.$directeur->image);                                               //destroy the appropriate image .     
         return $this->succes("","Directeur deleted successfully");}
         return $this->error('','ACCES INTERDIT ',403);
+
     }
 
 
@@ -145,17 +145,18 @@ class DirecteurController extends Controller
    
     /**
      * UpdateMyEmail() this method serve to update the email of the directeur Who just logged in.
-     * @param  int  $id User_id of the directeur  !!!!!!
      * @param  UpdateDirecteurRequest contain the validation rules of the data .
      * @return //a success message that mean the email of the directeur was successfully updated.
      */
    
-       public function UpdateMyEmail( UpdateDirecteurRequest $request ,$id)
+       public function UpdateMyEmail( UpdateDirecteurRequest $request )
               
        {
         if (Gate::allows('direct_update',$id))
          {
-               $directeur=Directeur::where('user_id',$id)->first();             
+
+               $id=auth()->user()->enseignant->id;
+               $directeur=Directeur::where('id',$id)->first();             
                $directeur->email_perso=$request['email_perso'];             
                $directeur->save();             
                return $this->succes("","email updated successfully");
@@ -169,16 +170,18 @@ class DirecteurController extends Controller
    
     /**
      * ShowMyProfil this method serve to display the informations of the directeur Who just logged in.
-     * @param  int  $id User_id of the directeur  !!!!!!
      * I used in this method DirecteurResource that serve to filter the data .
      */
 
-       public function ShowMyProfil($id)
+       public function ShowMyProfil()
       
        {
         if ( Gate::allows('direct_update',$id )) {
+             $id=auth()->user()->enseignant->id;
              return new DirecteurResource(Directeur::where('user_id',$id)->with('etablissement')->first());}
              return $this->error('','ACCES INTERDIT ',403);
+             
+             
        
         }
     
@@ -191,13 +194,16 @@ class DirecteurController extends Controller
      * @return //success message that mean the picture was successfully uploaded .
      */
 
-        public function UploadMyImage( Request $request,$id)
+        public function UploadMyImage( Request $request)
        
         {
-            if (Gate::allows('direct_update',$id ) ) { 
-                $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
 
-             $directeur=Directeur::where('user_id',$id)->first();
+            if (Gate::allows('direct_update',$id ) ) { 
+                $id=auth()->user()->enseignant->id;
+                $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
+            }
+
+             $directeur=Directeur::where('id',$id)->first();
              if($request->hasFile('image'))
              {
              $file=$request->image;

@@ -14,11 +14,13 @@ import Admin from '../views/UI/Admin.vue';
 
 //Directeur de l'etablissement
 import EtabDirector from "../views/UI/EtabDirector.vue";
+import TableEtablissement from "../views/TablesUAE/TableEtablissements.vue"
 
 
 //Table Admins et Directeurs for view and edit, concerns the UAE admin
 import TableAdmins from "../views/TablesUAE/TableAdmins.vue";
 import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
+import TableEnseignants from "../views/TablesEtab/TableEnseignant.vue";
 
 
 //Edit forms for admin and directeurs
@@ -31,6 +33,7 @@ import AddDirecteur from "../components/AddDirecteur.vue";
 
 //Edit Profile
 import EditProfile from '../components/EditProfile.vue';
+import EditAdmin from '../components/EditAdmin.vue'
 
 //Table intervention for validations
 import ValidateIntervention from '../views/TablesEtab/ValidateIntervention.vue'
@@ -56,6 +59,7 @@ const routes = [
       RequiresAuth: false
     }
   },
+
  
   /*The Default Layout for all Pages */
   {
@@ -93,7 +97,6 @@ const routes = [
       },
 
       /* Table directeurs des établissements home page, concern the uni admin only */
-
       {
         path: '/TableDirecteurs',
         name:'TableDirecteurs',
@@ -102,13 +105,13 @@ const routes = [
           AdminAccess: false,
           AdminUAEAccess: true,
           UserAccess: false,
-          DirectorUAEAccess: false,
+          DirectorUAEAccess: true,
           DirectorAccess:false,
         }
       },
+     
 
       /* Table admins des établissement home page, concern the uni admin only */
-
       {
         path: '/TableAdmins',
         name:'TableAdmins',
@@ -121,6 +124,7 @@ const routes = [
           DirectorAccess:false,
         }
       },
+     
 
       {
         path: '/TableInterventionsEnseignant/',
@@ -190,6 +194,41 @@ const routes = [
           AdminUAEAccess: true,
           UserAccess: false,
           DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
+
+
+
+      {
+        path: '/EditAdmin/:id ',
+        name:'EditAdmin ',
+        component: EditAdmin,
+        // meta:{
+        //   RequiresAuth: false
+        // }
+      },
+
+
+
+      {
+        path: '/TableEnseignants',
+        name:'TableEnseignants',
+        component: TableEnseignants,
+        // meta:{
+        //   RequiresAuth: false
+        // }
+      },
+
+      {
+        path: '/TableEtablissement',
+        name:'TableEtablissement',
+        component: TableEtablissement,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: true,
           DirectorAccess:false,
         }
       },
@@ -304,11 +343,15 @@ router.beforeEach((to, from, next) => {
   const usertype = store.state.user.role;
   //is he an admin UAE?
   const isAdminUAE = (parseInt(usertype)===4);
+  //is he a DirectorUAE?
   const isDirectorUAE = (parseInt(usertype)===3);
-  //is he an admin (or admin UAE)
+  //is he an admin?
   const isAdmin = (parseInt(usertype)===2);
+  //is he a Director?
   const isDirector = ((parseInt(usertype)===1));
+  //is he an Enseignant
   const isEnseignant = ((parseInt(usertype)===0));
+  //Notification
   const toast = useToast();
 
   //does the page require authentification
@@ -320,46 +363,47 @@ router.beforeEach((to, from, next) => {
     }
     else //if the user is authentificated
     {
-      if(to.name==='Dashboard')
+      if(to.name==='Dashboard')//if he's redirected to dashboard
       {
-        if(isAdminUAE)
+        if(isAdminUAE)//if he's AdminUAE
           next({ name: 'AdminUAE' });
-        else if(isAdmin)
+        else if(isAdmin)//if he's Admin
           next({ name: 'Admin' });
-        else if(isDirector)
+        else if(isDirector)//if he's Director
           next({ name: 'Directeur'});
-        else if(isDirectorUAE)
+        else if(isDirectorUAE)//if he's DirectorUAE
           next({ name: 'DirecteurUAE'})
-        else
+        else//if he's Enseignant
           next({ name: 'Enseignant' });
       }
-      else{
-        if (isAdminUAE && !to.meta.AdminUAEAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+      else//Any other Page
+      {
+        if (isAdminUAE && !to.meta.AdminUAEAccess)//if AdminUAE doesn't Have access
         {
           next({name:'Dashboard'});
           AccessDenied(toast);
         }
-        else if (isAdmin && !to.meta.AdminAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+        else if (isAdmin && !to.meta.AdminAccess)//if Admin doesn't Have access
         {
           next({name:'Dashboard'});
           AccessDenied(toast);
         }
-        else if (isDirectorUAE && !to.meta.DirectorUAEAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+        else if (isDirectorUAE && !to.meta.DirectorUAEAccess)//if DirectorUAE doesn't Have access
         {
           next({name:'Dashboard'});
           AccessDenied(toast);
         }
-        else if (isDirector && !to.meta.DirectorAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+        else if (isDirector && !to.meta.DirectorAccess) //if Director doesn't Have access
         {
           next({name:'Dashboard'});
           AccessDenied(toast);
         }
-        else if (isEnseignant && !to.meta.UserAccess) //if he's trying to access an adminUAE page and he's not adminUAE
+        else if (isEnseignant && !to.meta.UserAccess) //if Enseignant doesn't Have access
         {
           next({name:'Dashboard'});
           AccessDenied(toast);
         }
-        else //if he's an enseignant and trying to access his page
+        else // if he has access
         {
             next();
         }
