@@ -8,6 +8,7 @@ use App\Http\Resources\DirecteurResource;
 use App\Models\Directeur;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
+use App\Http\Controllers\AuthController;
 class DirecteurController extends Controller
 {
     // A class that handles the success and error messages

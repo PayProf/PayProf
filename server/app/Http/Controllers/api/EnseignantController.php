@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\api;
+use App\Http\Controllers\AuthController;
 use App\Http\Resources\EnseignantResource;
 
 use App\Http\Controllers\Controller;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 
 class EnseignantController extends Controller
 {
+
      // A class that handles the success and error messages
      use HttpResponses;
 //=========================================================== The access is retricted for:AdminUae|President ==============================================
@@ -82,7 +84,7 @@ class EnseignantController extends Controller
         
      
 //=========================================================== The access is retricted for:AdminUEtab ===============================================
-   
+
 
      /**
      * Update() this method serve to update the information of a specified enseignant.
@@ -90,6 +92,7 @@ class EnseignantController extends Controller
      * @param  int  $id ID Enseignant !!!!!!!!
      * @return  //a success message that mean the data of the enseignant was successfully updated.
      */
+
        public function update( UpdateEnseignantRequest $request, $id)
 
           {               
@@ -107,7 +110,7 @@ class EnseignantController extends Controller
                               
           }
 //======================================= The access is retricted for:AdminEtab ==============================================
-    
+
 
      /**
      * Destroy() this method serve to remove a specified enseignant.
@@ -152,6 +155,8 @@ class EnseignantController extends Controller
                
 
              
+
+       
                                        
        
           }
@@ -166,7 +171,7 @@ class EnseignantController extends Controller
        public function ShowMyPayments()
 
           {      
-                 $id=6;//auth()->user()->enseignant->id;
+                 $id=auth()->user()->enseignant->id;
 
                  if(Paiements::where('enseignant_id',$id)->exists())
 
@@ -183,6 +188,7 @@ class EnseignantController extends Controller
                  }
           }
    
+
 
 //============================================ The access is retricted for:Enseignant  =====================================================              
         
@@ -279,3 +285,4 @@ class EnseignantController extends Controller
                 
 // 
 }
+
