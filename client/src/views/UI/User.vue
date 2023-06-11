@@ -1,68 +1,32 @@
 <template>
-  <!-- <div class="w-screen h-70vh" style="margin-bottom: 40px;">
-    <div class="flex items-start justify-start mt-200" style="margin-top: 200px; margin-left: 20px;">
-      <div class="w-1/2">
-        <div class="bg-gray-200 p-4">
-          <h1 class="text-2xl font-bold">Profile enseignat : Mouad Hayaoui</h1>
-          <p class="py-2"><strong>PPR :</strong> 123456</p>
-          <p class="py-2"><strong>Nom:</strong> Hayaoui</p>
-          <p class="py-2"><strong>Prenom :</strong> Mouad</p>
-          <p class="py-2"><strong>Email :</strong> johndoe@example.com</p>
-          <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p>
-
-
-        </div>
-      </div>
-    </div>
-    <div class="w-200 h-200 bg-gray-200">
-      <BarChart />
-    </div>
-  </div> -->
-
-  <div class="p-4 mt-20 sm:mx-30">
-        <div class="p-4 border-2 border-gray-200  rounded-lg ">
-            <div class="flex items-center justify-center h-60 mb-6 mt-10 rounded bg-gray-50 ">
-                <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                    <figure><img src="" alt=""  /></figure>
-                    <div class="card-body">
-                        <h2 class="card-title">Table des Interventions</h2>
-                        <p>Afficher les informations detailees des intervention dans cette annee</p>
-                        <div class="card-actions justify-end">
-                            
-                            <button class="btn btn-primary" @click="showInterventions" href="#interventiontable">Consulter</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-6 mb-4 pt-6">
-                <div class="flex items-center justify-center rounded bg-gray-50 h-40 ">
-                    <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                        <figure><img src="" alt=""  /></figure>
-                        <div class="card-body">
-                            <h2 class="card-title">Graphes des nombres d'heures travaille cette annee</h2>
-                            <p>...</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="showGraphe">Consulter</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center rounded bg-gray-50 h-40 ">
-                    <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                        <figure><img src="" alt=""  /></figure>
-                        <div class="card-body">
-                            <h2 class="card-title">Afficher tous les informations de l'enseignant</h2>
-                            <p>....</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn btn-primary mb-3" @click="showProfile" href="#profilecard">Consulter</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
+    <div class="col-span-1">
+    <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
+      <li @click="showProfile" v-if="OpenProfile" class="bg-neutral text-white">
+        <i class="fa-solid fa-user"></i>
+      </li>
+      <li @click="showProfile" v-else>
+        <i class="fa-solid fa-user"></i>
+      </li>
+      <li @click="showInterventions" v-if="OpenInterventions" class="bg-neutral text-white Interventions">
+        <i class="fa-solid fa-chalkboard-user"></i>
+      </li>
+      <li @click="showInterventions" v-else class="Interventions">
+        <i class="fa-solid fa-chalkboard-user"></i>
+      </li>
+      <li @click="showGraphe" v-if="OpenGraphe" class="bg-neutral text-white">
+        <i class="fa-sharp fa-solid fa-signal"></i>
+      </li>
+      <li @click="showGraphe" v-else>
+        <i class="fa-sharp fa-solid fa-signal"></i>
+      </li>
+      <li>
+        <i class="fa-solid fa-arrows-up-down-left-right"></i>
+      </li>
+    </ul>
     </div>
     <!-- delete card accepting -->
+    <div class="col-span-11">
     <div>
     <div v-if="OpenDelete"  id="profilecard" class="popup-overlay">
       <div class="popup-container">
@@ -93,55 +57,45 @@
     </div>
   </div>
 </div>
-  <!-- <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto" style="margin-left: 20px; margin-right: 50px;">
-    <h1 style=" margin-top: 0;">Table Intervention :</h1>
-    <div class="search-bar-container">
-
-      <input type="text" class="search-bar" v-model="searchText" placeholder="Search" @input="filterTable">
-    </div> -->
-    <!-- <table class="table table-zebra w-full">
+  <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto mt-5" style="margin-left: 20px; margin-right: 50px;">
+    <h1 class="text-black font-bold text-xl">Table Intervention :</h1>
+    <table class="table table-zebra w-full">
+      <!-- head -->
       <thead>
         <tr>
           <th><input type="checkbox" /></th>
-          <th>Id_Intr</th>
-          <th>Etablisment</th>
-          <th>Intitule_Intervention</th>
-          <th>Annee universitaire</th>
-          <th>Semester</th>
+          <th>Intitule          </th>
+          <th>Année</th>
+          <th>Semestre</th>
           <th>Date Debut</th>
           <th>Date Fin</th>
-          <th>Nombre heures</th>
-          <th>Action</th>
+          <th>Nombre Heures</th>
+          <th v-if="IsAdmin">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(intervention) in Interventions" :key="intervention.Id_Intr">
+        <tr v-for="intervention in Interventions" :key="intervention.id">
           <td><input type="checkbox" /></td>
-          <td>{{ intervention.Id_Intr }}</td>
-          <td>{{ intervention.Etablisment }}</td>
-          <td>{{ intervention.Intitule_Intervention }}</td>
-          <td>{{ intervention.Annee_universitaire }}</td>
-          <td>{{ intervention.Semester }}</td>
-          <td>{{ intervention.Date_Debut }}</td>
-          <td>{{ intervention.Date_Fin }}</td>
-          <td>{{ intervention.Nombre_heures }}</td>
-          <td>
-            <button @click="showDeleteW" class="delete-btn">
+          <td>{{ intervention.IntituleIntervention }}</td>
+          <td>{{ intervention.AnneeUniv }}</td>
+          <td>{{ intervention.Semestre }}</td>
+          <td>{{ intervention.DateDebut }}</td>
+          <td>{{ intervention.DateFin }}</td>
+          <td>{{ intervention.NbrHeures }}</td>
+          <td v-if="IsAdmin">
+            <button @click="showDeleteW" class="delete-btn" >
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
             </button>
-            <button class="inspect-btn">
+            <button class="add-btn">
               <i class="fas fa-edit"></i>
-              <span class="tooltip" data-tooltip="Inspect">modify intervention </span>
-            </button>
-            <button class="btn btn-danger btn-sm">
-              <i class="fa fa-trash" aria-hidden="true"></i>
+              <span class="tooltip" data-tooltip="Edit">Edit intervention </span>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
-    <AddIntervention/>
+    <AddIntervention v-if="IsAdmin"/>
     <div class="btn-group" style="display: flex; justify-content: center; margin-top: 30px;">
     <button class="btn">1</button>
     <button class="btn btn-active">2</button>
@@ -149,30 +103,36 @@
     <button class="btn">4</button>
   </div> -->
 
-  <!-- </div> -->
-  <TableInterventionsUserVue v-if="OpenInterventions"/>
-  <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200">
+  </div>
+  <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 ">
+    <div class="flex justify-end">
+    </div>
       <BarChart />
     </div>
- 
-  
-  
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 import AddIntervention from '../../components/AddIntervention.vue';
 import BarChart from '../../components/chart.vue'
+import store from "../../store.js";
+import axios from "axios";
 import TableInterventionsUserVue from '../TablesEtab/TableInterventionsUser.vue';
+
 
 export default {
   name: 'User',
   data(){
     return{
       OpenInterventions:false,
-      OpenProfile:false,
+      OpenProfile:true,
       OpenGraphe:false,
       OpenDelete:false,
+      IsAdmin:store.state.user.role===2,
+      Interventions:[],
+      Profile:[],
     }
   },
   components: {
@@ -196,6 +156,26 @@ export default {
     },
     showDeleteW(){
       this.OpenDelete =!this.OpenDelete;
+    },
+    async getInterventions() {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention')
+        this.Interventions=response.data.data.interventions;
+        console.log(response.data.data.interventions);
+        console.log(this.Interventions)
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
+    async showmyprofile(){
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/ShowMyProfil');
+        console.log(response.data)
+      }
+      catch(error){
+        console.log(error)
+      }
     }
   },
   computed: {
@@ -204,9 +184,12 @@ export default {
     ]),
     
   },
-  // async created() {
-  //   await this.$store.dispatch('getInterventions');
-  // }
+  mounted() {
+    this.showmyprofile();
+    this.getInterventions();
+
+  },
+
 }
 </script>
 
@@ -237,7 +220,9 @@ export default {
   pointer-events: none;
   white-space: nowrap;
 }
-
+.Graphe:hover .tooltip,
+.Profile:hover .tooltip,
+.Interventions:hover .tooltip,
 .delete-btn:hover .tooltip,
 .add-btn:hover .tooltip,
 .inspect-btn:hover .tooltip {

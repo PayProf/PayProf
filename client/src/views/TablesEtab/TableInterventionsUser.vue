@@ -64,7 +64,9 @@
 </template>
 
 <script>
+import store from "../../store.js";
 import AddIntervention from '../../components/AddIntervention.vue';
+
 export default {
   name: 'Interventions',
   components:{
@@ -85,7 +87,7 @@ export default {
   methods: {
     async getInterventions() {
       try {
-        await axios.get('http://127.0.0.1:8000/api/Intervention').then(result=>{
+        await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention').then(result=>{
           this.Interventions = result.data
         })
       }
