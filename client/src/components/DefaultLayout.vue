@@ -30,12 +30,12 @@ export default {
     I verify the validity of the token if the token expired
     I refresh it*/
 
-  // async created(){
-  //   if(store.state.user.token && this.IsExpired)
-  //   {
-  //     await this.$store.dispatch('RefreshToken');
-  //   }
-  // }
+  async created(){
+    if(store.state.user.token && this.IsExpired)
+    {
+      await this.$store.dispatch('RefreshToken');
+    }
+  }
 
 }
 </script>

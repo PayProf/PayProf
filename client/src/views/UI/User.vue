@@ -63,7 +63,6 @@
       <!-- head -->
       <thead>
         <tr>
-          <th><input type="checkbox" /></th>
           <th>Intitule          </th>
           <th>Année</th>
           <th>Semestre</th>
@@ -75,7 +74,6 @@
       </thead>
       <tbody>
         <tr v-for="intervention in Interventions" :key="intervention.id">
-          <td><input type="checkbox" /></td>
           <td>{{ intervention.IntituleIntervention }}</td>
           <td>{{ intervention.AnneeUniv }}</td>
           <td>{{ intervention.Semestre }}</td>
@@ -101,7 +99,7 @@
     <button class="btn btn-active">2</button>
     <button class="btn">3</button>
     <button class="btn">4</button>
-  </div> -->
+  </div>
 
   </div>
   <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 ">
@@ -159,7 +157,12 @@ export default {
     },
     async getInterventions() {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention')
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyIntervention',config)
+        console.log(response.data)
         this.Interventions=response.data.data.interventions;
         console.log(response.data.data.interventions);
         console.log(this.Interventions)
@@ -170,7 +173,11 @@ export default {
     },
     async showmyprofile(){
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/ShowMyProfil');
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/ShowMyProfil',config);
         console.log(response.data)
       }
       catch(error){
