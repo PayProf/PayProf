@@ -9,7 +9,6 @@ use App\Http\Resources\EtablissementResource;
 use App\Models\Administrateur;
 use App\Models\Directeur;
 use App\Models\Enseignant;
-use App\Models\Directeur;
 use App\Models\Etablissement;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
@@ -113,6 +112,7 @@ class EtablissementController extends Controller
             return $this->error("", 'NO DATA FOUND',402);
         }
     }
+}
 
     /**
      * Remove the specified resource from storage.
@@ -137,6 +137,7 @@ class EtablissementController extends Controller
         return $this->succes('', 'SUCCESSFULLY DELETED');
         }
     }
+}
     public function Show_Myetablissement($user_id)
     {
        
@@ -163,7 +164,8 @@ class EtablissementController extends Controller
             $directeur = ['id_etablissement' => $data->etablissement_id];
             $etablissement = Etablissement::where('id', $directeur['id_etablissement'])->first();
             return $this->succes($etablissement, "MY ETABLISSEMENT");
-        }}
+        }
+    }
    
     
     
