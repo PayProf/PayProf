@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\api;
 
+use App\Events\storeuser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDirecteurRequest;
 use App\Http\Requests\UpdateDirecteurRequest;
@@ -9,10 +10,12 @@ use App\Models\Directeur;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Gate;
 class DirecteurController extends Controller
 {
     // A class that handles the success and error messages
     use HttpResponses;
+    
    
     
  //=========================================The access is retricted for:AdminUAE||President ================================================
@@ -25,8 +28,13 @@ class DirecteurController extends Controller
     */
    
     public function index()
-    {
-        return DirecteurResource::collection(Directeur::with('etablissement')->latest()->paginate(5));
+
+    {  
+        if (Gate::allows('check_role', [0,3])) { 
+            return DirecteurResource::collection(Directeur::with('etablissement')->latest()->paginate(5));
+        }
+        return $this->error('','ACCES INTERDIT ',403);
+        
     }
 
    
@@ -42,18 +50,28 @@ class DirecteurController extends Controller
     
      public function store(StoreDirecteurRequest $request)
      
-     {
+    {   
+        if (Gate::allows('check_role', [1])) { 
             $directeur=new Directeur();
-            $request['IdEtablissement']=1;                                                                  // auth()->user()->administrateur->etablissement_id//the security developper should approuve it
-            $directeur->PPR = $request['PPR'];
-            $directeur->nom = $request['nom'];
-            $directeur->prenom = $request['prenom'];
-            $directeur->date_naissance = $request['DateNaissance'];
-            $directeur->etablissement_id = $request['IdEtablissement'];
-            //$directeur->user_id = $request['IdUser']                                                      // i talked with the postgres admin to add a trigger for this  ;
-            $directeur->email_perso=$request['email_perso'];
-            $directeur->save();
-            return $this->succes("","added successfully");
+                
+            $directeur->etablissement_id= auth()->user()->administrateur->etablissement_id   ;                                                          
+             $directeur->PPR = $request['PPR'];
+             $directeur->nom = $request['nom'];
+             $directeur->prenom = $request['prenom'];
+             $directeur->date_naissance = $request['DateNaissance'];
+             //$directeur->etablissement_id = $request['IdEtablissement'];
+             $directeur->email_perso=$request['email_perso'];
+             $directeur->save();
+ 
+             $id=event (new storeuser($request->input('email_perso'),2,$request->input('nom'),$request->input('prenom')));
+             $directeur->user_id = $id[0];
+             $directeur->save();
+ 
+             return $this->succes("","added successfully");
+        }
+        return $this->error('','ACCES INTERDIT ',403);
+
+           
      }
 
 //=============================================The access is retricted for:AdminUAE|President|AdminEtab =============================================================    
@@ -67,7 +85,12 @@ class DirecteurController extends Controller
    
      public function show($id)
     {
-             return new DirecteurResource(Directeur::with('etablissement')->FindOrFail($id));
+        if (Gate::allows('check_role', [0,3]) || Gate::allows('admin_direct',$id) || Gate::allows('direct_himself',$id) ) {
+            return new DirecteurResource(Directeur::with('etablissement')->FindOrFail($id));
+         }
+         return $this->error('','ACCES INTERDIT ',403);
+
+             
    
     }
 
@@ -83,6 +106,7 @@ class DirecteurController extends Controller
     
      public function update(UpdateDirecteurRequest $request, $id)
     {    
+        if (Gate::allows('check_role', [0]) || Gate::allows('admin_direct',$id) ) {
 
        $directeur=Directeur::find($id);
        $directeur->PPR = $request['PPR'];
@@ -92,6 +116,8 @@ class DirecteurController extends Controller
        $directeur->email_perso=$request['email_perso'];
        $directeur->save();
        return $this->succes("","updated successfully");
+    }
+       return $this->error('','ACCES INTERDIT ',403);
     }
 
 //===========================================The access is retricted for:AdminEtab =====================================================
@@ -105,10 +131,12 @@ class DirecteurController extends Controller
       
      public function destroy($id)
     {
+        if (Gate::allows('check_role', [0]) || Gate::allows('admin_direct',$id) ) {
         $directeur=Directeur::FindOrfail($id);   
         $directeur->delete();
         unlink(public_path('uploads').'/'.$directeur->image);                                               //destroy the appropriate image .     
-        return $this->succes("","Directeur deleted successfully");
+        return $this->succes("","Directeur deleted successfully");}
+        return $this->error('','ACCES INTERDIT ',403);
     }
 
 
@@ -125,10 +153,14 @@ class DirecteurController extends Controller
        public function UpdateMyEmail( UpdateDirecteurRequest $request ,$id)
               
        {
+        if (Gate::allows('direct_update',$id))
+         {
                $directeur=Directeur::where('user_id',$id)->first();             
                $directeur->email_perso=$request['email_perso'];             
                $directeur->save();             
                return $this->succes("","email updated successfully");
+            }
+               return $this->error('','ACCES INTERDIT ',403);
         }
 
 
@@ -144,7 +176,9 @@ class DirecteurController extends Controller
        public function ShowMyProfil($id)
       
        {
-             return new DirecteurResource(Directeur::where('user_id',$id)->with('etablissement')->first());
+        if ( Gate::allows('direct_update',$id )) {
+             return new DirecteurResource(Directeur::where('user_id',$id)->with('etablissement')->first());}
+             return $this->error('','ACCES INTERDIT ',403);
        
         }
     
@@ -160,8 +194,8 @@ class DirecteurController extends Controller
         public function UploadMyImage( Request $request,$id)
        
         {
-
-             $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
+            if (Gate::allows('direct_update',$id ) ) { 
+                $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
 
              $directeur=Directeur::where('user_id',$id)->first();
              if($request->hasFile('image'))
@@ -181,6 +215,11 @@ class DirecteurController extends Controller
              {
              return $this->succes("","image uploaded successfully");    
              }
+              }
+              return $this->error('','ACCES INTERDIT ',403);
+            
+
+             
  
                    
          }           
