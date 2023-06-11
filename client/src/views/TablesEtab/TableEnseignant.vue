@@ -27,7 +27,7 @@
                 <td>{{ Enseignant.Email }}</td>
                 <td>{{ Enseignant.Email }}</td>
                 <td>
-                  <router-link :to="{ path: '/EditEnseignant/'+Enseignant.id }">
+                  <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
               <button class="add-btn px-4" >
               <i class="fas fa-pen" ></i>
               <span class="tooltip" data-tooltip="inspect">modifier</span>
@@ -39,7 +39,7 @@
               <span class="tooltip" data-tooltip="inspect">supprimer</span>
             </button>
             <!-- This page isn't created yet !!!! -->
-            <router-link :to="{ path: '/Enseignant/'+Enseignant.id }">
+            <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
               <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"> inspecter </span>

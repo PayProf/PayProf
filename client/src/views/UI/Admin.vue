@@ -41,10 +41,26 @@
                 </div>
             </div>
         </div>
+        <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
+            <div class="card-body">
+              <h1 class="text-2xl font-bold">Profile enseignat : {{ user.nom }} {{ user.prenom }}</h1>
+                    <p class="py-2"><strong>Nom:</strong> {{user.nom}}</p>
+                    <p class="py-2"><strong>Prenom :</strong> {{user.prenom}}</p>
+                    <p class="py-2"><strong>Email :</strong> johndoe@example.com</p>
+                    <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p>
+                    <h2 class="card-title">New movie is released!</h2>
+              <p>Click the button to watch on Jetflix app.</p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-primary">Change Password</button>
+              </div>
+          </div>
+        </div>
+
       <TableEnseignant v-if="OpenEns"/>
       <ValidateIntervention v-if="OpenInt"/>
-    </div>
-  </template>
+
+  </div>
+</template>
   
 
 <script>
@@ -82,7 +98,7 @@ export default {
       this.OpenEns = !this.OpenEns;
     },
     showProfile(){
-      this.OpenDir = !this.OpenDir;
+      this.OpenProfile = !this.OpenProfile;
     },
     ShowAllint(){
       this.OpenInt = !this.OpenInt;
@@ -91,6 +107,7 @@ export default {
   computed:{
     ...mapState([
         'enseignants',
+        'user'
     ])
   },
   async created(){
