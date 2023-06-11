@@ -101,7 +101,7 @@
     <button class="btn btn-active">2</button>
     <button class="btn">3</button>
     <button class="btn">4</button>
-  </div> -->
+  </div>
 
   </div>
   <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 ">
