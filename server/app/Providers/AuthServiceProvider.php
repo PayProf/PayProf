@@ -3,7 +3,12 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Administrateur;
+use App\Models\Directeur;
+use App\Models\Enseignant;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +30,138 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
-    }
+        Gate::define('check_role', function ($user, ...$roles) {
+            $userRole = $user->role;
+    
+            if (in_array($userRole, $roles)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        //in ADMINISTRATEUR controller(function show)
+        Gate::define('can_admin', function (User $user, $id) {
+            $administrateur = Administrateur::find($id);
+
+            if($administrateur &&  $administrateur->user_id==$user->id && $user->role==1){
+                return true;
+            }
+            
+        });
+      //in ADMINISTRATEUR controller(Check if admin can show only his own profil or update his own email )
+        Gate::define('admin_modify', function (User $user, $user_id) {
+            if($user->id==$user_id){
+                return true;
+            }
+            
+        });
+        
+        //IN DIRECTEUR CONTROLLER : 
+        //check if admin_etb can show only "les directeures de ses etablissements"
+        Gate::define('admin_direct', function (User $user, $id) {
+            $directeur = Directeur::find($id);
+            $admin = Administrateur::where('user_id', $user->id)->first();
+        
+            if ($directeur && $admin && $directeur->etablissement_id == $admin->etablissement_id && $user->role==1) {
+                return true;
+            }
+        
+            return false;
+        });
+        //Check if "directeur" can show only his own profil
+        Gate::define('direct_himself', function (User $user, $id) {
+            
+            $direct =Directeur::find($id);
+        
+            if ($direct && $direct->user_id==$user->id && $user->role==2) {
+                return true;
+            }
+        
+            return false;
+        });
+        //check if a directeur can update only his own email/image/show profil
+        Gate::define('direct_update', function (User $user, $user_id) {
+           if ($user->id==$user_id && $user->role==2) {
+                return true;
+            }
+        
+            return false;
+        });
+
+
+        ///////////////////// IN ENSEIGNAT CONTROLLER  ///////////
+
+      // check if  "directeur" can show "enseignant de son etablissement"
+        Gate::define('direct_ens', function (User $user, $id) {
+            $ens = Enseignant::find($id);
+            $direct=Directeur::where('user_id', $user->id)->first();
+            if ($ens && $direct && $ens->etablissement_id == $direct->etablissement_id && $user->role==2) {
+                return true;
+            }
+        
+            return false;
+        });
+
+        //check if "admin_etab" can show "enseignant de son etablissement"
+        Gate::define('admin_ens', function (User $user, $id) {
+            $ens = Enseignant::find($id);
+            $admin = Administrateur::where('user_id', $user->id)->first();
+
+            if($ens && $admin &&$ens->etablissement_id == $admin->etablissement_id && $user->role==1){
+                return true;
+            }
+            
+        });
+
+        //check if enseignant can show infos/upload image
+        Gate::define('ens_check_id', function (User $user, $id) {
+            $ens = Enseignant::find($id);
+
+            if($ens &&  $ens->user_id==$user->id && $user->role==4){
+                return true;
+            }
+            
+        });
+
+        ///////////////////// IN ETABLISSEMENT CONTROLLER  ///////////
+
+        //check if directeur can : 
+        Gate::define('admin_ens_etab', function (User $user, $id) {
+
+            
+            $direct=Directeur::where('user_id', $user->id)->first();
+            if($direct && $user->role==2 && $direct->etablissement_id==$id){
+                return true;
+            }
+       return false; 
+        });
+
+        Gate::define('admin_etab', function (User $user, $id) {
+            
+            $admin = Administrateur::where('user_id', $user->id)->first();
+           if($admin && $user->role==1 && $admin->etablissement_id==$id){
+            return true;
+       }
+       return false;
+        
+            
+        });
+
+         ///////////////////// IN INTERVENTIONS CONTROLLER  ///////////
+         Gate::define('interv_etab', function (User $user, $id) {
+            
+            $admin = Administrateur::where('user_id', $user->id)->first();
+           if($admin && $user->role==1 && $admin->etablissement_id==$id){
+            return true;
+       }
+       return false;
+        
+            
+        });
+
+
+
+
+        
+}
 }

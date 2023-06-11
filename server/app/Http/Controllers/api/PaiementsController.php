@@ -10,6 +10,7 @@ use App\Models\Paiements;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Gate;
 
 class PaiementsController extends Controller
 {
@@ -22,6 +23,7 @@ class PaiementsController extends Controller
      */
     public function index()
     {
+        if (Gate::allows('check_role', [3,0])) {   
         // Retrieve a paginated list of Paiements objects
         $paiement = Paiements::latest()->paginate(10);
 
@@ -30,6 +32,8 @@ class PaiementsController extends Controller
 
         // Return a success response with the transformed data
         return $this->succes($data, 'DISPLAY');
+        }
+        return $this->error('','ACCES INTERDIT ',403);
     }
 
     /**
@@ -57,11 +61,16 @@ class PaiementsController extends Controller
      */
     public function show($id)
     {
+        if (Gate::allows('check_role', [3,0])) {
         // Retrieve the specific Paiements resource by ID
         $data = new PaiementResource(Paiements::findOrFail($id));
 
         // Return a success response with the transformed data
         return $this->succes($data, 'DISPLAY');
+    }
+
+        return $this->error('','ACCES INTERDIT ',403);
+
     }
 
     /**
@@ -73,18 +82,21 @@ class PaiementsController extends Controller
      */
     public function update(UpdatePaiementsRequest $request, $id)
     {
-        // Find the existing Paiements resource by ID
-        $paiement = Paiements::findOrFail($id);
+        //=================== TRIGGER ===================================
+        //=================== ON PEUT PAS FAIRE LE MISE A JOUR============
+        // // Find the existing Paiements resource by ID
+        // $paiement = Paiements::findOrFail($id);
 
-        // Update the Paiements resource with the request data
-        $paiement->update($request->all());
+        // // Update the Paiements resource with the request data
+        // $paiement->update($request->all());
 
-        // Retrieve the updated resource
-        $data = new PaiementResource(Paiements::find($id));
+        // // Retrieve the updated resource
+        // $data = new PaiementResource(Paiements::find($id));
 
-        // Return a success response with the updated resource
-        return $this->succes($data, 'SUCCESSFLY UPDATE');
+        // // Return a success response with the updated resource
+        // return $this->succes($data, 'SUCCESSFLY UPDATE');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -94,14 +106,16 @@ class PaiementsController extends Controller
      */
     public function destroy($id)
     {
-        // Find the existing Paiements resource by ID
-        $paiement = Paiements::findOrFail($id);
+        //===============TRIGGER===================
+        //================ON PEUT PAS SUPPRIMER=================
+        // // Find the existing Paiements resource by ID
+        // $paiement = Paiements::findOrFail($id);
 
-        // Delete the Paiements resource
-        $paiement->delete();
+        // // Delete the Paiements resource
+        // $paiement->delete();
 
-        // Return a success response
-        return $this->succes('', 'DELETED DATA');
+        // // Return a success response
+        // return $this->succes('', 'DELETED DATA');
     }
 
     public function Show_paiements_enseignant($id_enseignant)
