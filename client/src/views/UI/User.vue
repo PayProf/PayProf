@@ -43,19 +43,32 @@
       </div>
     </div>
   </div>
-  <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
-  <div class="card-body">
-    <h1 class="text-2xl font-bold">Bienvenue à Payprof {{this.Profile.nom}} {{this.Profile.prenom}} !</h1>
+      <div v-if="OpenProfile && IsUpdate" class="card card-side bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h1 class="text-2xl font-bold">Bienvenue à Payprof {{this.Profile.nom}} {{this.Profile.prenom}} !</h1>
           <p class="py-2"><strong>PPR :</strong> {{this.Profile.PPR}}</p>
           <p class="py-2"><strong>Nom:</strong> {{this.Profile.nom}}</p>
           <p class="py-2"><strong>Prenom :</strong> {{this.Profile.prenom}}</p>
           <p class="py-2"><strong>Email :</strong> {{this.Profile.Email}}</p>
-          <p class="py-2"><strong>Etablissment :</strong>{{this.Profile.NomEtab}}</p>
-    <p>Click the button to watch on Jetflix app.</p>
-    <div class="card-actions justify-end">
-      <button class="btn btn-primary">Change Password</button>
-    </div>
+          <p class="py-2"><strong>Etablissment :</strong>{{this.Profile.NomEtab}} test</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary" @click="ToggleUpdate">Update Profile</button>
+          </div>
+        </div>
+      </div>
+        <div v-if="OpenProfile && !IsUpdate" class="card card-side bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h1 class="text-2xl font-bold">Bienvenue à Payprof {{this.Profile.nom}} {{this.Profile.prenom}} !</h1>
+                <p class="py-2"><strong>PPR :</strong> {{this.Profile.PPR}}</p>
+                <p class="py-2"><strong>Nom:</strong> {{this.Profile.nom}}</p>
+                <p class="py-2"><strong>Prenom :</strong> {{this.Profile.prenom}}</p>
+                <p class="py-2"><strong>Email :</strong> {{this.Profile.Email}}</p>
+                <p class="py-2"><strong>Etablissment :</strong>{{this.Profile.NomEtab}}</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary" @click="ToggleUpdate">Update Profile</button>
+          </div>
   </div>
+        </div>
 </div>
   <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto mt-5" style="margin-left: 20px; margin-right: 50px;">
     <h1 class="text-black font-bold text-xl">Table Intervention :</h1>
@@ -108,7 +121,6 @@
       <BarChart />
     </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -130,7 +142,14 @@ export default {
       OpenDelete:false,
       IsAdmin:store.state.user.role===2,
       Interventions:[],
-      Profile:[],
+      Profile: {
+        nom:'',
+        prenom:'',
+        PPR:'',
+        Email:'',
+        NomEtab:'',
+      },
+      IsUpdate:false,
     }
   },
   components: {
@@ -154,6 +173,9 @@ export default {
     },
     showDeleteW(){
       this.OpenDelete =!this.OpenDelete;
+    },
+    ToggleUpdate(){
+      this.IsUpdate=!this.IsUpdate;
     },
     async getInterventions() {
       try {
