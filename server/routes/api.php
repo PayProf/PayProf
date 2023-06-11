@@ -25,17 +25,17 @@ use Illuminate\Support\Facades\Route;
 
 route::apiResource('Enseignant',EnseignantController::class);
 //route of  ShowMyInterventions
-route::get('Enseignant/{Enseignant}/MyIntervention',[EnseignantController::class,'ShowMyInterventions']);
+route::get('Enseignant/ens/MyIntervention',[EnseignantController::class,'ShowMyInterventions']);
 //route of  ShowMyPayments
-route::get('Enseignant/{Enseignant}/MyPayments',[EnseignantController::class,'ShowMyPayments']);
+route::get('Enseignant/ens/MyPayments',[EnseignantController::class,'ShowMyPayments']);
 //route of UploadMyImage
-route::POST('Enseignant/{Enseignant}/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
+route::POST('Enseignant/ens/UploadMyImage',[EnseignantController::class,'UploadMyImage']);
 //route of ShowMyProfil
-route::get('Enseignant/{Enseignant}/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
+route::get('Enseignant/ens/ShowMyProfil',[EnseignantController::class,'ShowMyProfil']);
 //route of MyHours
-route::get('Enseignant/{Enseignant}/MyHours',[EnseignantController::class,'MyHours']);
+route::get('Enseignant/ens/MyHours',[EnseignantController::class,'MyHours']);
 //route of UpdateMyEmail
-route::PATCH('Enseignant/{Enseignant}/UpdateMyEmail',[EnseignantController::class,'UpdateMyEmail']);
+route::PATCH('Enseignant/ens/UpdateMyEmail',[EnseignantController::class,'UpdateMyEmail']);
 
 //=====================================================================================================
 
@@ -56,9 +56,9 @@ route::PATCH('Intervention/{Intervention}/visauae',[InterventionController::clas
 //route of the activation of the visaETAb
 route::PATCH('Intervention/{Intervention}/visaetab',[InterventionController::class ,'activeVisaEtab']);
 //route of the ShowMyEtabInterventions
-route::get('ShowMyEtabInterventions',[InterventionController::class ,'ShowMyEtabInterventions']);
+route::get('Intervention/int/ShowMyEtabInterventions',[InterventionController::class ,'ShowMyEtabInterventions']);
 //route of EnseignantInterventions
-route::get('Interventiont/{Intervention}/EnseignantInterventions',[InterventionController::class,'EnseignantInterventions']);
+route::get('Intervention/{Intervention}/EnseignantInterventions',[InterventionController::class,'EnseignantInterventions']);
 
 //======================================================================================================
 
@@ -72,11 +72,11 @@ route::apiResource('etab',EtablissementController::class);
 
 route::apiResource('Directeur',DirecteurController::class);
 //route of UploadMyImage
-route::POST('Directeur/{Directeur}/UploadMyImage',[DirecteurController::class,'UploadMyImage']);
+route::POST('Directeur/dir/UploadMyImage',[DirecteurController::class,'UploadMyImage']);
 //route of ShowMyProfil
-route::get('Directeur/{Directeur}/ShowMyProfil',[DirecteurController::class,'ShowMyProfil']);
+route::get('Directeur/dir/ShowMyProfil',[DirecteurController::class,'ShowMyProfil']);
 //route of UpdateMyEmail
-route::PATCH('Directeur/{Directeur}/UpdateMyEmail',[DirecteurController::class,'UpdateMyEmail']);
+route::PATCH('Directeur/dir/UpdateMyEmail',[DirecteurController::class,'UpdateMyEmail']);
 
 //=======================================================================================================
 

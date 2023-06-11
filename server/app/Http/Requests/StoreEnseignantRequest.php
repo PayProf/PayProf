@@ -29,9 +29,9 @@ class StoreEnseignantRequest extends FormRequest
             'nom'=>['required'],
             'prenom'=>['required'],
             'DateNaissance'=>['required','date'],
-            //'IdEtablissement'=>['default:1'],
+            'email_perso'=>['required','unique:enseignants'],
             'Grade'=>['required'],
-            'email_perso'=>['required','email','unique:enseignants'],
+           
             
             
            // 'IdUser'=>['required'],
