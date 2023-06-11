@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateEtablissementRequest;
 use App\Http\Resources\EtablissementResource;
 use App\Models\Administrateur;
 use App\Models\Enseignant;
+use App\Models\Directeur;
 use App\Models\Etablissement;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
