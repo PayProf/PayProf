@@ -30,7 +30,6 @@ class StoreEtablissementRequest extends FormRequest
             'code'=>['required'],
             'telephone'=>['required'],
             'FAX'=>['required'],
-            'Nbrenseignants'=>['required'],
             'ville'=>['required'],
         ];
             
