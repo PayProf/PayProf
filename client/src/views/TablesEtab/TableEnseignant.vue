@@ -56,29 +56,27 @@
 
 <script>
 import axios from 'axios';
+import {mapState} from "vuex";
+
 export default {
     name: 'TableEnseignants',
     components: {
-        PopupForm,
+        // PopupForm,
     },
     data() {
     return {
         Enseignants: []
     }
   },
-        showPopup() {
-            this.showPopupForm = true;
-        },
-    },
-    computed: {
+  computed: {
         ...mapState([
             'enseignants',
         ])
     },
-  mounted() {
-    this.getEnseignants();
-  },
   methods: {
+    // showPopup() {
+    //   this.showPopupForm = true;
+    // },
     async getEnseignants() {
       try {
         await axios.get('http://127.0.0.1:8000/api/Enseignant').then(result=>{
@@ -100,6 +98,9 @@ export default {
       })
     }
 
+  },
+  mounted() {
+    this.getEnseignants();
   },
 };
 
