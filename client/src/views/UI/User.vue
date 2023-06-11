@@ -1,42 +1,27 @@
 <template>
   <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
     <div class="col-span-1">
-    <ul class="menu bg-base-200 rounded-box mt-6 w-12" v-drag:y>
-      <li @click="showProfile" v-if="OpenProfile" class="bg-gray-500">
+    <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
+      <li @click="showProfile" v-if="OpenProfile" class="bg-neutral text-white">
         <i class="fa-solid fa-user"></i>
-        <a class="tooltip" data-tip="Profile">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-        </a>
       </li>
       <li @click="showProfile" v-else>
         <i class="fa-solid fa-user"></i>
-        <a class="tooltip" data-tip="Profile">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-        </a>
       </li>
-      <li @click="showInterventions" v-if="OpenInterventions" class="bg-gray-500">
+      <li @click="showInterventions" v-if="OpenInterventions" class="bg-neutral text-white Interventions">
         <i class="fa-solid fa-chalkboard-user"></i>
-        <a class="tooltip" data-tip="Interventions">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        </a>
       </li>
-      <li @click="showInterventions" v-else>
+      <li @click="showInterventions" v-else class="Interventions">
         <i class="fa-solid fa-chalkboard-user"></i>
-        <a class="tooltip" data-tip="Interventions">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        </a>
       </li>
-      <li @click="showGraphe" v-if="OpenGraphe" class="bg-gray-500">
+      <li @click="showGraphe" v-if="OpenGraphe" class="bg-neutral text-white">
         <i class="fa-sharp fa-solid fa-signal"></i>
-        <span class="tooltip" data-tip="Stats">
-<!--          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>-->
-        </span>
       </li>
       <li @click="showGraphe" v-else>
         <i class="fa-sharp fa-solid fa-signal"></i>
-        <span class="tooltip" data-tip="Stats">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-        </span>
+      </li>
+      <li>
+        <i class="fa-solid fa-arrows-up-down-left-right"></i>
       </li>
     </ul>
     </div>
@@ -73,50 +58,37 @@
   </div>
 </div>
   <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto mt-5" style="margin-left: 20px; margin-right: 50px;">
-    <h1 style=" margin-top: 0;">Table Intervention :</h1>
-    <div class="search-bar-container">
-
-      <input type="text" class="search-bar" v-model="searchText" placeholder="Search" @input="filterTable">
-    </div>
+    <h1 class="text-black font-bold text-xl">Table Intervention :</h1>
     <table class="table table-zebra w-full">
       <!-- head -->
       <thead>
         <tr>
           <th><input type="checkbox" /></th>
-          <th>Id_Intr</th>
-          <th>Etablisment</th>
-          <th>Intitule_Intervention</th>
-          <th>Annee universitaire</th>
-          <th>Semester</th>
+          <th>Intitule          </th>
+          <th>Année</th>
+          <th>Semestre</th>
           <th>Date Debut</th>
           <th>Date Fin</th>
-          <th>Nombre heures</th>
-          <th>Action</th>
+          <th>Nombre Heures</th>
+          <th v-if="IsAdmin">Action</th>
         </tr>
       </thead>
       <!-- body -->
       <tbody>
-        <tr v-for="(intervention) in Interventions" :key="intervention.Id_Intr">
+        <tr v-for="intervention in Interventions" :key="intervention.id">
           <td><input type="checkbox" /></td>
-          <td>{{ intervention.Id_Intr }}</td>
-          <td>{{ intervention.Etablisment }}</td>
-          <td>{{ intervention.Intitule_Intervention }}</td>
-          <td>{{ intervention.Annee_universitaire }}</td>
-          <td>{{ intervention.Semester }}</td>
-          <td>{{ intervention.Date_Debut }}</td>
-          <td>{{ intervention.Date_Fin }}</td>
-          <td>{{ intervention.Nombre_heures }}</td>
-          <td>
-            <!-- supIntervention(intervention.Id_Intr) -->
-            <button class="inspect-btn">
-              <i class="fa-solid fa-eye"></i>
-              <span class="tooltip" data-tooltip="Inspect">Inspect intervention </span>
-            </button>
-            <button @click="showDeleteW" class="delete-btn" v-if="IsAdmin">
+          <td>{{ intervention.IntituleIntervention }}</td>
+          <td>{{ intervention.AnneeUniv }}</td>
+          <td>{{ intervention.Semestre }}</td>
+          <td>{{ intervention.DateDebut }}</td>
+          <td>{{ intervention.DateFin }}</td>
+          <td>{{ intervention.NbrHeures }}</td>
+          <td v-if="IsAdmin">
+            <button @click="showDeleteW" class="delete-btn" >
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
             </button>
-            <button class="add-btn" v-if="IsAdmin">
+            <button class="add-btn">
               <i class="fas fa-edit"></i>
               <span class="tooltip" data-tooltip="Edit">Edit intervention </span>
             </button>
@@ -124,7 +96,7 @@
         </tr>
       </tbody>
     </table>
-    <AddIntervention/>
+    <AddIntervention v-if="IsAdmin"/>
     <div class="btn-group" style="display: flex; justify-content: center; margin-top: 30px;">
     <button class="btn">1</button>
     <button class="btn btn-active">2</button>
@@ -158,6 +130,8 @@ export default {
       OpenGraphe:false,
       OpenDelete:false,
       IsAdmin:store.state.user.role===2,
+      Interventions:[],
+      Profile:[],
     }
   },
   components: {
@@ -184,13 +158,20 @@ export default {
     async getInterventions() {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention')
-        //     .then(result=>{
-        //   this.Interventions = result.data
-        // })
-        console.log(store.state.user.id)
-        console.log(response.data)
+        this.Interventions=response.data.data.interventions;
+        console.log(response.data.data.interventions);
+        console.log(this.Interventions)
       }
       catch (error) {
+        console.log(error)
+      }
+    },
+    async showmyprofile(){
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/ShowMyProfil');
+        console.log(response.data)
+      }
+      catch(error){
         console.log(error)
       }
     }
@@ -202,9 +183,8 @@ export default {
     
   },
   mounted() {
-
+    this.showmyprofile();
     this.getInterventions();
-    console.log('test axios')
 
   },
 }
@@ -237,7 +217,9 @@ export default {
   pointer-events: none;
   white-space: nowrap;
 }
-
+.Graphe:hover .tooltip,
+.Profile:hover .tooltip,
+.Interventions:hover .tooltip,
 .delete-btn:hover .tooltip,
 .add-btn:hover .tooltip,
 .inspect-btn:hover .tooltip {
