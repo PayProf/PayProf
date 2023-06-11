@@ -1,251 +1,155 @@
-CREATE OR REPLACE FUNCTION public.create_user()
+
+---------------------------------------------------------------------------------------------------------------------------------
+-- Trigger pour faire un UPDATE du nombre des enseignants dans un etablissement 
+
+CREATE OR REPLACE FUNCTION update_nbr_enseignant()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF TG_OP = 'UPDATE' THEN
+        IF (new.etablissement_id <> old.etablissement_id) THEN
+            UPDATE etablissements SET "Nbrenseignants" = "Nbrenseignants" - 1 WHERE id = old.etablissement_id;
+            UPDATE etablissements SET "Nbrenseignants" = "Nbrenseignants" + 1 WHERE id = new.etablissement_id;
+        END IF;
+    END IF;
+
+    IF TG_OP = 'INSERT' THEN
+        UPDATE etablissements SET "Nbrenseignants" = "Nbrenseignants" + 1 WHERE id = new.etablissement_id;
+    END IF;
+
+    IF TG_OP = 'DELETE' THEN
+        UPDATE etablissements SET "Nbrenseignants" = "Nbrenseignants" - 1 WHERE id = old.etablissement_id;
+    END IF;
+
+    RETURN NEW;
+END
+$$;
+
+CREATE TRIGGER update_nbr_enseignant
+    AFTER INSERT OR UPDATE OR DELETE
+    ON enseignants
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_nbr_enseignant();
+
+----------------------------------------------------------------------------------------------------------------------------------------
+-- Trigger pour rejeter la modification ou la supression d'une intervention apres qu'il est accepte par Admin UAE   
+
+CREATE OR REPLACE FUNCTION b_limit_interventions()
     RETURNS trigger
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE NOT LEAKPROOF
 AS $BODY$
-declare
 
-newemail varchar(255);	
-newpassword varchar(255);	
-lastid int;
-newnom varchar(255);
-newprenom varchar(255);
-newrole int;
-tablename varchar(20);
-begin
-	tablename := TG_TABLE_NAME;
-	newnom :=new.nom;
-	newprenom :=new.prenom;
-	call create_email(newnom,newprenom,newemail);  -- Creation d'un email unique  
-	call create_password(newpassword);				-- Generation d'un password de 8 characters aleatoires 
-	
-	CASE tablename									-- determination des roles 
-   WHEN 'enseignants' THEN  newrole:=0;
-   WHEN 'directeurs' THEN   newrole:=1;
-   WHEN 'administrateurs' THEN newrole:=3;
-	END case;
+BEGIN
+    IF OLD.visa_uae = true  THEN
+       raise exception 'intervention deja aprouvé par Admin UAE';
+    END IF;
 
-	select max(id) from users into lastid;		 -- Stockage de la valuer du dernier id
-	lastid:=lastid+1;
-
-	
-	insert into users (id,email,password,role) values ( lastid ,newemail,newpassword,newrole);
-	new.user_id := lastid;
-	
-	return new;
-end 
+    RETURN OLD;
+END;
 $BODY$;
 
-
-CREATE TRIGGER CREATE_USER   -- bind the trigger function to a table
-   BEFORE INSERT
-   ON enseignants --/directeurs/administrateurs
-   FOR EACH ROW 
-       EXECUTE PROCEDURE create_user()
-
-----------------------------------------------------------------------------------------------------------------------------------
-
-CREATE FUNCTION decrement_enseignant()   ---- decrementer le nombre d'enseignats dans l'etablissement  apres la suppression d'un enseignant
-   RETURNS TRIGGER 
-   LANGUAGE PLPGSQL
-AS $$
-BEGIN
-  UPDATE etablissements SET "Nbrenseignants" = "Nbrenseignants"-1 where id=old.etablissement_id;
-  return new;
-END $$;
-
-
-CREATE TRIGGER decrement_enseignant   -- bind the trigger function to a table
-   AFTER DELETE
-   ON enseignants
+CREATE TRIGGER b_limit_interventions
+  BEFORE DELETE OR UPDATE 
+   ON interventions 
    FOR EACH ROW
-       EXECUTE PROCEDURE decrement_enseignant()
-
- ----------------------------------------------------------------------------------------------------------------------------------
-	   CREATE FUNCTION increment_enseignant()   ---- incrementer le nombre d'enseignats dans l'etablissement apres un ajout d'un enseignant
-   RETURNS TRIGGER 
-   LANGUAGE PLPGSQL
-AS $$
-BEGIN
-  UPDATE etablissements SET "Nbrenseignants" += 1 where id=new.etablissement_id;
-  return new;
-END $$;
-
-
-CREATE TRIGGER increment_enseignant   -- bind the trigger function to a table
-   AFTER INSERT
-   ON enseignants
-   FOR EACH ROW
-       EXECUTE PROCEDURE increment_enseignant()
-
----------------------------------------------------------------------------------------------------------------------------------
-create or replace function update_etab_enseignant ()
-returns trigger 
-LANGUAGE 'plpgsql'
-as $$
-
-begin
-		if (new.etablissement_id != old.etablissement_id ) then
-		 UPDATE etablissements SET "Nbrenseignants" -= 1 where id=old.etablissement_id;
-		 UPDATE etablissements SET "Nbrenseignants" += 1 where id=new.etablissement_id;
-		 end if;
-
-     return new;
-end $$;
-
-
-CREATE TRIGGER update_etab_enseignant   -- bind the trigger function to a table
-   after update
-   ON enseignants
-   FOR EACH ROW 
-       EXECUTE PROCEDURE update_etab_enseignant ()
+       EXECUTE PROCEDURE b_limit_interventions();
 
 -----------------------------------------------------------------------------------------------------------------------------------
-create or replace function b_limit_interventions ()
-returns trigger 
-LANGUAGE 'plpgsql'
-as $$
-declare 
-count_interventions int ;     
+-- Trigger pour rejeter une insertion des interventions invalides
 
-begin
+CREATE OR REPLACE FUNCTION c_limit_interventions()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    count_interventions INT;
+BEGIN
 
--- CREATE INDEX Allinterventions        			            -- optimisation 
--- ON interventions(enseignant_id,date_debut,date_fin);
+    IF NEW."Nbr_heures" > 250 THEN
+        RAISE EXCEPTION 'Le nombre d''heures est très élevé.';
+    END IF;
 
-      if NEW."Nbr_heures" > 250 then 
-        raise exception 'Nbre d''Nbr_heures tres grands ';
-        end if;
+    SELECT COUNT(id) INTO count_interventions
+    FROM interventions AS I
+    WHERE I.enseignant_id = NEW.enseignant_id
+        AND (I.date_debut <= NEW.date_fin AND I.date_fin >= NEW.date_debut)
+        AND I.visa_uae = TRUE
+        AND I.visa_etab = TRUE;
 
-		select count(id) into count_interventions from interventions as I 
-			where I.enseignant_id = new.enseignant_id 
-			and (I.date_debut <= NEW.date_fin AND I.date_fin >= NEW.date_debut)
-			and I.visa_uae = TRUE 
-			and I.visa_etab = TRUE ;
+    IF count_interventions = 5 THEN
+        RAISE EXCEPTION 'Le professeur ne peut pas effectuer une intervention à ce moment.';
+    END IF;
 
-		if count_interventions = 5 then
-				raise exception 'Le prof ne peut pas effectuer une intervention à ce moment ';
-		 end if;
+    RETURN NEW;
+END
+$$;
 
-     return new;
-end $$;
+CREATE TRIGGER c_limit_interventions
+    BEFORE INSERT OR UPDATE
+    ON interventions
+    FOR EACH ROW
+    EXECUTE PROCEDURE c_limit_interventions();
 
-CREATE TRIGGER b_limit_interventions   -- bind the trigger function to a table
-   before insert or update 
-   ON interventions
-   FOR EACH ROW 
-       EXECUTE PROCEDURE b_limit_interventions ()
-
- 
 
 -----------------------------------------------------------------------------------------------------------------------------------
-create or replace function a_limit_interventions ()
-returns trigger 
-LANGUAGE 'plpgsql'
-as $$
-declare 
+-- Trigger pour rejeter une insertion des interventions invalides
 
-annee1 int ;     
-annee2 int ; 
-semestre int;
+CREATE OR REPLACE FUNCTION a_limit_interventions()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    annee1 INT;
+    annee2 INT;
+    semestre INT;
+    AUXdate_debut DATE;
+    AUXdate_S2 DATE;
+    AUXdate_fin DATE;
+BEGIN
+    SELECT (string_to_array(NEW.annee_univ, '/'))[1] INTO annee1;   
+    SELECT (string_to_array(NEW.annee_univ, '/'))[2] INTO annee2;
 
-AUXdate_debut date;
-AUXdate_S2 date;
-AUXdate_fin date;
+    IF annee2 = annee1 + 1 AND NEW.date_debut < NEW.date_fin THEN
+        SELECT CAST(SUBSTRING(NEW.semestre FROM 2 FOR 2) AS INT) INTO semestre;
 
-begin
-		SELECT (string_to_array(NEW.annee_univ, '/'))[1] into annee1;
-		SELECT (string_to_array(NEW.annee_univ, '/'))[2] into annee2;
-		
-  if annee1 = annee2 + 1  and NEW.date_debut < NEW.date_fin then 
+        AUXdate_debut := CAST(annee1 || '-09-01' AS DATE); -- debut anneee
+        AUXdate_fin := CAST(annee2 || '-07-01' AS DATE);   -- fin annee
+        AUXdate_S2 := CAST(annee2 || '-02-01' AS DATE);     -- fin semestre 1
 
-		SELECT CAST (SUBSTRING(NEW.semestre FROM 2 FOR 1) AS int ) into semestre;
-		
-		AUXdate_debut := cast (annee1||'-09-01' as date );
-		AUXdate_fin := cast (annee2||'-07-01' as date );
-		AUXdate_S2 :=  cast (annee2||'-02-01' as date );
-		
+        CASE semestre
+            WHEN 1 THEN
+                IF AUXdate_debut > NEW.date_debut OR NEW.date_fin > AUXdate_S2 THEN
+                    RAISE EXCEPTION 'Les dates insérées sont incompatibles.';
+                END IF;
+            WHEN 2 THEN
+                IF AUXdate_S2 > NEW.date_debut OR NEW.date_fin > AUXdate_fin THEN
+                    RAISE EXCEPTION 'Les dates insérées sont incompatibles.';
+                END IF;
+            ELSE
+                RAISE EXCEPTION 'Semestre invalide.';
+        END CASE;
+    ELSE
+        RAISE EXCEPTION 'Donnée invalide.';
+    END IF;
 
-		    case semestre
-			when 1 then 
-			if AUXdate_debut > NEW.date_debut OR NEW.date_fin > AUXdate_S2 then   -- Eviter l'insertion des dates illogiques
-				raise exception 'Les dates insérées sont imcompatibles';
-			end if;
-			
-			when 2 then
-			if AUXdate_S2 > NEW.date_debut OR NEW.date_fin > AUXdate_fin then   -- Eviter l'insertion des dates illogiques
-				raise exception 'Les dates insérées sont imcompatibles';
-			end if;
-			
-			else raise exception 'Semestre Invalide';
-			
-		    end case ;
+    RETURN NEW;
+END
+$$;
 
-      else raise exception 'Donnée Invalide';  
-    end if ;
-     return new;
-end $$;
+CREATE TRIGGER a_limit_interventions
+    BEFORE INSERT OR UPDATE
+    ON interventions
+    FOR EACH ROW
+    EXECUTE PROCEDURE a_limit_interventions();
 
-CREATE TRIGGER a_limit_interventions -- bind the trigger function to a table
-   before insert or update 
-   ON interventions
-   FOR EACH ROW 
-       EXECUTE PROCEDURE a_limit_interventions ()
 
   ----------------------------------------------------------------------------------------------------------------------------------------
 
-	CREATE OR REPLACE FUNCTION create_usr_id ()    --- Youssef demand
-    RETURNS trigger
-    LANGUAGE 'plpgsql'
-	AS $$
-declare 
-custom_id int;
-BEGIN
-	select max(id) into custom_id  from users 
-	new.user_id = custom_id  + 1;
-  return new;
-END ;
-$$;
 
-	
-CREATE TRIGGER create_usr_id 
-  AFTER INSERT
-   ON enseignants --/ directeurs / administrateurs 
-   FOR EACH ROW
-       EXECUTE PROCEDURE create_usr_id ();
-
-----------------------------------------------------------------------------------------------------------------------------------------
-
-
-CREATE OR REPLACE FUNCTION delete_paiement ()    
-    RETURNS trigger
-    LANGUAGE 'plpgsql'
-	AS $$
-declare 
-
-BEGIN
-	begin									
-	delete from paiements where id=OLD.paiement_id;
-	commit;
-	end;
-	
-  return old;
-END ;
-$$;
-
-	
-CREATE TRIGGER delete_paiement 
-  AFTER DELETE
-   ON interventions 
-   FOR EACH ROW
-       EXECUTE PROCEDURE delete_paiement ();
-
-----------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-CREATE OR REPLACE FUNCTION pay1()
+CREATE OR REPLACE FUNCTION check_pay()
     RETURNS trigger
     LANGUAGE 'plpgsql'
     COST 100
@@ -256,23 +160,36 @@ DECLARE
     AUXCS INT := (grade_infos(new.enseignant_id))[1];
     H_Etab_origine INT;
     ET_ID BIGINT;
+    
 BEGIN
-    IF NEW.visa_uae = TRUE AND NEW.visa_etab = TRUE THEN
-        SELECT etablissement_id INTO ET_ID FROM enseignants WHERE id = NEW.enseignant_id;
+    IF NEW.visa_uae = true AND OLD.visa_etab = true  THEN
 
-        IF NEW.etablissement_id = ET_ID THEN  -- skip inserting charge statutaire et inserer juste vacations dans paiement
-            SELECT SUM("Nbr_heures") INTO H_Etab_origine FROM interventions WHERE enseignant_id = NEW.enseignant_id
-                AND etablissement_id = ET_ID AND annee_univ = NEW.annee_univ GROUP BY enseignant_id;
+    SELECT etablissement_id INTO ET_ID FROM enseignants WHERE id = OLD.enseignant_id;
 
-            IF H_Etab_origine > AUXCS THEN  -- purement les vacations
-               call pay2(NEW.enseignant_id, NEW.etablissement_id, NEW."Nbr_heures", NEW.annee_univ, NEW.semestre);
-            ELSE
-                IF H_Etab_origine + NEW."Nbr_heures" > AUXCS THEN  -- eliminer la charge + vacation
-                  call  pay2(NEW.enseignant_id, NEW.etablissement_id, H_Etab_origine + NEW."Nbr_heures" - AUXCS, NEW.annee_univ, NEW.semestre);
-                END IF;
-            END IF;  -- no else: no insertion if < charge
+        IF OLD.etablissement_id = ET_ID THEN  --  dans etab origine 
+
+            SELECT SUM("Nbr_heures") INTO H_Etab_origine FROM interventions WHERE enseignant_id = OLD.enseignant_id
+                AND etablissement_id = ET_ID AND annee_univ = OLD.annee_univ
+                AND visa_etab=true AND visa_uae=true  GROUP BY enseignant_id;
+                
+            if H_Etab_origine IS NULL then
+            H_Etab_origine := 0;
+            END if;
+
+            -- IF H_Etab_origine < AUXCS THEN  
+                 -- IF H_Etab_origine + NEW."Nbr_heures" <= AUXCS then 
+                    -- no pay : so do nothing in table paiements 
+
+            IF H_Etab_origine < AUXCS AND H_Etab_origine + OLD."Nbr_heures" > AUXCS  then -- this only happens once in each semester 
+                call  pay(OLD.enseignant_id, OLD.etablissement_id, H_Etab_origine + OLD."Nbr_heures" - AUXCS, OLD.annee_univ, OLD.semestre);
+            END IF ;
+
+            IF  H_Etab_origine >= AUXCS then -- vacation dans son etab origine 
+                  call  pay(OLD.enseignant_id, OLD.etablissement_id, OLD."Nbr_heures", OLD.annee_univ, OLD.semestre);
+            END IF; 
+
         ELSE
-           call  pay2(NEW.enseignant_id, NEW.etablissement_id, NEW."Nbr_heures", NEW.annee_univ, NEW.semestre);
+           call  pay(OLD.enseignant_id, OLD.etablissement_id, OLD."Nbr_heures", OLD.annee_univ, OLD.semestre);
         END IF;
     END IF;
 
@@ -281,4 +198,19 @@ END;
 $BODY$;
 
 
-----------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TRIGGER check_pay
+  BEFORE UPDATE 
+   ON interventions 
+   FOR EACH ROW
+       EXECUTE PROCEDURE check_pay();
+
+
+
+  ----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+ 
