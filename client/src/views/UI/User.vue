@@ -73,7 +73,6 @@
           <th v-if="IsAdmin">Action</th>
         </tr>
       </thead>
-      <!-- body -->
       <tbody>
         <tr v-for="intervention in Interventions" :key="intervention.id">
           <td><input type="checkbox" /></td>
@@ -102,7 +101,7 @@
     <button class="btn btn-active">2</button>
     <button class="btn">3</button>
     <button class="btn">4</button>
-  </div>
+  </div> -->
 
   </div>
   <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 ">
@@ -120,6 +119,8 @@ import AddIntervention from '../../components/AddIntervention.vue';
 import BarChart from '../../components/chart.vue'
 import store from "../../store.js";
 import axios from "axios";
+import TableInterventionsUserVue from '../TablesEtab/TableInterventionsUser.vue';
+
 
 export default {
   name: 'User',
@@ -138,6 +139,7 @@ export default {
     // PFintervention,
     BarChart,
     AddIntervention,
+    TableInterventionsUserVue,
   },
   methods: {
     showInterventions(){
@@ -187,6 +189,7 @@ export default {
     this.getInterventions();
 
   },
+
 }
 </script>
 

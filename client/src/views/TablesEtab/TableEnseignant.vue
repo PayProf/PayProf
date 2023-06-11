@@ -58,12 +58,23 @@
 import axios from 'axios';
 export default {
     name: 'TableEnseignants',
+    components: {
+        PopupForm,
+    },
     data() {
     return {
         Enseignants: []
     }
   },
-
+        showPopup() {
+            this.showPopupForm = true;
+        },
+    },
+    computed: {
+        ...mapState([
+            'enseignants',
+        ])
+    },
   mounted() {
     this.getEnseignants();
   },

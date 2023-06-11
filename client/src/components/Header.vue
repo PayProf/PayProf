@@ -51,7 +51,7 @@
       </div>
     </div>
   </label>
-  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-primary text-primary-content">
+  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-primary text-primary-content">
   <div class="card-body">
     <h2 class="card-title">M/Mme : {{ user.nom }} {{ user.prenom }}</h2>
     <p>Email : {{ user.email }}</p>

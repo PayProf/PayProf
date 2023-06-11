@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BulkStorerequest;
 use App\Http\Requests\StoreEtablissementRequest;
 use App\Http\Requests\UpdateEtablissementRequest;
 use App\Http\Resources\EtablissementResource;
@@ -64,7 +63,7 @@ class EtablissementController extends Controller
             // Check if the 'with' value is one of the allowed relationships.
             if (in_array($value, $array)) {
                 // Load the specified relationship for the Etablissement
-                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value));
+                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value)->latest()->paginate(10));
             } else {
                  // Return an error response if the specified relationship is not found.
                 return $this->error('', 'the fild that you enter is not found', 400);
@@ -88,7 +87,12 @@ class EtablissementController extends Controller
         // Update the Etablissement resource with the request data.
         $etablissment->update($request->all()); 
        // Retrieve the updated Etablissement resource.
-        $data = new EtablissementResource(Etablissement::find($id)); 
+        $data = new EtablissementResource(Etablissement::find($id));
+        if($data){
+            return $this->succes($data, 'DISPLAY');
+        }else{
+            return $this->error("", 'NO DATA FOUND',402);
+        }
     }
 
     /**
@@ -104,7 +108,12 @@ class EtablissementController extends Controller
          //This method deletes a specific Etablissement resource by ID.
         $etablissement->delete();
          //returns a JSON response indicating success .
-        return $this->succes('', 'DELETED DATA');
+         $data= new EtablissementResource(Etablissement::find($id));
+        if($data){
+        return $this->error('', 'error ',500);
+        }else{
+        return $this->succes('', 'SUCCESSFULLY DELETED');
+        }
     }
     public function Show_Myetablissement($user_id, $role)
     {
