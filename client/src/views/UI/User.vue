@@ -45,12 +45,12 @@
   </div>
   <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
   <div class="card-body">
-    <h1 class="text-2xl font-bold">Profile enseignat : Mouad Hayaoui</h1>
-          <p class="py-2"><strong>PPR :</strong> 123456</p>
-          <p class="py-2"><strong>Nom:</strong> Hayaoui</p>
-          <p class="py-2"><strong>Prenom :</strong> Mouad</p>
-          <p class="py-2"><strong>Email :</strong> johndoe@example.com</p>
-          <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p><h2 class="card-title">New movie is released!</h2>
+    <h1 class="text-2xl font-bold">Bienvenue à Payprof {{this.Profile.nom}} {{this.Profile.prenom}} !</h1>
+          <p class="py-2"><strong>PPR :</strong> {{this.Profile.PPR}}</p>
+          <p class="py-2"><strong>Nom:</strong> {{this.Profile.nom}}</p>
+          <p class="py-2"><strong>Prenom :</strong> {{this.Profile.prenom}}</p>
+          <p class="py-2"><strong>Email :</strong> {{this.Profile.Email}}</p>
+          <p class="py-2"><strong>Etablissment :</strong>{{this.Profile.NomEtab}}</p>
     <p>Click the button to watch on Jetflix app.</p>
     <div class="card-actions justify-end">
       <button class="btn btn-primary">Change Password</button>
@@ -162,10 +162,7 @@ export default {
           headers: { Authorization: `Bearer ${token}` }
         };
         const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyIntervention',config)
-        console.log(response.data)
-        this.Interventions=response.data.data.interventions;
-        console.log(response.data.data.interventions);
-        console.log(this.Interventions)
+        this.Interventions=response.data.data[0].interventions;
       }
       catch (error) {
         console.log(error)
@@ -177,8 +174,11 @@ export default {
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
+        console.log(token)
         const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/ShowMyProfil',config);
-        console.log(response.data)
+        console.log(response)
+        this.Profile=response.data.data;
+
       }
       catch(error){
         console.log(error)

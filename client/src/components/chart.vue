@@ -41,9 +41,13 @@
   
   onMounted(async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention'); // Replace 'your-api-endpoint' with the actual API URL
+      const token = store.state.user.token;
+      const config1 = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyIntervention',config1); // Replace 'your-api-endpoint' with the actual API URL
 
-      const interventions = response.data.data.interventions;
+      const interventions = response.data.data[0].interventions;
 
       const data = interventions.map(item => ({
         NbrHeures: item.NbrHeures,
