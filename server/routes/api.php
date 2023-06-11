@@ -86,11 +86,13 @@ route::PATCH('Directeur/{Directeur}/UpdateMyEmail',[DirecteurController::class,'
 
 //=======================================================================================================
 
-route::apiResource('admins',AdministrateurController::class);
-
-route::apiResource('paiements',PaiementsController::class);
+//============================================ ETABLISSEMENT API ============================================
 
 route::apiResource('etablissements',EtablissementController::class);
+
+route::get('etablissements/{user_id}/{role}/myetablissement',[EtablissementController::class,'Show_Myetablissement']);
+
+//=======================================================================================================
 
 route::get('paiements/{id}/enseignant',[PaiementsController::class,'Show_paiements_enseignant']);
 
@@ -98,11 +100,15 @@ route::get('admins/{user_id}/myprofile',[AdministrateurController::class,'Show_M
 
 route::put('admins/{user_id}/updateemail',[AdministrateurController::class,'Update_email']);
 
-route::get('etablissements/{user_id}/{role}/myetablissement',[EtablissementController::class,'Show_Myetablissement']);
+
 
 // route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 Route::get('admins/{user_id}/showenseignants',[AdministrateurController::class,'All_Enseignants']);
+
+route::apiResource('admins',AdministrateurController::class);
+
+route::apiResource('paiements',PaiementsController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -64,7 +64,7 @@ class AdministrateurController extends Controller
         $admin->email_perso=$request->input('email_perso');
         $admin->user_id=$id_user;
         $admin->save();
-        $data=new AdministrateurResource(Administrateur::find($request->id));
+        $data=new AdministrateurResource(Administrateur::find($admin->id));
     
    
         // Check if the creation was successful and return the appropriate response
