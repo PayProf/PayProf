@@ -10,6 +10,7 @@ use App\Models\Paiements;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Gate;
 
 class PaiementsController extends Controller
 {
@@ -22,6 +23,7 @@ class PaiementsController extends Controller
      */
     public function index()
     {
+        if (Gate::allows('check_role', [3,0])) {   
         // Retrieve a paginated list of Paiements objects
         $paiement = Paiements::latest()->paginate(10);
 
@@ -30,6 +32,8 @@ class PaiementsController extends Controller
 
         // Return a success response with the transformed data
         return $this->succes($data, 'DISPLAY');
+        }
+        return $this->error('','ACCES INTERDIT ',403);
     }
 
     /**
@@ -57,11 +61,16 @@ class PaiementsController extends Controller
      */
     public function show($id)
     {
+        if (Gate::allows('check_role', [3,0])) {
         // Retrieve the specific Paiements resource by ID
         $data = new PaiementResource(Paiements::findOrFail($id));
 
         // Return a success response with the transformed data
         return $this->succes($data, 'DISPLAY');
+    }
+
+        return $this->error('','ACCES INTERDIT ',403);
+
     }
 
     /**

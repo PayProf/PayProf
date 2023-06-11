@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Events\storeuser;
+use App\Events\store_user;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAdministrateurRequest;
@@ -14,16 +16,13 @@ use App\Models\Enseignant;
 use App\Models\Etablissement;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 class AdministrateurController extends Controller
 {
     use HttpResponses;
-    protected $destinationController;
-    public function __construct(AuthController $destinationController)
-      {
-          $this->destinationController = $destinationController;
-      }
+    
 
     /**
      * Display a listing of the resource.
@@ -31,17 +30,23 @@ class AdministrateurController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        // Retrieve a paginated list of Administrateur objects
+    {  
+        if (Gate::allows('check_role', [0])) { 
+             // Retrieve a paginated list of Administrateur objects
         $admin = Administrateur::latest()->paginate(10);
 
         // Transform the Administrateur objects into JSON resources
         $data = AdministrateurResource::collection($admin);
 
         // Return a success response with the transformed data
+        
         return $this->succes($data, 'DISPLAY');
-    }
+        }
 
+
+         return $this->error('','ACCES INTERDIT ',403);
+    
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -50,29 +55,37 @@ class AdministrateurController extends Controller
      */
     public function store(StoreAdministrateurRequest $request)
     {
-        $email=$request->email_perso;
-                  $role=2;
-                  $nom=$request->nom;
-                  $prenom=$request->prenom;
-                  $id_user=   $this->destinationController->register($email,$role,$nom,$prenom);
-        // Create a new Administrateur object based on the request data
+        
+        //if (Gate::allows('check_role', [0])) { 
+           // Create a new Administrateur object based on the request data
         $admin=new Administrateur();
         $admin->PPR=$request->input('PPR');
         $admin->nom=$request->input('nom');
         $admin->prenom=$request->input('prenom');
         $admin->etablissement_id=$request->input('etablissement_id');
         $admin->email_perso=$request->input('email_perso');
-        $admin->user_id=$id_user;
-        $admin->save();
+
+         $id=event (new storeuser($request->input('email_perso'),1,$request->input('nom'),$request->input('prenom')));
+        
+         $admin->user_id = $id[0];
+         $admin->save();
+
         $data=new AdministrateurResource(Administrateur::find($admin->id));
     
    
         // Check if the creation was successful and return the appropriate response
         if ($data) {
-            return $this->succes("", "SUCCESSFULLY ADDED");
+             return $this->succes("", "SUCCESSFULLYRRR ADDED");
+             
+             
         } else {
             return $this->error("", "UNSUCCESSFULLY ADDED", 500);
         }
+       // }
+        //return $this->error('','ACCES INTERDIT ',403);
+
+        
+        
     }
 
     /**
@@ -83,11 +96,17 @@ class AdministrateurController extends Controller
      */
     public function show($id)
     {
-        // Retrieve the specific Administrateur resource by ID
+        if (Gate::allows('check_role', [0]) || Gate::allows('can_admin',$id)) {
+            // Retrieve the specific Administrateur resource by ID
         $data = new AdministrateurResource(Administrateur::findOrFail($id));
 
         // Return a success response with the transformed data
         return $this->succes($data, 'DISPLAY');
+
+
+        }
+        return $this->error('','ACCES INTERDIT ',403);
+        
     }
 
     /**
@@ -99,7 +118,9 @@ class AdministrateurController extends Controller
      */
     public function update(UpdateAdministrateurRequest $request, $id)
     {
-        // Find the existing Administrateur resource by ID
+        //only admiuae
+        if (Gate::allows('check_role', [0]) ) {
+            // Find the existing Administrateur resource by ID
         $admin = Administrateur::findOrFail($id);
 
         // Update the Administrateur resource with the request data
@@ -112,6 +133,10 @@ class AdministrateurController extends Controller
         }
 
         return $this->error('', 'UNSUCCESSFULLY UPDATED', 500);
+
+        }
+        return $this->error('','ACCES INTERDIT ',403);
+        
     }
 
     /**
@@ -122,7 +147,8 @@ class AdministrateurController extends Controller
      */
     public function destroy($id)
     {
-        // Find the existing Administrateur resource by ID
+        if (Gate::allows('check_role', [0])) {
+             // Find the existing Administrateur resource by ID
         $grade = Administrateur::findOrFail($id);
 
         // Delete the Administrateur resource
@@ -130,11 +156,16 @@ class AdministrateurController extends Controller
 
         // Return a success response
         return $this->succes('', 'SUCCESSFULLY DELETED');
+        }
+        return $this->error('','ACCES INTERDIT ',403);
+       
     }
 
     public function Show_Myprofile($user_id)
-    {
-        // Retrieve the Administrateur resource based on the user_id
+    { 
+        
+        if (Gate::allows('check_role', [0]) || Gate::allows('admin_modify',$user_id)) {
+            // Retrieve the Administrateur resource based on the user_id
         $admin = Administrateur::where('user_id', $user_id)->first();
 
         // Check if the Administrateur resource exists and return the appropriate response
@@ -144,11 +175,16 @@ class AdministrateurController extends Controller
         } else {
             return $this->error("", "unavailable id", 500);
         }
+        }
+        return $this->error('','ACCES INTERDIT ',403);
+        
     }
 
     public function Update_email(UpdateEmailRequest $request, $user_id)
     {
-        // Retrieve the Administrateur resource based on the user_id
+        //seulement 
+        if (Gate::allows('check_role', [0]) || Gate::allows('admin_modify',$user_id)) {
+             // Retrieve the Administrateur resource based on the user_id
         $admin = Administrateur::where('user_id', $user_id)->first();
 
         // Update the email_perso attribute with the provided email_perso value
@@ -157,6 +193,9 @@ class AdministrateurController extends Controller
 
         // Return a success response
         return $this->succes('', 'SUCCESSLY CHANGED');
+        }
+        return $this->error('','ACCES INTERDIT ',403);
+       
     }
     public function All_Enseignants($user_id){
         $user=Administrateur::where('user_id', $user_id)->first();

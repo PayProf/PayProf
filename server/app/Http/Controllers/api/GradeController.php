@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateGradeRequest;
 use App\Http\Resources\GradeResource;
 use App\Models\Grade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class GradeController extends Controller
 {
@@ -22,9 +23,13 @@ class GradeController extends Controller
         */
 
        public function index()
-       {
-              return GradeResource::collection(Grade::latest()->paginate(10));
-       }
+          {
+              if (Gate::allows('check_role', [0,3,1])) { 
+
+                 return GradeResource::collection(Grade::latest()->paginate(10));
+              }
+              return $this->error('','ACCES INTERDIT ',403);
+          }
 
 
        //======================================================================= The access is retricted for :AdminUAE| AdminEtab =============================================================================================   
@@ -36,9 +41,18 @@ class GradeController extends Controller
         * @return / a success message which mean the grade was successfully added
         */
        public function store(StoreGradeRequest $request)
-       {
+          {
+              
+              if (Gate::allows('check_role', [0,1])) { 
+                 $grade= new GradeResource(Grade::create($request->all()));
+                 if($grade)
+                 {
+                 return response()->json(["message"=>"added successfuly"]);
+                 }
+              }
+              return $this->error('','ACCES INTERDIT ',403);
+          }
 
-              $grade = new GradeResource(Grade::create($request->all()));
 
               if ($grade) {
                      return response()->json(["message" => "added successfuly"]);
@@ -55,25 +69,34 @@ class GradeController extends Controller
         * @return /the information of the specified Grade.
         */
        public function show($id)
-       {
-              return new GradeResource(Grade::findOrFail($id));
-       }
+          {   
+              if (Gate::allows('check_role', [0,1])) { 
+            
+                 return new GradeResource(Grade::findOrFail($id));
+              }
+              return $this->error('','ACCES INTERDIT ',403);
+        
+          }
 
 
-       //========================================================================================= The access is retricted for : AdminUAE | AdminEtab  ============================================================        
+//========================================================================================= The access is retricted for : AdminUAE | AdminEtab  ============================================================        
 
-       /**
-        * Update this method serve to update the information of a specified Grade.
-        *
-        * @param  UpdateGradeRequest this class contains the validation rules.
-        * @param  int  $id IDGRADE !!!!!!
-        * @return // an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
-        */
+    /**
+     * Update this method serve to update the information of a specified Grade.
+     *
+     * @param  UpdateGradeRequest this class contains the validation rules.
+     * @param  int  $id IDGRADE !!!!!!
+     * @return // an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
+     */
        public function update(UpdateGradeRequest $request, $id)
-       {
-              Grade::findOrFail($id)->update($request->all());
-              return response()->json(["message" => " Updated successfully"]);
-       }
+          {
+              if (Gate::allows('check_role', [0,1])) { 
+                 Grade::findOrFail($id)->update($request->all());
+                 return response()->json(["message"=>" Updated successfully"]);
+              }
+              return $this->error('','ACCES INTERDIT ',403);
+          }
+
 
 
        //================================================================== The access is retricted for : AdminUAE| AdminEtab ====================================================================
@@ -85,13 +108,18 @@ class GradeController extends Controller
         * @return /// an error message in case of invalid Id // success message that mean the informations of the specified Grade are updated successfully
         */
        public function destroy($id)
-       {
-              $grade = Grade::FindOrFail($id);
-              if ($grade) {
-                     $grade->delete();
-                     return response()->json(["message" => "deleted successfuly"]);
+          {
+              if (Gate::allows('check_role', [0,1])) { 
+                 $grade=Grade::FindOrFail($id);
+                 if($grade)
+                 {
+                 $grade->delete();
+                 return response()->json(["message"=>"deleted successfuly"]);
+                 }
               }
-       }
+              return $this->error('','ACCES INTERDIT ',403);
+          }
+
 }
 
 

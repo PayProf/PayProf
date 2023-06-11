@@ -7,11 +7,13 @@ use App\Http\Requests\StoreEtablissementRequest;
 use App\Http\Requests\UpdateEtablissementRequest;
 use App\Http\Resources\EtablissementResource;
 use App\Models\Administrateur;
+use App\Models\Directeur;
 use App\Models\Enseignant;
 use App\Models\Directeur;
 use App\Models\Etablissement;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
+use Illuminate\Support\Facades\Gate;
 
 
 
@@ -25,12 +27,18 @@ class EtablissementController extends Controller
      */
     public function index()
     {
-        //// Retrieve a paginated list of Etablissement objects.
+        if (Gate::allows('check_role', [0,3])) { 
+
+            //// Retrieve a paginated list of Etablissement objects.
         $etablissements = Etablissement::latest()->paginate(10);  
-         // used to transform the collection of Etablissement objects into a collection of JSON resources.
-        $data = EtablissementResource::collection($etablissements);
-        // Return a success response with the transformed data.
-        return $this->succes($data, 'DISPLAY');
+        // used to transform the collection of Etablissement objects into a collection of JSON resources.
+       $data = EtablissementResource::collection($etablissements);
+       // Return a success response with the transformed data.
+       return $this->succes($data, 'DISPLAY');
+        }
+
+        return $this->error('','ACCES INTERDIT ',403);
+        
     }
 
     /**
@@ -41,10 +49,14 @@ class EtablissementController extends Controller
      */
     public function store(StoreEtablissementRequest $request)
     {
+        if (Gate::allows('check_role', [0])) { 
+
         // Create a new Etablissement object based on the request data.
         $data = new EtablissementResource(Etablissement::create($request->all()));  
         // Return a success response with the transformed data.
-        return $this->succes($data, 'SUCCESSFLY INSERT');
+        return $this->succes($data, 'SUCCESSFLY INSERT');}
+
+        return $this->error('','ACCES INTERDIT ',403);
     }
 
     /**
@@ -55,6 +67,8 @@ class EtablissementController extends Controller
      */
     public function show(Request $request, $id)
     {
+        if (Gate::allows('check_role', [0,3]) || Gate::allows('admin_ens_etab',$id)|| Gate::allows('admin_etab',$id)) {
+
         // Retrieve the specific Etablissement resource by ID.
         $data = new EtablissementResource(Etablissement::findOrFail($id)); //returns a specific Etablissement resource by ID 
        // Check if the 'with' query parameter is present in the request.
@@ -73,6 +87,9 @@ class EtablissementController extends Controller
         // Return a success response with the transformed data.
         return $this->succes($data, 'DISPLAY');
     }
+    return $this->error('','ACCES INTERDIT ',403);
+
+    }
 
     /**
      * Update the specified resource in storage.
@@ -83,6 +100,7 @@ class EtablissementController extends Controller
      */
     public function update(UpdateEtablissementRequest $request, $id)
     {
+        if (Gate::allows('check_role', [0]) || Gate::allows('admin_etab',$id)) {
          // Find the existing Etablissement resource by ID.
         $etablissment = Etablissement::findOrFail($id);
         // Update the Etablissement resource with the request data.
@@ -104,11 +122,14 @@ class EtablissementController extends Controller
      */
     public function destroy($id)
     {
+        if (Gate::allows('check_role', [0])) {
+
         // Find the existing Etablissement resource by ID.
         $etablissement = Etablissement::findOrFail($id);
          //This method deletes a specific Etablissement resource by ID.
         $etablissement->delete();
          //returns a JSON response indicating success .
+
          $data= new EtablissementResource(Etablissement::find($id));
         if($data){
         return $this->error('', 'error ',500);
@@ -116,27 +137,35 @@ class EtablissementController extends Controller
         return $this->succes('', 'SUCCESSFULLY DELETED');
         }
     }
-    public function Show_Myetablissement($user_id, $role)
+    public function Show_Myetablissement($user_id)
     {
+       
         // Check the role value to determine the user type and
         // retrieve the associated Etablissement.
-        if ($role == 4) {
-            $data = Enseignant::where('user_id', $user_id)->first();
-            $enseignant = ['id_etablissement' => $data->etablissement_id];
-            $etablissement = Etablissement::where('id', $enseignant['id_etablissement'])->first();
-            return $this->succes($etablissement, "MY ETABLISSEMENT");
+        if ( auth()->user()->role==4 &&  auth()->user()->id==$user_id){
+            
+                $data = Enseignant::where('user_id', $user_id)->first();
+                $enseignant = ['id_etablissement' => $data->etablissement_id];
+                $etablissement = Etablissement::where('id', $enseignant['id_etablissement'])->first();
+                return $this->succes($etablissement, "MY ETABLISSEMENT");
+            
         }
-        if ($role == 1) {
+        if ( auth()->user()->role==1 &&  auth()->user()->id==$user_id){
+        
             $data = Administrateur::where('user_id', $user_id)->first();
             $admin = ['id_etablissement' => $data->etablissement_id];
             $etablissement = Etablissement::where('id', $admin['id_etablissement'])->first();
             return $this->succes($etablissement, "MY ETABLISSEMENT");
-        }
-        if ($role == 2) {
+        } 
+        if ( auth()->user()->role==2 &&  auth()->user()->id==$user_id){
+        
             $data = Directeur::where('user_id', $user_id)->first();
             $directeur = ['id_etablissement' => $data->etablissement_id];
             $etablissement = Etablissement::where('id', $directeur['id_etablissement'])->first();
             return $this->succes($etablissement, "MY ETABLISSEMENT");
-        }
-    }
+        }}
+   
+    
+    
+
 }
