@@ -118,7 +118,7 @@ class PaiementsController extends Controller
         // return $this->succes('', 'DELETED DATA');
     }
 
-    public function Show_paiements_enseignant($id_enseignant)
+    public function ShowPaiementsEnseignant($id_enseignant)
     {
         // Retrieve payments (Paiements) for a specific enseignant
         // based on the enseignant_id. The related enseignant

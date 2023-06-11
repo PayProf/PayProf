@@ -30,7 +30,7 @@ class DirecteurController extends Controller
     public function index()
 
     {  
-        if (Gate::allows('check_role', [0,3])) { 
+       if (Gate::allows('check_role', [0,3])) { 
             return DirecteurResource::collection(Directeur::with('etablissement')->latest()->paginate(5));
         }
         return $this->error('','ACCES INTERDIT ',403);
@@ -222,13 +222,13 @@ class DirecteurController extends Controller
              return $this->succes("","image uploaded successfully");    
              }
               }
-              return $this->error('','ACCES INTERDIT ',403);
+            //   return $this->error('','ACCES INTERDIT ',403);
             
 
              
  
                    
-         }           
+        //  }           
 
 
 //================================================ SMEH LINA A KHOYA REDA SBER M3ANA ==========================================
@@ -237,4 +237,5 @@ class DirecteurController extends Controller
 
 
 // ======================================================= YOUSSEF HARRAK ===========================================
-}
+        
+            }
