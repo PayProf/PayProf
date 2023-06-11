@@ -63,17 +63,22 @@ export default {
     name: 'TableEnseignants',
     components:{
       AddEnseignantVue,
+
     },
     data() {
     return {
         Enseignants: []
     }
   },
-
-  mounted() {
-    this.getEnseignants();
-  },
+  computed: {
+        ...mapState([
+            'enseignants',
+        ])
+    },
   methods: {
+    // showPopup() {
+    //   this.showPopupForm = true;
+    // },
     async getEnseignants() {
       try {
         await axios.get('http://127.0.0.1:8000/api/Enseignant').then(result=>{
@@ -95,6 +100,9 @@ export default {
       })
     }
 
+  },
+  mounted() {
+    this.getEnseignants();
   },
 };
 

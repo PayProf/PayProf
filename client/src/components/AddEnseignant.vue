@@ -71,6 +71,7 @@ export default {
   data() {
     return {
       showPopup: false,
+
       errorsList: "",
       model: {
         Enseignant: {
@@ -86,6 +87,11 @@ export default {
   },
 
   methods: {
+    showPopup() {
+      this.isPopupVisible = !this.isPopupVisible;
+    },
+    
+
     saveEnseignant() {
       var myThis = this;
       axios.post('http://127.0.0.1/api/Enseignant', this.model.Enseignant)
@@ -120,6 +126,7 @@ export default {
       this.$router.push('/TableEnseignants');
     }
   }
+
 };
 </script>
 

@@ -8,6 +8,7 @@
   import Chart from 'chart.js/auto';
   import { onMounted } from 'vue';
   import axios from 'axios';
+  import store from '../store.js';
   
   const config = {
     type: 'line',
@@ -40,15 +41,18 @@
   
   onMounted(async () => {
     try {
-      const response = await axios.get('http://localhost:5000/Interventions'); // Replace 'your-api-endpoint' with the actual API URL
-  
-      const data = response.data.map(item => ({
-        nombre_heures: item.Nombre_heures,
-        date_debut: item.Date_Debut
+      const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention'); // Replace 'your-api-endpoint' with the actual API URL
+
+      const interventions = response.data.data.interventions;
+
+      const data = interventions.map(item => ({
+        NbrHeures: item.NbrHeures,
+        DateDebut: item.DateDebut
       }));
-  
-      config.data.labels = data.map(item => item.date_debut);
-      config.data.datasets[0].data = data.map(item => item.nombre_heures);
+
+      config.data.labels = data.map(item => item.DateDebut);
+      config.data.datasets[0].data = data.map(item => item.NbrHeures);
+      console.log(config.data.labels)
   
       const myChart = new Chart(document.getElementById('myChart'), config);
     } catch (error) {

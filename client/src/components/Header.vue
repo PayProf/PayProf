@@ -33,7 +33,7 @@
     </div>
 
 
-    <div class="navbar-end">
+
     <div class="navbar-end" v-if="IsAuth">
       <button class="btn btn-ghost btn-circle" @click="Logout">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -43,8 +43,6 @@
         </svg>
       </button>
 
-    </div>
-
     <div class="dropdown dropdown-end" v-if="IsAuth">
   <label @click="showdrop" tabindex="0" class="btn btn-ghost btn-circle avatar">
     <div class="avatar online placeholder">
@@ -53,7 +51,7 @@
       </div>
     </div>
   </label>
-  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-primary text-primary-content">
+  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-primary text-primary-content">
   <div class="card-body">
     <h2 class="card-title">M/Mme : {{ user.nom }} {{ user.prenom }}</h2>
     <p>Email : {{ user.email }}</p>

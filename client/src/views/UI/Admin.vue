@@ -10,6 +10,7 @@
                         <div class="card-actions justify-end">
                             
                             <button class="btn btn-primary" @click="showProfile">Consulter</button>
+
                         </div>
                     </div>
                 </div>
@@ -61,6 +62,7 @@
 
   </div>
 </template>
+
   
 
 <script>
@@ -68,6 +70,7 @@ import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
 import TableDirecteurs from '../TablesUAE/TableDirecteurs.vue';
 import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
+import TableEnseignats from '../../views/TablesEtab/TableEnseignant.vue'
 import {mapActions,mapState} from 'vuex';
 import Router from "../../router/index.js";
 export default {
@@ -75,6 +78,7 @@ export default {
   components: {
     TableEnseignant,
     PopupForm,
+
     TableDirecteurs,
     ValidateIntervention,
 
@@ -85,14 +89,21 @@ export default {
       OpenEns:false,
       OpenProfile:false,
       OpenInt:false,
+
     };
   },
   methods: {
-    ...mapActions([
-      'getEnseignants'
-  ]),
-    showPopup() {
-      this.showPopupForm = true;
+  //   ...mapActions([
+  //     'getEnseignants'
+  // ]),
+  showStats() {
+      this.OpenStats = !this.OpenStats;
+    },
+    showEnseignatsA() {
+      this.OpenEnseignants = !this.OpenEnseignants;
+    },
+    showInterventionsA() {
+      this.OpenInterventions = !this.OpenInterventions;
     },
     showEns(){
       this.OpenEns = !this.OpenEns;
@@ -109,10 +120,11 @@ export default {
         'enseignants',
         'user'
     ])
+
   },
-  async created(){
-    await this.$store.dispatch('getEnseignants');
-  }
+  // async created(){
+  //   await this.$store.dispatch('getEnseignants');
+  // }
 };
 
 

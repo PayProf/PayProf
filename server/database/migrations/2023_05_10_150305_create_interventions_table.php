@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('enseignant_id')->constrained()->onDelete('cascade');
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
-            $table->foreignId('paiement_id')->nullable()->constrained();
+          
             $table->string('intitule_intervention');
             $table->string('annee_univ')->default('2022/2023');
             $table->string('semestre')->default('S2');
