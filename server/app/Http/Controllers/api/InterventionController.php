@@ -47,7 +47,7 @@ class InterventionController extends Controller
 
                  $intervention=new Intervention();
                  $enseignant=$intervention->IdEnseignant($request['PPR']);
-                 $etablissement=1;     //auth()->user()->administrateur->etablissement_id;
+                 $etablissement=auth()->user()->administrateur->etablissement_id;
                  $intervention-> intitule_intervention= $request['IntituleIntervention'];
                  $intervention-> annee_univ= $request['AnneeUniv'];
                  $intervention-> semestre= $request['Semestre'];
@@ -92,11 +92,10 @@ class InterventionController extends Controller
 
        public function update(UpdateInterventionRequest $request, $id)
 
-
-          {
-                 $intervention=Intervention::FindOrFail($id);
-                 $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant
-                 // $etablissement= 1; //auth()->user()->administrateur->etablissement_id;
+  
+          {                
+                 $intervention=Intervention::FindOrFail($id);   
+                 $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant 
                  $intervention->intitule_intervention=$request['IntituleIntervention'];
                  $intervention->annee_univ = $request['AnneeUniv'] ;
                  $intervention->semestre = $request['Semestre'];
@@ -129,6 +128,9 @@ class InterventionController extends Controller
                  $intervention->delete();
                  return $this->succes("","intervention deleted successfully");
                  }
+                 else{
+                     return$this->error("","intervention introuvable",404);
+                 }
 
           }
 
@@ -148,8 +150,17 @@ class InterventionController extends Controller
 
        public function ShowMore($id)
 
-          {
-                 return new InterventionShowMoreResource(Intervention::with('enseignant','etablissement')->find($id));
+          {    
+              if(Intervention::where('id',$id)->exists())
+
+                {
+                     return new InterventionShowMoreResource(Intervention::with('enseignant','etablissement')->find($id));
+                }
+
+                else
+                {
+                     return $this->error("","intervention introuvable",404);
+                }
           }
 
 
@@ -170,6 +181,7 @@ class InterventionController extends Controller
                  $intervention =Intervention::find($id);
                  $intervention->visa_uae=$request['VisaUae'];
                  $intervention->save();
+                 return $this->succes("","updated successfully");
           }
 
 
@@ -188,6 +200,7 @@ class InterventionController extends Controller
                  $intervention =Intervention::find($id);
                  $intervention->visa_etab=$request['VisaEtab'];
                  $intervention->save();
+                 return $this->succes("","updated successfully");
           }
 
 
@@ -196,32 +209,32 @@ class InterventionController extends Controller
 //=========================================  The access is retricted for : DirecteurEtab|AdminEtab   ===================================================================
 
      /**
-     * ShowMyEtabInterventions  this method serve to display the interventions of the AdminEatblissement Or DirecteurEtablissement.
-
-     * the comments should be respected and approved by the security developper
-
+     * ShowMyEtabInterventions  this method serve to display the interventions of the Admin Eatblissement Or Directeur Etablissement.
+     
+     * the comments should be respected and approved by the security developper 
+     
      */
 
 
 
        public function ShowMyEtabInterventions()
+        
+          {  
+           
+                 //should be approved By the security developper 
 
+                   $role=auth()->user()->role;
+                   if($role==1)
+                   {
+                    $etab_id=auth()->user()->administrateur->etablissement_id;
+                   }
+                   elseif($role==2)
+                   {
+                    $etab_id=auth()->user()->directeur->etablissement_id;
+                        
+                   }
+                
 
-          {
-
-                /* should be approved By the security developper */
-
-                //    $role=auth()->user()->role;
-                //    if($role==1)
-                //    {
-                //     $etab_id=auth()->user()->administrateur->etablissement_id;
-                //    }
-                //    elseif($role==2)
-                //    {
-                //     $etab_id=auth()->user()->directeur->etablissement_id;
-
-                //    }
-                 $etab_id=1;
                  return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(10));
 
 
@@ -239,8 +252,16 @@ class InterventionController extends Controller
 
        public function EnseignantInterventions($id)
           {
+                 if(Intervention::where('enseignant_id',$id)->exists())
+                 {
+                     return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
+                 }
 
-                 return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
+                 else
+                {
+                     return $this->error("","intervention introuvable",404);
+                }
+                
 
           }
 
