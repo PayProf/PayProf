@@ -5,11 +5,12 @@
                 <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
                     <figure><img src=""  /></figure>
                     <div class="card-body">
-                        <h2 class="card-title">Table des enseignants</h2>
+                        <h2 class="card-title">Profile</h2>
                         <p>If a dog chews shoes whose shoes does he choose?</p>
                         <div class="card-actions justify-end">
                             
-                            <button class="btn btn-primary" @click="showEnseignatsA">Consulter</button>
+                            <button class="btn btn-primary" @click="showProfile">Consulter</button>
+
                         </div>
                     </div>
                 </div>
@@ -19,10 +20,10 @@
                     <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
                         <figure><img src=""  /></figure>
                         <div class="card-body">
-                            <h2 class="card-title">Statique Des profs</h2>
-                            <p>...</p>
+                            <h2 class="card-title">Table des enseignants</h2>
+                            <p>If a dog chews shoes whose shoes does he choose?</p>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="showStats">Consulter</button>
+                                <button class="btn btn-primary" @click="showEns">Consulter</button>
                             </div>
                         </div>
                     </div>
@@ -34,20 +35,40 @@
                             <h2 class="card-title">tables des interventions</h2>
                             <p>If a dog chews shoes whose shoes does he choose?</p>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="showInterventionsA">Consulter</button>
+                                <button class="btn btn-primary" @click="ShowAllint">Consulter</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-      <TableEnseignats v-if="OpenEnseignants"/>
+        <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
+            <div class="card-body">
+              <h1 class="text-2xl font-bold">Profile enseignat : {{ user.nom }} {{ user.prenom }}</h1>
+                    <p class="py-2"><strong>Nom:</strong> {{user.nom}}</p>
+                    <p class="py-2"><strong>Prenom :</strong> {{user.prenom}}</p>
+                    <p class="py-2"><strong>Email :</strong> johndoe@example.com</p>
+                    <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p>
+                    <h2 class="card-title">New movie is released!</h2>
+              <p>Click the button to watch on Jetflix app.</p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-primary">Change Password</button>
+              </div>
+          </div>
+        </div>
 
-    </div>
-  </template>
+      <TableEnseignant v-if="OpenEns"/>
+      <ValidateIntervention v-if="OpenInt"/>
+
+  </div>
+</template>
+
   
 
 <script>
+import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
+import TableDirecteurs from '../TablesUAE/TableDirecteurs.vue';
+import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
 import TableEnseignats from '../../views/TablesEtab/TableEnseignant.vue'
 import {mapActions,mapState} from 'vuex';
@@ -55,16 +76,20 @@ import Router from "../../router/index.js";
 export default {
   name: 'Admin',
   components: {
+    TableEnseignant,
     PopupForm,
-    TableEnseignats,
+
+    TableDirecteurs,
+    ValidateIntervention,
+
   },
   data() {
     return {
       showPopupForm: false,
-      OpenStats:false,
-      OpenEnseignants:false,
-      OpenInterventions:false,
-      
+      OpenEns:false,
+      OpenProfile:false,
+      OpenInt:false,
+
     };
   },
   methods: {
@@ -80,9 +105,22 @@ export default {
     showInterventionsA() {
       this.OpenInterventions = !this.OpenInterventions;
     },
+    showEns(){
+      this.OpenEns = !this.OpenEns;
+    },
+    showProfile(){
+      this.OpenProfile = !this.OpenProfile;
+    },
+    ShowAllint(){
+      this.OpenInt = !this.OpenInt;
+    }
   },
   computed:{
-   
+    ...mapState([
+        'enseignants',
+        'user'
+    ])
+
   },
   // async created(){
   //   await this.$store.dispatch('getEnseignants');

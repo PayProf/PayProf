@@ -11,6 +11,7 @@ import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
 
 //Admin de l'etablissement
 import Admin from '../views/UI/Admin.vue';
+import ADUser from '../views/UI/ADUSER.vue'
 
 //Directeur de l'etablissement
 import EtabDirector from "../views/UI/EtabDirector.vue";
@@ -79,6 +80,18 @@ const routes = [
         AdminUAEAccess: false,
         UserAccess: false,
         DirectorUAEAccess: true,
+        DirectorAccess:false,
+        }
+      },
+      {
+        path: '/ADuser/:id',
+        name:'ADUser',
+        component: ADUser,
+        meta:{
+        AdminAccess: true,
+        AdminUAEAccess: false,
+        UserAccess: false,
+        DirectorUAEAccess: false,
         DirectorAccess:false,
         }
       },

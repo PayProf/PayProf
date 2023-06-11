@@ -27,41 +27,43 @@
                 <td>{{ Enseignant.Email }}</td>
                 <td>{{ Enseignant.Email }}</td>
                 <td>
-                  <router-link :to="{ path: '/EditEnseignant/'+Enseignant.id }">
+                  <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
               <button class="add-btn px-4" >
               <i class="fas fa-pen" ></i>
-              <span class="tooltip" data-tooltip="inspect"></span>
+              <span class="tooltip" data-tooltip="inspect">modifier</span>
             </button>
             </router-link>
 
             <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" >
               <i class="fas fa-trash" ></i>
-              <span class="tooltip" data-tooltip="inspect"></span>
+              <span class="tooltip" data-tooltip="inspect">supprimer</span>
             </button>
             <!-- This page isn't created yet !!!! -->
-            <router-link :to="{ path: '/Enseignant/'+Enseignant.id }">
+            <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
               <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
-              <span class="tooltip" data-tooltip="inspect"></span>
+              <span class="tooltip" data-tooltip="inspect"> inspecter </span>
             </button>
             </router-link>
                 </td>
             </tr>
         </tbody>
     </table>
-  </div>
+    <AddEnseignantVue/>
+  </div> 
+
     
 
 </template>
 
 <script>
 import axios from 'axios';
-import {mapState} from "vuex";
-
+import AddEnseignantVue from '../../components/AddEnseignant.vue';
 export default {
     name: 'TableEnseignants',
-    components: {
-        // PopupForm,
+    components:{
+      AddEnseignantVue,
+
     },
     data() {
     return {
