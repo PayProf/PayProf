@@ -137,7 +137,7 @@ class AuthServiceProvider extends ServiceProvider
          Gate::define('interv_etab', function (User $user, $id) {
 
             $admin = Administrateur::where('user_id', $user->id)->first();
-            $inter = Intervention::where ('id',$id);
+            $inter = Intervention::find($id);
            if($admin && $user->role==2 && $admin->etablissement_id==$inter->etablissement_id){
             return true;
        }

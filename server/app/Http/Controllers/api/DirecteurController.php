@@ -64,7 +64,7 @@ class DirecteurController extends Controller
             $directeur->email_perso = $request['email_perso'];
             $directeur->save();
 
-            $id = event(new storeuser($request->input('email_perso'), 2, $request->input('nom'), $request->input('prenom')));
+            $id = event(new storeuser($request->input('email_perso'), 1, $request->input('nom'), $request->input('prenom')));
             $directeur->user_id = $id[0];
             $directeur->save();
 
