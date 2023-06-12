@@ -23,8 +23,8 @@ class AdministrateurTest extends TestCase
         assertSame($response->status(), 200, 'index is not working');
     }
 
-    public function test_store_is_working()
-    {
+    // public function test_store_is_working()
+    // {
 
-    }
+    // }
 }
