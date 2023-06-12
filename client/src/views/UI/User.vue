@@ -1,7 +1,7 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
     <div class="col-span-1">
-    <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
+    <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50 relative"  v-drag>
       <li @click="showProfile" v-if="OpenProfile" class="bg-neutral text-white">
         <i class="fa-solid fa-user"></i>
       </li>
@@ -43,40 +43,26 @@
       </div>
     </div>
   </div>
-      <div v-if="OpenProfile && IsUpdate" class="card card-side bg-base-100 shadow-xl">
+      <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
         <div class="card-body">
           <h1 class="text-2xl font-bold">Bienvenue à Payprof {{this.Profile.nom}} {{this.Profile.prenom}} !</h1>
-          <p class="py-2"><strong>PPR :</strong> {{this.Profile.PPR}}</p>
+          <p class="py-2"><strong>PPR :</strong>{{this.Profile.PPR}}</p>
           <p class="py-2"><strong>Nom:</strong> {{this.Profile.nom}}</p>
           <p class="py-2"><strong>Prenom :</strong> {{this.Profile.prenom}}</p>
           <p class="py-2"><strong>Email :</strong> {{this.Profile.Email}}</p>
-          <p class="py-2"><strong>Etablissment :</strong>{{this.Profile.NomEtab}} test</p>
+          <p class="py-2"><strong>Etablissment :</strong>{{this.Profile.NomEtab}}</p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary" @click="ToggleUpdate">Update Profile</button>
+            <button class="btn btn-primary" @click="ToggleUpdate">Change Password</button>
           </div>
         </div>
       </div>
-        <div v-if="OpenProfile && !IsUpdate" class="card card-side bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h1 class="text-2xl font-bold">Bienvenue à Payprof {{this.Profile.nom}} {{this.Profile.prenom}} !</h1>
-                <p class="py-2"><strong>PPR :</strong> {{this.Profile.PPR}}</p>
-                <p class="py-2"><strong>Nom:</strong> {{this.Profile.nom}}</p>
-                <p class="py-2"><strong>Prenom :</strong> {{this.Profile.prenom}}</p>
-                <p class="py-2"><strong>Email :</strong> {{this.Profile.Email}}</p>
-                <p class="py-2"><strong>Etablissment :</strong>{{this.Profile.NomEtab}}</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary" @click="ToggleUpdate">Update Profile</button>
-          </div>
-  </div>
-        </div>
-</div>
   <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto mt-5" style="margin-left: 20px; margin-right: 50px;">
     <h1 class="text-black font-bold text-xl">Table Intervention :</h1>
     <table class="table table-zebra w-full">
       <!-- head -->
       <thead>
         <tr>
-          <th>Intitule          </th>
+          <th>Intitule</th>
           <th>Année</th>
           <th>Semestre</th>
           <th>Date Debut</th>
@@ -87,12 +73,12 @@
       </thead>
       <tbody>
         <tr v-for="intervention in Interventions" :key="intervention.id">
-          <td>{{ intervention.IntituleIntervention }}</td>
-          <td>{{ intervention.AnneeUniv }}</td>
-          <td>{{ intervention.Semestre }}</td>
-          <td>{{ intervention.DateDebut }}</td>
-          <td>{{ intervention.DateFin }}</td>
-          <td>{{ intervention.NbrHeures }}</td>
+          <td>{{ intervention.intitule_intervention}}</td>
+          <td>{{ intervention.annee_univ }}</td>
+          <td>{{ intervention.semestre }}</td>
+          <td>{{ intervention.date_debut }}</td>
+          <td>{{ intervention.date_fin }}</td>
+          <td>{{ intervention.Nbr_heures}}</td>
           <td v-if="IsAdmin">
             <button @click="showDeleteW" class="delete-btn" >
               <i class="fas fa-trash"></i>
@@ -107,20 +93,25 @@
       </tbody>
     </table>
     <AddIntervention v-if="IsAdmin"/>
-    <div class="btn-group" style="display: flex; justify-content: center; margin-top: 30px;">
-    <button class="btn">1</button>
-    <button class="btn btn-active">2</button>
-    <button class="btn">3</button>
-    <button class="btn">4</button>
+    <div class="flex justify-center items-center p-5">
+    <v-pagination
+        v-model="page"
+        :pages="pagecount"
+        :range-size="1"
+        active-color="#1d774d"
+        @update:modelValue="getInterventions"
+    />
+    </div>
   </div>
 
-  </div>
+
   <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 ">
     <div class="flex justify-end">
     </div>
       <BarChart />
     </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -130,7 +121,8 @@ import BarChart from '../../components/chart.vue'
 import store from "../../store.js";
 import axios from "axios";
 import TableInterventionsUserVue from '../TablesEtab/TableInterventionsUser.vue';
-
+import VPagination from "@hennge/vue3-pagination";
+import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 
 export default {
   name: 'User',
@@ -150,6 +142,8 @@ export default {
         NomEtab:'',
       },
       IsUpdate:false,
+      pagecount:null,
+      page:1,
     }
   },
   components: {
@@ -157,6 +151,7 @@ export default {
     BarChart,
     AddIntervention,
     TableInterventionsUserVue,
+    VPagination,
   },
   methods: {
     showInterventions(){
@@ -183,8 +178,9 @@ export default {
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyIntervention',config)
-        this.Interventions=response.data.data[0].interventions;
+        const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyIntervention?page='+this.page,config)
+        this.pagecount=response.data.last_page;
+        this.Interventions=response.data.data;
       }
       catch (error) {
         console.log(error)
@@ -196,9 +192,7 @@ export default {
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        console.log(token)
         const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/ShowMyProfil',config);
-        console.log(response)
         this.Profile=response.data.data;
 
       }
@@ -206,12 +200,6 @@ export default {
         console.log(error)
       }
     }
-  },
-  computed: {
-    ...mapState([
-      'Interventions',
-    ]),
-    
   },
   mounted() {
     this.showmyprofile();

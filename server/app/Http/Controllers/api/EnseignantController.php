@@ -14,6 +14,7 @@ use App\Models\Enseignant;
 use App\Models\Intervention;
 use App\Models\Paiements;
 use App\Traits\HttpResponses;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -172,7 +173,8 @@ class EnseignantController extends Controller
               if(Intervention::where('enseignant_id',$id)->exists())
 
               {
-                     return  EnseignantInterventionResource::collection (Enseignant::where('id',$id)->with('interventions.etablissement')->paginate(10));
+//                     return  EnseignantInterventionResource::collection (Enseignant::where('id',$id)->with('interventions.etablissement')->paginate(3));
+                  return Intervention::where('enseignant_id',$id)->paginate(5);
               }
 
               else
@@ -181,14 +183,27 @@ class EnseignantController extends Controller
               }
           }
            //add Return access denied
-
-
-
-
-
-
-
           }
+
+    public function ShowMyGraphe()
+
+
+    {
+        if ( auth()->user()->role==0 ){
+        $id=auth()->user()->enseignant->id;
+        if(Intervention::where('enseignant_id',$id)->exists())
+
+        {
+            return Intervention::where('enseignant_id',$id)->get();
+        }
+
+        else
+        {
+            return $this->error("","Pas d'interventions pour le moment",404);
+        }
+    }
+        //add Return access denied
+    }
 //======================================================== The access is retricted for:Enseignant ===================================================
 
 
