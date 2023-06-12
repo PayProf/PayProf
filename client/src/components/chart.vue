@@ -41,19 +41,21 @@
   
   onMounted(async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id+'/MyIntervention'); // Replace 'your-api-endpoint' with the actual API URL
-
-      const interventions = response.data.data.interventions;
+      const token = store.state.user.token;
+      const config1 = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyGraphe',config1); // Replace 'your-api-endpoint' with the actual API URL
+      const interventions = response.data;
 
       const data = interventions.map(item => ({
-        NbrHeures: item.NbrHeures,
-        DateDebut: item.DateDebut
+        NbrHeures: item.Nbr_heures,
+        DateDebut: item.date_debut
       }));
 
       config.data.labels = data.map(item => item.DateDebut);
       config.data.datasets[0].data = data.map(item => item.NbrHeures);
-      console.log(config.data.labels)
-  
+
       const myChart = new Chart(document.getElementById('myChart'), config);
     } catch (error) {
       console.error('Error fetching data:', error);

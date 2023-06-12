@@ -96,7 +96,7 @@ class AdministrateurController extends Controller
      */
     public function show($id)
     {
-        if (Gate::allows('check_role', [0]) || Gate::allows('can_admin',$id)) {
+       // if (Gate::allows('check_role', [0]) || Gate::allows('can_admin',$id)) {
             // Retrieve the specific Administrateur resource by ID
         $data = new AdministrateurResource(Administrateur::findOrFail($id));
 
@@ -104,8 +104,8 @@ class AdministrateurController extends Controller
         return $this->succes($data, 'DISPLAY');
 
 
-        }
-        return $this->error('','ACCES INTERDIT ',403);
+       // }
+       // return $this->error('','ACCES INTERDIT ',403);
         
     }
 

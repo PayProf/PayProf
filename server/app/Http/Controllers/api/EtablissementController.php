@@ -77,7 +77,7 @@ class EtablissementController extends Controller
             // Check if the 'with' value is one of the allowed relationships.
             if (in_array($value, $array)) {
                 // Load the specified relationship for the Etablissement
-                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value)->latest()->paginate(10));
+                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value));
             } else {
                  // Return an error response if the specified relationship is not found.
                 return $this->error('', 'the fild that you enter is not found', 400);
@@ -85,7 +85,7 @@ class EtablissementController extends Controller
         }
         // Return a success response with the transformed data.
         return $this->succes($data, 'DISPLAY');
-    }
+   }
     return $this->error('','ACCES INTERDIT ',403);
 
     }
@@ -138,7 +138,7 @@ class EtablissementController extends Controller
         }
     }
 }
-    public function Show_Myetablissement($user_id)
+    public function ShowMyetablissement($user_id)
     {
        
         // Check the role value to determine the user type and
