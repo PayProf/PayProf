@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 class AdministrateurController extends Controller
 {
     use HttpResponses;
-    
+
 
     /**
      * Display a listing of the resource.
@@ -30,8 +30,8 @@ class AdministrateurController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {  
-        if (Gate::allows('check_role', [4])) { 
+    {
+        if (Gate::allows('check_role', [4])) {
              // Retrieve a paginated list of Administrateur objects
         $admin = Administrateur::latest()->paginate(10);
 
@@ -39,13 +39,13 @@ class AdministrateurController extends Controller
         $data = AdministrateurResource::collection($admin);
 
         // Return a success response with the transformed data
-        
+
         return $this->succes($data, 'DISPLAY');
         }
 
 
          return $this->error('','ACCES INTERDIT ',403);
-    
+
     }
     /**
      * Store a newly created resource in storage.
@@ -55,8 +55,8 @@ class AdministrateurController extends Controller
      */
     public function store(StoreAdministrateurRequest $request)
     {
-        
-        if (Gate::allows('check_role', [4])) { 
+
+        if (Gate::allows('check_role', [4])) {
            // Create a new Administrateur object based on the request data
         $admin=new Administrateur();
         $admin->PPR=$request->input('PPR');
@@ -66,26 +66,26 @@ class AdministrateurController extends Controller
         $admin->email_perso=$request->input('email_perso');
 
          $id=event (new storeuser($request->input('email_perso'),1,$request->input('nom'),$request->input('prenom')));
-        
+
          $admin->user_id = $id[0];
          $admin->save();
 
         $data=new AdministrateurResource(Administrateur::find($admin->id));
-    
-   
+
+
         // Check if the creation was successful and return the appropriate response
         if ($data) {
              return $this->succes("", "SUCCESSFULLY ADDED");
-             
-             
+
+
         } else {
             return $this->error("", "UNSUCCESSFULLY ADDED", 500);
         }
         }
         return $this->error('','ACCES INTERDIT ',403);
 
-        
-        
+
+
         }
 
     /**
@@ -106,7 +106,7 @@ class AdministrateurController extends Controller
 
         }
         return $this->error('','ACCES INTERDIT ',403);
-        
+
     }
 
     /**
@@ -136,7 +136,7 @@ class AdministrateurController extends Controller
 
         }
         return $this->error('','ACCES INTERDIT ',403);
-        
+
     }
 
     /**
@@ -158,12 +158,12 @@ class AdministrateurController extends Controller
         return $this->succes('', 'SUCCESSFULLY DELETED');
         }
         return $this->error('','ACCES INTERDIT ',403);
-       
+
     }
 
     public function ShowMyprofile($user_id)
-    { 
-        
+    {
+
         if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
 
 
@@ -181,12 +181,12 @@ class AdministrateurController extends Controller
 
 
         return $this->error('','ACCES INTERDIT ',403);
-        
+
     }
 
     public function Updateemail(UpdateEmailRequest $request, $user_id)
     {
-        //seulement 
+        //seulement
         if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
 
              // Retrieve the Administrateur resource based on the user_id
@@ -201,27 +201,27 @@ class AdministrateurController extends Controller
         }
 
         return $this->error('','ACCES INTERDIT ',403);
-       
+
     }
     public function AllEnseignants($user_id){
 
-        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
+        if (Gate::allows('check_role', [2]) || Gate::allows('admin_modify',$user_id)) {
 
 
         $user=Administrateur::where('user_id', $user_id)->first();
         if($user){
             $etablissement_id=$user->etablissement_id;
-            $data = new EtablissementResource(Etablissement::findOrFail($etablissement_id)->loadMissing('Enseignants'));
+            $data = Enseignant::where('etablissement_id',$etablissement_id)->paginate(2);
             if($data){
                return $this->succes($data,"DISPLAY");
             }else{
                 return $this->error("","NO DATA FOUND",404);
             }
         }else{
-            return $this->error("","NO DATA FOUND",404);
+            return $this->error("","NO DATA FOUND 2",404);
         }
     }
-    
+
     return $this->error('','ACCES INTERDIT ',403);
 }
 }

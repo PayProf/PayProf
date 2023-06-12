@@ -4,7 +4,6 @@
             <!-- head -->
             <thead>
               <tr>
-                <th></th>
                 <th>PPR</th>
                 <th>Etablissement</th>
                 <th>Intetule Intervention</th>
@@ -46,16 +45,20 @@
             </tbody>
           </table>
         </div>
-        <div class="btn-group">
-          <button class="btn">1</button>
-          <button class="btn btn-active">2</button>
-          <button class="btn">3</button>
-          <button class="btn">4</button>
-        </div>
+  <div class="flex justify-center items-center p-5">
+<!--    <v-pagination-->
+<!--        v-model="page"-->
+<!--        :pages="pagecount"-->
+<!--        :range-size="1"-->
+<!--        active-color="#1d774d"-->
+<!--        @update:modelValue="getEnseignants"-->
+<!--    />-->
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+import store from "../../store.js";
 export default {
   name: 'Interventions',
   data() {
@@ -64,19 +67,20 @@ export default {
     }
   },
 
-  mounted() {
+  async mounted() {
 
-    this.getInterventions();
-    console.log('test axios')
+    await this.getInterventions();
 
   },
   methods: {
     async getInterventions() {
       try {
-        axios.get('http://127.0.0.1:8000/api/Intervention').then(result => {
-          this.Interventions = result.data
-        })
-        console.log(this.Interventions.data)
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/Intervention/int/ShowMyEtabInterventions',config)
+        console.log(response)
       }
       catch (error) {
         console.log(error)

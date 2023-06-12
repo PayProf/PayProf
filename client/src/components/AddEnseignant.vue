@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
+    <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
     <div v-if="showPopup" class="popup">
       <div class="popup-content">
         <h2 class="card-title">Add Intervention</h2>
