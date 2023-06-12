@@ -1,82 +1,116 @@
 <template>
-   <div class="overflow-x-auto ml-20 ">
-    <table class="table table-zebra w-full  ">
+   <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
             <!-- head -->
             <thead>
               <tr>
-                <th></th>
-                <th>PPR</th>
+                <th class="z-30">PPR</th>
                 <th>Etablissement</th>
-                <th>Intetule Intervention</th>
+                <th>Intitule Intervention</th>
                 <th>Année universitaire</th>
                 <th>Semestre</th>
                 <th>Date début</th>
                 <th>Date fin</th>
+                <th>Nombre Heures</th>
                 <th>Visa UAE</th>
                 <th>Visa Etab</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(Intervention,id) in Interventions.data" :key="id">
-                <td>{{ Intervention.PPRProf }}</td>
-                <td>{{ Intervention.Id_Intr }}</td>
-                <td>{{ Intervention.NomEtab}}</td>
-                <td>{{ Intervention.IntituleIntervention}}</td>
-                <td>{{ Intervention.AnneeUniv }}</td>
-                <td>{{ Intervention.Semestre }}</td>
-                <td>{{ Intervention.DateDebut }}</td>
-                <td>{{ Intervention.DateFin }}</td>
-                <td>{{ Intervention.Nombre_heures }}</td>
-                <td> <input type="checkbox" checked="checked" class="checkbox" disabled />  </td>
-                <td> <input type="checkbox" checked="checked" class="checkbox" /> </td>
-                <td>
-                  <button class="delete-btn">
-                    <i class="fas fa-trash"></i>
-                    <span class="tooltip" data-tooltip="Delete">Supprimer Intervention </span>
+              <tr v-for="(Intervention,id) in Interventions" :key="id">
+                <td>{{ Intervention.enseignant.PPR }}</td>
+                <td>{{ Intervention.etablissement.nom}}</td>
+                <td>{{ Intervention.intitule_intervention}}</td>
+                <td>{{ Intervention.annee_univ }}</td>
+                <td>{{ Intervention.semestre }}</td>
+                <td>{{ Intervention.date_debut }}</td>
+                <td>{{ Intervention.date_fin }}</td>
+                <td>{{ Intervention.Nbr_heures }}</td>
+                <td> <input type="checkbox" :checked="Intervention.visa_uae" class="checkbox" />  </td>
+                <td> <input type="checkbox" :checked="Intervention.visa_etab" class="checkbox"  /> </td>
+                <td v-if="this.role==2">
+                  <button class="add-btn px-4" >
+                    <i class="fas fa-pen" ></i>
+                    <span class="tooltip" data-tooltip="inspect">modifier</span>
                   </button>
-                  <button class="inspect-btn">
-                    <i class="fas fa-edit"></i>
-                    <span class="tooltip" data-tooltip="Inspect">modify Intervention </span>
+
+                  <button class="add-btn px-4" @click="deleteIntervention(Intervention.id)" >
+                    <i class="fas fa-trash" ></i>
+                    <span class="tooltip" data-tooltip="inspect">supprimer</span>
                   </button>
-                  <button class="btn btn-danger btn-sm">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                  </button>
+                  <!-- This page isn't created yet !!!! -->
                 </td>
               </tr>
             </tbody>
           </table>
-        </div>
-        <div class="btn-group">
-          <button class="btn">1</button>
-          <button class="btn btn-active">2</button>
-          <button class="btn">3</button>
-          <button class="btn">4</button>
-        </div>
+   </div>
+           <div class="flex justify-center items-center p-5">
+             <v-pagination
+                 v-model="page"
+                 :pages="pagecount"
+                 :range-size="1"
+                 active-color="#1d774d"
+                 @update:modelValue="getInterventions"
+             />
+           </div>
+     <div class="flex justify-center items-center">
+            <AddIntervention @intervention-added="getInterventions"/>
+     </div>
+
+
 </template>
 
 <script>
+import VPagination from "@hennge/vue3-pagination";
+import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 import axios from "axios";
+import store from "../../store.js";
+import AddIntervention from "../../components/AddIntervention.vue";
 export default {
   name: 'Interventions',
+  components:{
+    AddIntervention,
+    VPagination,
+  },
   data() {
     return {
-      Interventions: []
+      Interventions: [],
+      role:store.state.user.role,
+      page:1,
+      pagecount:null,
     }
   },
 
-  mounted() {
+  async mounted() {
 
-    this.getInterventions();
-    console.log('test axios')
+    await this.getInterventions();
 
   },
   methods: {
+    async deleteIntervention(id){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.delete('http://127.0.0.1:8000/api/Intervention/'+id,config);
+        console.log(response);
+        this.getInterventions();
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
     async getInterventions() {
       try {
-        axios.get('http://127.0.0.1:8000/api/Intervention').then(result => {
-          this.Interventions = result.data
-        })
-        console.log(this.Interventions.data)
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/Intervention/int/ShowMyEtabInterventions?page='+this.page,config)
+        this.Interventions=response.data.data
+        this.pagecount=response.data.last_page
       }
       catch (error) {
         console.log(error)
