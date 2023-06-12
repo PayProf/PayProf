@@ -24,11 +24,10 @@ class GradeController extends Controller
 
        public function index()
           {
-              if (Gate::allows('check_role', [0,3,1])) { 
+              
 
                  return GradeResource::collection(Grade::latest()->paginate(10));
-              }
-              return $this->error('','ACCES INTERDIT ',403);
+              
           }
 
 
@@ -43,21 +42,24 @@ class GradeController extends Controller
        public function store(StoreGradeRequest $request)
           {
               
-              if (Gate::allows('check_role', [0,1])) { 
+              if (Gate::allows('check_role', [4])) { 
+
                  $grade= new GradeResource(Grade::create($request->all()));
                  if($grade)
                  {
                  return response()->json(["message"=>"added successfuly"]);
                  }
-              }
+              
               return $this->error('','ACCES INTERDIT ',403);
-          }
+          
 
 
               if ($grade) {
                      return response()->json(["message" => "added successfuly"]);
               }
-       }
+            }
+         }
+       
 
 
        //================================================================================== The access is retricted for :AdminUAE| AdminEtab  ============================================
@@ -70,11 +72,10 @@ class GradeController extends Controller
         */
        public function show($id)
           {   
-              if (Gate::allows('check_role', [0,1])) { 
+              
             
                  return new GradeResource(Grade::findOrFail($id));
-              }
-              return $this->error('','ACCES INTERDIT ',403);
+              
         
           }
 
@@ -90,7 +91,7 @@ class GradeController extends Controller
      */
        public function update(UpdateGradeRequest $request, $id)
           {
-              if (Gate::allows('check_role', [0,1])) { 
+              if (Gate::allows('check_role', [4])) { 
                  Grade::findOrFail($id)->update($request->all());
                  return response()->json(["message"=>" Updated successfully"]);
               }
@@ -109,7 +110,7 @@ class GradeController extends Controller
         */
        public function destroy($id)
           {
-              if (Gate::allows('check_role', [0,1])) { 
+              if (Gate::allows('check_role', [4])) { 
                  $grade=Grade::FindOrFail($id);
                  if($grade)
                  {
@@ -121,6 +122,7 @@ class GradeController extends Controller
           }
 
 }
+
 
 
 //================================================ SMEH LINA A KHOYA REDA SBER M3ANA ================================================================

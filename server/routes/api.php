@@ -90,51 +90,52 @@ route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     //============================================ Directeur API ============================================
-    
+    Route::middleware('is_enseignant')->group(function () {
+
+    route::apiResource('Directeur', DirecteurController::class);
     //route of UploadMyImage
     route::POST('Directeur/dir/UploadMyImage', [DirecteurController::class, 'UploadMyImage']);
     //route of ShowMyProfil
     route::get('Directeur/dir/ShowMyProfil', [DirecteurController::class, 'ShowMyProfil']);
     //route of UpdateMyEmail
     route::PATCH('Directeur/dir/UpdateMyEmail', [DirecteurController::class, 'UpdateMyEmail']);
-    //=======================================================================================================
-    Route::middleware('is_enseignant')->group(function () {
-        route::apiResource('admins', AdministrateurController::class);
-        route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'Show_Myprofile']);
 
-        route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Update_email']);
     });
+    //=======================================================================================================
     
+    Route::middleware('is_enseignant')->group(function () {
 
+        Route::get('admins/{user_id}/showenseignants', [AdministrateurController::class, 'AllEnseignants']);
 
+        Route::apiResource('admins', AdministrateurController::class);
 
+        Route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'ShowMyprofile']);
+
+        Route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Updateemail']);
+        
+    });
+    route::apiResource('etablissements', EtablissementController::class);
+    route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);
+
+    Route::apiResource('paiements', PaiementsController::class);
     //oute::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 });
 //============================================ ETABLISSEMENT API ============================================
 
-route::apiResource('etablissements', EtablissementController::class);
 
-route::get('etablissements/{user_id}/{role}/myetablissement', [EtablissementController::class, 'Show_Myetablissement']);
+
+
 
 //=======================================================================================================
 //============================================ ADMINISTRATEUR API ============================================
 
-Route::get('admins/{user_id}/showenseignants', [AdministrateurController::class, 'AllEnseignants']);
 
-Route::apiResource('admins', AdministrateurController::class);
-
-Route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'ShowMyprofile']);
-
-Route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Updateemail']);
 
 //=======================================================================================================
 
 //============================================ PAIEMENT API ============================================
 
-Route::apiResource('paiements', PaiementsController::class);
 
-Route::get('paiements/{id}/enseignants', [PaiementsController::class, 'ShowPaiementsEnseignant']);
 
-//=======================================================================================================
-route::apiResource('Directeur', DirecteurController::class);
+

@@ -23,7 +23,7 @@ class PaiementsController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('check_role', [3,0])) {   
+        if (Gate::allows('check_role', [3,4])) {   
         // Retrieve a paginated list of Paiements objects
         $paiement = Paiements::latest()->paginate(10);
 
@@ -61,7 +61,8 @@ class PaiementsController extends Controller
      */
     public function show($id)
     {
-        if (Gate::allows('check_role', [3,0])) {
+        //??????????????????????????????
+        if (Gate::allows('check_role', [4,0])) {
         // Retrieve the specific Paiements resource by ID
         $data = new PaiementResource(Paiements::findOrFail($id));
 
@@ -118,14 +119,5 @@ class PaiementsController extends Controller
         // return $this->succes('', 'DELETED DATA');
     }
 
-    public function ShowPaiementsEnseignant($id_enseignant)
-    {
-        // Retrieve payments (Paiements) for a specific enseignant
-        // based on the enseignant_id. The related enseignant
-        // model is eager loaded using the with() method to retrieve the associated teacher data.
-        $data = Paiements::where('enseignant_id', $id_enseignant)->with('enseignant')->get();
-
-        // Return a success response with the retrieved data
-        return $this->succes($data, 'DISPLAY');
-    }
+   
 }

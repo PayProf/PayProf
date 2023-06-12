@@ -26,7 +26,7 @@ class EtablissementController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('check_role', [0,3])) { 
+        if (Gate::allows('check_role', [4,3])) { 
 
             //// Retrieve a paginated list of Etablissement objects.
         $etablissements = Etablissement::latest()->paginate(10);  
@@ -48,12 +48,13 @@ class EtablissementController extends Controller
      */
     public function store(StoreEtablissementRequest $request)
     {
-        if (Gate::allows('check_role', [0])) { 
+        if (Gate::allows('check_role', [4])) { 
 
         // Create a new Etablissement object based on the request data.
         $data = new EtablissementResource(Etablissement::create($request->all()));  
         // Return a success response with the transformed data.
-        return $this->succes($data, 'SUCCESSFLY INSERT');}
+        return $this->succes($data, 'SUCCESSFLY INSERT');
+    }
 
         return $this->error('','ACCES INTERDIT ',403);
     }
@@ -66,7 +67,7 @@ class EtablissementController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if (Gate::allows('check_role', [0,3]) || Gate::allows('admin_ens_etab',$id)|| Gate::allows('admin_etab',$id)) {
+        if (Gate::allows('check_role', [4,3]) || Gate::allows('direct_etab',$id)) {
 
         // Retrieve the specific Etablissement resource by ID.
         $data = new EtablissementResource(Etablissement::findOrFail($id)); //returns a specific Etablissement resource by ID 
@@ -77,7 +78,7 @@ class EtablissementController extends Controller
             // Check if the 'with' value is one of the allowed relationships.
             if (in_array($value, $array)) {
                 // Load the specified relationship for the Etablissement
-                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value));
+                $data = new EtablissementResource(Etablissement::find($id)->loadMissing($value));
             } else {
                  // Return an error response if the specified relationship is not found.
                 return $this->error('', 'the fild that you enter is not found', 400);
@@ -99,9 +100,9 @@ class EtablissementController extends Controller
      */
     public function update(UpdateEtablissementRequest $request, $id)
     {
-        if (Gate::allows('check_role', [0]) || Gate::allows('admin_etab',$id)) {
+        if (Gate::allows('check_role', [4]) ) {
          // Find the existing Etablissement resource by ID.
-        $etablissment = Etablissement::findOrFail($id);
+        $etablissment = Etablissement::find($id);
         // Update the Etablissement resource with the request data.
         $etablissment->update($request->all()); 
        // Retrieve the updated Etablissement resource.
@@ -112,6 +113,8 @@ class EtablissementController extends Controller
             return $this->error("", 'NO DATA FOUND',402);
         }
     }
+    return $this->error('', 'acces interdit ',403);
+
 }
 
     /**
@@ -122,28 +125,33 @@ class EtablissementController extends Controller
      */
     public function destroy($id)
     {
-        if (Gate::allows('check_role', [0])) {
+        if (Gate::allows('check_role', [4])) {
 
         // Find the existing Etablissement resource by ID.
-        $etablissement = Etablissement::findOrFail($id);
+        $etablissement = Etablissement::find($id);
          //This method deletes a specific Etablissement resource by ID.
+         if($etablissement){
         $etablissement->delete();
          //returns a JSON response indicating success .
 
          $data= new EtablissementResource(Etablissement::find($id));
-        if($data){
-        return $this->error('', 'error ',500);
+         return $this->succes('', 'SUCCESSFULLY DELETED');
+        
+        
         }else{
-        return $this->succes('', 'SUCCESSFULLY DELETED');
-        }
+            return $this->error('', 'not found ',403);
+        
     }
 }
+return $this->error('', 'acces interdit ',500);
+}
+    
     public function ShowMyetablissement($user_id)
     {
        
         // Check the role value to determine the user type and
         // retrieve the associated Etablissement.
-        if ( auth()->user()->role==4 &&  auth()->user()->id==$user_id){
+        if ( auth()->user()->role==0 &&  auth()->user()->id==$user_id){
             
                 $data = Enseignant::where('user_id', $user_id)->first();
                 $enseignant = ['id_etablissement' => $data->etablissement_id];
@@ -151,14 +159,14 @@ class EtablissementController extends Controller
                 return $this->succes($etablissement, "MY ETABLISSEMENT");
             
         }
-        if ( auth()->user()->role==1 &&  auth()->user()->id==$user_id){
+        if ( auth()->user()->role==2 &&  auth()->user()->id==$user_id){
         
             $data = Administrateur::where('user_id', $user_id)->first();
             $admin = ['id_etablissement' => $data->etablissement_id];
             $etablissement = Etablissement::where('id', $admin['id_etablissement'])->first();
             return $this->succes($etablissement, "MY ETABLISSEMENT");
         } 
-        if ( auth()->user()->role==2 &&  auth()->user()->id==$user_id){
+        if ( auth()->user()->role==1 &&  auth()->user()->id==$user_id){
         
             $data = Directeur::where('user_id', $user_id)->first();
             $directeur = ['id_etablissement' => $data->etablissement_id];

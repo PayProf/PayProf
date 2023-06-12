@@ -31,7 +31,7 @@ class AdministrateurController extends Controller
      */
     public function index()
     {  
-        if (Gate::allows('check_role', [0])) { 
+        if (Gate::allows('check_role', [4])) { 
              // Retrieve a paginated list of Administrateur objects
         $admin = Administrateur::latest()->paginate(10);
 
@@ -56,7 +56,7 @@ class AdministrateurController extends Controller
     public function store(StoreAdministrateurRequest $request)
     {
         
-        //if (Gate::allows('check_role', [0])) { 
+        if (Gate::allows('check_role', [4])) { 
            // Create a new Administrateur object based on the request data
         $admin=new Administrateur();
         $admin->PPR=$request->input('PPR');
@@ -75,18 +75,18 @@ class AdministrateurController extends Controller
    
         // Check if the creation was successful and return the appropriate response
         if ($data) {
-             return $this->succes("", "SUCCESSFULLYRRR ADDED");
+             return $this->succes("", "SUCCESSFULLY ADDED");
              
              
         } else {
             return $this->error("", "UNSUCCESSFULLY ADDED", 500);
         }
-       // }
-        //return $this->error('','ACCES INTERDIT ',403);
+        }
+        return $this->error('','ACCES INTERDIT ',403);
 
         
         
-    }
+        }
 
     /**
      * Display the specified resource.
@@ -96,7 +96,7 @@ class AdministrateurController extends Controller
      */
     public function show($id)
     {
-       // if (Gate::allows('check_role', [0]) || Gate::allows('can_admin',$id)) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('can_admin',$id)) {
             // Retrieve the specific Administrateur resource by ID
         $data = new AdministrateurResource(Administrateur::findOrFail($id));
 
@@ -104,8 +104,8 @@ class AdministrateurController extends Controller
         return $this->succes($data, 'DISPLAY');
 
 
-       // }
-       // return $this->error('','ACCES INTERDIT ',403);
+        }
+        return $this->error('','ACCES INTERDIT ',403);
         
     }
 
@@ -119,7 +119,7 @@ class AdministrateurController extends Controller
     public function update(UpdateAdministrateurRequest $request, $id)
     {
         //only admiuae
-        if (Gate::allows('check_role', [0]) ) {
+        if (Gate::allows('check_role', [4]) ) {
             // Find the existing Administrateur resource by ID
         $admin = Administrateur::findOrFail($id);
 
@@ -147,12 +147,12 @@ class AdministrateurController extends Controller
      */
     public function destroy($id)
     {
-        if (Gate::allows('check_role', [0])) {
+        if (Gate::allows('check_role', [4])) {
              // Find the existing Administrateur resource by ID
-        $grade = Administrateur::findOrFail($id);
+        $admin = Administrateur::find($id);
 
         // Delete the Administrateur resource
-        $grade->delete();
+        $admin->delete();
 
         // Return a success response
         return $this->succes('', 'SUCCESSFULLY DELETED');
@@ -164,18 +164,22 @@ class AdministrateurController extends Controller
     public function ShowMyprofile($user_id)
     { 
         
-        if (Gate::allows('check_role', [0]) || Gate::allows('admin_modify',$user_id)) {
-            // Retrieve the Administrateur resource based on the user_id
-        $admin = Administrateur::where('user_id', $user_id)->first();
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
 
-        // Check if the Administrateur resource exists and return the appropriate response
-        if ($admin) {
-            $data = new AdministrateurResource($admin);
-            return $this->succes($data, 'PROFILE');
-        } else {
-            return $this->error("", "unavailable id", 500);
+
+                // Retrieve the Administrateur resource based on the user_id
+            $admin = Administrateur::where('user_id', $user_id)->first();
+
+            // Check if the Administrateur resource exists and return the appropriate response
+            if ($admin) {
+                $data = new AdministrateurResource($admin);
+                return $this->succes($data, 'PROFILE');
+            } else {
+                return $this->error("", "unavailable id", 500);
+            }
         }
-        }
+
+
         return $this->error('','ACCES INTERDIT ',403);
         
     }
@@ -183,7 +187,8 @@ class AdministrateurController extends Controller
     public function Updateemail(UpdateEmailRequest $request, $user_id)
     {
         //seulement 
-        if (Gate::allows('check_role', [0]) || Gate::allows('admin_modify',$user_id)) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
+
              // Retrieve the Administrateur resource based on the user_id
         $admin = Administrateur::where('user_id', $user_id)->first();
 
@@ -194,10 +199,15 @@ class AdministrateurController extends Controller
         // Return a success response
         return $this->succes('', 'SUCCESSLY CHANGED');
         }
+
         return $this->error('','ACCES INTERDIT ',403);
        
     }
     public function AllEnseignants($user_id){
+
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
+
+
         $user=Administrateur::where('user_id', $user_id)->first();
         if($user){
             $etablissement_id=$user->etablissement_id;
@@ -209,6 +219,9 @@ class AdministrateurController extends Controller
             }
         }else{
             return $this->error("","NO DATA FOUND",404);
+        }
     }
+    
+    return $this->error('','ACCES INTERDIT ',403);
 }
 }

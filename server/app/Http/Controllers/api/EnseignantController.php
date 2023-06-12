@@ -34,12 +34,14 @@ class EnseignantController extends Controller
    
        public function index()
 
-          {   
-            if (Gate::allows('check_role', [0])) {          
+         {   
+            if (Gate::allows('check_role', [4,3])) { 
+
            return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10)); 
-           }
+           
+         }
             return $this->error('','ACCES INTERDIT ',403);                    
-          }
+         }
 
 //============================================================== The access is retricted for:AdminUEtab ========================================================          
 
@@ -56,7 +58,7 @@ class EnseignantController extends Controller
           {  
 
               
-              if (Gate::allows('check_role', [1])) { 
+              if (Gate::allows('check_role', [2])) { 
                  $enseignant=new Enseignant();
 
                  $grade_id=$enseignant->IdGrade($request['Grade']);                                  //IdGrade() it's a method that return the id of the grade 
@@ -76,7 +78,8 @@ class EnseignantController extends Controller
                  $enseignant->save();
 
 
-                 return $this->succes("","added successfully");}
+                 return $this->succes("","added successfully");
+               }
                  return $this->error('','ACCES INTERDIT ',403);
 
                  // return new EnseignantResource(Enseignant::create($request->all()));it's another method but we should know the etab_id 
@@ -93,7 +96,7 @@ class EnseignantController extends Controller
    
        public function show($id)
 
-          {      if (Gate::allows('check_role', [0,3]) || Gate::allows('direct_ens',$id) || Gate::allows('admin_ens',$id) ) {  
+          {      if (Gate::allows('check_role', [4,3]) || Gate::allows('direct_ens',$id) || Gate::allows('admin_ens',$id) ) {  
 
                  return new EnseignantResource(Enseignant::with('etablissement','grade')->FindOrFail($id));
                 }
@@ -149,7 +152,8 @@ class EnseignantController extends Controller
                  if($ens->image)
                  unlink(public_path('uploads').'/'.$ens->image);                                         //destroy the appropriate image .       
                  $ens->delete();              
-                 return $this->succes("","enseignant deleted successfully"); }
+                 return $this->succes("","enseignant deleted successfully");
+                }
                  return $this->error('','ACCES INTERDIT ',403);  
           }
 
@@ -166,7 +170,8 @@ class EnseignantController extends Controller
        public function ShowMyInterventions()
 
 
-          {   if ( auth()->user()->role==4 ){  
+          { if (Gate::allows('check_role', [0])) {  
+            if ( auth()->user()->role==0 ){  
               $id=auth()->user()->enseignant->id;
               
               if(Intervention::where('enseignant_id',$id)->exists())
@@ -179,15 +184,12 @@ class EnseignantController extends Controller
               {
                      return $this->error("","Pas d'interventions pour le moment",404); 
               }
+            }
+         
+
+
+            return $this->error('','ACCES INTERDIT ',403);
           }
-           //add Return access denied
-               
-
-             
-
-       
-                                       
-       
           }
 //======================================================== The access is retricted for:Enseignant ===================================================
       
@@ -199,7 +201,9 @@ class EnseignantController extends Controller
            
        public function ShowMyPayments()
 
-          {      if(auth()->user()->role==4){
+          {     if (Gate::allows('check_role', [0])) { 
+            
+               if(auth()->user()->role==0){
                  $id=auth()->user()->enseignant->id;
 
                  if(Paiements::where('enseignant_id',$id)->exists())
@@ -215,6 +219,11 @@ class EnseignantController extends Controller
                  {
                      return $this->error("",'Pas de payements pour le moment',404);
                  }
+               }
+         
+
+
+               return $this->error('','ACCES INTERDIT ',403);
           }
           }
    
@@ -232,8 +241,10 @@ class EnseignantController extends Controller
        public function UploadMyImage( Request $request)
        
           {
+            if (Gate::allows('check_role', [0])) { 
+
               $id=auth()->user()->enseignant->id;
-              if (Gate::allows('ens_check_id', $id)) {
+             
                  $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
 
                  $enseignant=Enseignant::where('id',$id)->first();
@@ -254,8 +265,13 @@ class EnseignantController extends Controller
                  {
                  return $this->succes("","image uploaded successfully");    
                  }
-              }
-              return $this->error('','ACCES INTERDIT ',403); 
+               }
+         
+
+
+               return $this->error('','ACCES INTERDIT ',403);
+              
+              
 
           }
 //==================================== The access is retricted for:Enseignant   ============================================================                
@@ -270,11 +286,17 @@ class EnseignantController extends Controller
        public function ShowMyProfil()
 
           {
-              $id=auth()->user()->enseignant->id;
-              if (Gate::allows('ens_check_id', $id)) {
+            if (Gate::allows('check_role', [0])) { 
+              $id=auth()->user()->id;
+             
                      return new EnseignantResource(Enseignant::where('user_id',$id)->with('etablissement','grade')->first());
-              }
-              return $this->error('','ACCES INTERDIT ',403);   
+            }
+         
+
+
+           return $this->error('','ACCES INTERDIT ',403);
+    
+                
           }
 
 //======================================= The access is retricted for:Enseignant ======================================= 
@@ -285,7 +307,7 @@ class EnseignantController extends Controller
      */
        public function MyHours ()
           {
-              if (Gate::allows('check_role', [0])){
+            if (Gate::allows('check_role', [0])) { 
               $id=auth()->user()->enseignant->id;
                
               if(Intervention::where('enseignant_id',$id)->exists())
@@ -297,7 +319,12 @@ class EnseignantController extends Controller
               {
                      return response()->json(["hours"=>0]);
               }
-              }
+            }
+         
+
+
+            return $this->error('','ACCES INTERDIT ',403);
+              
           }
 
 //==================================== The access is retricted for:Enseignant ============================================
@@ -312,15 +339,20 @@ class EnseignantController extends Controller
        public function UpdateMyEmail( UpdateEnseignantRequest $request )
 
           {
+            if (Gate::allows('check_role', [0])) { 
 
-                 if (Gate::allows('ens_check_id', $id)) {
+                
                  $id=auth()->user()->enseignant->id;
                  $enseignant=Enseignant::where('id',$id)->first();  
                  $enseignant->email_perso=$request['email_perso'];   
                  $enseignant->save();  
                  return $this->succes("","email updated successfully");
-          }
-          return $this->error('','ACCES INTERDIT ',403);
+               }
+         
+
+
+               return $this->error('','ACCES INTERDIT ',403);
+          
        }
 
                 

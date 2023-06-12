@@ -29,7 +29,7 @@ class InterventionController extends Controller
      */
     public function index()
     {
-       if (Gate::allows('check_role', [1])) {  
+       if (Gate::allows('check_role', [4,3])) {  
         //return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10));
         }
         return $this->error('','ACCES INTERDIT ',403);
@@ -51,7 +51,7 @@ class InterventionController extends Controller
 
           {
 
-              if (Gate::allows('check_role', [1])) {  
+              if (Gate::allows('check_role', [2])) {  
                  $intervention=new Intervention();
                  $enseignant=$intervention->IdEnseignant($request['PPR']);
                  $etablissement=auth()->user()->administrateur->etablissement_id;
@@ -84,7 +84,7 @@ class InterventionController extends Controller
        public function show($id)
 
           {
-              if (Gate::allows('check_role', [1,3])) {  
+              if (Gate::allows('check_role', [4,3]) || Gate::allows('interv_etab', $id)) {  
                  return new InterventionResource(Intervention::with('enseignant','etablissement')->findOrFail($id));
               }
               return $this->error('','ACCES INTERDIT ',403);
@@ -105,7 +105,8 @@ class InterventionController extends Controller
        public function update(UpdateInterventionRequest $request, $id)
 
   
-          {          if (Gate::allows('check_role', [1])) {         
+          { //admin_etab si meme etab 
+                    if (Gate::allows('interv_etab', $id)) {         
                  $intervention=Intervention::FindOrFail($id);   
                  $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant 
                  $intervention->intitule_intervention=$request['IntituleIntervention'];
@@ -136,7 +137,7 @@ class InterventionController extends Controller
        public function destroy($id)
 
           {
-              if (Gate::allows('check_role', [1])) {    
+              if (Gate::allows('interv_etab', $id)) {    
                  $intervention= Intervention::find($id);
                  if($intervention)
                  {
@@ -170,7 +171,8 @@ class InterventionController extends Controller
 
           {    
 
-              if (Gate::allows('check_role', [1,0,2,3])) {  
+              if (Gate::allows('check_role', [4,3]) || Gate::allows('interv_etab', $id) ) {  
+
               if(Intervention::where('id',$id)->exists())
 
                 {
@@ -222,7 +224,7 @@ class InterventionController extends Controller
 
        public function activeVisaEtab(UpdateInterventionRequest $request,$id)
           {
-              if (Gate::allows('check_role', [2])) {  
+              if (Gate::allows('check_role', [1])) {  
                  $intervention =Intervention::find($id);
                  $intervention->visa_etab=$request['VisaEtab'];
                  $intervention->save();
@@ -281,7 +283,7 @@ class InterventionController extends Controller
        public function EnseignantInterventions($id)
           {
 
-                 if (Gate::allows('check_role', [3,0,1,2])) { 
+                 
                  if(Intervention::where('enseignant_id',$id)->exists())
                  {
                      return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
@@ -291,8 +293,7 @@ class InterventionController extends Controller
                 {
                      return $this->error("","intervention introuvable",404);
                 }
-                   }
-              return $this->error('','ACCES INTERDIT ',403);
+                   
                 
 
           }

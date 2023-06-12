@@ -30,7 +30,7 @@ class DirecteurController extends Controller
     public function index()
 
     {  
-       if (Gate::allows('check_role', [0,3])) { 
+       if (Gate::allows('check_role', [4,3])) { 
             return DirecteurResource::collection(Directeur::with('etablissement')->latest()->paginate(5));
         }
         return $this->error('','ACCES INTERDIT ',403);
@@ -51,7 +51,8 @@ class DirecteurController extends Controller
      public function store(StoreDirecteurRequest $request)
      
     {   
-        if (Gate::allows('check_role', [1])) { 
+        if (Gate::allows('check_role', [2])) { 
+
             $directeur=new Directeur();             
             $directeur->etablissement_id= auth()->user()->administrateur->etablissement_id   ;                                                          
              $directeur->PPR = $request['PPR'];
@@ -68,9 +69,8 @@ class DirecteurController extends Controller
  
              return $this->succes("","added successfully");
         }
-        return $this->error('','ACCES INTERDIT ',403);
 
-           
+        return $this->error('','ACCES INTERDIT ',403);   
      }
 
 //=============================================The access is retricted for:AdminUAE|President|AdminEtab =============================================================    
@@ -84,7 +84,7 @@ class DirecteurController extends Controller
    
      public function show($id)
     {
-        if (Gate::allows('check_role', [0,3]) || Gate::allows('admin_direct',$id) || Gate::allows('direct_himself',$id) ) {
+        if (Gate::allows('check_role', [4,3]) || Gate::allows('admin_direct',$id) || Gate::allows('direct_himself',$id) ) {
             return new DirecteurResource(Directeur::with('etablissement')->FindOrFail($id));
          }
          return $this->error('','ACCES INTERDIT ',403);
@@ -105,7 +105,7 @@ class DirecteurController extends Controller
     
      public function update(UpdateDirecteurRequest $request, $id)
     {    
-        if (Gate::allows('check_role', [0]) || Gate::allows('admin_direct',$id) ) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_direct',$id) ) {
 
        $directeur=Directeur::find($id);
        $directeur->PPR = $request['PPR'];
@@ -130,7 +130,7 @@ class DirecteurController extends Controller
       
      public function destroy($id)
     {
-        if (Gate::allows('check_role', [0]) || Gate::allows('admin_direct',$id) ) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_direct',$id) ) {
         $directeur=Directeur::FindOrfail($id);   
         $directeur->delete();
         unlink(public_path('uploads').'/'.$directeur->image);                                               //destroy the appropriate image .     
@@ -152,7 +152,7 @@ class DirecteurController extends Controller
        public function UpdateMyEmail( UpdateDirecteurRequest $request )
               
        {
-        if (Gate::allows('direct_update',$id))
+        if (Gate::allows('check_role', [1])) 
          {
 
                $id=auth()->user()->enseignant->id;
@@ -176,13 +176,12 @@ class DirecteurController extends Controller
        public function ShowMyProfil()
       
        {
-        if ( Gate::allows('direct_update',$id )) {
+        if (Gate::allows('check_role', [1])) {
              $id=auth()->user()->enseignant->id;
-             return new DirecteurResource(Directeur::where('user_id',$id)->with('etablissement')->first());}
-             return $this->error('','ACCES INTERDIT ',403);
-             
-             
-       
+             return new DirecteurResource(Directeur::where('user_id',$id)->with('etablissement')->first());
+            }
+            return $this->error('','ACCES INTERDIT ',403);
+        
         }
     
 //===============================================The access is retricted for:Directeur====================================
@@ -198,7 +197,7 @@ class DirecteurController extends Controller
        
         {
 
-            if (Gate::allows('direct_update',$id ) ) { 
+            if (Gate::allows('check_role', [1])) { { 
                 $id=auth()->user()->enseignant->id;
                 $request->validate([ 'image'=>'required|max:1024|mimes:png,jpg,png' ]);
             }
@@ -222,20 +221,15 @@ class DirecteurController extends Controller
              return $this->succes("","image uploaded successfully");    
              }
               }
-            //   return $this->error('','ACCES INTERDIT ',403);
+            return $this->error('','ACCES INTERDIT ',403);
             
 
              
  
                    
-        //  }           
-
-
-//================================================ SMEH LINA A KHOYA REDA SBER M3ANA ==========================================
+        }           
 
 
 
-
-// ======================================================= YOUSSEF HARRAK ===========================================
         
-            }
+}
