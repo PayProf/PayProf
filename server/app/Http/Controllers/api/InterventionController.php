@@ -23,18 +23,15 @@ class InterventionController extends Controller
 
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Indexe() it's a methode that serve to display all the interventions with the name of the etablissement and also name of Enseiganant.
+     * I used  InterventionResource class  that serve to filter  data .
+     * @return mixed the important data of all interventions.
      */
+
     public function index()
+
     {
-       if (Gate::allows('check_role', [4,3])) {
-        //return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10));
-        }
-        return $this->error('','ACCES INTERDIT ',403);
-
-
+        return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(10));
     }
 
 //===========================================  The access is retricted for:AdminEtab ==================================================
@@ -137,7 +134,7 @@ class InterventionController extends Controller
        public function destroy($id)
 
           {
-//              if (Gate::allows('interv_etab', $id)) {
+              if (Gate::allows('interv_etab', $id)) {
                  $intervention= Intervention::find($id);
                  if($intervention)
                  {
@@ -147,7 +144,7 @@ class InterventionController extends Controller
                 else{
                      return$this->error("","intervention introuvable",404);
                  }
-//              }
+              }
               return $this->error('','ACCES INTERDIT ',403);
 
 

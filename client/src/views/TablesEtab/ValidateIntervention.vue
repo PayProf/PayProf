@@ -27,8 +27,20 @@
                 <td>{{ Intervention.date_debut }}</td>
                 <td>{{ Intervention.date_fin }}</td>
                 <td>{{ Intervention.Nbr_heures }}</td>
-                <td> <input type="checkbox" :checked="Intervention.visa_uae" class="checkbox" />  </td>
-                <td> <input type="checkbox" :checked="Intervention.visa_etab" class="checkbox"  /> </td>
+                <td>
+                  <input type="checkbox" :checked="Intervention.visa_uae" class="checkbox" v-if="role == 1"/>
+                  <div v-else class="flex justify-center">
+                  <i class="fa-solid fa-x text-red-500" v-if="!Intervention.visa_uae"></i>
+                  <i class="fa-solid fa-check text-green-500" v-else></i>
+                  </div>
+                </td>
+                <td>
+                  <input type="checkbox" :checked="Intervention.visa_etab" class="checkbox" v-if="role == 1"  />
+                  <div v-else class="flex justify-center">
+                    <i class="fa-solid fa-x text-red-500" v-if="!Intervention.visa_etab"></i>
+                    <i class="fa-solid fa-check text-green-500" v-else></i>
+                  </div>
+                </td>
                 <td v-if="this.role==2">
                   <button class="add-btn px-4" >
                     <i class="fas fa-pen" ></i>
@@ -95,8 +107,7 @@ export default {
           headers: { Authorization: `Bearer ${token}` }
         };
         const response = await axios.delete('http://127.0.0.1:8000/api/Intervention/'+id,config);
-        console.log(response);
-        this.getInterventions();
+        await this.getInterventions();
       }
       catch (error) {
         console.log(error)
