@@ -45,9 +45,10 @@ AS $BODY$
 BEGIN
     IF OLD.visa_uae = true  THEN
        raise exception 'intervention deja aprouvé par Admin UAE';
+    ELSE
+        RETURN new;
     END IF;
 
-    RETURN OLD;
 END;
 $BODY$;
 
