@@ -15,16 +15,16 @@
         <i class="fa-solid fa-user"></i>
       </li>
       <li @click="showEns" v-if="OpenEns" class="bg-neutral text-white Interventions">
-        <i class="fa-solid fa-chalkboard-user"></i>
+        <i class="fa-solid fa-user-tie"></i>
       </li>
       <li @click="showEns" v-else class="Interventions">
-        <i class="fa-solid fa-chalkboard-user"></i>
+        <i class="fa-solid fa-user-tie"></i>
       </li>
       <li @click="ShowAllint" v-if="OpenInt" class="bg-neutral text-white">
-        <i class="fa-sharp fa-solid fa-signal"></i>
+        <i class="fa-solid fa-chalkboard-user"></i>
       </li>
       <li @click="ShowAllint" v-else>
-        <i class="fa-sharp fa-solid fa-signal"></i>
+        <i class="fa-solid fa-chalkboard-user"></i>
       </li>
       <li>
         <i class="fa-solid fa-arrows-up-down-left-right"></i>

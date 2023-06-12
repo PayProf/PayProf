@@ -263,7 +263,7 @@ class InterventionController extends Controller
 
                     }
 
-                 return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(10));
+                 return  Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5);
               }
               return $this->error('','ACCES INTERDIT ',403);
 
