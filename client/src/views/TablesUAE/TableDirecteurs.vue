@@ -46,18 +46,24 @@
     </table>
     <button class="btn btn-outline btn-success" @click="RedirectAdd()" v-if="this.Userrole === 4">Ajouter un Directeur</button>
   </div>
+  <AddDirecteur v-if="openAdd"/>
 </template>
 
 <script>
 import axios from 'axios';
 import store from "../../store.js";
+import AddDirecteur from '../../components/AddDirecteur.vue';
 
 export default {
   data() {
     return {
       Directeurs:[],
       Userrole:store.state.user.role,
+      openAdd:false,
     }
+  },
+  components:{
+    AddDirecteur
   },
 
   mounted() {
@@ -70,7 +76,11 @@ export default {
   methods: {
     async getDirecteurs() {
       try {
-        await axios.get('http://127.0.0.1:8000/api/Directeur').then(result => {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        await axios.get('http://127.0.0.1:8000/api/Directeur',config).then(result => {
           this.Directeurs = result.data.data
         })
         console.log(this.Directeurs)
@@ -81,11 +91,15 @@ export default {
     },
 
     RedirectAdd() {
-      this.$router.push('/AddDirecteurs')
+      this.openAdd = !this.openAdd
     },
 
     deleteDirecteur(DirecteurId){
-      axios.delete(`http://127.0.0.1:8000/api/Directeur/${DirecteurId}`)
+      const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+      axios.delete(`http://127.0.0.1:8000/api/Directeur/${DirecteurId}`,config)
       .then(res=>{
         console.log(res.data)
         this.getDirecteurs()

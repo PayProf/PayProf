@@ -24,14 +24,14 @@
           <td>{{ Etablissement.ville }}</td>
           <td>{{ Etablissement.Nombre_des_enseignants }}</td>
           <td>
-            <router-link :to="{ path: '/EditEtablissement/'+Etablissement.id }">
+            <router-link :to="{ path: '/EditEtablissement/'+Etablissement.id }" v-if="Userrole === 4">
               <button class="add-btn px-4" >
               <i class="fas fa-pen" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
             </router-link>
 
-            <button class="add-btn px-4" @click="deleteEtablissement(Etablissement.id)" >
+            <button class="add-btn px-4" @click="deleteEtablissement(Etablissement.id)" v-if="Userrole === 4">
               <i class="fas fa-trash" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
@@ -46,18 +46,25 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-outline btn-secondary  ml-5 mt-2 text-black" >Button</button>
+    <button class="btn btn-outline btn-secondary  ml-5 mt-2 text-black" @click="redirectAdd()" v-if="Userrole === 4">Add etablissement</button>
   </div>
+<AddEtablissement v-if="openAdd"/>
 </template>
 
 <script>
+import store from '../../store';
 import axios from 'axios';
+import AddEtablissement from '../../components/AddEtablissement.vue';
 export default {
-
+  components:{
+    AddEtablissement
+  },
   name: 'TableEtablissement',
   data() {
     return {
-      Etablissements: []
+      Etablissements: [],
+      Userrole:store.state.user.role,
+      openAdd:false
     }
   },
 
@@ -70,7 +77,11 @@ export default {
   methods: {
     async getEtablissements() {
       try {
-        await axios.get('http://127.0.0.1:8000/api/etablissements').then(result=>{
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        await axios.get('http://127.0.0.1:8000/api/etablissements',config).then(result=>{
           console.log('test axios')
           this.Etablissements = result.data
         })
@@ -81,11 +92,18 @@ export default {
       }
     },
     deleteEtablissement(EtablissementId){
-      axios.delete(`http://127.0.0.1:8000/api/etablissements/${EtablissementId}`)
+      const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+      axios.delete(`http://127.0.0.1:8000/api/etablissements/${EtablissementId}`,config)
       .then(res=>{
         console.log(res.data)
         this.getAdmins()
       })
+    },
+    redirectAdd(){
+      this.openAdd = !this.openAdd
     }
   },
  

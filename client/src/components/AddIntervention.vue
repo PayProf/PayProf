@@ -94,6 +94,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -121,9 +122,13 @@ export default {
     };
   },
   methods: {
-    saveIntervention() {
+    saveIntervention(){
+      const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
       axios
-        .post('http://127.0.0.1:8000/api/Intervention', this.model.Intervention)
+        .post('http://127.0.0.1:8000/api/Intervention', this.model.Intervention,config)
         .then(result => {
           console.log(result.data);
           this.model.Intervention = {
