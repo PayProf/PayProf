@@ -65,7 +65,7 @@ class AdministrateurController extends Controller
         $admin->etablissement_id=$request->input('etablissement_id');
         $admin->email_perso=$request->input('email_perso');
 
-         $id=event (new storeuser($request->input('email_perso'),1,$request->input('nom'),$request->input('prenom')));
+         $id=event (new storeuser($request->input('email_perso'),2,$request->input('nom'),$request->input('prenom')));
 
          $admin->user_id = $id[0];
          $admin->save();

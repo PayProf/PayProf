@@ -75,7 +75,7 @@ class EnseignantController extends Controller
                  $enseignant->email_perso=$request['email_perso'];
                  $enseignant->save();
 
-                 $id=event (new storeuser($request->input('email_perso'),4,$request->input('nom'),$request->input('prenom')));
+                 $id=event (new storeuser($request->input('email_perso'),0,$request->input('nom'),$request->input('prenom')));
                  $enseignant->user_id = $id[0];
                  $enseignant->save();
 
