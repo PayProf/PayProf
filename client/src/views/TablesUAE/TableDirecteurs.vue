@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto border">
+  <div class="overflow-x-auto border z-10">
     <table class="table w-screen botrder">
       <!-- head -->
       <thead>
@@ -25,14 +25,14 @@
           <td>{{ Directeur.DateNaissance }}</td>
 
           <td>
-            <router-link :to="{ path: '/EditDirecteur/' + Directeur.id }" v-if="this.Userrole === 4">
+            <router-link :to="{ path: '/EditDirecteur/' + Directeur.id }" v-if="this.Userrole == 2">
               <button class="add-btn px-4">
                 <i class="fas fa-pen"></i>
                 <span class="tooltip" data-tooltip="inspect"></span>
               </button>
             </router-link>
 
-            <button class="add-btn px-4" @click="deleteDirecteur(Directeur.id)" v-if="this.Userrole === 4">
+            <button class="add-btn px-4" @click="deleteDirecteur(Directeur.id)" v-if="this.Userrole == 2">
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
@@ -44,9 +44,8 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-outline btn-success" @click="RedirectAdd()" v-if="this.Userrole === 4">Ajouter un Directeur</button>
   </div>
-  <AddDirecteur v-if="openAdd"/>
+  <AddDirecteur v-if="this.Userrole == 2" />
 </template>
 
 <script>

@@ -24,14 +24,14 @@
           <td>{{ Etablissement.ville }}</td>
           <td>{{ Etablissement.Nombre_des_enseignants }}</td>
           <td>
-            <router-link :to="{ path: '/EditEtablissement/'+Etablissement.id }" v-if="Userrole === 4">
+            <router-link :to="{ path: '/EditEtablissement/'+Etablissement.id }" v-if="Userrole == 4">
               <button class="add-btn px-4" >
               <i class="fas fa-pen" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
             </router-link>
 
-            <button class="add-btn px-4" @click="deleteEtablissement(Etablissement.id)" v-if="Userrole === 4">
+            <button class="add-btn px-4" @click="deleteEtablissement(Etablissement.id)" v-if="Userrole == 4">
               <i class="fas fa-trash" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
@@ -46,7 +46,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-outline btn-secondary  ml-5 mt-2 text-black" @click="redirectAdd()" v-if="Userrole === 4">Add etablissement</button>
+    <button class="btn btn-outline btn-secondary  ml-5 mt-2 text-black" @click="redirectAdd()" v-if="Userrole == 4">Add etablissement</button>
   </div>
 <AddEtablissement v-if="openAdd"/>
 </template>
@@ -99,7 +99,7 @@ export default {
       axios.delete(`http://127.0.0.1:8000/api/etablissements/${EtablissementId}`,config)
       .then(res=>{
         console.log(res.data)
-        this.getAdmins()
+        this.getEtablissements()
       })
     },
     redirectAdd(){

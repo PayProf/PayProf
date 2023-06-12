@@ -2,10 +2,10 @@
 
     <h1 class="text-5xl font-bold mt-24 text-gray-700 ">Table admins</h1>
     <div class="overflow-x-auto border">
-  <table class="table w-screen botrder">
+  <table class="table w-screen botrder z-10">
     <!-- head -->
     <thead>
-      <tr >
+      <tr>
         <th></th>
         <th>PPR</th>
         <th>Nom</th>
@@ -85,6 +85,7 @@ export default {
         };
         await axios.get('http://127.0.0.1:8000/api/admins',config).then(result => {
           this.Admins = result.data
+          console.log(result.data)
         })
         console.log(this.Admins.data)
       }

@@ -1,7 +1,10 @@
 <template>
   <div>
-    <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
-    <div v-if="showPopup" class="popup">
+    <div class="flex justify-center mt-5 ">
+      <button class="btn btn-primary rounded mb-4 w-32" @click="showPopup = true"><span class="text-2xl">+</span></button>
+    </div>
+    
+    <div v-if="showPopup" class="popup z-40">
       <div class="popup-content card w-96 bg-neutral ">
         <div class="card-body items-center text-center">
           <h2 class="card-title">Add Directeur</h2>
@@ -41,6 +44,13 @@
                 <input type="text" v-model="model.Directeur.email_perso" placeholder="Email"
                   class="input input-bordered" />
               </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Date Naissance</span>
+                </label>
+                <input type="date" v-model="model.Directeur.DateNaissance" placeholder="DateNaissance"
+                  class="input input-bordered" />
+              </div>
               
             </div>
 
@@ -48,7 +58,7 @@
               <button type="submit" class="btn btn-primary rounded" style="margin-bottom: 5px;">
                 Add Directeur
               </button>
-              <button type="button" class="btn btn-primary rounded" @click="showPopup = false">
+              <button type="button" class="btn btn-error rounded" @click="showPopup = false">
                 Cancel
               </button>
             </div>
@@ -60,6 +70,7 @@
 </template>
   
 <script>
+import store from '../store';
 import axios from 'axios';
 export default {
   name: 'AddDirecteur',
@@ -89,7 +100,7 @@ export default {
         };
 
       var myThis = this;
-      axios.post('http://127.0.0.1/api/Directeurs', this.model.Directeur,config)
+      axios.post('http://127.0.0.1:8000/api/Directeur', this.model.Directeur,config)
         .then(result => {
           console.log(result.data)
           this.model.Directeur = {

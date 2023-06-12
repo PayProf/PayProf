@@ -1,7 +1,7 @@
 <template>
   <div>
     <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
-    <div v-if="showPopup" class="popup">
+    <div v-if="showPopup" class="popup z-40">
       <div class="popup-content card w-96 bg-neutral ">
         <div class="card-body items-center text-center">
           <h2 class="card-title">Add Intervention</h2>

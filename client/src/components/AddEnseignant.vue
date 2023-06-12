@@ -1,7 +1,7 @@
 <template>
   <div>
     <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
-    <div v-if="showPopup" class="popup">
+    <div v-if="showPopup" class="popup z-40">
       <div class="popup-content">
         <h2 class="card-title">Add Intervention</h2>
         <form @submit.prevent="saveEnseignant(); showPopup = false">

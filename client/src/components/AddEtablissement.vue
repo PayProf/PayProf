@@ -1,6 +1,6 @@
 <template>
   <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
-  <div v-if="showPopup" class="popup">
+  <div v-if="showPopup" class="popup z-40">
     <div class="popup-content card w-96 bg-neutral ">
       <div class="card-body items-center text-center">
         <h2 class="card-title">Add Etablissement</h2>
@@ -11,7 +11,7 @@
               <label class="label">
                 <span class="label-text">Nom</span>
               </label>
-              <input type="text" v-model="model.Etablissement.nom" placeholder="Nom" class="input input-bordered" />
+              <input type="text" v-model="model.Etablissement.Nom" placeholder="Nom" class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
@@ -29,7 +29,7 @@
               <label class="label">
                 <span class="label-text">Telephone</span>
               </label>
-              <input type="text" v-model="model.Etablissement.Telephone" placeholder="Telephone"
+              <input type="text" v-model="model.Etablissement.telephone" placeholder="Telephone"
                 class="input input-bordered" />
             </div>
             <div class="form-control">
@@ -56,6 +56,7 @@
 </template>
   
 <script>
+import store  from "../store";
 import axios from 'axios';
 export default {
   name: 'AddEtablissement',
@@ -65,10 +66,10 @@ export default {
       showPopup: false,
       model: {
         Etablissement: {
-          nom: "",
+          Nom: "",
           code: "",
           ville: "",
-          Telephone: "",
+          telephone: "",
           FAX: ""
         }
       }
