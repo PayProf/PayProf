@@ -67,7 +67,10 @@ class AuthController extends Controller
         // Retourner la réponse réussie avec le rôle de l'utilisateur et le jeton d'accès
         return $this->succes([
             'role' => $user->role,
-            'token' => $token
+            'token' => $token,
+            'id' => $user->id,
+
+
         ], 'SUCCESSFULLY LOGIN');
     }
     

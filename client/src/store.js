@@ -20,11 +20,12 @@ const store = createStore({
     {
       nom: "mouad",
       prenom: "hayaoui",
-      id: 2,//localStorage.getItem('USERID'),
+
+      id: localStorage.getItem('USERID'),
       email: localStorage.getItem('EMAIL'),
 
-      role: 2,//localStorage.getItem('ROLE'),
-      token: 123,//localStorage.getItem('TOKEN'),
+      role: localStorage.getItem('ROLE'),
+      token: localStorage.getItem('TOKEN'),
       token_exp: localStorage.getItem('EXPIRATION')
     },
 
@@ -105,7 +106,8 @@ const store = createStore({
       localStorage.setItem('TOKEN', payload.token);
       state.user.role = payload.role;
       localStorage.setItem('ROLE', payload.role);
-
+      state.user.id = payload.id;
+      localStorage.setItem('USERID', payload.id);
       //get the current date
       const currentDate = new Date();
       //Add hours till expiration to it

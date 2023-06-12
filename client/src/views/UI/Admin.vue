@@ -1,85 +1,85 @@
-<template style="margin-top: 100px;">
-<div class="p-4 mt-20 sm:mx-30">
-        <div class="p-4 border-2 border-gray-200  rounded-lg ">
-            <div class="flex items-center justify-center h-60 mb-6 mt-10 rounded bg-gray-50 ">
-                <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                    <figure><img src=""  /></figure>
-                    <div class="card-body">
-                        <h2 class="card-title">Profile</h2>
-                        <p>If a dog chews shoes whose shoes does he choose?</p>
-                        <div class="card-actions justify-end">
-                            
-                            <button class="btn btn-primary" @click="showProfile">Consulter</button>
-
-                        </div>
-                    </div>
-                </div>
+<template>
+  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
+    <div class="col-span-1">
+    <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
+      <li @click="showProfile" v-if="OpenProfile" href="#tableEns" class="bg-neutral text-white">
+        <i class="fa-solid fa-user"></i>
+      </li>
+      <li @click="showProfile" v-else>
+        <i class="fa-solid fa-user"></i>
+      </li>
+      <li @click="showEns" v-if="OpenInt" class="bg-neutral text-white Interventions">
+        <i class="fa-solid fa-chalkboard-user"></i>
+      </li>
+      <li @click="showEns" v-else class="Interventions">
+        <i class="fa-solid fa-chalkboard-user"></i>
+      </li>
+      <li @click="showGraphe" v-if="OpenGraphe" class="bg-neutral text-white">
+        <i class="fa-sharp fa-solid fa-signal"></i>
+      </li>
+      <li @click="showGraphe" v-else>
+        <i class="fa-sharp fa-solid fa-signal"></i>
+      </li>
+      <li>
+        <i class="fa-solid fa-arrows-up-down-left-right"></i>
+      </li>
+    </ul>
+    </div>
+    <!-- delete card accepting -->
+    <div class="col-span-11">
+    <!-- <div>
+    <div v-if="OpenDelete"  id="profilecard" class="popup-overlay">
+      <div class="popup-container">
+        <div class="card w-96 bg-neutral text-neutral-content">
+          <div class="card-body items-center text-center">
+            <h2 class="card-title">WARNING !</h2>
+            <p>Are you sure you want to delete the intervention?</p>
+            <div class="card-actions justify-end">
+              <button @click="supIntervention()" class="btn btn-primary">Accept</button>
+              <button @click="OpenDelete = false" class="btn btn-ghost">Deny</button>
             </div>
-            <div class="grid grid-cols-2 gap-6 mb-4 pt-6">
-                <div class="flex items-center justify-center rounded bg-gray-50 h-40 ">
-                    <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                        <figure><img src=""  /></figure>
-                        <div class="card-body">
-                            <h2 class="card-title">Table des enseignants</h2>
-                            <p>If a dog chews shoes whose shoes does he choose?</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="showEns">Consulter</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center rounded bg-gray-50 h-40 ">
-                    <div class="card card-compact w-full h-full bg-base-100 drop-shadow-md ">
-                        <figure><img src=""  /></figure>
-                        <div class="card-body">
-                            <h2 class="card-title">tables des interventions</h2>
-                            <p>If a dog chews shoes whose shoes does he choose?</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn btn-primary" @click="ShowAllint">Consulter</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
-            <div class="card-body">
-              <h1 class="text-2xl font-bold">Profile enseignat : {{ user.nom }} {{ user.prenom }}</h1>
-                    <p class="py-2"><strong>Nom:</strong> {{user.nom}}</p>
-                    <p class="py-2"><strong>Prenom :</strong> {{user.prenom}}</p>
-                    <p class="py-2"><strong>Email :</strong> johndoe@example.com</p>
-                    <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p>
-                    <h2 class="card-title">New movie is released!</h2>
-              <p>Click the button to watch on Jetflix app.</p>
-              <div class="card-actions justify-end">
-                <button class="btn btn-primary">Change Password</button>
-              </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div> -->
+  <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
+  <div class="card-body">
+    <h1 class="text-2xl font-bold">Profile enseignat : Mouad Hayaoui</h1>
+          <p class="py-2"><strong>PPR :</strong> {{Profile.PPR}}</p>
+          <p class="py-2"><strong>Nom:</strong> {{Profile.nom}}</p>
+          <p class="py-2"><strong>Prenom :</strong> {{Profile.prenom}}</p>
+          <p class="py-2"><strong>Email :</strong> {{Profile.email}}</p>
+          <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p>
+    <div class="card-actions justify-end">
+      <button class="btn btn-primary">Change Password</button>
+    </div>
+  </div>
+</div>
+  
+    </div>
+  <!-- </> -->
 
-      <TableEnseignant v-if="OpenEns"/>
-      <ValidateIntervention v-if="OpenInt"/>
 
   </div>
+  <TableEnseignant id="tableEns" v-if="OpenEns"/>
+
 </template>
 
   
 
 <script>
+import store from '../../store'
+import axios from 'axios';
 import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
-import TableDirecteurs from '../TablesUAE/TableDirecteurs.vue';
 import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
-import TableEnseignats from '../../views/TablesEtab/TableEnseignant.vue'
 import {mapActions,mapState} from 'vuex';
-import Router from "../../router/index.js";
 export default {
   name: 'Admin',
   components: {
     TableEnseignant,
     PopupForm,
-
-    TableDirecteurs,
     ValidateIntervention,
 
   },
@@ -87,8 +87,16 @@ export default {
     return {
       showPopupForm: false,
       OpenEns:false,
-      OpenProfile:false,
+      OpenGraphe:false,
+      OpenProfile:true,
       OpenInt:false,
+      Profile:{
+        PPR:'',
+        nom:'',
+        prenom:'',
+        email:'',
+        etablissement:'',
+      }
 
     };
   },
@@ -96,6 +104,21 @@ export default {
   //   ...mapActions([
   //     'getEnseignants'
   // ]),
+  async showmyprofile(id){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/admins/'+id+'/myprofile',config);
+        this.Profile=response.data.data;
+        console.log(Profile);
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
   showStats() {
       this.OpenStats = !this.OpenStats;
     },
@@ -113,8 +136,12 @@ export default {
     },
     ShowAllint(){
       this.OpenInt = !this.OpenInt;
+    },
+    showGraphe(){
+      this.OpenGraphe = !this.OpenGraphe;
     }
   },
+  
   computed:{
     ...mapState([
         'enseignants',
@@ -122,6 +149,10 @@ export default {
     ])
 
   },
+  mounted() {
+  this.showmyprofile(this.$store.state.user.id);
+},
+
   // async created(){
   //   await this.$store.dispatch('getEnseignants');
   // }

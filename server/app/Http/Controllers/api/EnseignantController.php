@@ -14,6 +14,7 @@ use App\Models\Enseignant;
 use App\Models\Intervention;
 use App\Models\Paiements;
 use App\Traits\HttpResponses;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -24,14 +25,14 @@ class EnseignantController extends Controller
      use HttpResponses;
 //=========================================================== The access is retricted for:AdminUae|President ==============================================
 
-    
- 
+
+
      /**
      * Index() it's a methode that serve to display all the profs with there etablissement and grade.
      * I used in this method EnseignantResource that serve to filter the data .
      * @return mixed the important data of all PROFS such as :(Nom|prenom|etablissement|grade.......) .
     */
-   
+
        public function index()
 
          {   
@@ -43,7 +44,8 @@ class EnseignantController extends Controller
             return $this->error('','ACCES INTERDIT ',403);                    
          }
 
-//============================================================== The access is retricted for:AdminUEtab ========================================================          
+
+//============================================================== The access is retricted for:AdminUEtab ========================================================
 
 
      /**
@@ -52,27 +54,27 @@ class EnseignantController extends Controller
      * @return / a success message that mean the new enseignant was successfully inserted.
      * Attention the comments in this method must be respected.
      */
-     
+
        public function store(StoreEnseignantRequest $request)
 
-          {  
-
+          {
               
               if (Gate::allows('check_role', [2])) { 
+
                  $enseignant=new Enseignant();
 
-                 $grade_id=$enseignant->IdGrade($request['Grade']);                                  //IdGrade() it's a method that return the id of the grade 
+                 $grade_id=$enseignant->IdGrade($request['Grade']);                                  //IdGrade() it's a method that return the id of the grade
                  $etablissement_id=auth()->user()->administrateur->etablissement_id;                //the security developper should approuve it
                  $enseignant->PPR = $request['PPR'];
                  $enseignant->nom = $request['nom'];
                  $enseignant->prenom = $request['prenom'];
                  $enseignant->date_naissance = $request['DateNaissance'];
                  $enseignant->etablissement_id = auth()->user()->administrateur->etablissement_id  ;
-                 $enseignant->grade_id =$grade_id;  
-                                                 
+                 $enseignant->grade_id =$grade_id;
+
                  $enseignant->email_perso=$request['email_perso'];
                  $enseignant->save();
-                
+
                  $id=event (new storeuser($request->input('email_perso'),4,$request->input('nom'),$request->input('prenom')));
                  $enseignant->user_id = $id[0];
                  $enseignant->save();
@@ -82,30 +84,31 @@ class EnseignantController extends Controller
                }
                  return $this->error('','ACCES INTERDIT ',403);
 
-                 // return new EnseignantResource(Enseignant::create($request->all()));it's another method but we should know the etab_id 
+                 // return new EnseignantResource(Enseignant::create($request->all()));it's another method but we should know the etab_id
 
           }
 //======================================================= The access is retricted for:AdminUEtab|AdminUae|DireteurEtab|President ==================================================
-     
+
     //the access to this method is restricted for 0,3 and also 1 and 2
      /**
      * Show() this method serve to display a specified teacher with the name and the city of his etablissement and also his  grade  .
      * @param  int  $id it's IDEnseignant!!!!!!
      * @return   // error message in case of invalid enseignantid
      */
-   
+
        public function show($id)
 
           {      if (Gate::allows('check_role', [4,3]) || Gate::allows('direct_ens',$id) || Gate::allows('admin_ens',$id) ) {  
 
+
                  return new EnseignantResource(Enseignant::with('etablissement','grade')->FindOrFail($id));
                 }
-                 
-                return $this->error('','ACCES INTERDIT ',403);                   
-                 
+
+                return $this->error('','ACCES INTERDIT ',403);
+
           }
-        
-     
+
+
 //=========================================================== The access is retricted for:AdminUEtab ===============================================
 
 
@@ -118,21 +121,21 @@ class EnseignantController extends Controller
 
        public function update( UpdateEnseignantRequest $request, $id)
 
-          {       if ( Gate::allows('admin_ens',$id)) {             
-                      
+          {       if ( Gate::allows('admin_ens',$id)) {
+
                  $enseignant=Enseignant::find($id);
-                 $grade_id=$enseignant->IdGrade($request['Grade']);  
+                 $grade_id=$enseignant->IdGrade($request['Grade']);
                  $enseignant->PPR = $request['PPR'];
                  $enseignant->nom = $request['nom'];
                  $enseignant->prenom = $request['prenom'];
                  $enseignant->date_naissance = $request['DateNaissance'];
                  $enseignant->grade_id=$grade_id;
-                
+
                  $enseignant->save();
                  return $this->succes("","updated successfully");
                 }
-                 return $this->error('','ACCES INTERDIT ',403);  
-                              
+                 return $this->error('','ACCES INTERDIT ',403);
+
           }
 //======================================= The access is retricted for:AdminEtab ==============================================
 
@@ -140,14 +143,14 @@ class EnseignantController extends Controller
      /**
      * Destroy() this method serve to remove a specified enseignant.
      * @param  int  $id ID Enseignant !!!!!!
-     * @return ///a success message that mean the enseignant was successfully deleted. 
+     * @return ///a success message that mean the enseignant was successfully deleted.
      */
 
        public function destroy($id)
 
 
-          {       
-              if ( Gate::allows('admin_ens',$id) ) {           
+          {
+              if ( Gate::allows('admin_ens',$id) ) {
                  $ens= Enseignant::FindOrfail($id);
                  if($ens->image)
                  unlink(public_path('uploads').'/'.$ens->image);                                         //destroy the appropriate image .       
@@ -155,14 +158,15 @@ class EnseignantController extends Controller
                  return $this->succes("","enseignant deleted successfully");
                 }
                  return $this->error('','ACCES INTERDIT ',403);  
+
           }
 
-//=============================================== The access is retricted for:Enseignant ===========================================================================                
-   
+//=============================================== The access is retricted for:Enseignant ===========================================================================
+
 
      /**
      * ShowMyInterventions() this method serve to display the intervention of the enseignant Who just logged in .
-     * @return /// all the interventions of the enseignant Who just logged in  
+     * @return /// all the interventions of the enseignant Who just logged in
      */
 
 
@@ -172,17 +176,20 @@ class EnseignantController extends Controller
 
           { if (Gate::allows('check_role', [0])) {  
             if ( auth()->user()->role==0 ){  
+
+
               $id=auth()->user()->enseignant->id;
-              
+
               if(Intervention::where('enseignant_id',$id)->exists())
 
               {
-                     return  EnseignantInterventionResource::collection (Enseignant::where('id',$id)->with('interventions.etablissement')->paginate(10));   
+//                     return  EnseignantInterventionResource::collection (Enseignant::where('id',$id)->with('interventions.etablissement')->paginate(3));
+                  return Intervention::where('enseignant_id',$id)->paginate(5);
               }
-             
+
               else
               {
-                     return $this->error("","Pas d'interventions pour le moment",404); 
+                     return $this->error("","Pas d'interventions pour le moment",404);
               }
             }
          
@@ -191,14 +198,34 @@ class EnseignantController extends Controller
             return $this->error('','ACCES INTERDIT ',403);
           }
           }
+
+    public function ShowMyGraphe()
+
+
+    {
+        if ( auth()->user()->role==0 ){
+        $id=auth()->user()->enseignant->id;
+        if(Intervention::where('enseignant_id',$id)->exists())
+
+        {
+            return Intervention::where('enseignant_id',$id)->get();
+        }
+
+        else
+        {
+            return $this->error("","Pas d'interventions pour le moment",404);
+        }
+    }
+        //add Return access denied
+    }
 //======================================================== The access is retricted for:Enseignant ===================================================
-      
+
 
      /**
      * ShowMyPaymentsthis method serve to display the payments of the enseignant Who just logged in .
-     * @return /// all the payments of the enseignant Who just logged in  
+     * @return /// all the payments of the enseignant Who just logged in
      */
-           
+
        public function ShowMyPayments()
 
           {     if (Gate::allows('check_role', [0])) { 
@@ -210,7 +237,7 @@ class EnseignantController extends Controller
 
                  {
 
-                     $ens=Enseignant::where('id',$id)->with('paiements')->get();  
+                     $ens=Enseignant::where('id',$id)->with('paiements')->get();
 
                      return response()->json($ens);
                  }
@@ -226,20 +253,20 @@ class EnseignantController extends Controller
                return $this->error('','ACCES INTERDIT ',403);
           }
           }
-   
 
 
-//============================================ The access is retricted for:Enseignant  =====================================================              
-        
-   
+
+//============================================ The access is retricted for:Enseignant  =====================================================
+
+
      /**
      * UploadMyImage this method serve to upload the Profil picture of the enseignant Who just logged inr.
 
      * @return //success message that mean the picture was successfully uploaded .
      */
-  
+
        public function UploadMyImage( Request $request)
-       
+
           {
             if (Gate::allows('check_role', [0])) { 
 
@@ -252,18 +279,18 @@ class EnseignantController extends Controller
                  {
                  $file=$request->image;
                  $image_name=time().'_'. $file->getClientOriginalName();
-                 $file->move(public_path('uploads'),$image_name);                 
-        
+                 $file->move(public_path('uploads'),$image_name);
+
 // ===================== if the enseignant already has a ProfilPicture =======================================
                  if($enseignant->image)
-                 { unlink(public_path('uploads'). '/' .$enseignant->image); }                 
+                 { unlink(public_path('uploads'). '/' .$enseignant->image); }
                  $enseignant->image=$image_name;
                  $result=$enseignant->save();
-                 } 
-// =================================== Si le resultat est true ==============================================                          
+                 }
+// =================================== Si le resultat est true ==============================================
                  if($result)
                  {
-                 return $this->succes("","image uploaded successfully");    
+                 return $this->succes("","image uploaded successfully");
                  }
                }
          
@@ -273,10 +300,11 @@ class EnseignantController extends Controller
               
               
 
+
           }
-//==================================== The access is retricted for:Enseignant   ============================================================                
-           
-   
+//==================================== The access is retricted for:Enseignant   ============================================================
+
+
      /**
      * ShowMyProfil this method serve to display the informations of the enseignant Who just logged in.
      * @param  int  $id User_id of the Enseignant !!!!!!
@@ -295,11 +323,12 @@ class EnseignantController extends Controller
 
 
            return $this->error('','ACCES INTERDIT ',403);
+         }
     
                 
-          }
 
-//======================================= The access is retricted for:Enseignant ======================================= 
+
+//======================================= The access is retricted for:Enseignant =======================================
 
 
      /**
@@ -309,7 +338,7 @@ class EnseignantController extends Controller
           {
             if (Gate::allows('check_role', [0])) { 
               $id=auth()->user()->enseignant->id;
-               
+
               if(Intervention::where('enseignant_id',$id)->exists())
               {
                  $enseignant=new Enseignant();
@@ -343,9 +372,9 @@ class EnseignantController extends Controller
 
                 
                  $id=auth()->user()->enseignant->id;
-                 $enseignant=Enseignant::where('id',$id)->first();  
-                 $enseignant->email_perso=$request['email_perso'];   
-                 $enseignant->save();  
+                 $enseignant=Enseignant::where('id',$id)->first();
+                 $enseignant->email_perso=$request['email_perso'];
+                 $enseignant->save();
                  return $this->succes("","email updated successfully");
                }
          
@@ -355,7 +384,7 @@ class EnseignantController extends Controller
           
        }
 
-                
-// 
+
+//
 }
 
