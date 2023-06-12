@@ -2,11 +2,11 @@
   <div>
     <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
     <div v-if="showPopup" class="popup">
-      <div class="popup-content card w-96 bg-neutral text-neutral-content">
+      <div class="popup-content card w-96 bg-neutral ">
         <div class="card-body items-center text-center">
           <h2 class="card-title">Add Intervention</h2>
           <form @submit.prevent="saveIntervention(); showPopup = false">
-            <!-- Form fields for adding an intervention -->
+            <!-- Form fields fogr addin an intervention -->
             <div class="grid grid-cols-2 gap-4">
               <div class="form-control">
                 <label class="label">
@@ -52,6 +52,7 @@
               </div>
               <div class="form-control">
                 <label class="label">
+                  <!-- l -->
                   <span class="label-text">Date début</span>
                 </label>
                 <input type="date" v-model="model.Intervention.DateDebut" placeholder="Date début"

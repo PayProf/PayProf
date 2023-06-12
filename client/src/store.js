@@ -25,6 +25,7 @@ const store = createStore({
 
       role: localStorage.getItem('ROLE'),
       token: localStorage.getItem('TOKEN'),
+
       token_exp: localStorage.getItem('EXPIRATION')
     },
 

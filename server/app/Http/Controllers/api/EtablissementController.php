@@ -9,7 +9,6 @@ use App\Http\Resources\EtablissementResource;
 use App\Models\Administrateur;
 use App\Models\Directeur;
 use App\Models\Enseignant;
-use App\Models\Directeur;
 use App\Models\Etablissement;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
@@ -78,7 +77,7 @@ class EtablissementController extends Controller
             // Check if the 'with' value is one of the allowed relationships.
             if (in_array($value, $array)) {
                 // Load the specified relationship for the Etablissement
-                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value)->latest()->paginate(10));
+                $data = new EtablissementResource(Etablissement::findOrFail($id)->loadMissing($value));
             } else {
                  // Return an error response if the specified relationship is not found.
                 return $this->error('', 'the fild that you enter is not found', 400);
@@ -86,7 +85,7 @@ class EtablissementController extends Controller
         }
         // Return a success response with the transformed data.
         return $this->succes($data, 'DISPLAY');
-    }
+   }
     return $this->error('','ACCES INTERDIT ',403);
 
     }
@@ -113,6 +112,7 @@ class EtablissementController extends Controller
             return $this->error("", 'NO DATA FOUND',402);
         }
     }
+}
 
     /**
      * Remove the specified resource from storage.
@@ -137,7 +137,8 @@ class EtablissementController extends Controller
         return $this->succes('', 'SUCCESSFULLY DELETED');
         }
     }
-    public function Show_Myetablissement($user_id)
+}
+    public function ShowMyetablissement($user_id)
     {
        
         // Check the role value to determine the user type and
@@ -163,7 +164,8 @@ class EtablissementController extends Controller
             $directeur = ['id_etablissement' => $data->etablissement_id];
             $etablissement = Etablissement::where('id', $directeur['id_etablissement'])->first();
             return $this->succes($etablissement, "MY ETABLISSEMENT");
-        }}
+        }
+    }
    
     
     

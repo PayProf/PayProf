@@ -82,18 +82,21 @@ class PaiementsController extends Controller
      */
     public function update(UpdatePaiementsRequest $request, $id)
     {
-        // Find the existing Paiements resource by ID
-        $paiement = Paiements::findOrFail($id);
+        //=================== TRIGGER ===================================
+        //=================== ON PEUT PAS FAIRE LE MISE A JOUR============
+        // // Find the existing Paiements resource by ID
+        // $paiement = Paiements::findOrFail($id);
 
-        // Update the Paiements resource with the request data
-        $paiement->update($request->all());
+        // // Update the Paiements resource with the request data
+        // $paiement->update($request->all());
 
-        // Retrieve the updated resource
-        $data = new PaiementResource(Paiements::find($id));
+        // // Retrieve the updated resource
+        // $data = new PaiementResource(Paiements::find($id));
 
-        // Return a success response with the updated resource
-        return $this->succes($data, 'SUCCESSFLY UPDATE');
+        // // Return a success response with the updated resource
+        // return $this->succes($data, 'SUCCESSFLY UPDATE');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -103,17 +106,19 @@ class PaiementsController extends Controller
      */
     public function destroy($id)
     {
-        // Find the existing Paiements resource by ID
-        $paiement = Paiements::findOrFail($id);
+        //===============TRIGGER===================
+        //================ON PEUT PAS SUPPRIMER=================
+        // // Find the existing Paiements resource by ID
+        // $paiement = Paiements::findOrFail($id);
 
-        // Delete the Paiements resource
-        $paiement->delete();
+        // // Delete the Paiements resource
+        // $paiement->delete();
 
-        // Return a success response
-        return $this->succes('', 'DELETED DATA');
+        // // Return a success response
+        // return $this->succes('', 'DELETED DATA');
     }
 
-    public function Show_paiements_enseignant($id_enseignant)
+    public function ShowPaiementsEnseignant($id_enseignant)
     {
         // Retrieve payments (Paiements) for a specific enseignant
         // based on the enseignant_id. The related enseignant
