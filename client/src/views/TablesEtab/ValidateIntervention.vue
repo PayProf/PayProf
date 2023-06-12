@@ -1,10 +1,10 @@
 <template>
-   <div class="overflow-x-auto ">
+   <div class="overflow-x-auto">
     <table class="table table-zebra w-full">
             <!-- head -->
             <thead>
               <tr>
-                <th>PPR</th>
+                <th class="z-30">PPR</th>
                 <th>Etablissement</th>
                 <th>Intitule Intervention</th>
                 <th>Année universitaire</th>

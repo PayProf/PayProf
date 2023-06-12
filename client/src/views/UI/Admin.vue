@@ -7,7 +7,7 @@
   </div>
   <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12" v-else>
     <div class="col-span-1">
-    <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
+    <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-40" v-drag>
       <li @click="showProfile" v-if="OpenProfile" href="#tableEns" class="bg-neutral text-white">
         <i class="fa-solid fa-user"></i>
       </li>
