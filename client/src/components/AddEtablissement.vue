@@ -1,71 +1,76 @@
 <template>
-  <div class="ml-30 my-20">
-    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 justify-center">
-      <div class="card-body">
-        <form>
-          <!-- Form fields for adding an enseignant -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Nom</span>
-            </label>
-            <input type="text" v-model="model.Etablissement.Nom" placeholder="Nom" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Ville</span>
-            </label>
-            <input type="text" v-model="model.Etablissement.ville" placeholder="Ville" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Telephone</span>
-            </label>
-            <input type="number" v-model="model.Etablissement.Telephone" placeholder="telephone"
-              class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Fax</span>
-            </label>
-            <input type="number" v-model="model.Etablissement.code" placeholder="Fax" class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Nbr Enseingant</span>
-            </label>
-            <input type="number" v-model="model.Etablissement.Nombre_des_enseignants" placeholder="NbrEnseingant"
-              class="input input-bordered" />
+  <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
+  <div v-if="showPopup" class="popup z-40">
+    <div class="popup-content card w-96 bg-neutral ">
+      <div class="card-body items-center text-center">
+        <h2 class="card-title">Add Etablissement</h2>
+        <form @submit.prevent="saveEtablissement(); showPopup = false">
+          <!-- Form fields fogr addin an Etablissement -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Nom</span>
+              </label>
+              <input type="text" v-model="model.Etablissement.Nom" placeholder="Nom" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Code</span>
+              </label>
+              <input type="text" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Ville</span>
+              </label>
+              <input type="text" v-model="model.Etablissement.ville" placeholder="Ville" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Telephone</span>
+              </label>
+              <input type="text" v-model="model.Etablissement.telephone" placeholder="Telephone"
+                class="input input-bordered" />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Fax</span>
+              </label>
+              <input type="text" v-model="model.Etablissement.FAX" placeholder="Année universitaire"
+                class="input input-bordered" />
+            </div>
           </div>
 
           <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px;"
-              @click="saveEtablissement(), RedirectTable()">Add
-              Etablissement</button>
-            <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded" style="margin-bottom: 5px;">
+              Add Etablissement
+            </button>
+            <button type="button" class="btn btn-primary rounded" @click="showPopup = false">
+              Cancel
+            </button>
           </div>
         </form>
       </div>
     </div>
-
-
   </div>
 </template>
   
 <script>
+import store  from "../store";
 import axios from 'axios';
 export default {
   name: 'AddEtablissement',
   data() {
     return {
       errorsList: "",
+      showPopup: false,
       model: {
         Etablissement: {
+          Nom: "",
           code: "",
           ville: "",
-          Telephone: "",
-          Nom: "",
-          Nombre_des_enseignants: ""
+          telephone: "",
+          FAX: ""
         }
       }
     }
@@ -73,17 +78,21 @@ export default {
 
   methods: {
     saveEtablissement() {
-
+      const token = store.state.user.token;
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
       var myThis = this;
-      axios.post('http://127.0.0.1:8000/api/etablissements', this.model.Etablissement)
+      axios.post('http://127.0.0.1:8000/api/etablissements', this.model.Etablissement, config)
         .then(result => {
           console.log(result.data)
           this.model.Etablissement = {
+            nom: "",
             code: "",
             ville: "",
             Telephone: "",
-            Nom: "",
-            Nombre_des_enseignants: ""
+            FAX: ""
+
           }
 
         }).catch(function (error) {
@@ -109,10 +118,7 @@ export default {
         });
     },
 
-    //Redirect to table view
-    RedirectTable() {
-      this.$router.push('/TableEtablissements')
-    }
+
 
   },
 
@@ -136,4 +142,5 @@ export default {
 .popup-content {
   background-color: #fff;
   padding: 20px;
-}</style>
+}
+</style>

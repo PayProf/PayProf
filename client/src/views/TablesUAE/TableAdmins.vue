@@ -2,10 +2,10 @@
 
     <h1 class="text-5xl font-bold mt-24 text-gray-700 ">Table admins</h1>
     <div class="overflow-x-auto border">
-  <table class="table w-screen botrder">
+  <table class="table w-screen botrder z-10">
     <!-- head -->
     <thead>
-      <tr >
+      <tr>
         <th></th>
         <th>PPR</th>
         <th>Nom</th>
@@ -31,7 +31,7 @@
             </button>
             </router-link>
 
-            <button class="add-btn px-4" @click="deleteAdmin(Admin.id)" >
+            <button class="add-btn px-4" @click="deleteAdmin(Admin.id)">
               <i class="fas fa-trash" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
@@ -49,18 +49,24 @@
     </tbody>
   </table>
 </div>
-
+<AddAdmin v-if="openAdd"/>
 <button class="btn btn-outline btn-success" @click="RedirectAdd()" >Ajouter un admin</button>
   
 </template>
 
 <script>
+import AddAdmin from '../../components/AddAdmin.vue';
+import store from '../../store';
 import axios from 'axios';
 export default {
     name: 'EtabAdmins',
+    components:{
+      AddAdmin
+    },
     data() {
     return {
-      Admins: []
+      Admins: [],
+      openAdd:false,
     }
   },
 
@@ -73,8 +79,13 @@ export default {
   methods: {
     async getAdmins() {
       try {
-        await axios.get('http://127.0.0.1:8000/api/admins').then(result => {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        await axios.get('http://127.0.0.1:8000/api/admins',config).then(result => {
           this.Admins = result.data
+          console.log(result.data)
         })
         console.log(this.Admins.data)
       }
@@ -83,10 +94,14 @@ export default {
       }
     },
     RedirectAdd() {
-      this.$router.push('/AddAdmin')
+      this.openAdd = !this.openAdd
     },
     deleteAdmin(AdminId){
-      axios.delete(`http://127.0.0.1:8000/api/admins/${AdminId}`)
+      const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+      axios.delete(`http://127.0.0.1:8000/api/admins/${AdminId}`,config)
       .then(res=>{
         console.log(res.data)
         this.getAdmins()

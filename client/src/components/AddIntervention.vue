@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
     <div v-if="showPopup" class="popup z-50">
       <div class="popup-content card w-96 bg-neutral ">
@@ -77,6 +78,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -103,6 +105,7 @@ export default {
     };
   },
   methods: {
+
     async postIntervention() {
       try {
         const token = store.state.user.token;

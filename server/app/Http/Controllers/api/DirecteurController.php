@@ -55,7 +55,7 @@ class DirecteurController extends Controller
         if (Gate::allows('check_role', [2])) {
 
             $directeur = new Directeur();
-            $directeur->etablissement_id = auth()->user()->administrateur->etablissement_id;
+            $directeur->etablissement_id = $request['etablissement_id'];
             $directeur->PPR = $request['PPR'];
             $directeur->nom = $request['nom'];
             $directeur->prenom = $request['prenom'];
