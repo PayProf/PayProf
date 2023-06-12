@@ -1,5 +1,11 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
+  <div class="hero min-h-screen bg-base-200" v-if="IsLoading">
+    <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+         role="status">
+      <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+    </div>
+  </div>
+  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12" v-if="!IsLoading">
     <div class="col-span-1">
     <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50 relative"  v-drag>
       <li @click="showProfile" v-if="OpenProfile" class="bg-neutral text-white">
@@ -144,6 +150,7 @@ export default {
       IsUpdate:false,
       pagecount:null,
       page:1,
+      IsLoading:false,
     }
   },
   components: {
@@ -201,9 +208,11 @@ export default {
       }
     }
   },
-  mounted() {
-    this.showmyprofile();
-    this.getInterventions();
+  async mounted() {
+    this.IsLoading=true;
+    await this.showmyprofile();
+    await this.getInterventions();
+    this.IsLoading=false;
 
   },
 
