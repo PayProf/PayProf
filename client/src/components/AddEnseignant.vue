@@ -103,12 +103,13 @@ export default {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json'
-
           }
         };
         console.log(this.model.Enseignant)
-        await axios.post(`http://127.0.0.1:8000/api/Enseignant`, this.model.Enseignant, config);
+        const response = await axios.post(`http://127.0.0.1:8000/api/Enseignant`, this.model.Enseignant, config);
+        console.log(response)
         console.log('Enseignant added successfully');
+
       } catch (error) {
         console.log(error);
       }
@@ -118,9 +119,6 @@ export default {
       this.$router.push('/TableEnseignants');
     }
   },
-  mounted(){
-
-  }
 
 };
 </script>

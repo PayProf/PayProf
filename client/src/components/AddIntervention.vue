@@ -114,8 +114,8 @@ export default {
         };
         await axios.post(`http://127.0.0.1:8000/api/Intervention`, this.model.Intervention, config);
         console.log('Enseignant added successfully');
-
-
+        this.$emit('intervention-added');
+        this.showPopup=false;
       } catch (error) {
         console.log(error);
       }

@@ -29,21 +29,17 @@
                 <td>{{ Intervention.Nbr_heures }}</td>
                 <td> <input type="checkbox" :checked="Intervention.visa_uae" class="checkbox" />  </td>
                 <td> <input type="checkbox" :checked="Intervention.visa_etab" class="checkbox"  /> </td>
-                <td>
-                  <button class="add-btn px-4" v-if="this.role==2" >
+                <td v-if="this.role==2">
+                  <button class="add-btn px-4" >
                     <i class="fas fa-pen" ></i>
                     <span class="tooltip" data-tooltip="inspect">modifier</span>
                   </button>
 
-                  <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" v-if="this.role==2">
+                  <button class="add-btn px-4" @click="deleteIntervention(Intervention.id)" >
                     <i class="fas fa-trash" ></i>
                     <span class="tooltip" data-tooltip="inspect">supprimer</span>
                   </button>
                   <!-- This page isn't created yet !!!! -->
-                    <button class="add-btn px-4"  >
-                      <i class="fas fa-eye" ></i>
-                      <span class="tooltip" data-tooltip="inspect"> inspecter </span>
-                    </button>
                 </td>
               </tr>
             </tbody>
@@ -59,7 +55,7 @@
              />
            </div>
      <div class="flex justify-center items-center">
-            <AddIntervention/>
+            <AddIntervention @intervention-added="getInterventions"/>
      </div>
 
 
@@ -92,6 +88,20 @@ export default {
 
   },
   methods: {
+    async deleteIntervention(id){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.delete('http://127.0.0.1:8000/api/Intervention/'+id,config);
+        console.log(response);
+        this.getInterventions();
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
     async getInterventions() {
       try {
         const token = store.state.user.token;

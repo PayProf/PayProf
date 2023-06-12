@@ -137,7 +137,7 @@ class InterventionController extends Controller
        public function destroy($id)
 
           {
-              if (Gate::allows('interv_etab', $id)) {
+//              if (Gate::allows('interv_etab', $id)) {
                  $intervention= Intervention::find($id);
                  if($intervention)
                  {
@@ -147,7 +147,7 @@ class InterventionController extends Controller
                 else{
                      return$this->error("","intervention introuvable",404);
                  }
-              }
+//              }
               return $this->error('','ACCES INTERDIT ',403);
 
 
