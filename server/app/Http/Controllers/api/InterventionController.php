@@ -29,7 +29,7 @@ class InterventionController extends Controller
      */
     public function index()
     {
-       if (Gate::allows('check_role', [4,3])) {  
+       if (Gate::allows('check_role', [4,3])) {
         //return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10));
         }
         return $this->error('','ACCES INTERDIT ',403);
@@ -51,7 +51,7 @@ class InterventionController extends Controller
 
           {
 
-              if (Gate::allows('check_role', [2])) {  
+              if (Gate::allows('check_role', [2])) {
                  $intervention=new Intervention();
                  $enseignant=$intervention->IdEnseignant($request['PPR']);
                  $etablissement=auth()->user()->administrateur->etablissement_id;
@@ -84,7 +84,7 @@ class InterventionController extends Controller
        public function show($id)
 
           {
-              if (Gate::allows('check_role', [4,3]) || Gate::allows('interv_etab', $id)) {  
+              if (Gate::allows('check_role', [4,3]) || Gate::allows('interv_etab', $id)) {
                  return new InterventionResource(Intervention::with('enseignant','etablissement')->findOrFail($id));
               }
               return $this->error('','ACCES INTERDIT ',403);
@@ -104,11 +104,11 @@ class InterventionController extends Controller
 
        public function update(UpdateInterventionRequest $request, $id)
 
-  
-          { //admin_etab si meme etab 
-                    if (Gate::allows('interv_etab', $id)) {         
-                 $intervention=Intervention::FindOrFail($id);   
-                 $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant 
+
+          { //admin_etab si meme etab
+                    if (Gate::allows('interv_etab', $id)) {
+                 $intervention=Intervention::FindOrFail($id);
+                 $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant
                  $intervention->intitule_intervention=$request['IntituleIntervention'];
                  $intervention->annee_univ = $request['AnneeUniv'] ;
                  $intervention->semestre = $request['Semestre'];
@@ -137,7 +137,7 @@ class InterventionController extends Controller
        public function destroy($id)
 
           {
-              if (Gate::allows('interv_etab', $id)) {    
+//              if (Gate::allows('interv_etab', $id)) {
                  $intervention= Intervention::find($id);
                  if($intervention)
                  {
@@ -147,7 +147,7 @@ class InterventionController extends Controller
                 else{
                      return$this->error("","intervention introuvable",404);
                  }
-              }
+//              }
               return $this->error('','ACCES INTERDIT ',403);
 
 
@@ -169,9 +169,9 @@ class InterventionController extends Controller
 
        public function ShowMore($id)
 
-          {    
+          {
 
-              if (Gate::allows('check_role', [4,3]) || Gate::allows('interv_etab', $id) ) {  
+              if (Gate::allows('check_role', [4,3]) || Gate::allows('interv_etab', $id) ) {
 
               if(Intervention::where('id',$id)->exists())
 
@@ -202,7 +202,7 @@ class InterventionController extends Controller
 
        public function activeVisaUae(UpdateInterventionRequest $request,$id)
           {
-              if (Gate::allows('check_role', [3])) {  
+              if (Gate::allows('check_role', [3])) {
                  $intervention =Intervention::find($id);
                  $intervention->visa_uae=$request['VisaUae'];
                  $intervention->save();
@@ -224,7 +224,7 @@ class InterventionController extends Controller
 
        public function activeVisaEtab(UpdateInterventionRequest $request,$id)
           {
-              if (Gate::allows('check_role', [1])) {  
+              if (Gate::allows('check_role', [1])) {
                  $intervention =Intervention::find($id);
                  $intervention->visa_etab=$request['VisaEtab'];
                  $intervention->save();
@@ -240,33 +240,33 @@ class InterventionController extends Controller
 
      /**
      * ShowMyEtabInterventions  this method serve to display the interventions of the Admin Eatblissement Or Directeur Etablissement.
-     
-     * the comments should be respected and approved by the security developper 
-     
+
+     * the comments should be respected and approved by the security developper
+
      */
 
 
 
        public function ShowMyEtabInterventions()
-        
-          {  
-              if (Gate::allows('check_role', [1,2])) { 
+
+          {
+              if (Gate::allows('check_role', [1,2])) {
 
                    $role=auth()->user()->role;
-                   if($role==1)
+                   if($role==2)
                    {
                    $etab_id=auth()->user()->administrateur->etablissement_id;
                    }
-                    elseif($role==2)
+                    elseif($role==1)
                    {
                      $etab_id=auth()->user()->directeur->etablissement_id;
-                        
+
                     }
-                
-                 return  InterventionResource::collection(Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(10));
+
+                 return  Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5);
               }
               return $this->error('','ACCES INTERDIT ',403);
-           
+
 
 
           }
@@ -283,7 +283,7 @@ class InterventionController extends Controller
        public function EnseignantInterventions($id)
           {
 
-                 
+
                  if(Intervention::where('enseignant_id',$id)->exists())
                  {
                      return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
@@ -293,8 +293,8 @@ class InterventionController extends Controller
                 {
                      return $this->error("","intervention introuvable",404);
                 }
-                   
-                
+
+
 
           }
 

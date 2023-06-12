@@ -1,7 +1,8 @@
 <template>
   <div>
-    <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
-    <div v-if="showPopup" class="popup z-40">
+
+    <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
+    <div v-if="showPopup" class="popup z-50">
       <div class="popup-content card w-96 bg-neutral ">
         <div class="card-body items-center text-center">
           <h2 class="card-title">Add Intervention</h2>
@@ -10,35 +11,29 @@
             <div class="grid grid-cols-2 gap-4">
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Code</span>
+                  <span class="label-text">PPR</span>
                 </label>
-                <input type="text" v-model="model.Intervention.Code" placeholder="Code" class="input input-bordered" />
+                <input type="text" v-model="model.Intervention.PPR" placeholder="Code" class="input input-bordered" />
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Etablissement</span>
                 </label>
-                <input type="text" v-model="model.Intervention.Etablissement" placeholder="Etablissement"
+                <input type="text" v-model="model.Intervention.NomEtab" placeholder="Etablissement"
                   class="input input-bordered" />
-              </div>
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">Ville</span>
-                </label>
-                <input type="text" v-model="model.Intervention.Ville" placeholder="Ville" class="input input-bordered" />
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Intitule Intervention</span>
                 </label>
-                <input type="text" v-model="model.Intervention.Intitule" placeholder="Intitule"
+                <input type="text" v-model="model.Intervention.IntituleIntervention" placeholder="Intitule"
                   class="input input-bordered" />
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Année universitaire</span>
                 </label>
-                <input type="text" v-model="model.Intervention.Annee" placeholder="Année universitaire"
+                <input type="text" v-model="model.Intervention.AnneeUniv" placeholder="Année universitaire"
                   class="input input-bordered" />
               </div>
               <div class="form-control">
@@ -46,8 +41,8 @@
                   <span class="label-text">Semestre</span>
                 </label>
                 <select v-model="model.Intervention.Semestre" class="select select-bordered">
-                  <option value="1">1st Semester</option>
-                  <option value="2">2nd Semester</option>
+                  <option value="S1">1st Semester</option>
+                  <option value="S2">2nd Semester</option>
                 </select>
               </div>
               <div class="form-control">
@@ -69,25 +64,14 @@
                 <label class="label">
                   <span class="label-text">Nombre d'heure</span>
                 </label>
-                <input type="text" v-model="model.Intervention.NombreHeures" placeholder="Nombre d'heure"
+                <input type="text" v-model="model.Intervention.NbrHeures" placeholder="Nombre d'heure"
                   class="input input-bordered" />
               </div>
-              <div class="form-control col-span-2">
-                <label class="label">
-                  <span class="label-text">Visa_etb</span>
-                </label>
-                <input type="checkbox" v-model="model.Intervention.Checkbox1" class="checkbox checkbox-primary" />
-              </div>
-              
             </div>
 
-            <div class="form-control mt-6">
-              <button type="submit" class="btn btn-primary rounded" style="margin-bottom: 5px;">
-                Add Intervention
-              </button>
-              <button type="button" class="btn btn-primary rounded" @click="showPopup = false">
-                Cancel
-              </button>
+            <div class="form-control mt-6 grid grid-cols-2 flex items-center">
+              <button type="submit" class="btn btn-primary h-9" style="border-radius: 10px;" @click="postIntervention">Add Intervention</button>
+              <button class="btn btn-error text-white h-9 ml-2" style="border-radius: 10px;" @click="showPopup = false">Cancel</button>
             </div>
           </form>
         </div>
@@ -99,6 +83,7 @@
 
 <script>
 import axios from 'axios';
+import store from "../store.js";
 export default {
   name: 'AddIntervention',
   data() {
@@ -106,60 +91,39 @@ export default {
       showPopup: false,
       model: {
         Intervention: {
-          Code: '',
-          Etablissement: '',
-          Ville: '',
-          Intitule: '',
-          Annee: '',
+          IntituleIntervention: '',
+          AnneeUniv: '',
           Semestre: '',
           DateDebut: '',
           DateFin: '',
-          NombreHeures: '',
-          Checkbox1: false,
-          Checkbox2: false
+          PPR: '',
+          NomEtab:'',
+          NbrHeures:'',
         }
-      }
+      },
+      role:store.state.user.role,
     };
   },
   methods: {
-    saveIntervention(){
-      const token = store.state.user.token;
+
+    async postIntervention() {
+      try {
+        const token = store.state.user.token;
         const config = {
-          headers: { Authorization: `Bearer ${token}` }
-        };
-      axios
-        .post('http://127.0.0.1:8000/api/Intervention', this.model.Intervention,config)
-        .then(result => {
-          console.log(result.data);
-          this.model.Intervention = {
-            Code: '',
-            Etablissement: '',
-            Ville: '',
-            Intitule: '',
-            Annee: '',
-            Semestre: '',
-            DateDebut: '',
-            DateFin: '',
-            NombreHeures: '',
-            Checkbox1: false,
-            Checkbox2: false
-          };
-        })
-        .catch(error => {
-          if (error.response) {
-            if (error.response.status == 422) {
-              this.errorsList = error.response.data.errors;
-            }
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            console.log('Error', error.message);
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
           }
-        });
-    }
+        };
+        await axios.post(`http://127.0.0.1:8000/api/Intervention`, this.model.Intervention, config);
+        console.log('Enseignant added successfully');
+        this.$emit('intervention-added');
+        this.showPopup=false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
   }
 };
 </script>
