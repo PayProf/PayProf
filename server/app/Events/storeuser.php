@@ -26,7 +26,7 @@ class storeuser
     public $prenom;
     
     
-    public Administrateur $admin;
+   
     public function __construct($email, $role, $nom, $prenom)
     {
         $this->nom=$nom;
