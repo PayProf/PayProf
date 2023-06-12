@@ -101,7 +101,7 @@ const routes = [
         name:'Directeur',
         component: EtabDirector,
         meta:{
-        AdminAccess: false,
+        AdminAccess: true,
         AdminUAEAccess: false,
         UserAccess: false,
         DirectorUAEAccess: false,

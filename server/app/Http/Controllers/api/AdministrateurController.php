@@ -161,7 +161,7 @@ class AdministrateurController extends Controller
        
     }
 
-    public function Show_Myprofile($user_id)
+    public function ShowMyprofile($user_id)
     { 
         
         if (Gate::allows('check_role', [0]) || Gate::allows('admin_modify',$user_id)) {
@@ -180,7 +180,7 @@ class AdministrateurController extends Controller
         
     }
 
-    public function Update_email(UpdateEmailRequest $request, $user_id)
+    public function Updateemail(UpdateEmailRequest $request, $user_id)
     {
         //seulement 
         if (Gate::allows('check_role', [0]) || Gate::allows('admin_modify',$user_id)) {
@@ -197,11 +197,11 @@ class AdministrateurController extends Controller
         return $this->error('','ACCES INTERDIT ',403);
        
     }
-    public function All_Enseignants($user_id){
+    public function AllEnseignants($user_id){
         $user=Administrateur::where('user_id', $user_id)->first();
         if($user){
             $etablissement_id=$user->etablissement_id;
-            $data = new EtablissementResource(Etablissement::findOrFail($etablissement_id)->loadMissing('Enseignants')->latest()->paginate(10));
+            $data = new EtablissementResource(Etablissement::findOrFail($etablissement_id)->loadMissing('Enseignants'));
             if($data){
                return $this->succes($data,"DISPLAY");
             }else{

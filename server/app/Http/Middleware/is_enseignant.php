@@ -18,7 +18,7 @@ class is_enseignant
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->role==4){
+        if ($request->user()->role==0){
             return $this->error('','ACCES INTERDIT ',403);
         }
         else{

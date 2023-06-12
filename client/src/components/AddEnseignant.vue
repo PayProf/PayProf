@@ -4,7 +4,7 @@
     <div v-if="showPopup" class="popup">
       <div class="popup-content">
         <h2 class="card-title">Add Intervention</h2>
-        <form @submit.prevent="saveIntervention(); showPopup = false">
+        <form @submit.prevent="saveEnseignant(); showPopup = false">
           <!-- Form fields for adding an enseignant -->
           <div class="form-control">
             <label class="label">
@@ -40,9 +40,9 @@
             </label>
             <select v-model="model.Enseignant.Grade" class="select select-bordered">
               <option value="">Select Grade</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
+              <option value="A">PA</option>
+              <option value="B">PS</option>
+              <option value="C">PES</option>
             </select>
           </div>
 
@@ -65,14 +65,13 @@
 
 <script>
 import axios from 'axios';
+import store from '../store'
 
 export default {
   name: 'AddEnseignant',
   data() {
     return {
       showPopup: false,
-
-      errorsList: "",
       model: {
         Enseignant: {
           PPR: "",
@@ -87,44 +86,47 @@ export default {
   },
 
   methods: {
+    saveEnseignant() {
+      // Call the API to save the enseignant
+      this.postEnseignant();
+
+      // Additional logic after saving the enseignant
+      this.showPopup = false;
+      this.RedirectTable();
+    },
     showPopup() {
       this.isPopupVisible = !this.isPopupVisible;
     },
     
+    async postEnseignant() {
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
 
-    saveEnseignant() {
-      var myThis = this;
-      axios.post('http://127.0.0.1/api/Enseignant', this.model.Enseignant)
-        .then(result => {
-          console.log(result.data)
-          this.model.Enseignant = {
-            PPR: "",
-            nom: "",
-            prenom: "",
-            Email: "",
-            Grade: "",
-            DateNaissance: ""
-          }
-        })
-        .catch(function (error) {
-          if (error.response) {
-            if (error.response.status == 422) {
-              myThis.errorsList = error.response.data.errors;
-            }
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            console.log('Error', error.message);
-          }
-        });
+        const enseignantData = {
+          PPR: this.model.Enseignant.PPR,
+          nom: this.model.Enseignant.nom,
+          prenom: this.model.Enseignant.prenom,
+          Email: this.model.Enseignant.Email,
+          Grade: this.model.Enseignant.Grade,
+          DateNaissance: this.model.Enseignant.DateNaissance
+        };
+
+        await axios.post(`http://127.0.0.1:8000/api/enseignant`, enseignantData, config);
+        console.log('Enseignant added successfully');
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     RedirectTable() {
       this.$router.push('/TableEnseignants');
     }
+  },
+  mounted(){
+    this.postEnseignant();
   }
 
 };

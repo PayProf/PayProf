@@ -101,16 +101,7 @@ route::group(['middleware'=>['auth:sanctum']],function(){
     route::PATCH('Directeur/dir/UpdateMyEmail',[DirecteurController::class,'UpdateMyEmail']);
     //=======================================================================================================
     Route::middleware('is_enseignant')->group(function() {
-    route::apiResource('admins',AdministrateurController::class);
-    route::get('admins/{user_id}/myprofile',[AdministrateurController::class,'Show_Myprofile']);
-
-    route::put('admins/{user_id}/updateemail',[AdministrateurController::class,'Update_email']);
-
     });
-
-    Route::get('admins/{user_id}/showenseignants',[AdministrateurController::class,'All_Enseignants']);
-
-    route::apiResource('admins',AdministrateurController::class);
 
     route::apiResource('paiements',PaiementsController::class);
 
@@ -120,5 +111,15 @@ route::group(['middleware'=>['auth:sanctum']],function(){
     route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
     });
+    route::apiResource('admins',AdministrateurController::class);
+    route::get('admins/{user_id}/myprofile',[AdministrateurController::class,'ShowMyprofile']);
+
+    route::put('admins/{user_id}/updateemail',[AdministrateurController::class,'Updateemail']);
+
+
+    Route::get('admins/{user_id}/showenseignants',[AdministrateurController::class,'AllEnseignants']);
+
+    route::apiResource('admins',AdministrateurController::class);
+
 
 
