@@ -99,6 +99,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     //route of UpdateMyEmail
     route::PATCH('Directeur/dir/UpdateMyEmail', [DirecteurController::class, 'UpdateMyEmail']);
     //=======================================================================================================
+
     Route::middleware('is_enseignant')->group(function () {
         route::apiResource('admins', AdministrateurController::class);
         route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'Show_Myprofile']);
@@ -113,6 +114,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
 
 });
 //============================================ ETABLISSEMENT API ============================================
+
 
 route::apiResource('etablissements', EtablissementController::class);
 
@@ -134,6 +136,7 @@ Route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Up
 //============================================ PAIEMENT API ============================================
 
 Route::apiResource('paiements', PaiementsController::class);
+
 
 Route::get('paiements/{id}/enseignants', [PaiementsController::class, 'ShowPaiementsEnseignant']);
 

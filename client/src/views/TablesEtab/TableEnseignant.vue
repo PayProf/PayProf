@@ -28,19 +28,19 @@
                 <td>{{ Enseignant.Email }}</td>
                 <td>
                   <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
-              <button class="add-btn px-4" >
+              <button class="add-btn px-4" v-if="user.role ===2" >
               <i class="fas fa-pen" ></i>
               <span class="tooltip" data-tooltip="inspect">modifier</span>
             </button>
             </router-link>
 
-            <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" >
+            <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" v-if="user.role===2">
               <i class="fas fa-trash" ></i>
               <span class="tooltip" data-tooltip="inspect">supprimer</span>
             </button>
             <!-- This page isn't created yet !!!! -->
             <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
-              <button class="add-btn px-4" >
+              <button class="add-btn px-4"  >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"> inspecter </span>
             </button>
@@ -49,7 +49,7 @@
             </tr>
         </tbody>
     </table>
-    <AddEnseignantVue/>
+    <AddEnseignant/>
   </div> 
 
     
@@ -57,12 +57,14 @@
 </template>
 
 <script>
+import store from '../../store'
 import axios from 'axios';
-import AddEnseignantVue from '../../components/AddEnseignant.vue';
+import { mapActions, mapState } from 'vuex';
+import AddEnseignant from '../../components/AddEnseignant.vue';
 export default {
     name: 'TableEnseignants',
     components:{
-      AddEnseignantVue,
+      AddEnseignant,
 
     },
     data() {
@@ -73,15 +75,20 @@ export default {
   computed: {
         ...mapState([
             'enseignants',
+            'user'
         ])
     },
   methods: {
     // showPopup() {
     //   this.showPopupForm = true;
     // },
-    async getEnseignants() {
+    async getEnseignants(id) {
       try {
-        await axios.get('http://127.0.0.1:8000/api/Enseignant').then(result=>{
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        await axios.get('http://127.0.0.1:8000/api/admins/'+id+'showenseignants',config).then(result=>{
           this.Enseignants = result.data
 
         })
@@ -102,7 +109,7 @@ export default {
 
   },
   mounted() {
-    this.getEnseignants();
+    this.getEnseignants(this.$store.state.user.id);
   },
 };
 
