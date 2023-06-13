@@ -11,6 +11,7 @@ import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
 
 //Admin de l'etablissement
 import Admin from '../views/UI/Admin.vue';
+import ADUser from '../views/UI/ADUSER.vue'
 
 //Directeur de l'etablissement
 import EtabDirector from "../views/UI/EtabDirector.vue";
@@ -44,7 +45,7 @@ import Notfound from "../views/UI/Notfound.vue";
 import { useToast } from "vue-toastification";
 import TableInterventionsEnseignant from "../views/UI/TableInterventionsEnseignant.vue";
 import User from "../views/UI/User.vue";
-
+import Etablissement from "../views/UI/Etablissement.vue"
 /******************************************* Routes Configuration *******************************************/
 
 const routes = [
@@ -59,7 +60,7 @@ const routes = [
       RequiresAuth: false
     }
   },
-
+  
  
   /*The Default Layout for all Pages */
   {
@@ -79,6 +80,30 @@ const routes = [
         AdminUAEAccess: false,
         UserAccess: false,
         DirectorUAEAccess: true,
+        DirectorAccess:false,
+        }
+      },
+      {
+        path: '/Etablissement/:id',
+        name:'Etablissement',
+        component: Etablissement,
+        meta:{
+          AdminAccess: true,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: true,
+          DirectorAccess:true,
+          }
+      },
+      {
+        path: '/ADuser/:id',
+        name:'ADUser',
+        component: ADUser,
+        meta:{
+        AdminAccess: true,
+        AdminUAEAccess: false,
+        UserAccess: false,
+        DirectorUAEAccess: false,
         DirectorAccess:false,
         }
       },

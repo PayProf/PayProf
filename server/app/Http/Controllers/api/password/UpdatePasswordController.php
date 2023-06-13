@@ -13,6 +13,11 @@ class UpdatePasswordController extends Controller
     use HttpResponses;
 
     public function UpdatePassword(UpdatePasswordRequest $request,$user_id){
+      $old_pass=bcrypt($request->password);
+     
+     if(auth()->user()->password==$old_pass){
+      auth()->user()->password=$request->new_password;
+     }
      $user=User::find($user_id);
      if($user){
        if($user){

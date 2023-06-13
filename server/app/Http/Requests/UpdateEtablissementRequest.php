@@ -31,7 +31,6 @@ class UpdateEtablissementRequest extends FormRequest
             'code'=>['required'],
             'telephone'=>['required'],
             'FAX'=>['required'],
-            'Nbrenseignants'=>['required'],
             'ville'=>['required'],
         ];
     }else{
@@ -41,7 +40,6 @@ class UpdateEtablissementRequest extends FormRequest
             'code'=>['sometimes','required'],
             'telephone'=>['sometimes','required'],
             'FAX'=>['sometimes','required'],
-            'Nbrenseignants'=>['sometimes','required'],
             'ville'=>['sometimes','required'],
         ];
     }

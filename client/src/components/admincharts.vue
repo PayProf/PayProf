@@ -17,6 +17,7 @@
       datasets: [{
         label: 'Nombre_heures',
         data: [],
+        id:null,
         fill: false,
         borderColor: 'rgb(75, 192, 192)',
       }]
@@ -45,12 +46,12 @@
       const config1 = {
         headers: { Authorization: `Bearer ${token}` }
       };
-      const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyGraphe',config1); // Replace 'your-api-endpoint' with the actual API URL
-      const interventions = response.data;
+      const response = await axios.get('http://127.0.0.1:8000/api/Intervention/'+store.state.SelectedId.Id+'/EnseignantInterventionsGraphe',config1); // Replace 'your-api-endpoint' with the actual API URL
+      const interventions = response.data.data;
 
       const data = interventions.map(item => ({
-        NbrHeures: item.Nbr_heures,
-        DateDebut: item.date_debut
+        NbrHeures: item.Nbrheures,
+        DateDebut: item.DateDebut
       }));
 
       config.data.labels = data.map(item => item.DateDebut);

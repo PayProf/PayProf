@@ -10,21 +10,17 @@ use Illuminate\Notifications\Notification;
 class LoginNotification extends Notification
 {
     use Queueable;
-   
+
     protected $password;
-    
-    
+    protected $email;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($password)
+    public function __construct($password, $email)
     {
+        $this->email = $email;
         $this->password = $password;
-        
-        
-
-
     }
 
     /**
@@ -42,12 +38,8 @@ class LoginNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->greeting('Bonjour')
-            ->line('Vous avez été enregistré avec succès.')
-            ->line('Voici votre mot de passe : ' . $this->password)
-            ->line('Veuillez le conserver en toute sécurité.')
-            ->line('Merci de votre inscription !');
+        // Utilisation de la classe MailMessage pour générer l'e-mail
+        return (new MailMessage)->markdown('email.registeremail', ['password' => $this->password, 'email' => $this->email]);
     }
 
     /**

@@ -1,5 +1,7 @@
 <template>
-  <div class="navbar bg-base-100 fixed top-0 w-full z-10 drop-shadow-md mb-10">
+
+
+  <div class="navbar bg-base-100 fixed top-0 w-full drop-shadow-md mb-10 z-50">
     <div class="navbar-start">
       <div class="dropdown">
           <label class="btn btn-circle swap swap-rotate">
@@ -143,14 +145,14 @@ this.dropdownOpen=!this.dropdownOpen;
   if (this.user.role) {
     switch (this.user.role) {
       case 0 :
-        return 'Enseignat';
+        return 'Enseignant';
       case 1 :
         return 'Directeur';
       case 2 :
         return 'Admin';
       case 3 :
         return 'Directeur UAE';
-      case 4 :
+      case '4' :
         return 'Super Admin';
       default:
         return 'Unknown Role';

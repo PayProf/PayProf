@@ -1,75 +1,84 @@
 <template>
-  <div class="ml-30 my-20">
-    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 justify-center">
-      <div class="card-body">
-        <form>
-          <!-- Form fields for adding an enseignant -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">PPR</span>
-            </label>
-            <input type="number" v-model="model.Directeur.PPR" placeholder="PPR" class="input input-bordered" />
-          </div>
+  <div>
+    <div class="flex justify-center mt-5 ">
+      <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
+    </div>
+    
+    <div v-if="showPopup" class="popup z-40">
+      <div class="popup-content card w-96 bg-neutral ">
+        <div class="card-body items-center text-center">
+          <h2 class="card-title">Add Directeur</h2>
+          <form @submit.prevent="saveDirecteur(); showPopup = false">
+            <!-- Form fields fogr addin an Directeur -->
+            <div class="grid grid-cols-2 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">PPR</span>
+                </label>
+                <input type="text" v-model="model.Directeur.PPR" placeholder="PPR" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Nom</span>
+                </label>
+                <input type="text" v-model="model.Directeur.nom" placeholder="Nom"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Prenom</span>
+                </label>
+                <input type="text" v-model="model.Directeur.prenom" placeholder="Prenom" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Etablissement</span>
+                </label>
+                <input type="text" v-model="model.Directeur.etablissement_id" placeholder="Email"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Email</span>
+                </label>
+                <input type="text" v-model="model.Directeur.email_perso" placeholder="Email"
+                  class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Date Naissance</span>
+                </label>
+                <input type="date" v-model="model.Directeur.DateNaissance" placeholder="DateNaissance"
+                  class="input input-bordered" />
+              </div>
+              
+            </div>
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Nom</span>
-            </label>
-            <input type="text" v-model="model.Directeur.nom" placeholder="Nom" class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Prénom</span>
-            </label>
-            <input type="text" v-model="model.Directeur.prenom" placeholder="Prénom" class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Email</span>
-            </label>
-            <input type="email" v-model="model.Directeur.Email" placeholder="Email" class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Etablissement</span>
-            </label>
-            <input type="text" v-model="model.Directeur.NomEtab" placeholder="Etablissement"
-              class="input input-bordered" />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Date Naissance</span>
-            </label>
-            <input type="date" v-model="model.Directeur.DateNaissance" placeholder="Etablissement"
-              class="input input-bordered" />
-          </div>
-
-          <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary" style="border-radius: 10px;"
-              @click="saveDirecteur(), RedirectTable()">Add
-              Directeur</button>
-            <button class="btn btn-primary" style="border-radius: 10px;">Cancel</button>
-          </div>
-
-        </form>
+            <div class="form-control mt-6">
+              <button type="submit" class="btn btn-primary rounded" style="margin-bottom: 5px;">
+                Add Directeur
+              </button>
+              <button type="button" class="btn btn-error rounded" @click="showPopup = false">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-
-
   </div>
 </template>
   
 <script>
+import store from '../store';
 import axios from 'axios';
 export default {
   name: 'AddDirecteur',
+
   data() {
     return {
       errorsList: "",
+      showPopup:false,
       model: {
         Directeur: {
           PPR: "",
@@ -85,9 +94,13 @@ export default {
 
   methods: {
     saveDirecteur() {
+      const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
 
       var myThis = this;
-      axios.post('http://127.0.0.1/api/Directeurs', this.model.Directeur)
+      axios.post('http://127.0.0.1:8000/api/Directeur', this.model.Directeur,config)
         .then(result => {
           console.log(result.data)
           this.model.Directeur = {
@@ -95,7 +108,7 @@ export default {
             nom: "",
             prenom: "",
             Email: "",
-            NomEtab: "",
+            etablissement_id: "",
             DateNaissance: ""
           }
 

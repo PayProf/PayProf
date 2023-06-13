@@ -10,8 +10,12 @@ use App\Traits\HttpResponses;
 
 use App\Models\User;
 
+use Carbon\Carbon;
+use Dotenv\Util\Str;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Support\Facades\Notification;
+use Laravel\Sanctum\PersonalAccessToken;
+
 
 
 
@@ -20,39 +24,58 @@ use Symfony\Component\HttpFoundation\Request;
 class AuthController extends Controller
 {
     use HttpResponses;
-    protected $email;
-    protected $role;
-    
-   /* public function __construct($email,$role){
-      $this->email=$email;
-      $this->role=$role;
-    }*/
+   
     public function login(LoginUserRequest $request){
-        // Valider les données de la requête
+             // Valider la requête en utilisant les règles définies dans LoginUserRequest
         $request->validated($request->all());
-         // Vérifier les informations d'identification
+        
+        // Récupérer l'utilisateur en fonction de l'email fourni
+        $user = User::where('email', $request->email)->first();
+       
+        // Vérifier s'il existe des jetons valides pour cet utilisateur
+        if($user){
+            $validTokens = $user->tokens()
+            ->where('expires_at', '>', now())
+            ->count();
+            if ($validTokens > 0) {
+                return $this->error('','Utilisateur déjà connecté',409);
+            }
+        }
+        
+    
+        // Si des jetons valides existent, retourner une erreur 
+        
+    
+        
+        
+        // Authentifier l'utilisateur en utilisant les identifiants fournis (email et mot de passe)
         if (!Auth::attempt($request->only('email', 'password'))){
             return $this->error('','Credentials do not match',401);
         }
-       // Récupérer l'utilisateur correspondant à l'e-mail fourni
-        $user=user::where('email',$request->email)->first();
+    
+        // Récupérer à nouveau l'utilisateur après l'authentification réussie
+        $user = User::where('email', $request->email)->first();
        
-       // Retourner la réponse de succès(role du user+token) indiquant que la connexion s'est déroulée avec succès
+       // Créer un jeton d'accès pour l'utilisateur
+       $token = $user->createToken('token-name')->plainTextToken;
+    
+        // Mettre à jour la date d'expiration du jeton d'accès
+        $personalAccessToken = PersonalAccessToken::findToken($token);
+        $personalAccessToken->expires_at = Carbon::now()->addHours(2);
+        $personalAccessToken->save();
+    
+        // Retourner la réponse réussie avec le rôle de l'utilisateur et le jeton d'accès
         return $this->succes([
-            'role'=>$user->role,
-            'token'=>$user->createToken('API Token of '.$user->name
-            )->plainTextToken
-           
-        
+            'role' => $user->role,
+            'token' => $token,
+            'id' => $user->id,
 
-        ],'SUCCESSFLY LOGIN');
-        
-        
-       
-       
-        
-       
+
+        ], 'SUCCESSFULLY LOGIN');
     }
+    
+
+
     public function logout(){
         
         // Supprimer tous les tokens d'authentification de l'utilisateur actuellement authentifié
@@ -62,44 +85,53 @@ class AuthController extends Controller
 
     }
 
+
     public function refreshToken()
-{
+  {
+    // Récupérer l'utilisateur authentifié
     $user = auth()->user();
 
-    // Supprimer tous les tokens existants de l'utilisateur
+    // Supprimer tous les jetons d'accès de l'utilisateur
     $user->tokens()->delete();
 
-    // Créer un nouveau token pour l'utilisateur
-    $newToken = $user->createToken('API Token of ' . $user->name)->plainTextToken;
+    // Créer un nouveau jeton d'accès pour l'utilisateur
+    $token = $user->createToken('token-name')->plainTextToken;
 
+    // Mettre à jour la date d'expiration du jeton d'accès
+    $personalAccessToken = PersonalAccessToken::findToken($token);
+    $personalAccessToken->expires_at = Carbon::now()->addHours(2);
+    $personalAccessToken->save();
+
+    // Retourner la réponse réussie avec le nouveau jeton d'accès
     return $this->succes([
-        
-        'token' => $newToken
-    ],'SUCCESSFLY refreshToken');
-}
+        'token' => $token
+    ], 'SUCCESSFULLY refreshToken');
+   }
+
+
+   
 
 
 
 
-    /*public function register($email,$role){
-        
-        
-        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*_";
-        $password = substr(str_shuffle($chars), 0, 12);
-        echo $password;
-        $user = User::create([
-            'email' => $email,
-            'password' => bcrypt($password),
-            'role' => $role
-        ]);
 
-       
-    }*/
+
+
+
+
+
+
+
+
+
     
 
-   
 
-   
+
+
+
+    
+
  
 }
 

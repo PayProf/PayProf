@@ -1,147 +1,129 @@
 <template>
-  <div>
-    <button class="btn btn-primary rounded mb-4" @click="showPopup">ADD</button>
-    <div v-if="isPopupVisible" class="popup">
-      <div class="popup-content card w-96 bg-neutral text-neutral-content">
-        <div class="card-body items-center text-center">
-          <h2 class="card-title">Add Intervention</h2>
-          <form @submit.prevent="saveIntervention();">
-            <!-- Form fields for adding an intervention -->
-            <div class="grid grid-cols-2 gap-4">
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">PPR</span>
-                </label>
-                <input type="text" v-model="model.Enseignant.Code" placeholder="PPR" class="input input-bordered" />
-              </div>
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">Nom</span>
-                </label>
-                <input type="text" v-model="model.Enseignant.Nom" placeholder="Nom" class="input input-bordered" />
-              </div>
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">Prénom</span>
-                </label>
-                <input type="text" v-model="model.Enseignant.Prenom" placeholder="Prénom" class="input input-bordered" />
-              </div>
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">Email</span>
-                </label>
-                <input type="email" v-model="model.Enseignant.Email" placeholder="Email" class="input input-bordered" />
-              </div>
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">Grade</span>
-                </label>
-                <input type="text" v-model="model.Enseignant.Grade" placeholder="Grade" class="input input-bordered" />
-              </div>
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">Date de naissance</span>
-                </label>
-                <input type="date" v-model="model.Enseignant.DateNaissance" class="input input-bordered" />
-              </div>
-            </div>
-            <div class="form-control mt-6">
-              <button @click="ADDEnse" class="btn btn-primary rounded" style="margin-bottom: 5px;">
-                Add Enseignant
-              </button>
-              <button type="button" class="btn btn-primary rounded" @click="showPopup = false">
-                Cancel
-              </button>
-            </div>
-          </form>
+
+  <div class="z-40">
+    <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
+    <div v-if="showPopup" class="popup">
+      <div class="popup-content rounded-lg">
+        <div class="flex justify-center">
+        <h2 class="card-title">Add Enseignant</h2>
         </div>
+        <form @submit.prevent="saveEnseignant(); showPopup = false">
+          <!-- Form fields for adding an enseignant -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">PPR</span>
+            </label>
+            <input type="number" v-model="model.Enseignant.PPR" placeholder="PPR" class="input input-bordered h-9" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Nom</span>
+            </label>
+            <input type="text" v-model="model.Enseignant.nom" placeholder="Nom" class="input input-bordered h-9" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Prénom</span>
+            </label>
+            <input type="text" v-model="model.Enseignant.prenom" placeholder="Prénom" class="input input-bordered h-9" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Email</span>
+            </label>
+            <input type="email" v-model="model.Enseignant.email_perso" placeholder="Email" class="input input-bordered h-9" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Grade</span>
+            </label>
+            <select v-model="model.Enseignant.Grade" class="select select-bordered h-9">
+              <option value="">Select Grade</option>
+              <option value="PA">PA</option>
+              <option value="PE">PS</option>
+              <option value="PES">PES</option>
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Date Naissance</span>
+            </label>
+            <input type="date" v-model="model.Enseignant.DateNaissance" placeholder="Date Naissance" class="input input-bordered h-9" />
+          </div>
+
+          <div class="form-control mt-6 grid grid-cols-2 flex items-center">
+            <button type="submit" class="btn btn-primary h-9" style="border-radius: 10px;" @click="saveEnseignant()">Add Enseignant</button>
+            <button class="btn btn-error text-white h-9 ml-2" style="border-radius: 10px;" @click="showPopup = false">Cancel</button>
+          </div>
+        </form>
       </div>
     </div>
-
-
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import store from '../store'
+
 export default {
   name: 'AddEnseignant',
   data() {
     return {
-      isPopupVisible: false,
-      errorsList: "",
+      showPopup: false,
       model: {
         Enseignant: {
-          PPR: "",
-          nom: "",
-          prenom: "",
-          Email: "",
-          Grade: "",
-          DateNaissance: ""
+          PPR:'',
+          nom:'',
+          prenom:'',
+          DateNaissance:'',
+          email_perso:'',
+          Grade:'',
         }
       }
     }
   },
 
   methods: {
-    showPopup() {
-      this.isPopupVisible = !this.isPopupVisible;
+    async saveEnseignant() {
+      // Call the API to save the enseignant
+      await this.postEnseignant();
+
+      // Additional logic after saving the enseignant
+      this.showPopup = false;
     },
     
-
-    saveEnseignant() {
-
-      var myThis = this;
-      axios.post('http://127.0.0.1/api/Enseignant', this.model.Enseignant)
-        .then(result => {
-          console.log(result.data)
-          this.model.Enseignant = {
-            PPR: "",
-            nom: "",
-            prenom: "",
-            Email: "",
-            Grade: "",
-            DateNaissance: ""
+    async postEnseignant() {
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
           }
+        };
+        console.log(this.model.Enseignant)
+        const response = await axios.post(`http://127.0.0.1:8000/api/Enseignant`, this.model.Enseignant, config);
+        console.log(response)
+        console.log('Enseignant added successfully');
 
-        }).catch(function (error) {
-
-          if (error.response) {
-
-            if (error.response.status == 422) {
-
-              //if you don't specify "myThis" an undefined error will be shown
-              myThis.errorsList = error.response.data.errors;
-            }
-
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-
-        });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-    //Redirect to table view
     RedirectTable() {
-      this.$router.push('/TableEnseignants')
+      this.$router.push('/TableEnseignants');
     }
   },
 
-
 };
 </script>
-  
+
 <style>
 .popup {
   position: fixed;
@@ -158,5 +140,7 @@ export default {
 .popup-content {
   background-color: #fff;
   padding: 20px;
+  max-width: 500px; /* Adjust the value as needed */
+  width: 90%;
 }
 </style>

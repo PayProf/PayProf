@@ -14,8 +14,8 @@ class InterventionResource extends JsonResource
      */
     public function toArray($request)
     {
-       return 
-       [ 
+       return
+       [
 
         'id'=>$this->id,
         'IntituleIntervention'=>$this->intitule_intervention,
@@ -25,6 +25,7 @@ class InterventionResource extends JsonResource
         'DateFin'=>$this->date_fin,
         'VisaUae'=>$this->visa_uae,
         'VisaEtab'=>$this->visa_etab,
+        'Nbrheures'=>$this->Nbr_heures,
         'PPRProf'=> $this->enseignant->PPR,
         'NomEtab'=>$this->etablissement->nom,
 

@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model
 {
     use HasFactory;
-    protected $fillable = 
+    protected $fillable =
     [
-           
-            'designation',
-            'charge_statutaire',
-            'Taux_horaire_vacation',
+        'designation',
+        'charge_statutaire',
+        'Taux_horaire_vacation',
     ];
 
-    public function enseignants(){
+    public function enseignants()
+    {
         return $this->hasMany(Enseignant::class);
     }
 }

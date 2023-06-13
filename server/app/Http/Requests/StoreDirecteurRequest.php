@@ -29,6 +29,7 @@ class StoreDirecteurRequest extends FormRequest
             'prenom'=>['required'],
             'DateNaissance'=>['required','date'],
             'email_perso'=>['required','email','unique:directeurs'],
+            // 'etablissement_id'=>['required']
             
             
            // 'IdUser'=>['required'],

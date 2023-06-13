@@ -22,36 +22,32 @@ class UpdateInterventionRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {  
+    {
          $method=$this->method();
-       
-        if($method == "PUT"){
-            return [          
-                
+
+        if($method == "PATCH"){
+            return [
+
                 //all the fields will be sent to the db (also the the fields unchanged )
 
-                'IntituleIntervention'=>['required'],
-                'AnneeUniv'=>['required'],
-                'Semestre'=>['required'],
-                'DateDebut'=> ['required'],
-                'DateFin'=>['required'],
-                'NbrHeures'=>['required'],
-                'PPR'=>['required'],
-               
+//                'IntituleIntervention'=>['required'],
+//                'AnneeUniv'=>['required'],
+//                'Semestre'=>['required'],
+//                'DateDebut'=> ['required'],
+//                'DateFin'=>['required'],
+//                'NbrHeures'=>['required'],
+//                'PPR'=>['required'],
+                    'VisaUae'=>['sometimes','required'],
+                    'VisaEtab' =>['sometimes','required'],
+                    'IntituleIntervention'=>['sometimes','required'],
+                    'AnneeUniv'=>['sometimes','required'],
+                    'Semestre'=>['sometimes','required'],
+                    'DateDebut'=> ['sometimes'],
+                    'DateFin'=>['sometimes'],
+                    'NbrHeures'=>['sometimes'],
+                    'PPR'=>['sometimes'],
+
                 ];
-        }
-
-        else       // if the method is PATCH
-        { 
-
-            return [                 
-                
-                // only the specified fileds will be modified and sent to the db
-
-                'VisaUae'=>['sometimes','required'],
-                'VisaEtab' =>['sometimes','required'],
-               
-            ];
         }
 }
 // protected function prepareForValidation()
@@ -59,8 +55,8 @@ class UpdateInterventionRequest extends FormRequest
 //     {           if ($this->VisaUae)   {$this->merge(['visa_uae'=> ucfirst($this->VisaUae),]);}
 //                 if ($this->VisaEtab)   {$this->merge(['visa_etab'=> ucfirst($this->VisaEtab),]);}
 
-                
+
 //     }
-    
+
 }
 

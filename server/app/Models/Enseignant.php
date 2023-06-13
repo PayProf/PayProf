@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class Enseignant extends Model
 {
     use HasFactory;
-    protected $fillable =[
+    protected $fillable = [
         'PPR',
         'nom',
         'prenom',
@@ -24,28 +24,30 @@ class Enseignant extends Model
     ];
 
 
-       public function IdGrade($designation)
-           {
-                 $grade_id=DB::table('grades')
-                 ->select('id')
-                 ->where('designation', $designation)
-                 ->first();
-                 return $grade_id->id;
-           }
-       public function Hours($id)
-          {
-                
-                 $hours=DB::table('interventions')->where('enseignant_id',$id)->sum('Nbr_heures'); 
-                 return $hours;
-          }
+    public function IdGrade($designation)
+    {
+        $grade_id = DB::table('grades')
+            ->select('id')
+            ->where('designation', $designation)
+            ->first();
+        return $grade_id->id;
+    }
+    public function Hours($id)
+    {
+
+        $hours = DB::table('interventions')->where('enseignant_id', $id)->sum('Nbr_heures');
+        return $hours;
+    }
 
 
 
-    public function etablissement(){
+    public function etablissement()
+    {
         return $this->belongsTo(Etablissement::class);
     }
 
-    public function grade(){
+    public function grade()
+    {
         return $this->belongsTo(Grade::class);
     }
 
@@ -58,11 +60,9 @@ class Enseignant extends Model
     {
         return $this->hasMany(Paiements::class);
     }
-          
-    public function user() : BelongsTo
+
+    public function user(): BelongsTo
     {   //to get the user that have the role as enseignant
         return $this->belongsTo(User::class);
     }
-
-    
 }

@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\DB;
 class Intervention extends Model
 {
     use HasFactory;
-     protected $fillable=
-     [
+    protected $fillable =
+    [
         'intitule_intervention',
         'annee_univ',
         'semestre',
@@ -22,17 +22,16 @@ class Intervention extends Model
         'visa_uae',
         'visa_etab',
         'paiement_id'
-     ];
+    ];
 
-    
+
     public function IdEnseignant($prof)
     {
         $enseignant = DB::table('enseignants')
-                      ->select('id')
-                      ->where('PPR', $prof)
-                      ->first();
+            ->select('id')
+            ->where('PPR', $prof)
+            ->first();
         return $enseignant->id;
-
     }
 
     // public function IdEtablissement($etab)
@@ -48,20 +47,16 @@ class Intervention extends Model
 
     public function etablissement()
     {
-        return $this->belongsTo(Etablissement::class );
-      
+        return $this->belongsTo(Etablissement::class);
     }
 
     public function enseignant()
     {
-        return $this->belongsTo(Enseignant::class );
-      
+        return $this->belongsTo(Enseignant::class);
     }
 
     public function paiement()
     {
-        return $this->belongsTo(Paiements::class );
-      
+        return $this->belongsTo(Paiements::class);
     }
-
 }
