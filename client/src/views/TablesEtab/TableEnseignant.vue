@@ -18,24 +18,24 @@
         <td>{{Enseignant.PPR}}</td>
         <td>{{ Enseignant.nom }}</td>
         <td>{{ Enseignant.prenom }}</td>
-        <td>{{ Enseignant.grade_id }}</td>
-        <td>{{ Enseignant.email_perso}}</td>
-        <td>{{ Enseignant.date_naissance }}</td>
+        <td>{{ Enseignant.Grade }}</td>
+        <td>{{ Enseignant.Email}}</td>
+        <td>{{ Enseignant.DateNaissance }}</td>
         <td>
           <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
-            <button class="add-btn px-4" v-if="user.role==2" >
+            <button class="add-btn px-4" v-if="user.role==2 ||user.role==4" >
               <i class="fas fa-pen" ></i>
               <span class="tooltip" data-tooltip="inspect">modifier</span>
             </button>
           </router-link>
 
-          <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" v-if="user.role==2">
+          <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" v-if="user.role==2 ||user.role==4 ">
             <i class="fas fa-trash" ></i>
             <span class="tooltip" data-tooltip="inspect">supprimer</span>
           </button>
           <!-- This page isn't created yet !!!! -->
           <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
-            <button class="add-btn px-4"  >
+            <button class="add-btn px-4"  v-if="user.role==2 ||user.role==4">
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"> inspecter </span>
             </button>
@@ -116,15 +116,17 @@ export default {
       catch (error) {
         console.log(error)
       }
-    },
+     },
     async getEnseignantsEtab() {
       try {
         const token = store.state.user.token;
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        const res = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/showenseignants?page='+this.page,config)
-        this.model.Enseignants=res.data.data.data;
+        const res = await axios.get('http://127.0.0.1:8000/api/etablissements/'+this.$route.params.id+'?with=Enseignants',config)
+        console.log('ttttttt')
+        console.log(res.data.data.Enseignants)
+        this.model.Enseignants=res.data.data.Enseignants;
         this.pagecount=res.data.data.last_page;
 
 
@@ -143,9 +145,12 @@ export default {
 
   },
   mounted() {
-    this.getEnseignantsEtab();
-  },
-};
+      this.getEnseignantsEtab();
+      this.getEnseignants();
+    }
+    
+  }
+
 
 
 </script>

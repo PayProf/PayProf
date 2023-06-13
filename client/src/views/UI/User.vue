@@ -98,7 +98,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-neutral" @click="downloadPDF">Telecharger payement</button>
+    <button class="btn btn-neutral" @click="downloadPDF()">Telecharger payement</button>
     <AddIntervention v-if="IsAdmin"/>
     <div class="flex justify-center items-center p-5">
     <v-pagination
