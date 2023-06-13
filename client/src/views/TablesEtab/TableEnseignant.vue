@@ -55,7 +55,7 @@
       />
     </div>
     <div class="flex justify-center">
-    <AddEnseignant/>
+    <AddEnseignant v-if="role == 2"/>
     </div>
   </div>
 
@@ -179,11 +179,11 @@ export default {
 
       
     },
-    getTables(){
+    async getTables(){
         if(store.state.user.role==4){
-          return this.getEnseignantsEtab()
+          await this.getEnseignantsEtab();
         }else if(store.state.user.role==2 ){
-          return this.getEnseignants()
+          await this.getEnseignants();
         }
       }
     // deleteEnseignant(EnseignantId){
