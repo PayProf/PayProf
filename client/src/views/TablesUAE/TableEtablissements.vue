@@ -46,7 +46,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-outline btn-secondary  ml-5 mt-2 text-black" @click="redirectAdd()" v-if="Userrole == 4">Add etablissement</button>
+
   </div>
 <AddEtablissement />
 </template>

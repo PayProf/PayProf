@@ -55,7 +55,7 @@ class DirecteurController extends Controller
         if (Gate::allows('check_role', [2])) {
 
             $directeur = new Directeur();
-            $directeur->etablissement_id = $request['etablissement_id'];
+            $directeur->etablissement_id = auth()->user()->administrateur->etablissement_id;
             $directeur->PPR = $request['PPR'];
             $directeur->nom = $request['nom'];
             $directeur->prenom = $request['prenom'];
@@ -130,8 +130,11 @@ class DirecteurController extends Controller
     {
         if (Gate::allows('check_role', [4]) || Gate::allows('admin_direct', $id)) {
             $directeur = Directeur::FindOrfail($id);
+            if($directeur->image){
+                unlink(public_path('uploads') . '/' . $directeur->image); 
+            }
             $directeur->delete();
-            unlink(public_path('uploads') . '/' . $directeur->image);                                               //destroy the appropriate image .     
+                                                          //destroy the appropriate image .     
             return $this->succes("", "Directeur deleted successfully");
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
@@ -152,7 +155,7 @@ class DirecteurController extends Controller
     {
         if (Gate::allows('check_role', [1])) {
 
-            $id = auth()->user()->enseignant->id;
+            $id = auth()->user()->directeur->id;
             $directeur = Directeur::where('id', $id)->first();
             $directeur->email_perso = $request['email_perso'];
             $directeur->save();
@@ -174,7 +177,7 @@ class DirecteurController extends Controller
 
     {
         if (Gate::allows('check_role', [1])) {
-            $id = auth()->user()->enseignant->id;
+            $id = auth()->user()->directeur->id;
             return new DirecteurResource(Directeur::where('user_id', $id)->with('etablissement')->first());
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
@@ -194,7 +197,7 @@ class DirecteurController extends Controller
     {
 
         if (Gate::allows('check_role', [1])) { {
-                $id = auth()->user()->enseignant->id;
+                $id = auth()->user()->directeur->id;
                 $request->validate(['image' => 'required|max:1024|mimes:png,jpg,png']);
             }
 

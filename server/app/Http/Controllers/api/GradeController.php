@@ -54,9 +54,7 @@ class GradeController extends Controller
           
 
 
-              if ($grade) {
-                     return response()->json(["message" => "added successfuly"]);
-              }
+              
             }
          }
        

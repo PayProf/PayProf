@@ -23,7 +23,6 @@
           <td>{{ Directeur.NomEtab }}</td>
           <td>{{ Directeur.Email }}</td>
           <td>{{ Directeur.DateNaissance }}</td>
-
           <td>
             <router-link :to="{ path: '/EditDirecteur/' + Directeur.id }" v-if="this.Userrole == 2">
               <button class="add-btn px-4">
