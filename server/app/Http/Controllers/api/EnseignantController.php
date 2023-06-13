@@ -59,6 +59,7 @@ class EnseignantController extends Controller
 
   {
 
+
     if (Gate::allows('check_role', [2])) {
 
       $enseignant = new Enseignant();
@@ -98,6 +99,7 @@ class EnseignantController extends Controller
 
   public function show($id)
 
+
   {
     if (Gate::allows('check_role', [4, 3]) || Gate::allows('direct_ens', $id) || Gate::allows('admin_ens', $id)) {
 
@@ -124,20 +126,25 @@ class EnseignantController extends Controller
   {
     if (Gate::allows('admin_ens', $id)) {
 
-      $enseignant = Enseignant::find($id);
-      $grade_id = $enseignant->IdGrade($request['Grade']);
-      $enseignant->PPR = $request['PPR'];
-      $enseignant->nom = $request['nom'];
-      $enseignant->prenom = $request['prenom'];
-      $enseignant->date_naissance = $request['DateNaissance'];
-      $enseignant->grade_id = $grade_id;
 
-      $enseignant->save();
-      return $this->succes("", "updated successfully");
-    }
-    return $this->error('', 'ACCES INTERDIT ', 403);
+                 $enseignant=Enseignant::find($id);
+//                 $grade_id=$enseignant->IdGrade($request['Grade']);
+//                 $enseignant->PPR = $request['PPR'];
+//                 $enseignant->nom = $request['nom'];
+//                 $enseignant->prenom = $request['prenom'];
+//                 $enseignant->date_naissance = $request['DateNaissance'];
+//                 $enseignant->grade_id=$grade_id;
+
+//                 $enseignant->save();
+                  $data=$enseignant->update($request->all());
+                  if($data){
+                      return $this->succes("","Intervention updated successfully");
+                  }else{
+                      return $this->error("","error",403);
+                  }
+                }
+                 return $this->error('','ACCES INTERDIT ',403);
   }
-  //======================================= The access is retricted for:AdminEtab ==============================================
 
 
   /**
@@ -160,6 +167,7 @@ class EnseignantController extends Controller
     return $this->error('', 'ACCES INTERDIT ', 403);
   }
 
+
   //=============================================== The access is retricted for:Enseignant ===========================================================================
 
 
@@ -176,8 +184,6 @@ class EnseignantController extends Controller
   {
     if (Gate::allows('check_role', [0])) {
       if (auth()->user()->role == 0) {
-
-
         $id = auth()->user()->enseignant->id;
 
         if (Intervention::where('enseignant_id', $id)->exists()) {
@@ -195,6 +201,7 @@ class EnseignantController extends Controller
   }
 
   public function ShowMyGraphe()
+
 
 
   {
@@ -235,10 +242,10 @@ class EnseignantController extends Controller
       }
 
 
-
       return $this->error('', 'ACCES INTERDIT ', 403);
     }
   }
+
 
 
 
@@ -279,8 +286,6 @@ class EnseignantController extends Controller
       }
     }
 
-
-
     return $this->error('', 'ACCES INTERDIT ', 403);
   }
   //==================================== The access is retricted for:Enseignant   ============================================================
@@ -306,9 +311,6 @@ class EnseignantController extends Controller
     return $this->error('', 'ACCES INTERDIT ', 403);
   }
 
-
-
-
   //======================================= The access is retricted for:Enseignant =======================================
 
 
@@ -319,6 +321,7 @@ class EnseignantController extends Controller
   {
     if (Gate::allows('check_role', [0])) {
       $id = auth()->user()->enseignant->id;
+
 
       if (Intervention::where('enseignant_id', $id)->exists()) {
         $enseignant = new Enseignant();
@@ -344,9 +347,9 @@ class EnseignantController extends Controller
 
   public function UpdateMyEmail(UpdateEnseignantRequest $request)
 
+
   {
     if (Gate::allows('check_role', [0])) {
-
 
       $id = auth()->user()->enseignant->id;
       $enseignant = Enseignant::where('id', $id)->first();
@@ -354,7 +357,6 @@ class EnseignantController extends Controller
       $enseignant->save();
       return $this->succes("", "email updated successfully");
     }
-
 
 
     return $this->error('', 'ACCES INTERDIT ', 403);

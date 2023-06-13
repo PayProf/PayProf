@@ -23,14 +23,15 @@ class InterventionController extends Controller
 
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Indexe() it's a methode that serve to display all the interventions with the name of the etablissement and also name of Enseiganant.
+     * I used  InterventionResource class  that serve to filter  data .
+     * @return mixed the important data of all interventions.
      */
+
     public function index()
     {
         if (Gate::allows('check_role', [4, 3])) {
-            //return EnseignantResource::collection(Enseignant::with('etablissement','grade')->latest()->paginate(10));
+            return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(10));
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
     }
@@ -97,26 +98,32 @@ class InterventionController extends Controller
      * @return  //a success message that mean the data of theintervention  was successfully updated.
      */
 
-    public function update(UpdateInterventionRequest $request, $id)
+       public function update(UpdateInterventionRequest $request, $id)
 
 
-    { //admin_etab si meme etab
-        if (Gate::allows('interv_etab', $id)) {
-            $intervention = Intervention::FindOrFail($id);
-            $enseignant = $intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant
-            $intervention->intitule_intervention = $request['IntituleIntervention'];
-            $intervention->annee_univ = $request['AnneeUniv'];
-            $intervention->semestre = $request['Semestre'];
-            $intervention->date_debut = $request['DateDebut'];
-            $intervention->date_fin = $request['DateFin'];
-            $intervention->Nbr_heures = $request['NbrHeures'];
-            $intervention->enseignant_id = $enseignant;
-            //$intervention->etablissement_id=$etablissement;                                        // we will not use it because when he update the etablissement_id remain the same
-            $intervention->save();
-            return $this->succes("", "Intervention updated successfully");
-        }
-        return $this->error('', 'ACCES INTERDIT ', 403);
-    }
+          { //admin_etab si meme etab
+                    if (Gate::allows('interv_etab', $id)) {
+                 $intervention=Intervention::FindOrFail($id);
+//                 $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant
+//                 $intervention->intitule_intervention=$request['IntituleIntervention'];
+//                 $intervention->annee_univ = $request['AnneeUniv'] ;
+//                 $intervention->semestre = $request['Semestre'];
+//                 $intervention->date_debut = $request['DateDebut'] ;
+//                 $intervention->date_fin = $request['DateFin'] ;
+//                 $intervention->Nbr_heures = $request['NbrHeures'] ;
+//                 $intervention->enseignant_id=$enseignant;
+                 //$intervention->etablissement_id=$etablissement;                                        // we will not use it because when he update the etablissement_id remain the same
+                 //$intervention->save();
+                        $data=$intervention->update($request->all());
+                        if($data){
+                            return $this->succes("","Intervention updated successfully");
+                        }else{
+                            return $this->error("","error",403);
+                        }
+
+              }
+              return $this->error('','ACCES INTERDIT ',403);
+          }
 
 
 
@@ -131,18 +138,22 @@ class InterventionController extends Controller
 
     public function destroy($id)
 
-    {
-        //              if (Gate::allows('interv_etab', $id)) {
-        $intervention = Intervention::find($id);
-        if ($intervention) {
-            $intervention->delete();
-            return $this->succes("", "intervention deleted successfully");
-        } else {
-            return $this->error("", "intervention introuvable", 404);
-        }
-        //              }
-        return $this->error('', 'ACCES INTERDIT ', 403);
-    }
+          {
+              if (Gate::allows('interv_etab', $id)) {
+                 $intervention= Intervention::find($id);
+                 if($intervention)
+                 {
+                 $intervention->delete();
+                 return $this->succes("","intervention deleted successfully");
+                 }
+                else{
+                     return $this->error("","intervention introuvable",404);
+                 }
+              }
+              return $this->error('','ACCES INTERDIT ',403);
+
+
+          }
 
 
 
@@ -259,15 +270,40 @@ class InterventionController extends Controller
 
 
 
-    public function EnseignantInterventions($id)
+
+       public function EnseignantInterventions($id)
+          {
+
+
+//                 if(Intervention::where('enseignant_id',$id)->exists())
+//                 {
+                     return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
+//                 }
+//
+//                 else
+//                {
+//                     return $this->error("","intervention introuvable",404);
+//                }
+
+
+
+          }
+    public function EnseignantInterventionsGraphe($id)
     {
 
 
-        if (Intervention::where('enseignant_id', $id)->exists()) {
-            return  InterventionResource::collection(Intervention::where('enseignant_id', $id)->with('enseignant', 'etablissement')->latest()->paginate(5));
-        } else {
-            return $this->error("", "intervention introuvable", 404);
-        }
+//                 if(Intervention::where('enseignant_id',$id)->exists())
+//                 {
+        return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->get());
+//                 }
+//
+//                 else
+//                {
+//                     return $this->error("","intervention introuvable",404);
+//                }
+
+
+
     }
 
 

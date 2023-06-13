@@ -195,17 +195,14 @@ class AdministrateurController extends Controller
         if (Gate::allows('check_role', [2]) || Gate::allows('admin_modify', $user_id)) {
 
 
-            $user = Administrateur::where('user_id', $user_id)->first();
-            if ($user) {
-                $etablissement_id = $user->etablissement_id;
-                $data = Enseignant::where('etablissement_id', $etablissement_id)->paginate(5);
-                if ($data) {
-                    return $this->succes($data, "DISPLAY");
-                } else {
-                    return $this->error("", "NO DATA FOUND", 404);
-                }
-            } else {
-                return $this->error("", "NO DATA FOUND 2", 404);
+        $user=Administrateur::where('user_id', $user_id)->first();
+        if($user){
+            $etablissement_id=$user->etablissement_id;
+            $data = Enseignant::where('etablissement_id',$etablissement_id)->with('grade')->latest()->paginate(5);
+            if($data){
+               return $this->succes($data,"DISPLAY");
+            }else{
+                return $this->error("","NO DATA FOUND",404);
             }
         }
 

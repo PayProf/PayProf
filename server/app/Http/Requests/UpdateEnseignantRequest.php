@@ -24,33 +24,27 @@ class UpdateEnseignantRequest extends FormRequest
      */
     public function rules()
     {
-        $method = $this->method();        // to check the http method 
+        $method=$this->method();        // to check the http method
 
-        if ($method == 'PUT') {
-            return [
+        if($method=='PATCH')
+            {
+                return [
 
-                //all the fields will be sent to the db (also the the fields unchanged )
+                    //all the fields will be sent to the db (also the the fields unchanged )
 
-                'PPR' => ['required'],
-                'nom' => ['required'],
-                'prenom' => ['required'],
-                'DateNaissance' => ['required', 'date'],
-                //  'Etablissement'=>['required'],
-                'Grade' => ['required'],
-                // 'email_perso'=>['required','email','unique:enseignants'],
-                // 'IdUser',
+                        'PPR'=>['sometimes','required'],
+                        'nom'=>['sometimes','required'],
+                        'prenom'=>['sometimes','required'],
+                        'DateNaissance'=>['sometimes','required','date'],
+                      //  'Etablissement'=>['required'],
+                        'Grade'=>['sometimes','required'],
+                    'email_perso'=>['sometimes','required','email','unique:enseignants,email'],
+                       // 'email_perso'=>['required','email','unique:enseignants'],
+                       // 'IdUser',
 
-            ];
-        } else    // if the method is PATCH
-        {
+                    ];
+            }
 
-            return
-                [
-
-                    // only the specified fileds will be modified and sent to the db
-                    'email_perso' => ['sometimes', 'required', 'email', 'unique:enseignants,email_perso'],
-                ];
-        }
     }
     protected function prepareForValidation()
     {
@@ -66,6 +60,6 @@ class UpdateEnseignantRequest extends FormRequest
         }
         if ($this->IdUser) {
             $this->merge(['user_id' => ucfirst($this->IdUser)]);
-        }
+
     }
 }
