@@ -46,32 +46,30 @@ class AdministrateurController extends Controller
 
         return $this->error('', 'ACCES INTERDIT ', 403);
     }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreAdministrateurRequest $request)
     {
 
         if (Gate::allows('check_role', [4])) {
-           // Create a new Administrateur object based on the request data
-        $admin=new Administrateur();
-        $admin->PPR=$request->input('PPR');
-        $admin->nom=$request->input('nom');
-        $admin->prenom=$request->input('prenom');
-        $admin->etablissement_id=$request->input('etablissement_id');
-        $admin->email_perso=$request->input('email_perso');
+            // Create a new Administrateur object based on the request data
+            $admin = new Administrateur();
+            $admin->PPR = $request->input('PPR');
+            $admin->nom = $request->input('nom');
+            $admin->prenom = $request->input('prenom');
+            $admin->etablissement_id = $request->input('etablissement_id');
+            $admin->email_perso = $request->input('email_perso');
 
-         
 
-         
-         $admin->save();
-         $id=event (new storeuser($request->input('email_perso'),1,$request->input('nom'),$request->input('prenom')));
-         $admin->user_id = $id[0];
-        $data=new AdministrateurResource(Administrateur::find($admin->id));
-            
+            $admin->save();
+            $id = event(new storeuser($request->input('email_perso'), 1, $request->input('nom'), $request->input('prenom')));
+            $admin->user_id = $id[0];
+            $data = new AdministrateurResource(Administrateur::find($admin->id));
 
 
             // Check if the creation was successful and return the appropriate response
@@ -87,7 +85,7 @@ class AdministrateurController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -105,8 +103,8 @@ class AdministrateurController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateAdministrateurRequest $request, $id)
@@ -133,7 +131,7 @@ class AdministrateurController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -191,23 +189,25 @@ class AdministrateurController extends Controller
 
         return $this->error('', 'ACCES INTERDIT ', 403);
     }
+
     public function AllEnseignants($user_id)
     {
 
         if (Gate::allows('check_role', [2]) || Gate::allows('admin_modify', $user_id)) {
 
 
-        $user=Administrateur::where('user_id', $user_id)->first();
-        if($user){
-            $etablissement_id=$user->etablissement_id;
-            $data = Enseignant::where('etablissement_id',$etablissement_id)->with('grade')->latest()->paginate(5);
-            if($data){
-               return $this->succes($data,"DISPLAY");
-            }else{
-                return $this->error("","NO DATA FOUND",404);
+            $user = Administrateur::where('user_id', $user_id)->first();
+            if ($user) {
+                $etablissement_id = $user->etablissement_id;
+                $data = Enseignant::where('etablissement_id', $etablissement_id)->with('grade')->latest()->paginate(5);
+                if ($data) {
+                    return $this->succes($data, "DISPLAY");
+                } else {
+                    return $this->error("", "NO DATA FOUND", 404);
+                }
             }
-        }
 
-        return $this->error('', 'ACCES INTERDIT ', 403);
+            return $this->error('', 'ACCES INTERDIT ', 403);
+        }
     }
 }

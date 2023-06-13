@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-10 mx-64">
+  <div class="mt-10">
     <table class="table table-zebra w-full ">
       <!-- head -->
       <thead>
@@ -199,9 +199,7 @@ export default {
   async mounted() {
      await this.getTables();
     }
-    
   }
-  },
 
 
 

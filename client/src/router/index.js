@@ -361,93 +361,93 @@ function AlreadyConnected(toast){
 
 /*The Page where there's the enseignant profile */
 
-// router.beforeEach((to, from, next) => {
-//   //If the token is present(Authentificated)
-//   const isAuth = store.state.user.token;
-//   //the role and privilege
-//   const usertype = store.state.user.role;
-//   //is he an admin UAE?
-//   const isAdminUAE = (parseInt(usertype)===4);
-//   //is he a DirectorUAE?
-//   const isDirectorUAE = (parseInt(usertype)===3);
-//   //is he an admin?
-//   const isAdmin = (parseInt(usertype)===2);
-//   //is he a Director?
-//   const isDirector = ((parseInt(usertype)===1));
-//   //is he an Enseignant
-//   const isEnseignant = ((parseInt(usertype)===0));
-//   //Notification
-//   const toast = useToast();
+router.beforeEach((to, from, next) => {
+  //If the token is present(Authentificated)
+  const isAuth = store.state.user.token;
+  //the role and privilege
+  const usertype = store.state.user.role;
+  //is he an admin UAE?
+  const isAdminUAE = (parseInt(usertype)===4);
+  //is he a DirectorUAE?
+  const isDirectorUAE = (parseInt(usertype)===3);
+  //is he an admin?
+  const isAdmin = (parseInt(usertype)===2);
+  //is he a Director?
+  const isDirector = ((parseInt(usertype)===1));
+  //is he an Enseignant
+  const isEnseignant = ((parseInt(usertype)===0));
+  //Notification
+  const toast = useToast();
 
-//   //does the page require authentification
-//   if (to.meta.RequiresAuth) {
-//     if (!isAuth) //if the user is not authentification
-//     {
-//       next({ name: 'Home' });
-//       AccessDenied(toast);//This one shows notification of access denied
-//     }
-//     else //if the user is authentificated
-//     {
-//       if(to.name==='Dashboard')//if he's redirected to dashboard
-//       {
-//         if(isAdminUAE)//if he's AdminUAE
-//           next({ name: 'AdminUAE' });
-//         else if(isAdmin)//if he's Admin
-//           next({ name: 'Admin' });
-//         else if(isDirector)//if he's Director
-//           next({ name: 'Directeur'});
-//         else if(isDirectorUAE)//if he's DirectorUAE
-//           next({ name: 'DirecteurUAE'})
-//         else//if he's Enseignant
-//           next({ name: 'Enseignant' });
-//       }
-//       else//Any other Page
-//       {
-//         if (isAdminUAE && !to.meta.AdminUAEAccess)//if AdminUAE doesn't Have access
-//         {
-//           next({name:'Dashboard'});
-//           AccessDenied(toast);
-//         }
-//         else if (isAdmin && !to.meta.AdminAccess)//if Admin doesn't Have access
-//         {
-//           next({name:'Dashboard'});
-//           AccessDenied(toast);
-//         }
-//         else if (isDirectorUAE && !to.meta.DirectorUAEAccess)//if DirectorUAE doesn't Have access
-//         {
-//           next({name:'Dashboard'});
-//           AccessDenied(toast);
-//         }
-//         else if (isDirector && !to.meta.DirectorAccess) //if Director doesn't Have access
-//         {
-//           next({name:'Dashboard'});
-//           AccessDenied(toast);
-//         }
-//         else if (isEnseignant && !to.meta.UserAccess) //if Enseignant doesn't Have access
-//         {
-//           next({name:'Dashboard'});
-//           AccessDenied(toast);
-//         }
-//         else // if he has access
-//         {
-//             next();
-//         }
-//       }
-//     }
-//   }
-//   else //if it doesn't require authentification
-//   {
-//     if (isAuth) //and he's authentificated
-//     {
-//       next({name:'Dashboard'});
-//       AlreadyConnected(toast);
-//     }
-//     else //and he's not authentificated
-//     {
-//       next();
-//     }
-//   }
-// });
+  //does the page require authentification
+  if (to.meta.RequiresAuth) {
+    if (!isAuth) //if the user is not authentification
+    {
+      next({ name: 'Home' });
+      AccessDenied(toast);//This one shows notification of access denied
+    }
+    else //if the user is authentificated
+    {
+      if(to.name==='Dashboard')//if he's redirected to dashboard
+      {
+        if(isAdminUAE)//if he's AdminUAE
+          next({ name: 'AdminUAE' });
+        else if(isAdmin)//if he's Admin
+          next({ name: 'Admin' });
+        else if(isDirector)//if he's Director
+          next({ name: 'Directeur'});
+        else if(isDirectorUAE)//if he's DirectorUAE
+          next({ name: 'DirecteurUAE'})
+        else//if he's Enseignant
+          next({ name: 'Enseignant' });
+      }
+      else//Any other Page
+      {
+        if (isAdminUAE && !to.meta.AdminUAEAccess)//if AdminUAE doesn't Have access
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else if (isAdmin && !to.meta.AdminAccess)//if Admin doesn't Have access
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else if (isDirectorUAE && !to.meta.DirectorUAEAccess)//if DirectorUAE doesn't Have access
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else if (isDirector && !to.meta.DirectorAccess) //if Director doesn't Have access
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else if (isEnseignant && !to.meta.UserAccess) //if Enseignant doesn't Have access
+        {
+          next({name:'Dashboard'});
+          AccessDenied(toast);
+        }
+        else // if he has access
+        {
+            next();
+        }
+      }
+    }
+  }
+  else //if it doesn't require authentification
+  {
+    if (isAuth) //and he's authentificated
+    {
+      next({name:'Dashboard'});
+      AlreadyConnected(toast);
+    }
+    else //and he's not authentificated
+    {
+      next();
+    }
+  }
+});
 
 
 export default router;
