@@ -14,6 +14,12 @@
       <li @click="showProfile" v-else>
         <i class="fa-solid fa-user"></i>
       </li>
+      <li @click="ShowMyDir" v-if="OpenDir" class="bg-neutral text-white Interventions">
+        <i class="fa-solid fa-suitcase"></i>
+      </li>
+      <li @click="ShowMyDir" v-else class="Interventions">
+        <i class="fa-solid fa-suitcase"></i>
+      </li>
       <li @click="showEns" v-if="OpenEns" class="bg-neutral text-white Interventions">
         <i class="fa-solid fa-user-tie"></i>
       </li>
@@ -35,6 +41,7 @@
   <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
   <div class="card-body">
     <h1 class="text-2xl font-bold">Bonjour l'Admin de {{ Etablissement.nom }}</h1>
+
           <p class="py-2"><strong>PPR :</strong> {{Profile.PPR}}</p>
           <p class="py-2"><strong>Nom:</strong> {{Profile.nom}}</p>
           <p class="py-2"><strong>Prenom :</strong> {{Profile.prenom}}</p>
@@ -42,11 +49,38 @@
           <p class="py-2"><strong>Etablissment :</strong> {{ Etablissement.nom }}</p>
           <p class="py-2"><strong>Nombre des Enseignants :</strong> {{ Etablissement.Nbrenseignants }}</p>
           <p class="py-2"><strong>Ville :</strong> {{ Etablissement.ville }}</p>
-    <div class="card-actions justify-end">
-      <button class="btn btn-primary">Change Password</button>
-    </div>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Change Password</button>
+          </div>
   </div>
 </div>
+      <div v-if="OpenDir" class="card card-side bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h1 class="text-2xl font-bold">Voici Votre Directeur</h1>
+          <p class="py-2"><strong>PPR :</strong> {{Profile.PPR}}</p>
+          <p class="py-2"><strong>Nom:</strong> {{Profile.nom}}</p>
+          <p class="py-2"><strong>Prenom :</strong> {{Profile.prenom}}</p>
+          <p class="py-2"><strong>Email :</strong> {{Profile.email_perso}}</p>
+          <p class="py-2"><strong>Etablissment :</strong> {{ Etablissement.nom }}</p>
+          <p class="py-2"><strong>Nombre des Enseignants :</strong> {{ Etablissement.Nbrenseignants }}</p>
+          <p class="py-2"><strong>Ville :</strong> {{ Etablissement.ville }}</p>
+          <div class="card-actions justify-end items-center">
+            <div class="text-white dropdown dropdown-top"><label tabindex="0" class="btn btn-error text-white m-1">Supprimer</label>
+              <ul tabindex="0" class="dropdown-content menu p-2 pb-4 shadow bg-neutral rounded-box w-52">
+                <li><p>Êtes-vous sûr(e) ?</p></li>
+                <li>
+                  <a class="hover:ml-2 transition-transform duration-300 transform hover:translate-x-1">Oui</a>
+                  <a class="hover:ml-2 transition-transform duration-300 transform hover:translate-x-1">Non</a>
+                </li>
+              </ul></div>
+            <button class="btn btn-primary">Modifier</button>
+            <button class="btn btn-primary">Ajouter</button>
+
+
+          </div>
+
+        </div>
+      </div>
       <TableEnseignant id="tableEns" v-if="OpenEns"/>
       <ValidateIntervention v-if="OpenInt"/>
   
@@ -81,6 +115,7 @@ export default {
       OpenEns:false,
       OpenGraphe:false,
       OpenProfile:true,
+      OpenDir:false,
       OpenInt:false,
       IsLoading:false,
       Profile:{
@@ -91,6 +126,9 @@ export default {
         etablissement:'',
       },
       Etablissement:{
+
+      },
+      Directeur: {
 
       },
 
@@ -108,6 +146,21 @@ export default {
         };
         const response = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/myetablissement',config);
         this.Etablissement=response.data.data;
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
+    async GetMyDirecteur(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/Directeur/'+store.state.user.id+'/myetablissement',config);
+        // this.Directeur=response.data.data;
+        console.log(response)
 
       }
       catch(error){
@@ -148,7 +201,10 @@ export default {
     },
     showGraphe(){
       this.OpenGraphe = !this.OpenGraphe;
-    }
+    },
+    ShowMyDir(){
+      this.OpenDir=!this.OpenDir;
+    },
   },
   
   computed:{
