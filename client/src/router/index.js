@@ -101,10 +101,10 @@ const routes = [
         component: ADUser,
         meta:{
         AdminAccess: true,
-        AdminUAEAccess: false,
+        AdminUAEAccess: true,
         UserAccess: false,
-        DirectorUAEAccess: false,
-        DirectorAccess:false,
+        DirectorUAEAccess: true,
+        DirectorAccess:true,
         }
       },
 
