@@ -1,6 +1,6 @@
 <template>
   <!-- TABLE ETABLISSEMENT -->
-  <div class="overflow-x-auto border mx-64">
+  <div class="overflow-x-auto border">
     <table class="table w-screen botrder">
       <!-- head -->
       <thead>
@@ -19,7 +19,7 @@
         <tr v-for="(Etablissement, id) in this.Etablissements.data" :key="id">
           <td>{{ Etablissement.id }}</td>
           <td>{{ Etablissement.code }}</td>
-          <td>{{ Etablissement.Nom }}</td>
+          <td>{{ Etablissement.nom }}</td>
           <td>{{ Etablissement.Telephone }}</td>
           <td>{{ Etablissement.ville }}</td>
           <td>{{ Etablissement.Nombre_des_enseignants }}</td>

@@ -83,6 +83,7 @@ export default {
           headers: { Authorization: `Bearer ${token}` }
         };
         await axios.get('http://127.0.0.1:8000/api/Directeur',config).then(result => {
+          console.log(result.data.data[0])
           this.Directeurs = result.data.data
         })
         console.log(this.Directeurs)

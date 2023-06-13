@@ -1,5 +1,7 @@
 <template>
-  <button class="btn btn-primary rounded mb-4" @click="showPopup = true">ADD</button>
+   <div class="flex justify-center mt-5 ">
+      <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
+    </div>
   <div v-if="showPopup" class="popup z-40">
     <div class="popup-content card w-96 bg-neutral ">
       <div class="card-body items-center text-center">
