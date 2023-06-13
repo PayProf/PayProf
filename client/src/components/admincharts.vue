@@ -48,7 +48,6 @@
       };
       const response = await axios.get('http://127.0.0.1:8000/api/Intervention/'+store.state.SelectedId.Id+'/EnseignantInterventionsGraphe',config1); // Replace 'your-api-endpoint' with the actual API URL
       const interventions = response.data.data;
-      console.log(interventions)
 
       const data = interventions.map(item => ({
         NbrHeures: item.Nbrheures,

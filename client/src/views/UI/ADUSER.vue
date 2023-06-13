@@ -1,5 +1,11 @@
 <template>
-  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
+  <div class="hero min-h-screen bg-base-200" v-if="Loading">
+    <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+         role="status">
+      <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+    </div>
+  </div>
+  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12" v-else>
     <div class="col-span-1">
       <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-30" v-drag>
         <li @click="showProfile" v-if="OpenProfile" class="bg-neutral text-white">
@@ -27,19 +33,15 @@
     </div>
     <!-- delete card accepting -->
     <div class="col-span-11">
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl col-span-1">
         <div class="card-body">
-          <h1 class="text-2xl font-bold">Profile enseignat : Mouad Hayaoui</h1>
-          <p class="py-2"><strong>PPR :</strong> 123456</p>
-          <p class="py-2"><strong>Nom:</strong> Hayaoui</p>
-          <p class="py-2"><strong>Prenom :</strong> Mouad</p>
-          <p class="py-2"><strong>Email :</strong> johndoe@example.com</p>
-          <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p><h2 class="card-title">New movie is released!</h2>
-          <p>Click the button to watch on Jetflix app.</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary">Change Password</button>
-          </div>
+          <h1 class="text-2xl font-bold">L'Enseignant {{ this.Enseignant.nom }} {{this.Enseignant.prenom}}</h1>
+          <p class="py-2 grid grid-cols-2 gap-4"><span><strong>PPR:</strong> {{ this.Enseignant.PPR }}</span><span><strong>Grade :</strong> {{this.Enseignant.Grade}}</span></p>
+          <p class="py-2 grid grid-cols-2 gap-4"><span><strong>Nom:</strong> {{ this.Enseignant.nom }}</span><span><strong>Prenom :</strong> {{this.Enseignant.prenom}}</span></p>
+          <p class="py-2"><strong>Email :</strong> {{this.Enseignant.Email}}</p>
+          <p class="py-2"><strong>Etablissement :</strong> {{this.Enseignant.NomEtab}}</p>
+          <p class="py-2"><strong>Date Naissance :</strong> {{this.Enseignant.DateNaissance}}</p>
         </div>
       </div>
         <div v-if="OpenGraphe" class="w-200 h-200 bg-base-100 flex items-center justify-center mt-5 col-span-1 ">
@@ -124,6 +126,9 @@ export default {
       page:1,
       pagecount:null,
       Interventions:[],
+      Enseignant: {
+      },
+      Loading:false,
     }
   },
   components: {
@@ -164,6 +169,20 @@ export default {
         console.log(error)
       }
     },
+    async getEnseignantProfile(id){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+
+        const res= await axios.get('http://127.0.0.1:8000/api/Enseignant/'+id,config)
+        this.Enseignant=res.data.data;
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
   },
   computed: {
     ...mapState([
@@ -174,10 +193,13 @@ export default {
   // async created() {
   //   await this.$store.dispatch('getInterventions');
   // }
-  mounted() {
+  async mounted() {
+    this.Loading=true;
     const id = this.$route.params.id;
     localStorage.setItem('SELECTEDID',id);
-    this.getInterventions(id);
+    await this.getEnseignantProfile(id)
+    await this.getInterventions(id);
+    this.Loading=false;
   },
 
 }
