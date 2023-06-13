@@ -82,6 +82,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('Intervention/int/ShowMyEtabInterventions', [InterventionController::class, 'ShowMyEtabInterventions']);
     //route of EnseignantInterventions
     route::get('Intervention/{Intervention}/EnseignantInterventions', [InterventionController::class, 'EnseignantInterventions']);
+    route::get('Intervention/{Intervention}/EnseignantInterventionsGraphe', [InterventionController::class, 'EnseignantInterventionsGraphe']);
     //======================================================================================================
 
 
@@ -103,7 +104,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
 
     });
     //=======================================================================================================
-    
+
     Route::middleware('is_enseignant')->group(function () {
 
         Route::get('admins/{user_id}/showenseignants', [AdministrateurController::class, 'AllEnseignants']);
@@ -113,7 +114,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'ShowMyprofile']);
 
         Route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Updateemail']);
-        
+
     });
     route::apiResource('etablissements', EtablissementController::class);
     route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);

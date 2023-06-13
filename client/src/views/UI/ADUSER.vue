@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
     <div class="col-span-1">
-      <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
+      <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-30" v-drag>
         <li @click="showProfile" v-if="OpenProfile" class="bg-neutral text-white">
           <i class="fa-solid fa-user"></i>
         </li>
@@ -42,10 +42,8 @@
           </div>
         </div>
       </div>
-        <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 col-span-1 ">
-          <div class="flex justify-end">
-          </div>
-          <BarChart />
+        <div v-if="OpenGraphe" class="w-200 h-200 bg-base-100 flex items-center justify-center mt-5 col-span-1 ">
+          <BarChart class="w-full"/>
         </div>
 
       </div>
@@ -89,13 +87,15 @@
           </tr>
           </tbody>
         </table>
+        <div class="flex justify-center">
         <v-pagination
             v-model="page"
             :pages="pagecount"
             :range-size="1"
             active-color="#1d774d"
-            @update:modelValue="getInterventions"
+            @update:modelValue="getInterventions(this.$route.params.id)"
         />
+        </div>
       </div>
 
 
@@ -108,7 +108,9 @@ import axios from 'axios';
 import store from '../../store';
 import { mapActions, mapState } from 'vuex';
 import AddIntervention from '../../components/AddIntervention.vue';
-import BarChart from '../../components/chart.vue'
+import BarChart from '../../components/admincharts.vue';
+import VPagination from "@hennge/vue3-pagination";
+import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 
 export default {
   name: 'ADUser',
@@ -119,6 +121,8 @@ export default {
       OpenGraphe:true,
       OpenDelete:false,
       Enseignants:null,
+      page:1,
+      pagecount:null,
       Interventions:[],
     }
   },
@@ -126,6 +130,7 @@ export default {
     // PFintervention,
     BarChart,
     AddIntervention,
+    VPagination,
   },
 
   methods: {
@@ -151,9 +156,9 @@ export default {
           headers: { Authorization: `Bearer ${token}` }
         };
 
-        const res= await axios.get('http://127.0.0.1:8000/api/Intervention/'+id+'/EnseignantInterventions',config)
+        const res= await axios.get('http://127.0.0.1:8000/api/Intervention/'+id+'/EnseignantInterventions?page='+this.page,config)
         this.Interventions=res.data.data
-        console.log(this.Interventions)
+        this.pagecount=res.data.meta.last_page
       }
       catch (error) {
         console.log(error)
@@ -171,6 +176,7 @@ export default {
   // }
   mounted() {
     const id = this.$route.params.id;
+    localStorage.setItem('SELECTEDID',id);
     this.getInterventions(id);
   },
 

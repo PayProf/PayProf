@@ -300,6 +300,23 @@ class InterventionController extends Controller
 
 
           }
+    public function EnseignantInterventionsGraphe($id)
+    {
+
+
+//                 if(Intervention::where('enseignant_id',$id)->exists())
+//                 {
+        return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->get());
+//                 }
+//
+//                 else
+//                {
+//                     return $this->error("","intervention introuvable",404);
+//                }
+
+
+
+    }
 
 
 
