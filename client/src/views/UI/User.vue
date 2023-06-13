@@ -98,6 +98,7 @@
         </tr>
       </tbody>
     </table>
+    <button class="btn btn-neutral" @click="downloadPDF">Telecharger payement</button>
     <AddIntervention v-if="IsAdmin"/>
     <div class="flex justify-center items-center p-5">
     <v-pagination
@@ -118,9 +119,14 @@
     </div>
     </div>
   </div>
+  <div ref="content" v-show="false">
+    <h1>teeeeest</h1>
+  </div>
+
 </template>
 
 <script>
+
 import { mapActions, mapState } from 'vuex';
 import AddIntervention from '../../components/AddIntervention.vue';
 import BarChart from '../../components/chart.vue'
@@ -129,6 +135,8 @@ import axios from "axios";
 import TableInterventionsUserVue from '../TablesEtab/TableInterventionsUser.vue';
 import VPagination from "@hennge/vue3-pagination";
 import "@hennge/vue3-pagination/dist/vue3-pagination.css";
+import jspdf from 'jspdf'
+
 
 export default {
   name: 'User',
@@ -206,7 +214,19 @@ export default {
       catch(error){
         console.log(error)
       }
+    },
+    downloadPDF(){
+
+      const doc = new jspdf();
+
+      const html = this.$refs.content.innerHTML
+
+      doc.fromHTML(html,15,15)
+
+
+      pdf.save('Paiement.pdf');
     }
+
   },
   async mounted() {
     this.IsLoading=true;

@@ -112,6 +112,20 @@ export default {
         const res = await axios.get('http://127.0.0.1:8000/api/admins/'+store.state.user.id+'/showenseignants?page='+this.page,config)
         this.model.Enseignants=res.data.data.data;
         this.pagecount=res.data.data.last_page;
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
+    async getEnseignantsEtab() {
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const res = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/showenseignants?page='+this.page,config)
+        this.model.Enseignants=res.data.data.data;
+        this.pagecount=res.data.data.last_page;
 
 
       }
@@ -129,7 +143,7 @@ export default {
 
   },
   mounted() {
-    this.getEnseignants();
+    this.getEnseignantsEtab();
   },
 };
 
