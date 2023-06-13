@@ -46,7 +46,7 @@
       const config1 = {
         headers: { Authorization: `Bearer ${token}` }
       };
-      const response = await axios.get('http://127.0.0.1:8000/api/Intervention/'+store.state.SelectedId.Id+'/EnseignantInterventionsGraphe',config1); // Replace 'your-api-endpoint' with the actual API URL
+      const response = await axios.get('http://127.0.0.1:8000/api/Intervention/'+localStorage.getItem('SELECTEDID')+'/EnseignantInterventionsGraphe',config1); // Replace 'your-api-endpoint' with the actual API URL
       const interventions = response.data.data;
 
       const data = interventions.map(item => ({
