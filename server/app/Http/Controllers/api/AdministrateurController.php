@@ -18,6 +18,8 @@ use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use App\Http\Resources\DirecteurResource;
+use App\Models\Directeur;
 
 class AdministrateurController extends Controller
 {
@@ -210,5 +212,11 @@ class AdministrateurController extends Controller
 
             return $this->error('', 'ACCES INTERDIT ', 403);
         }
+    }
+
+    public function MyDir()
+    {
+        $id=auth()->user()->administrateur->etablissement_id;
+        return new DirecteurResource(Directeur::where('etablissement_id', $id)->with('etablissement')->first());
     }
 }

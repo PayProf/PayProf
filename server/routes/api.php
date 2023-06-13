@@ -117,6 +117,8 @@ route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Updateemail']);
 
+        Route::get('Administrateur/adm/MyDir', [AdministrateurController::class, 'MyDir']);
+
     });
     route::apiResource('etablissements', EtablissementController::class);
     route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);
