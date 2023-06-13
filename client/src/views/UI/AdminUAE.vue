@@ -1,7 +1,5 @@
 <template>
-  <TableAdmins v-if="showAdmin" />
-  <TableDirecteurs v-if="showDir" />
-  <TableEtablissements v-if="showEtablissement"/>
+
   
   <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
     <div class="col-span-1">
@@ -30,6 +28,11 @@
           <i class="fa-solid fa-arrows-up-down-left-right"></i>
         </li>
       </ul>
+    </div>
+    <div class="col-span-11">
+      <TableAdmins v-if="showAdmin" />
+      <TableDirecteurs v-if="showDir" />
+      <TableEtablissements v-if="showEtablissement"/>
     </div>
 
   </div>
