@@ -287,15 +287,15 @@ class InterventionController extends Controller
           {
 
 
-                 if(Intervention::where('enseignant_id',$id)->exists())
-                 {
+//                 if(Intervention::where('enseignant_id',$id)->exists())
+//                 {
                      return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
-                 }
-
-                 else
-                {
-                     return $this->error("","intervention introuvable",404);
-                }
+//                 }
+//
+//                 else
+//                {
+//                     return $this->error("","intervention introuvable",404);
+//                }
 
 
 

@@ -27,23 +27,8 @@
     </div>
     <!-- delete card accepting -->
     <div class="col-span-11">
-      <div>
-        <div v-if="OpenDelete"  id="profilecard" class="popup-overlay">
-          <div class="popup-container">
-            <div class="card w-96 bg-neutral text-neutral-content">
-              <div class="card-body items-center text-center">
-                <h2 class="card-title">WARNING !</h2>
-                <p>Are you sure you want to delete the intervention?</p>
-                <div class="card-actions justify-end">
-                  <button @click="supIntervention()" class="btn btn-primary">Accept</button>
-                  <button @click="OpenDelete = false" class="btn btn-ghost">Deny</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
+      <div class="grid grid-cols-2 gap-4">
+      <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl col-span-1">
         <div class="card-body">
           <h1 class="text-2xl font-bold">Profile enseignat : Mouad Hayaoui</h1>
           <p class="py-2"><strong>PPR :</strong> 123456</p>
@@ -57,58 +42,63 @@
           </div>
         </div>
       </div>
+        <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 col-span-1 ">
+          <div class="flex justify-end">
+          </div>
+          <BarChart />
+        </div>
+
+      </div>
+
       <div v-if="OpenInterventions" id="interventiontable" class="overflow-x-auto mt-5" style="margin-left: 20px; margin-right: 50px;">
         <h1 class="text-black font-bold text-xl">Table Intervention :</h1>
         <table class="table table-zebra w-full">
           <!-- head -->
           <thead>
           <tr>
-            <th><input type="checkbox" /></th>
             <th>Intitule          </th>
             <th>Année</th>
             <th>Semestre</th>
             <th>Date Debut</th>
             <th>Date Fin</th>
             <th>Nombre Heures</th>
-            <th v-if="IsAdmin">Action</th>
+            <th>Visa UAE</th>
+            <th>Visa Etab</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="intervention in Interventions" :key="intervention.id">
-            <td><input type="checkbox" /></td>
             <td>{{ intervention.IntituleIntervention }}</td>
             <td>{{ intervention.AnneeUniv }}</td>
             <td>{{ intervention.Semestre }}</td>
             <td>{{ intervention.DateDebut }}</td>
             <td>{{ intervention.DateFin }}</td>
-            <td>{{ intervention.NbrHeures }}</td>
-            <td v-if="IsAdmin">
-              <button @click="showDeleteW" class="delete-btn" >
-                <i class="fas fa-trash"></i>
-                <span class="tooltip" data-tooltip="Delete">Supprimer intervention </span>
-              </button>
-              <button class="add-btn">
-                <i class="fas fa-edit"></i>
-                <span class="tooltip" data-tooltip="Edit">Edit intervention </span>
-              </button>
+            <td>{{ intervention.Nbrheures }}</td>
+            <td>
+              <div class="flex justify-center">
+                <i class="fa-solid fa-x text-red-500" v-if="!intervention.VisaUae"></i>
+                <i class="fa-solid fa-check text-green-500" v-else></i>
+              </div>
+            </td>
+            <td>
+              <div class="flex justify-center">
+                <i class="fa-solid fa-x text-red-500" v-if="!intervention.VisaEtab"></i>
+                <i class="fa-solid fa-check text-green-500" v-else></i>
+              </div>
             </td>
           </tr>
           </tbody>
         </table>
-        <AddIntervention v-if="IsAdmin"/>
-        <div class="btn-group" style="display: flex; justify-content: center; margin-top: 30px;">
-          <button class="btn">1</button>
-          <button class="btn btn-active">2</button>
-          <button class="btn">3</button>
-          <button class="btn">4</button>
-        </div>
+        <v-pagination
+            v-model="page"
+            :pages="pagecount"
+            :range-size="1"
+            active-color="#1d774d"
+            @update:modelValue="getInterventions"
+        />
+      </div>
 
-      </div>
-      <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 ">
-        <div class="flex justify-end">
-        </div>
-        <BarChart />
-      </div>
+
     </div>
   </div>
 </template>
@@ -124,9 +114,9 @@ export default {
   name: 'ADUser',
   data(){
     return{
-      OpenInterventions:false,
-      OpenProfile:false,
-      OpenGraphe:false,
+      OpenInterventions:true,
+      OpenProfile:true,
+      OpenGraphe:true,
       OpenDelete:false,
       Enseignants:null,
       Interventions:[],
@@ -162,34 +152,13 @@ export default {
         };
 
         const res= await axios.get('http://127.0.0.1:8000/api/Intervention/'+id+'/EnseignantInterventions',config)
-        console.log(res)
         this.Interventions=res.data.data
-        console.log(res.data.data)
+        console.log(this.Interventions)
       }
       catch (error) {
         console.log(error)
       }
     },
-    // async getInterventions() {
-    //   try {
-    //     const token = store.state.user.token;
-    //     const config = {
-    //       headers: { Authorization: `Bearer ${token}` }
-    //     };
-    //     const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyIntervention',config)
-    //     this.Interventions=response.data.data[0].interventions;
-    //   }
-    //   catch (error) {
-    //     console.log(error)
-    //   }
-    // },
-    deleteEnseignant(EnseignantId){
-      axios.delete(`http://127.0.0.1:8000/api/admins/${AdminId}`)
-          .then(res=>{
-            console.log(res.data)
-            this.getAdmins()
-          })
-    }
   },
   computed: {
     ...mapState([
@@ -202,7 +171,6 @@ export default {
   // }
   mounted() {
     const id = this.$route.params.id;
-    console.log(id)
     this.getInterventions(id);
   },
 
