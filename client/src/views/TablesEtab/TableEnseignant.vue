@@ -119,13 +119,21 @@ export default {
         console.log(error)
       }
     },
-    // deleteEnseignant(EnseignantId){
-    //   axios.delete(`http://127.0.0.1:8000/api/admins/${AdminId}`)
-    //   .then(res=>{
-    //     console.log(res.data)
-    //     this.getAdmins()
-    //   })
-    // }
+    async DeleteEnseignant(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        await axios.delete('http://127.0.0.1:8000/api/enseignant',config)
+
+
+
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
 
   },
   mounted() {

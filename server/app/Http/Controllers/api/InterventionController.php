@@ -105,17 +105,23 @@ class InterventionController extends Controller
           { //admin_etab si meme etab
                     if (Gate::allows('interv_etab', $id)) {
                  $intervention=Intervention::FindOrFail($id);
-                 $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant
-                 $intervention->intitule_intervention=$request['IntituleIntervention'];
-                 $intervention->annee_univ = $request['AnneeUniv'] ;
-                 $intervention->semestre = $request['Semestre'];
-                 $intervention->date_debut = $request['DateDebut'] ;
-                 $intervention->date_fin = $request['DateFin'] ;
-                 $intervention->Nbr_heures = $request['NbrHeures'] ;
-                 $intervention->enseignant_id=$enseignant;
+//                 $enseignant=$intervention->IdEnseignant($request['PPR']);                                //it's a method that return the id of the enseignant
+//                 $intervention->intitule_intervention=$request['IntituleIntervention'];
+//                 $intervention->annee_univ = $request['AnneeUniv'] ;
+//                 $intervention->semestre = $request['Semestre'];
+//                 $intervention->date_debut = $request['DateDebut'] ;
+//                 $intervention->date_fin = $request['DateFin'] ;
+//                 $intervention->Nbr_heures = $request['NbrHeures'] ;
+//                 $intervention->enseignant_id=$enseignant;
                  //$intervention->etablissement_id=$etablissement;                                        // we will not use it because when he update the etablissement_id remain the same
-                 $intervention->save();
-                 return $this->succes("","Intervention updated successfully");
+                 //$intervention->save();
+                        $data=$intervention->update($request->all());
+                        if($data){
+                            return $this->succes("","Intervention updated successfully");
+                        }else{
+                            return $this->error("","error",403);
+                        }
+
               }
               return $this->error('','ACCES INTERDIT ',403);
           }
