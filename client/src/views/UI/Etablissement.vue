@@ -1,5 +1,5 @@
 <template>
-   <div class="card card-side bg-base-100 shadow-xl mx-72">
+   <div class="card card-side bg-base-100 shadow-xl  mx-64">
         <div class="card-body">
           <h1 class="text-2xl font-bold">Etablissement {{Etablissements.nom}}</h1>
           <p class="py-2"><strong>Nom :</strong>{{this.Etablissements.code}}</p>

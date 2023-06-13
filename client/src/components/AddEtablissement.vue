@@ -11,7 +11,7 @@
               <label class="label">
                 <span class="label-text">Nom</span>
               </label>
-              <input type="text" v-model="model.Etablissement.Nom" placeholder="Nom" class="input input-bordered" />
+              <input type="text" v-model="model.Etablissement.nom" placeholder="Nom" class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
@@ -66,7 +66,7 @@ export default {
       showPopup: false,
       model: {
         Etablissement: {
-          Nom: "",
+          nom: "",
           code: "",
           ville: "",
           telephone: "",

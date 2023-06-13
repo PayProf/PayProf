@@ -1,6 +1,6 @@
 <template>
   <!-- TABLE ETABLISSEMENT -->
-  <div class="overflow-x-auto border">
+  <div class="overflow-x-auto border mx-64">
     <table class="table w-screen botrder">
       <!-- head -->
       <thead>
@@ -48,7 +48,7 @@
     </table>
     <button class="btn btn-outline btn-secondary  ml-5 mt-2 text-black" @click="redirectAdd()" v-if="Userrole == 4">Add etablissement</button>
   </div>
-<AddEtablissement v-if="openAdd"/>
+<AddEtablissement />
 </template>
 
 <script>

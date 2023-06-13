@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-10">
-    <table class="table table-zebra w-full">
+  <div class="mt-10 mx-64">
+    <table class="table table-zebra w-full ">
       <!-- head -->
       <thead>
       <tr>
@@ -117,6 +117,7 @@ export default {
         console.log(error)
       }
      },
+
     async getEnseignantsEtab() {
       try {
         const token = store.state.user.token;
@@ -134,7 +135,16 @@ export default {
       catch (error) {
         console.log(error)
       }
+
+      
     },
+    getTables(){
+        if(store.state.user.role==4){
+          return this.getEnseignantsEtab()
+        }else if(store.state.user.role==2 ){
+          return this.getEnseignants()
+        }
+      }
     // deleteEnseignant(EnseignantId){
     //   axios.delete(`http://127.0.0.1:8000/api/admins/${AdminId}`)
     //   .then(res=>{
@@ -145,8 +155,7 @@ export default {
 
   },
   mounted() {
-      this.getEnseignantsEtab();
-      this.getEnseignants();
+     this.getTables()
     }
     
   }
