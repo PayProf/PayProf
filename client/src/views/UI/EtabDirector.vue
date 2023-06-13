@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <TableEnseignant id="tableEns" v-if="OpenEns"/>
+      <TableEnseignant id="tableEns" v-if="OpenEns" :IdEtab="IdEtab"/>
       <ValidateIntervention v-if="OpenInt"/>
 
     </div>
@@ -92,6 +92,7 @@ export default {
       Etablissement:{
 
       },
+      IdEtab:'',
 
     };
   },
@@ -107,6 +108,7 @@ export default {
         };
         const response = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/myetablissement',config);
         this.Etablissement=response.data.data;
+
         console.log(response)
 
       }
@@ -122,6 +124,7 @@ export default {
         };
         const response = await axios.get('http://127.0.0.1:8000/api/Directeur/dir/ShowMyProfil',config);
         this.Profile=response.data.data;
+        this.IdEtab=this.Profile.IdEtablissement;
 
       }
       catch(error){

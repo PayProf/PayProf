@@ -101,6 +101,8 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('Directeur/dir/ShowMyProfil', [DirecteurController::class, 'ShowMyProfil']);
     //route of UpdateMyEmail
     route::PATCH('Directeur/dir/UpdateMyEmail', [DirecteurController::class, 'UpdateMyEmail']);
+    //route of MyProfs
+    route::get('Directeur/dir/MyProfs',[DirecteurController::class,'MyProfs']);
 
     });
     //=======================================================================================================
