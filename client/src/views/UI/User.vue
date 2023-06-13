@@ -217,14 +217,7 @@ export default {
     },
     downloadPDF(){
 
-      const doc = new jspdf();
-
-      const html = this.$refs.content.innerHTML
-
-      doc.fromHTML(html,15,15)
-
-
-      pdf.save('Paiement.pdf');
+      window.print()
     }
 
   },
