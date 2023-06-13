@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Paiements extends Model
 {
     use HasFactory;
-    protected $fillable =[
+    protected $fillable = [
         'enseignant_id',
         'etablissement_id',
         'VH',
@@ -22,19 +22,15 @@ class Paiements extends Model
 
     public function etablissement()
     {
-        return $this->belongsTo(Etablissement::class );
-      
+        return $this->belongsTo(Etablissement::class);
     }
 
     public function enseignant()
     {
-        return $this->belongsTo(Enseignant::class );
-      
+        return $this->belongsTo(Enseignant::class);
     }
     public function intervention()
     {
-        return $this->hasOne(Intervention::class );
-      
+        return $this->hasOne(Intervention::class);
     }
-
 }

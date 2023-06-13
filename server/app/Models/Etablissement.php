@@ -8,23 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class Etablissement extends Model
 {
     use HasFactory;
-    protected $fillable =[
-       'code',
-       'nom',
-       'telephone',
-       'ville',
-       'FAX',
+    protected $fillable = [
+        'code',
+        'nom',
+        'telephone',
+        'ville',
+        'FAX',
 
     ];
-    public function enseignants(){
+    public function enseignants()
+    {
         return $this->hasMany(Enseignant::class);
     }
 
-    public function administrateurs(){
+    public function administrateurs()
+    {
         return $this->hasMany(Administrateur::class);
     }
 
-    public function interventions(){
+    public function interventions()
+    {
         return $this->hasMany(Intervention::class);
     }
 
@@ -37,5 +40,4 @@ class Etablissement extends Model
     {
         return $this->hasOne(Directeur::class);
     }
-
 }
