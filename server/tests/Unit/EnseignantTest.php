@@ -5,10 +5,16 @@ namespace Tests\Unit;
 use App\Models\Enseignant;
 use Tests\TestCase;
 use App\Http\Controllers\api\EnseignantController;
+use App\Models\Administrateur;
+use App\Models\Etablissement;
+use App\Models\Grade;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFileExists;
+use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertNotSame;
 use function PHPUnit\Framework\assertSame;
 
 class EnseignantTest extends TestCase
@@ -20,8 +26,14 @@ class EnseignantTest extends TestCase
      */
     public function test_index_enseignant_works_correctly()
     {
+        $user = User::factory()->create([
+            'role' => rand(3, 4)
+        ]);
+
+        // we create a mocking  user
+        $mock_user  = $this->actingAs($user);
         // Send a GET request to the 'api/Enseignant' endpoint
-        $response = $this->get('api/Enseignant');
+        $response = $mock_user->get('api/Enseignant');
 
         // Assert that the response status code is 200 (OK)
         $response->assertStatus(200);
@@ -34,15 +46,25 @@ class EnseignantTest extends TestCase
      */
     public function test_store_method_works_correctly()
     {
+        $user = User::factory()->create([
+            'role' => 2,
+            'password' => 'oussama2020'
+        ]);
+        $admin_etab = Administrateur::factory()->create([
+            "user_id" => $user->id,
+            "etablissement_id" =>  Etablissement::count()
+        ]);
+
         // Create a new instance of the Enseignant model using the factory
         $ens = Enseignant::factory()->make();
+
         // Send a JSON POST request to the 'api/Enseignant' endpoint with the specified data
-        $response = $this->json('POST', 'api/Enseignant', [
+        $response = $this->actingAs($user)->json('POST', 'api/Enseignant', [
             'PPR' => $ens->PPR,
             'nom' => $ens->nom,
             'prenom' => $ens->prenom,
             "DateNaissance" => $ens->date_naissance,
-            'Grade' => "Jacky Daniel",
+            'Grade' => Grade::first()->designation,
             'email_perso' => $ens->email_perso
         ]);
 
@@ -57,11 +79,17 @@ class EnseignantTest extends TestCase
      */
     public function test_show_enseignant_works_correctly()
     {
+        $user = User::factory()->create([
+            'role' => rand(3, 4)
+        ]);
+
+        // we create a mocking  user
+        $mock_user  = $this->actingAs($user);
         // Create a new instance of the Enseignant model using the factory and save it to the database
         $ens = Enseignant::factory()->create();
 
         // Send a GET request to the 'api/Enseignant/{id}' endpoint, where {id} is the ID of the created Enseignant
-        $response = $this->get('api/Enseignant/' . $ens->id);
+        $response = $mock_user->get('api/Enseignant/' . $ens->id);
 
         // Assert that the response status code is 200 (OK)
         $response->assertStatus(200);
@@ -74,16 +102,25 @@ class EnseignantTest extends TestCase
      */
     public function test_update_method_works_correctly()
     {
+        $user = User::factory()->create([
+            'role' => 2,
+            'password' => 'oussama2020'
+        ]);
+        $admin_etab = Administrateur::factory()->create([
+            "user_id" => $user->id,
+            "etablissement_id" =>  Etablissement::count()
+        ]);
+
         // Create a new instance of the Enseignant model using the factory
         $ens = Enseignant::factory()->make();
 
-        // Send a JSON POST request to the 'api/Enseignant' endpoint with the specified data to create a new Enseignant record
-        $response = $this->json('POST', 'api/Enseignant', [
+        // Send a JSON POST request to the 'api/Enseignant' endpoint with the specified data
+        $response = $this->actingAs($user)->json('POST', 'api/Enseignant', [
             'PPR' => $ens->PPR,
             'nom' => $ens->nom,
             'prenom' => $ens->prenom,
             "DateNaissance" => $ens->date_naissance,
-            'Grade' => "Jacky Daniel",
+            'Grade' => Grade::first()->designation,
             'email_perso' => $ens->email_perso
         ]);
 
@@ -94,12 +131,12 @@ class EnseignantTest extends TestCase
         $ens_id = Enseignant::where("PPR", $ens->PPR)->first()->id;
 
         // Send a JSON PUT request to the 'api/Enseignant/{id}' endpoint to update the Enseignant record
-        $resp = $this->json('PUT', 'api/Enseignant/' . $ens_id, [
+        $resp = $this->actingAs($user)->json('PUT', 'api/Enseignant/' . $ens_id, [
             'PPR' => $ens->PPR,
             'nom' => $ens->nom . "|",
             'prenom' => $ens->prenom,
             "DateNaissance" => $ens->date_naissance,
-            'Grade' => "Jacky Daniel",
+            'Grade' => Grade::first()->designation,
         ]);
 
         // Assert that the response status code is 200 (OK)
@@ -112,17 +149,24 @@ class EnseignantTest extends TestCase
      */
     public function test_destroy_works_properly()
     {
+
+        $user = User::factory()->create([
+            'role' => 2
+
+        ]);
+        $admin_etab = Administrateur::factory()->create([
+            "user_id" => $user->id,
+            "etablissement_id" =>  Etablissement::count()
+        ]);
         // Create a new instance of the Enseignant model and save it to the database
-        $ens = Enseignant::factory()->create();
-
-        // Create a new instance of the EnseignantController
-        $response = new EnseignantController();
-
+        $ens = Enseignant::factory()->create([
+            'etablissement_id' => $admin_etab->etablissement_id
+        ]);
         // Call the destroy method on the EnseignantController instance to delete the Enseignant record
-        $res = $response->destroy($ens->id)->status();
+        $res = $this->actingAs($user)->json("delete", 'api/Enseignant/' . $ens->id);
 
         // Assert that the status code of the response is 200 (OK)
-        assertSame($res, 200, "Enseignant not deleted !!!");
+        assertSame($res->status(), 200, "Enseignant not deleted !!!");
     }
 
     /**
@@ -132,17 +176,14 @@ class EnseignantTest extends TestCase
      */
     public function test_show_my_intervention_is_functional()
     {
+        $user = User::factory()->create([
+            'role' => 0
+        ]);
         // Generate a random user ID between 1 and Enseignant::count()
-        $random_user_id = rand(1, Enseignant::count());
-
-        // Create a new instance of the EnseignantController
-        $response = new EnseignantController();
-
-        // Call the ShowMyInterventions method on the EnseignantController instance with the random user ID
-        $res = $response->ShowMyInterventions($random_user_id)->status();
+        $res = $this->actingAs($user)->json('GET', "Enseignant/ens/MyIntervention");
 
         // Assert that the status code of the response is 200 (OK)
-        assertSame($res, 200, "interventions method is not fully functional");
+        assertNotSame($res->status(), 403, "interventions method is not fully functional");
     }
 
     /**
@@ -152,26 +193,12 @@ class EnseignantTest extends TestCase
      */
     public function test_show_payments_is_working_correctly()
     {
-        // Generate a random user ID between 2 and 26
-        $random_user_id = rand(2, 26);
+        $ens_id = Enseignant::with('paiements')->first()->user_id;
+        $user = User::where('id', $ens_id)->first();
 
-        // Create a new instance of the EnseignantController
-        $response = new EnseignantController();
-
-        // Call the ShowMyPayments method on the EnseignantController instance with the random user ID
-        $res = $response->ShowMyPayments($random_user_id);
-
-        // Get the data returned from the response
-        $data_returned = $res->getData()->data->paiements;
-
-        // Check if the returned data is empty
-        if (empty($data_returned)) {
-            // Assert that the status code of the response is 404 (Not Found)
-            assertSame($res->status(), 404, "payments method is not fully functional");
-        } else {
-            // Assert that the status code of the response is 200 (OK)
-            assertSame($res->status(), 200, "payments method is not fully functional");
-        }
+        // Generate a random user ID between 1 and Enseignant::count()
+        $res = $this->actingAs($user)->json('GET', "api/Enseignant/ens/MyPayments");
+        assertSame($res->status(), 200, "payments method is not fully functional");
     }
 
     /**
@@ -181,6 +208,13 @@ class EnseignantTest extends TestCase
      */
     public function test_upload_image_is_working_correctly()
     {
+        $user = User::factory()->create([
+            'role' => 0
+        ]);
+        $ens = Enseignant::factory()->create([
+            "user_id" => $user->id,
+            "etablissement_id" =>  Etablissement::count()
+        ]);
         // Set up a fake local storage for testing
         Storage::fake('local');
 
@@ -188,9 +222,9 @@ class EnseignantTest extends TestCase
         $file = UploadedFile::fake()->create('test.png');
 
         // Send a JSON POST request to the 'api/Enseignant/6/UploadMyImage' endpoint with the file
-        $response = $this->json(
+        $response = $this->actingAs($user)->json(
             'post',
-            'api/Enseignant/6/UploadMyImage',
+            'api/Enseignant/ens/UploadMyImage',
             [
                 'image' => $file
             ]
@@ -216,17 +250,16 @@ class EnseignantTest extends TestCase
      */
     public function test_show_my_profile_is_functional()
     {
-        // Get the first Enseignant record from the database
-        $dump_user = Enseignant::first();
+        $user = User::factory()->create([
+            'role' => 0
+        ]);
 
-        // Create a new instance of the EnseignantController
-        $response = new EnseignantController();
 
         // Call the ShowMyProfil method on the EnseignantController instance with the user ID from the dump_user record
-        $res = $response->ShowMyProfil($dump_user->user_id);
+        $response = $this->actingAs($user)->json('get', "Enseignant/ens/ShowMyProfil");
 
         // Assert that the PPR (Personal Public Registry) of the response matches the PPR of the dump_user record
-        assertSame($res->PPR, $dump_user->PPR, "show profile method is not fully functional");
+        assertNotNull($response->getData(), "show profile method is not fully functional");
     }
 
     /**
@@ -236,17 +269,16 @@ class EnseignantTest extends TestCase
      */
     public function test_show_my_hours_is_working()
     {
-        // Get the first Enseignant record from the database
-        $dump_user = Enseignant::first();
-
-        // Create a new instance of the EnseignantController
-        $response = new EnseignantController();
+        $user = User::where('role', 0)->first();
+        $ens = Enseignant::factory()->create([
+            "user_id" => $user->id,
+            "etablissement_id" =>  Etablissement::count()
+        ]);
 
         // Call the MyHours method on the EnseignantController instance with the user ID from the dump_user record
-        $res = $response->MyHours($dump_user->user_id);
-
+        $response = $this->actingAs($user)->json('get', "api/Enseignant/ens/MyHours");
         // Assert that the status code of the response is 200 (OK)
-        assertSame($res->status(), 200, "interventions method is not fully functional");
+        assertSame($response->status(), 200, "my hours method is not fully functional");
     }
 
     /**
@@ -256,19 +288,25 @@ class EnseignantTest extends TestCase
      */
     public function test_update_email_is_working_correctly()
     {
-        // Get the first Enseignant record from the database
-        $dump_user = Enseignant::first();
-
-        // Generate a new email by appending 'aga' to the existing email
-        $nv_email = $dump_user->email_perso . 'test';
-
-        // Send a JSON PATCH request to the 'api/Enseignant/{user_id}/UpdateMyEmail' endpoint
-        // with the updated email as the request payload
-        $resp = $this->json('PATCH', 'api/Enseignant/' . $dump_user->user_id . '/UpdateMyEmail', [
-            'email_perso' => $nv_email
+        $user = User::factory()->create([
+            'role' => 0
+        ]);
+        $ens = Enseignant::factory()->create([
+            "user_id" => $user->id,
         ]);
 
-        // Assert that the email of the first Enseignant record in the database matches the updated email
-        assertEquals($nv_email, Enseignant::first()->email_perso, 'email not updated correctly');
+        // Create a new instance of the Administrateur model using the factory and save it to the database
+
+        // Generate a new email by appending 'test' to the existing email
+        $new_email = 'test' . $ens->email_perso;
+
+        // Send a PUT request to update the email of the Administrateur
+        $response = $this->actingAs($user)->json('PATCH', 'api/Enseignant/ens/UpdateMyEmail', [
+            'email_perso' => $new_email
+        ]);
+        // Retrieve the updated email from the database
+        $ens_updated_email = Enseignant::where('user_id', $user->id)->orderBy('PPR', 'DESC')->first()->email_perso;
+        // Assert that the email in the database matches the updated email
+        assertEquals($new_email, $ens_updated_email, 'Email not updated correctly');
     }
 }

@@ -32,20 +32,19 @@ class AdministrateurController extends Controller
     public function index()
     {
         if (Gate::allows('check_role', [4])) {
-             // Retrieve a paginated list of Administrateur objects
-        $admin = Administrateur::latest()->paginate(10);
+            // Retrieve a paginated list of Administrateur objects
+            $admin = Administrateur::latest()->paginate(10);
 
-        // Transform the Administrateur objects into JSON resources
-        $data = AdministrateurResource::collection($admin);
+            // Transform the Administrateur objects into JSON resources
+            $data = AdministrateurResource::collection($admin);
 
-        // Return a success response with the transformed data
+            // Return a success response with the transformed data
 
-        return $this->succes($data, 'DISPLAY');
+            return $this->succes($data, 'DISPLAY');
         }
 
 
-         return $this->error('','ACCES INTERDIT ',403);
-
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
     /**
      * Store a newly created resource in storage.
@@ -72,22 +71,18 @@ class AdministrateurController extends Controller
          $id=event (new storeuser($request->input('email_perso'),1,$request->input('nom'),$request->input('prenom')));
          $admin->user_id = $id[0];
         $data=new AdministrateurResource(Administrateur::find($admin->id));
+            
 
 
-        // Check if the creation was successful and return the appropriate response
-        if ($data) {
-             return $this->succes("", "SUCCESSFULLY ADDED");
-
-
-        } else {
-            return $this->error("", "UNSUCCESSFULLY ADDED", 500);
+            // Check if the creation was successful and return the appropriate response
+            if ($data) {
+                return $this->succes("", "SUCCESSFULLY ADDED");
+            } else {
+                return $this->error("", "UNSUCCESSFULLY ADDED", 500);
+            }
         }
-        }
-        return $this->error('','ACCES INTERDIT ',403);
-
-
-
-        }
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
 
     /**
      * Display the specified resource.
@@ -97,17 +92,14 @@ class AdministrateurController extends Controller
      */
     public function show($id)
     {
-        if (Gate::allows('check_role', [4]) || Gate::allows('can_admin',$id)) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('can_admin', $id)) {
             // Retrieve the specific Administrateur resource by ID
-        $data = new AdministrateurResource(Administrateur::findOrFail($id));
+            $data = new AdministrateurResource(Administrateur::findOrFail($id));
 
-        // Return a success response with the transformed data
-        return $this->succes($data, 'DISPLAY');
-
-
+            // Return a success response with the transformed data
+            return $this->succes($data, 'DISPLAY');
         }
-        return $this->error('','ACCES INTERDIT ',403);
-
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
     /**
@@ -120,24 +112,22 @@ class AdministrateurController extends Controller
     public function update(UpdateAdministrateurRequest $request, $id)
     {
         //only admiuae
-        if (Gate::allows('check_role', [4]) ) {
+        if (Gate::allows('check_role', [4])) {
             // Find the existing Administrateur resource by ID
-        $admin = Administrateur::findOrFail($id);
+            $admin = Administrateur::findOrFail($id);
 
-        // Update the Administrateur resource with the request data
-        $value = $admin->update($request->all());
+            // Update the Administrateur resource with the request data
+            $value = $admin->update($request->all());
 
-        // Check if the update was successful and return the appropriate response
-        if ($value) {
-            $data = new AdministrateurResource(Administrateur::find($id));
-            return $this->succes($data, 'SUCCESSFULLY UPDATED');
+            // Check if the update was successful and return the appropriate response
+            if ($value) {
+                $data = new AdministrateurResource(Administrateur::find($id));
+                return $this->succes($data, 'SUCCESSFULLY UPDATED');
+            }
+
+            return $this->error('', 'UNSUCCESSFULLY UPDATED', 500);
         }
-
-        return $this->error('', 'UNSUCCESSFULLY UPDATED', 500);
-
-        }
-        return $this->error('','ACCES INTERDIT ',403);
-
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
     /**
@@ -149,26 +139,25 @@ class AdministrateurController extends Controller
     public function destroy($id)
     {
         if (Gate::allows('check_role', [4])) {
-             // Find the existing Administrateur resource by ID
-        $admin = Administrateur::find($id);
+            // Find the existing Administrateur resource by ID
+            $admin = Administrateur::find($id);
 
-        // Delete the Administrateur resource
-        $admin->delete();
+            // Delete the Administrateur resource
+            $admin->delete();
 
-        // Return a success response
-        return $this->succes('', 'SUCCESSFULLY DELETED');
+            // Return a success response
+            return $this->succes('', 'SUCCESSFULLY DELETED');
         }
-        return $this->error('','ACCES INTERDIT ',403);
-
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
     public function ShowMyprofile($user_id)
     {
 
-        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify', $user_id)) {
 
 
-                // Retrieve the Administrateur resource based on the user_id
+            // Retrieve the Administrateur resource based on the user_id
             $admin = Administrateur::where('user_id', $user_id)->first();
 
             // Check if the Administrateur resource exists and return the appropriate response
@@ -181,48 +170,44 @@ class AdministrateurController extends Controller
         }
 
 
-        return $this->error('','ACCES INTERDIT ',403);
-
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
     public function Updateemail(UpdateEmailRequest $request, $user_id)
     {
         //seulement
-        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify', $user_id)) {
 
-             // Retrieve the Administrateur resource based on the user_id
-        $admin = Administrateur::where('user_id', $user_id)->first();
+            // Retrieve the Administrateur resource based on the user_id
+            $admin = Administrateur::where('user_id', $user_id)->first();
 
-        // Update the email_perso attribute with the provided email_perso value
-        $admin->email_perso = $request->input('email_perso');
-        $admin->save();
+            // Update the email_perso attribute with the provided email_perso value
+            $admin->email_perso = $request->input('email_perso');
+            $admin->save();
 
-        // Return a success response
-        return $this->succes('', 'SUCCESSLY CHANGED');
+            // Return a success response
+            return $this->succes('', 'SUCCESSLY CHANGED');
         }
 
-        return $this->error('','ACCES INTERDIT ',403);
-
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
-    public function AllEnseignants($user_id){
+    public function AllEnseignants($user_id)
+    {
 
-        if (Gate::allows('check_role', [2]) || Gate::allows('admin_modify',$user_id)) {
+        if (Gate::allows('check_role', [2]) || Gate::allows('admin_modify', $user_id)) {
 
 
         $user=Administrateur::where('user_id', $user_id)->first();
         if($user){
             $etablissement_id=$user->etablissement_id;
-            $data = Enseignant::where('etablissement_id',$etablissement_id)->paginate(5);
+            $data = Enseignant::where('etablissement_id',$etablissement_id)->with('grade')->latest()->paginate(5);
             if($data){
                return $this->succes($data,"DISPLAY");
             }else{
                 return $this->error("","NO DATA FOUND",404);
             }
-        }else{
-            return $this->error("","NO DATA FOUND 2",404);
         }
-    }
 
-    return $this->error('','ACCES INTERDIT ',403);
-}
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
 }
