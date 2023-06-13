@@ -1,6 +1,6 @@
 <template>
 
-    <h1 class="text-5xl font-bold mt-24 text-gray-700 ">Table admins</h1>
+<h1 class="text-black font-bold text-xl">Table Intervention :</h1>
     <div class="overflow-x-auto border">
   <table class="table w-screen botrder">
     <!-- head -->

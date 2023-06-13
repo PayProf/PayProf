@@ -10,38 +10,41 @@
           <th>Nom</th>
           <th>Télephone</th>
           <th>Fax</th>
+          <td>Ville</td>
           <th>Nombre enseignants</th>
           <!-- Consulter la table des enseignants de cet etablissement -->
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(Etablissement, id) in this.Etablissements.data" :key="id">
-          <td>{{ Etablissement.id }}</td>
-          <td>{{ Etablissement.code }}</td>
-          <td>{{ Etablissement.nom }}</td>
-          <td>{{ Etablissement.Telephone }}</td>
-          <td>{{ Etablissement.ville }}</td>
-          <td>{{ Etablissement.Nombre_des_enseignants }}</td>
+        <tr v-for="(Etablissement, id) in this.model.Etablissements.data" :key="id">
+          <td>{{ id + 1 }}</td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.code }}</div><div v-else><input type="text" :placeholder="Etablissement.code" v-model="this.UpdatedEtablissement.code" class="input input-ghost w-full max-w-xs" disabled/></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.nom }}</div><div v-else><input type="text" :placeholder="Etablissement.nom" v-model="this.UpdatedEtablissement.nom" class="input input-ghost w-full max-w-xs" disabled/></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Telephone }}</div><div v-else><input type="text" :placeholder="Etablissement.Telephone" v-model="this.UpdatedEtablissement.Telephone" class="input input-ghost w-full max-w-xs" /></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.FAX }}</div><div v-else><input type="text" :placeholder="Etablissement.FAX" v-model="this.UpdatedEtablissement.FAX" class="input input-ghost w-full max-w-xs" /></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.ville }}</div><div v-else><input type="text" :placeholder="Etablissement.ville" v-model="this.UpdatedEtablissement.ville" class="input input-ghost w-full max-w-xs" disabled/></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Nombre_des_enseignants }}</div><div v-else><input type="text" :placeholder="Etablissement.Nombre_des_enseignants" v-model="this.UpdatedEtablissement.Nombre_des_enseignants" class="input input-ghost w-full max-w-xs"  disabled/></div></td>
           <td>
-            <router-link :to="{ path: '/EditEtablissement/'+Etablissement.id }" v-if="Userrole == 4">
-              <button class="add-btn px-4" >
-              <i class="fas fa-pen" ></i>
-              <span class="tooltip" data-tooltip="inspect"></span>
-            </button>
-            </router-link>
 
-            <button class="add-btn px-4" @click="deleteEtablissement(Etablissement.id)" v-if="Userrole == 4">
-              <i class="fas fa-trash" ></i>
-              <span class="tooltip" data-tooltip="inspect"></span>
+            <button class="add-btn px-4" v-if="Userrole==4" @click="this.SelectedId = Etablissement.id" >
+              <i class="fas fa-pen" v-if="!IsRow(Etablissement.id)"></i>
+              <i class="fas fa-check" v-else @click="ConfirmEdit(Etablissement.id)"></i>
+              <span class="tooltip" data-tooltip="inspect">modifier</span>
             </button>
-            <!-- This page isn't created yet !!!! -->
+
             <router-link :to="{ path: '/Etablissement/'+Etablissement.id }">
               <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
             </router-link>
+            <button class="add-btn px-4" @click="deleteEtablissement(Etablissement.id)" v-if="Userrole == 4">
+              <i class="fas fa-trash" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            <!-- This page isn't created yet !!!! -->
+            
           </td>
         </tr>
       </tbody>
@@ -62,7 +65,18 @@ export default {
   name: 'TableEtablissement',
   data() {
     return {
-      Etablissements: [],
+      model:{
+        Etablissements: [{
+          nom:'',
+          code:'',
+          Telephone:'',
+          FAX:'',
+          ville:'',
+          Nombre_des_enseignants:''
+        }],
+      },
+      UpdatedEtablissement:{},
+      SelectedId:null,
       Userrole:store.state.user.role,
       openAdd:false
     }
@@ -75,6 +89,30 @@ export default {
 
   },
   methods: {
+    IsRow(id) {
+      return id == this.SelectedId;
+    },
+    async ConfirmEdit(id) {
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+          }
+        };
+
+        await axios.patch(
+            `http://127.0.0.1:8000/api/etablissements/${id}`,
+            this.UpdatedEtablissement, // Pass the object in the request payload
+            config
+        );
+        this.SelectedId = null;
+        await this.getEtablissements();
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getEtablissements() {
       try {
         const token = store.state.user.token;
@@ -83,9 +121,9 @@ export default {
         };
         await axios.get('http://127.0.0.1:8000/api/etablissements',config).then(result=>{
           console.log('test axios')
-          this.Etablissements = result.data
+          this.model.Etablissements = result.data
         })
-        console.log(this.Etablissements)
+        console.log(this.model.Etablissements)
       }
       catch (error) {
         console.log(error)

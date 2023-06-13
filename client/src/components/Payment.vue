@@ -1,0 +1,217 @@
+<template>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <div class="col-md-12 mx-10 mt-24">
+        <div class="row">
+
+            <div class="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+                <div class="row flex-row ">
+                    <div class="receipt-header">
+                        <div class="col-xs-8 col-sm-8 col-md-8 text-left">
+                            <div class="receipt-left">
+                                <b>
+                                    <h5>Customer Name </h5>
+                                </b>
+                                <p><b>Mobile :</b> </p>
+                                <p><b>Email :</b> </p>
+                                <p><b>Date debut :</b> </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div>
+                    <table class="table table-bordered w-full mt-0">
+                        <thead class=" bg-slate-500">
+                            <tr>
+                                <th>Intitule</th>
+                                <th>Nombre d'heure</th>
+                                <th>Paiement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="col-md-9">Payment for August 2016</td>
+                                <td class="col-md-3"> 15,000 DH</td>
+                                <td class="col-md-3"> 15,000 DH</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9">Payment for August 2016</td>
+                                <td class="col-md-3"> 15,000 DH</td>
+                                <td class="col-md-3"> 15,000 DH</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9">Payment for August 2016</td>
+                                <td class="col-md-3"> 15,000 DH</td>
+                                <td class="col-md-3"> 15,000 DH</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9">Payment for August 2016</td>
+                                <td class="col-md-3"> 15,000 DH</td>
+                                <td class="col-md-3"> 15,000 DH</td>
+                            </tr>
+                            <tr>
+
+                                <td class="text-center">
+                                    <h2><strong>Total: </strong></h2>
+                                </td>
+
+                                <td class="col-md-9"></td>
+                                <td class="text-center text-danger">
+                                    <h2><strong> 31.566 DH</strong></h2>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="receipt-header receipt-header-mid receipt-footer">
+                        <div class="col-xs-8 col-sm-8 col-md-8 text-left">
+                            <div class="receipt-right">
+                                <h5 style="color: rgb(92, 90, 90);">PayProf</h5>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-neutral" @click="downloadPDF()" id="btn">Telecharger payement</button>
+</template>
+
+<script>
+
+export default {
+    name: 'Payment',
+    data() {
+        return {
+            isVisible: false,
+        }
+    },
+    methods: {
+        showReceipt() {
+            this.isVisible = !this.isVisible
+        },
+        downloadPDF() {
+            document.getElementById("header").style.display = 'none'
+            document.getElementById("footer").style.display = 'none'
+            document.getElementById("btn").style.display = 'none'
+            window.print()
+        },
+        async getPayment() {
+            try {
+                const token = store.state.user.token;
+                const config = {
+                    headers: { Authorization: `Bearer ${token}` }
+                };
+                const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/ShowMyProfil', config);
+                this.Profile = response.data.data;
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+
+    }
+}
+</script>
+
+<style>
+body {
+    background: #eee;
+    margin-top: 20px;
+}
+
+.receipt-main {
+    background: #ffffff none repeat scroll 0 0;
+    border-bottom: 12px solid #333333;
+    border-top: 12px solid #333333;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 40px 30px !important;
+    position: relative;
+    box-shadow: 0 1px 21px #acacac;
+    color: #333333;
+    font-family: open sans;
+}
+
+.receipt-main p {
+    color: #333333;
+    font-family: open sans;
+    line-height: 1.42857;
+}
+
+.receipt-footer h1 {
+    font-size: 15px;
+    font-weight: 400 !important;
+    margin: 0 !important;
+}
+
+.receipt-main::after {
+    background: #414143 none repeat scroll 0 0;
+    content: "";
+    height: 5px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: -13px;
+}
+
+.receipt-main thead {
+    background: #414143 none repeat scroll 0 0;
+}
+
+.receipt-main thead th {
+    color: rgb(11, 11, 11);
+}
+
+.receipt-right h5 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 7px 0;
+}
+
+
+
+
+
+.receipt-main td {
+    padding: 9px 20px !important;
+}
+
+.receipt-main th {
+    padding: 13px 20px !important;
+}
+
+.receipt-main td {
+    font-size: 13px;
+    font-weight: initial !important;
+}
+
+.receipt-main td p:last-child {
+    margin: 0;
+    padding: 0;
+}
+
+.receipt-main td h2 {
+    font-size: 20px;
+    font-weight: 900;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+
+
+.receipt-header-mid {
+    margin: 24px 0;
+    overflow: hidden;
+}
+
+#container {
+    background-color: #dcdcdc;
+}
+</style>

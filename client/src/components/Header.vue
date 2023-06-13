@@ -1,7 +1,7 @@
 <template>
 
 
-  <div class="navbar bg-base-100 fixed top-0 w-full drop-shadow-md mb-10 z-50">
+  <div class="navbar bg-base-100 fixed top-0 w-full drop-shadow-md mb-10 z-50" id="header">
     <div class="navbar-start">
       <div class="dropdown">
           <label class="btn btn-circle swap swap-rotate">

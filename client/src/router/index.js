@@ -46,6 +46,7 @@ import { useToast } from "vue-toastification";
 import TableInterventionsEnseignant from "../views/UI/TableInterventionsEnseignant.vue";
 import User from "../views/UI/User.vue";
 import Etablissement from "../views/UI/Etablissement.vue"
+import Payment from "../components/Payment.vue"
 /******************************************* Routes Configuration *******************************************/
 
 const routes = [
@@ -71,6 +72,18 @@ const routes = [
       RequiresAuth: true,
     },
     children:[
+      {
+        path: '/Payment',
+        name:'Payment',
+        component: Payment,
+        meta:{
+        AdminAccess: true,
+        AdminUAEAccess: true,
+        UserAccess: true,
+        DirectorUAEAccess: true,
+        DirectorAccess:true,
+        }
+      },
       {
         path: '/DirecteurUAE',
         name:'DirecteurUAE',
@@ -101,9 +114,9 @@ const routes = [
         component: ADUser,
         meta:{
         AdminAccess: true,
-        AdminUAEAccess: false,
+        AdminUAEAccess: true,
         UserAccess: false,
-        DirectorUAEAccess: false,
+        DirectorUAEAccess: true,
         DirectorAccess:false,
         }
       },
