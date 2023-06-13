@@ -211,7 +211,7 @@ class AdministrateurController extends Controller
         $user=Administrateur::where('user_id', $user_id)->first();
         if($user){
             $etablissement_id=$user->etablissement_id;
-            $data = Enseignant::where('etablissement_id',$etablissement_id)->paginate(5);
+            $data = Enseignant::where('etablissement_id',$etablissement_id)->with('grade')->latest()->paginate(5);
             if($data){
                return $this->succes($data,"DISPLAY");
             }else{

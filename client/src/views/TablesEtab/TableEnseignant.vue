@@ -15,21 +15,20 @@
       </thead>
       <tbody>
       <tr v-for="(Enseignant,index) in this.model.Enseignants" :key="index">
-        <td>{{Enseignant.PPR}}</td>
-        <td>{{ Enseignant.nom }}</td>
-        <td>{{ Enseignant.prenom }}</td>
-        <td>{{ Enseignant.grade_id }}</td>
-        <td>{{ Enseignant.email_perso}}</td>
-        <td>{{ Enseignant.date_naissance }}</td>
+        <td><div>{{Enseignant.PPR}}</div></td>
+        <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.nom }}</div><div v-else><input type="text" :placeholder="Enseignant.nom" v-model="this.UpdatedEnseignant.nom" class="input input-ghost w-full max-w-xs" /></div></td>
+        <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.prenom }}</div><div v-else><input type="text" :placeholder="Enseignant.prenom" v-model="this.UpdatedEnseignant.prenom" class="input input-ghost w-full max-w-xs" /></div></td>
+        <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.grade.designation }}</div><div v-else><input type="text" :placeholder="Enseignant.grade.designation" v-model="this.UpdatedEnseignant.grade" class="input input-ghost w-full max-w-xs" /></div></td>
+        <td><div>{{ Enseignant.email_perso}}</div></td>
+        <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.date_naissance }}</div><div v-else><input type="text" :placeholder="Enseignant.date_naissance" v-model="this.UpdatedEnseignant.date_naissance" class="input input-ghost w-full max-w-xs" /></div></td>
         <td>
-          <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
-            <button class="add-btn px-4" v-if="user.role==2" >
-              <i class="fas fa-pen" ></i>
+            <button class="add-btn px-4" v-if="user.role==2" @click="this.SelectedId = Enseignant.id" >
+              <i class="fas fa-pen" v-if="!IsRow(Enseignant.id)"></i>
+              <i class="fas fa-check" v-else @click="ConfirmEdit(Enseignant.id)"></i>
               <span class="tooltip" data-tooltip="inspect">modifier</span>
             </button>
-          </router-link>
 
-          <button class="add-btn px-4" @click="deleteEnseignant(Enseignant.id)" v-if="user.role==2">
+          <button class="add-btn px-4" @click="DeleteEnseignant(Enseignant.id)" v-if="user.role==2">
             <i class="fas fa-trash" ></i>
             <span class="tooltip" data-tooltip="inspect">supprimer</span>
           </button>
@@ -79,18 +78,22 @@ export default {
   data() {
     return {
       model:{
-        Enseignants:{
+        Enseignants:[{
           id:'',
           nom:'',
           prenom:'',
-          Grade:'',
-          DateNaissance:'',
-          Email:'',
+          grade:{},
+          date_naissance:'',
+          email_perso:'',
+          PPR:'',
 
-        },
+        }],
+
 
 
       } ,
+      UpdatedEnseignant:{},
+      SelectedId:null,
       pagecount:null,
       page:1,
 
@@ -103,42 +106,61 @@ export default {
     ])
   },
   methods: {
+    IsRow(id) {
+      return id == this.SelectedId;
+    },
+    async ConfirmEdit(id) {
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+          }
+        };
+
+        await axios.patch(
+            `http://127.0.0.1:8000/api/Enseignant/${id}`,
+            this.UpdatedEnseignant, // Pass the object in the request payload
+            config
+        );
+        this.SelectedId = null;
+        await this.getEnseignants();
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getEnseignants() {
       try {
         const token = store.state.user.token;
         const config = {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {Authorization: `Bearer ${token}`}
         };
-        const res = await axios.get('http://127.0.0.1:8000/api/admins/'+store.state.user.id+'/showenseignants?page='+this.page,config)
-        this.model.Enseignants=res.data.data.data;
-        this.pagecount=res.data.data.last_page;
+        const res = await axios.get('http://127.0.0.1:8000/api/admins/' + store.state.user.id + '/showenseignants?page=' + this.page, config)
+        this.model.Enseignants = res.data.data.data;
+        this.pagecount = res.data.data.last_page;
 
 
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error)
       }
     },
-    async DeleteEnseignant(){
+    async DeleteEnseignant(id) {
       try {
         const token = store.state.user.token;
         const config = {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {Authorization: `Bearer ${token}`}
         };
-        await axios.delete('http://127.0.0.1:8000/api/enseignant',config)
-
-
-
-      }
-      catch (error) {
+        await axios.delete('http://127.0.0.1:8000/api/Enseignant/' + id, config)
+        await this.getEnseignants();
+      } catch (error) {
         console.log(error)
       }
     },
-
   },
-  mounted() {
-    this.getEnseignants();
-  },
+  async mounted() {
+    await this.getEnseignants();
+  }
 };
 
 

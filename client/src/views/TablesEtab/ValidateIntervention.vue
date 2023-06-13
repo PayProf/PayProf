@@ -115,9 +115,7 @@ export default {
           }
         };
 
-        console.log(token); // Here it shows the things i changed
-
-        const response = await axios.patch(
+        await axios.patch(
             `http://127.0.0.1:8000/api/Intervention/${id}`,
             this.UpdatedIntervetion, // Pass the object in the request payload
             config
