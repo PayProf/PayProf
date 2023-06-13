@@ -82,7 +82,7 @@ BEGIN
     IF sum_vh >= 100 THEN
         INSERT INTO paiements (enseignant_id, etablissement_id, "VH", "Taux_H", "Brut", "IR", "Net", "Annee_univ", "Semestre")
         VALUES (auxenseignant_id, auxetablissement_id, aux_vh, 0, 0, 0, 0, aux_annee_univ, aux_semestre)
-        ON CONFLICT (enseignant_id, "Annee_univ", "Semestre",etablissement_id)
+        ON CONFLICT ON CONSTRAINT unique_paiement
         DO UPDATE SET "VH" = paiements."VH" + aux_vh;
     ELSE  -- sum_vh < 100
 
@@ -93,7 +93,7 @@ BEGIN
         END IF;    
             INSERT INTO paiements (enseignant_id, etablissement_id, "VH", "Taux_H", "Brut", "IR", "Net", "Annee_univ", "Semestre")
             VALUES (auxenseignant_id, auxetablissement_id, aux_vh, auxth, tab[1], tab[2], tab[3], aux_annee_univ, aux_semestre)
-            ON CONFLICT (enseignant_id, "Annee_univ", "Semestre",etablissement_id)
+            ON CONFLICT ON CONSTRAINT unique_paiement
             DO UPDATE SET "VH" = paiements."VH" + aux_vh, "Brut" = paiements."Brut" + tab[1], "IR" = paiements."IR" + tab[2], "Net" = paiements."Net" + tab[3];
         
     END IF;
