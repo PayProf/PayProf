@@ -23,14 +23,14 @@ class StoreAdministrateurRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'PPR'=>['required'],
-            'nom'=>['required'],
-            'prenom'=>['required'],
-            'etablissement_id'=>['required'],
-            // 'user_id'=>['required'],
-            'email_perso'=>['required','email'],
-          //  'Email'=>['required','email'],
+       
+            return [
+                'PPR' => ['required', 'numeric','min:7'],
+                'nom' => ['required', 'string','max:30'],
+                'prenom' => ['required', 'string','max:30'],
+                'etablissement_id' => ['required','exists:etablissements'],
+                'email_perso' => ['required', 'email']
             ];
+        
     }
 }

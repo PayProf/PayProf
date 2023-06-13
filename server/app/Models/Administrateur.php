@@ -17,6 +17,14 @@ class Administrateur extends Model
         'email_perso',
 
     ];
+    public function getIdEtablissement($etablissement)
+{
+    $etablissement_id = DB::table('etablissements')
+        ->where('nom', $etablissement)
+        ->value('id');
+        
+    return $etablissement_id;
+}
     public function etablissement()
     {
         return $this->belongsTo(Etablissement::class);
