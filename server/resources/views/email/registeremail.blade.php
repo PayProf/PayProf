@@ -1,10 +1,17 @@
-Bonjour
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <p>Bonjour,</p>
+    <p>Vous avez été enregistré avec succès.</p>
+    <p>Voici votre email : {{ $email }}</p>
+    <p>Voici votre mot de passe : {{ $password }}</p>
+    <p>Veuillez le conserver en toute sécurité.</p>
+    <p>Merci de votre inscription !</p>
+    <p>Cordialement,</p>
+    <p>Votre site PAYPROF</p>
+</body>
+</html>
 
-Vous avez été enregistré avec succès.<br>
-Voici votre email : {{ $email }}<br>
-Voici votre mot de passe : {{ $password }}<br>
-Veuillez le conserver en toute sécurité.<br>
-Merci de votre inscription !<br>
-Cordialement,<br>
-Votre site PAYPROF
 

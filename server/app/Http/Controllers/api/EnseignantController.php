@@ -64,7 +64,7 @@ class EnseignantController extends Controller
                  $enseignant=new Enseignant();
 
                  $grade_id=$enseignant->IdGrade($request['Grade']);                                  //IdGrade() it's a method that return the id of the grade
-                 $etablissement_id=auth()->user()->administrateur->etablissement_id;                //the security developper should approuve it
+                    
                  $enseignant->PPR = $request['PPR'];
                  $enseignant->nom = $request['nom'];
                  $enseignant->prenom = $request['prenom'];
@@ -175,7 +175,7 @@ class EnseignantController extends Controller
 
 
           { if (Gate::allows('check_role', [0])) {  
-            if ( auth()->user()->role==0 ){  
+           
 
 
               $id=auth()->user()->enseignant->id;
@@ -191,12 +191,12 @@ class EnseignantController extends Controller
               {
                      return $this->error("","Pas d'interventions pour le moment",404);
               }
+            
             }
-         
 
 
             return $this->error('','ACCES INTERDIT ',403);
-          }
+          
           }
 
     public function ShowMyGraphe()
@@ -216,7 +216,8 @@ class EnseignantController extends Controller
             return $this->error("","Pas d'interventions pour le moment",404);
         }
     }
-        //add Return access denied
+    return $this->error('','ACCES INTERDIT ',403);
+        
     }
 //======================================================== The access is retricted for:Enseignant ===================================================
 
@@ -252,6 +253,7 @@ class EnseignantController extends Controller
 
                return $this->error('','ACCES INTERDIT ',403);
           }
+          return $this->error('','ACCES INTERDIT ',403);
           }
 
 

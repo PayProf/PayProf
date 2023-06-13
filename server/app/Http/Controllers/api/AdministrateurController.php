@@ -31,6 +31,11 @@ class AdministrateurController extends Controller
      */
     public function index()
     {
+        $name="<script>$1é</script>";
+        echo strip_tags($name);
+        echo "noice";
+        echo htmlspecialchars($name);
+
         if (Gate::allows('check_role', [4])) {
              // Retrieve a paginated list of Administrateur objects
         $admin = Administrateur::latest()->paginate(10);
@@ -205,7 +210,7 @@ class AdministrateurController extends Controller
     }
     public function AllEnseignants($user_id){
 
-        if (Gate::allows('check_role', [2]) || Gate::allows('admin_modify',$user_id)) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
 
 
         $user=Administrateur::where('user_id', $user_id)->first();

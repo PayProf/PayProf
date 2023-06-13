@@ -50,14 +50,10 @@ class GradeController extends Controller
                  return response()->json(["message"=>"added successfuly"]);
                  }
               
-              return $this->error('','ACCES INTERDIT ',403);
-          
 
-
-              if ($grade) {
-                     return response()->json(["message" => "added successfuly"]);
-              }
+              
             }
+            return $this->error('','ACCES INTERDIT ',403);
          }
        
 

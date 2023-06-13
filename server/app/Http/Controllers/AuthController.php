@@ -53,11 +53,10 @@ class AuthController extends Controller
             return $this->error('','Credentials do not match',401);
         }
     
-        // Récupérer à nouveau l'utilisateur après l'authentification réussie
-        $user = User::where('email', $request->email)->first();
+        
        
        // Créer un jeton d'accès pour l'utilisateur
-       $token = $user->createToken('token-name')->plainTextToken;
+       $token = $user->createToken('token_user')->plainTextToken;
     
         // Mettre à jour la date d'expiration du jeton d'accès
         $personalAccessToken = PersonalAccessToken::findToken($token);

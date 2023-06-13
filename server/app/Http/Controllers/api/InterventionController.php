@@ -137,7 +137,7 @@ class InterventionController extends Controller
        public function destroy($id)
 
           {
-//              if (Gate::allows('interv_etab', $id)) {
+             if (Gate::allows('interv_etab', $id)) {
                  $intervention= Intervention::find($id);
                  if($intervention)
                  {
@@ -147,7 +147,7 @@ class InterventionController extends Controller
                 else{
                      return$this->error("","intervention introuvable",404);
                  }
-//              }
+             }
               return $this->error('','ACCES INTERDIT ',403);
 
 
@@ -282,7 +282,7 @@ class InterventionController extends Controller
 
        public function EnseignantInterventions($id)
           {
-
+            if (Gate::allows('check_role', [1])) {
 
                  if(Intervention::where('enseignant_id',$id)->exists())
                  {
@@ -293,7 +293,8 @@ class InterventionController extends Controller
                 {
                      return $this->error("","intervention introuvable",404);
                 }
-
+            }
+            return $this->error('','ACCES INTERDIT ',403);
 
 
           }
