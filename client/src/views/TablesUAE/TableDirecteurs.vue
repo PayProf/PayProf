@@ -15,8 +15,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="Directeur in this.Directeurs" :key="Directeur.id">
-          <td>{{ Directeur.id + 1 }}</td>
+        <tr v-for="(Directeur,index) in this.Directeurs" :key="index">
+
+
+          <td>{{ Directeur.id }}</td>
           <td>{{ Directeur.PPR }}</td>
           <td>{{ Directeur.nom }}</td>
           <td>{{ Directeur.prenom }}</td>
@@ -24,24 +26,23 @@
           <td>{{ Directeur.Email }}</td>
           <td>{{ Directeur.DateNaissance }}</td>
           <td>
-            <router-link :to="{ path: '/EditDirecteur/' + Directeur.id }" v-if="this.Userrole == 2">
               <button class="add-btn px-4">
                 <i class="fas fa-pen"></i>
                 <span class="tooltip" data-tooltip="inspect"></span>
               </button>
-            </router-link>
 
             <button class="add-btn px-4" @click="deleteDirecteur(Directeur.id)" v-if="this.Userrole == 2">
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
-            <router-link>
+<!--            <router-link>-->
+<!--            The error here was caused by route-link it had no link, add it before uncomment-->
               <button class="add-btn px-2">
                 <i class="fas fa-eye"></i>
                 <span class="tooltip" data-tooltip="inspect"></span>
               </button>
-            </router-link>
-              
+<!--            </router-link>-->
+
           </td>
         </tr>
       </tbody>
@@ -67,9 +68,9 @@ export default {
     AddDirecteur
   },
 
-  mounted() {
+  async mounted() {
 
-    this.getDirecteurs();
+    await this.getDirecteurs();
 
   },
   computed:{
@@ -82,10 +83,9 @@ export default {
           headers: { Authorization: `Bearer ${token}` }
         };
         await axios.get('http://127.0.0.1:8000/api/Directeur',config).then(result => {
-          console.log(result.data.data[0])
           this.Directeurs = result.data.data
         })
-        console.log(this.Directeurs)
+
       }
       catch (error) {
         console.log(error)

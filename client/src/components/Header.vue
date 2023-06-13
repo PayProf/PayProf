@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="navbar-center">
-      <a class="btn btn-ghost normal-case text-xl" href="https://www.uae.ma/website/node/41">PayProf</a>
+      <a class="btn btn-ghost normal-case text-xl" href="#">PayProf</a>
     </div>
 
 

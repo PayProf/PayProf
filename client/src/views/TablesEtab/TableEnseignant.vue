@@ -19,7 +19,7 @@
         <td><div>{{Enseignant.PPR}}</div></td>
         <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.nom }}</div><div v-else><input type="text" :placeholder="Enseignant.nom" v-model="this.UpdatedEnseignant.nom" class="input input-ghost w-full max-w-xs" /></div></td>
         <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.prenom }}</div><div v-else><input type="text" :placeholder="Enseignant.prenom" v-model="this.UpdatedEnseignant.prenom" class="input input-ghost w-full max-w-xs" /></div></td>
-        <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.grade.designation }}</div><div v-else><input type="text" :placeholder="Enseignant.grade.designation" v-model="this.UpdatedEnseignant.grade" class="input input-ghost w-full max-w-xs" /></div></td>
+        <td><div v-if="!IsRow(Enseignant.id)"><div v-if="role == 2 || role == 1">{{ Enseignant.grade.designation }}</div><div v-else>{{Enseignant.Grade}}</div></div><div v-else><input type="text" :placeholder="Enseignant.grade.designation" v-model="this.UpdatedEnseignant.grade" class="input input-ghost w-full max-w-xs" /></div></td>
         <td><div>{{ Enseignant.email_perso}}</div></td>
         <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.date_naissance }}</div><div v-else><input type="text" :placeholder="Enseignant.date_naissance" v-model="this.UpdatedEnseignant.date_naissance" class="input input-ghost w-full max-w-xs" /></div></td>
         <td>
@@ -98,6 +98,7 @@ export default {
       SelectedId:null,
       pagecount:null,
       page:1,
+      role:store.state.user.role,
 
     }
   },
@@ -157,8 +158,6 @@ export default {
           headers: { Authorization: `Bearer ${token}` }
         };
         const res = await axios.get('http://127.0.0.1:8000/api/etablissements/'+this.$route.params.id+'?with=Enseignants',config)
-        console.log('ttttttt')
-        console.log(res.data.data.Enseignants)
         this.model.Enseignants=res.data.data.Enseignants;
         this.pagecount=res.data.data.last_page;
          } catch (error) {

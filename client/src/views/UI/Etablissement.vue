@@ -32,25 +32,20 @@ export default {
     components:{
         TableEnseignant
     },
-    mounted(){
-        this.getEtablissement();
+    async mounted(){
+        await this.getEtablissement();
     },
     methods:{
-         getEtablissement(){
+         async getEtablissement(){
       try {
         this.EtablissementId = this.$route.params.id;
-        console.log(this.EtablissementId)
         const token = store.state.user.token;
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        console.log('test axios')
-         axios.get('http://127.0.0.1:8000/api/etablissements/'+this.$route.params.id,config).then(result=>{
-          console.log('test axios')
+         await axios.get('http://127.0.0.1:8000/api/etablissements/'+this.$route.params.id,config).then(result=>{
           this.Etablissements = result.data.data
-          console.log(this.Etablissements)
         })
-        console.log(this.Etablissement.data)
 
       }
       catch (error) {
