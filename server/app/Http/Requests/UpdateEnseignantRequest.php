@@ -44,15 +44,22 @@ class UpdateEnseignantRequest extends FormRequest
 
                     ];
             }
+
     }
     protected function prepareForValidation()
     {
 
-              if($this->DateNaissance)   { $this->merge([ 'date_naissance'=> ucfirst($this->DateNaissance)]);}
-              if($this->dEtablissement)  { $this->merge([ 'etablissement_i'=> ucfirst($this->IdEtablissement)]);}
-              if($this->IdGrade)         { $this->merge([ 'grade_id'=> ucfirst($this->IdGrade)]);}
-              if($this->IdUser)          { $this->merge([ 'user_id'=> ucfirst($this->IdUser)]);}
-
+        if ($this->DateNaissance) {
+            $this->merge(['date_naissance' => ucfirst($this->DateNaissance)]);
+        }
+        if ($this->dEtablissement) {
+            $this->merge(['etablissement_i' => ucfirst($this->IdEtablissement)]);
+        }
+        if ($this->IdGrade) {
+            $this->merge(['grade_id' => ucfirst($this->IdGrade)]);
+        }
+        if ($this->IdUser) {
+            $this->merge(['user_id' => ucfirst($this->IdUser)]);
 
     }
 }

@@ -18,7 +18,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
         'role',
@@ -51,8 +50,8 @@ class User extends Authenticatable
 
     public function enseignant()
     {
-        
-       return $this->hasOne(Enseignant::class);
+
+        return $this->hasOne(Enseignant::class);
     }
 
     public function administrateur()
@@ -64,5 +63,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(Directeur::class);
     }
-
 }

@@ -19,7 +19,7 @@ class InterventionController extends Controller
     use HttpResponses;
 
 
-//========================================= The access is retricted for:AdminUAE||President ================================================
+    //========================================= The access is retricted for:AdminUAE||President ================================================
 
 
     /**
@@ -29,12 +29,14 @@ class InterventionController extends Controller
      */
 
     public function index()
-
     {
-        return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(10));
+        if (Gate::allows('check_role', [4, 3])) {
+            return  InterventionResource::collection(Intervention::with('enseignant','etablissement')->latest()->paginate(10));
+        }
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
-//===========================================  The access is retricted for:AdminEtab ==================================================
+    //===========================================  The access is retricted for:AdminEtab ==================================================
 
 
     /**
@@ -44,31 +46,29 @@ class InterventionController extends Controller
      * Attention the comments in this method must be respected
      */
 
-       public function store(StoreInterventionRequest $request)
+    public function store(StoreInterventionRequest $request)
 
-          {
+    {
 
-              if (Gate::allows('check_role', [2])) {
-                 $intervention=new Intervention();
-                 $enseignant=$intervention->IdEnseignant($request['PPR']);
-                 $etablissement=auth()->user()->administrateur->etablissement_id;
-                 $intervention-> intitule_intervention= $request['IntituleIntervention'];
-                 $intervention-> annee_univ= $request['AnneeUniv'];
-                 $intervention-> semestre= $request['Semestre'];
-                 $intervention-> date_debut= $request['DateDebut'];
-                 $intervention->Nbr_heures= $request['NbrHeures'];
-                 $intervention->date_fin= $request['DateFin'];
-                 $intervention->enseignant_id=$enseignant ;
-                 $intervention->etablissement_id= $etablissement ;
-                 $intervention->save();
-                 return $this->succes("","Intervention added successfully");
-              }
-              return $this->error('','ACCES INTERDIT ',403);
+        if (Gate::allows('check_role', [2])) {
+            $intervention = new Intervention();
+            $enseignant = $intervention->IdEnseignant($request['PPR']);
+            $etablissement = auth()->user()->administrateur->etablissement_id;
+            $intervention->intitule_intervention = $request['IntituleIntervention'];
+            $intervention->annee_univ = $request['AnneeUniv'];
+            $intervention->semestre = $request['Semestre'];
+            $intervention->date_debut = $request['DateDebut'];
+            $intervention->Nbr_heures = $request['NbrHeures'];
+            $intervention->date_fin = $request['DateFin'];
+            $intervention->enseignant_id = $enseignant;
+            $intervention->etablissement_id = $etablissement;
+            $intervention->save();
+            return $this->succes("", "Intervention added successfully");
+        }
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
 
-
-          }
-
-//============================================= The access is retricted for:AdminUAE||President =======================================================
+    //============================================= The access is retricted for:AdminUAE||President =======================================================
 
 
 
@@ -78,18 +78,17 @@ class InterventionController extends Controller
      * @return   // error message in case of invalid InterventionrId
      */
 
-       public function show($id)
+    public function show($id)
 
-          {
-              if (Gate::allows('check_role', [4,3]) || Gate::allows('interv_etab', $id)) {
-                 return new InterventionResource(Intervention::with('enseignant','etablissement')->findOrFail($id));
-              }
-              return $this->error('','ACCES INTERDIT ',403);
+    {
+        if (Gate::allows('check_role', [4, 3]) || Gate::allows('interv_etab', $id)) {
+            return new InterventionResource(Intervention::with('enseignant', 'etablissement')->findOrFail($id));
+        }
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
 
-          }
 
-
-//=================================================== The access is retricted for:AdminEtab ==========================================================
+    //=================================================== The access is retricted for:AdminEtab ==========================================================
 
 
     /**
@@ -128,7 +127,7 @@ class InterventionController extends Controller
 
 
 
-//==================================================== The access is retricted for:AdminEtab =================================================================
+    //==================================================== The access is retricted for:AdminEtab =================================================================
 
 
     /**
@@ -137,7 +136,7 @@ class InterventionController extends Controller
      * @return ///a success message that means the directeur was successfully deleted.
      */
 
-       public function destroy($id)
+    public function destroy($id)
 
           {
               if (Gate::allows('interv_etab', $id)) {
@@ -148,7 +147,7 @@ class InterventionController extends Controller
                  return $this->succes("","intervention deleted successfully");
                  }
                 else{
-                     return$this->error("","intervention introuvable",404);
+                     return $this->error("","intervention introuvable",404);
                  }
               }
               return $this->error('','ACCES INTERDIT ',403);
@@ -158,7 +157,7 @@ class InterventionController extends Controller
 
 
 
-//============================================= The access is retricted for:AdminEtab|President|directeur|AdminUAE  ===============================
+    //============================================= The access is retricted for:AdminEtab|President|directeur|AdminUAE  ===============================
 
 
 
@@ -170,29 +169,24 @@ class InterventionController extends Controller
      */
 
 
-       public function ShowMore($id)
+    public function ShowMore($id)
 
-          {
+    {
 
-              if (Gate::allows('check_role', [4,3]) || Gate::allows('interv_etab', $id) ) {
+        if (Gate::allows('check_role', [4, 3]) || Gate::allows('interv_etab', $id)) {
 
-              if(Intervention::where('id',$id)->exists())
-
-                {
-                     return new InterventionShowMoreResource(Intervention::with('enseignant','etablissement')->find($id));
-                }
-
-                else
-                {
-                     return $this->error("","intervention introuvable",404);
-                }
-                }
-              return $this->error('','ACCES INTERDIT ',403);
-          }
+            if (Intervention::where('id', $id)->exists()) {
+                return new InterventionShowMoreResource(Intervention::with('enseignant', 'etablissement')->find($id));
+            } else {
+                return $this->error("", "intervention introuvable", 404);
+            }
+        }
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
 
 
 
-//=============================================  The access is retricted for : President  ===============================================================
+    //=============================================  The access is retricted for : President  ===============================================================
 
 
 
@@ -203,19 +197,19 @@ class InterventionController extends Controller
      */
 
 
-       public function activeVisaUae(UpdateInterventionRequest $request,$id)
-          {
-              if (Gate::allows('check_role', [3])) {
-                 $intervention =Intervention::find($id);
-                 $intervention->visa_uae=$request['VisaUae'];
-                 $intervention->save();
-                return $this->succes("","updated successfully");
-              }
-              return $this->error('','ACCES INTERDIT ',403);
-          }
+    public function activeVisaUae(UpdateInterventionRequest $request, $id)
+    {
+        if (Gate::allows('check_role', [3])) {
+            $intervention = Intervention::find($id);
+            $intervention->visa_uae = $request['VisaUae'];
+            $intervention->save();
+            return $this->succes("", "updated successfully");
+        }
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
 
 
-//================================================== The access is retricted for : DirecteurEtab  =========================================
+    //================================================== The access is retricted for : DirecteurEtab  =========================================
 
 
     /**
@@ -225,23 +219,23 @@ class InterventionController extends Controller
      */
 
 
-       public function activeVisaEtab(UpdateInterventionRequest $request,$id)
-          {
-              if (Gate::allows('check_role', [1])) {
-                 $intervention =Intervention::find($id);
-                 $intervention->visa_etab=$request['VisaEtab'];
-                 $intervention->save();
-                return $this->succes("","updated successfully");
-              }
-              return $this->error('','ACCES INTERDIT ',403);
-          }
+    public function activeVisaEtab(UpdateInterventionRequest $request, $id)
+    {
+        if (Gate::allows('check_role', [1])) {
+            $intervention = Intervention::find($id);
+            $intervention->visa_etab = $request['VisaEtab'];
+            $intervention->save();
+            return $this->succes("", "updated successfully");
+        }
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
 
 
 
 
-//=========================================  The access is retricted for : DirecteurEtab|AdminEtab   ===================================================================
+    //=========================================  The access is retricted for : DirecteurEtab|AdminEtab   ===================================================================
 
-     /**
+    /**
      * ShowMyEtabInterventions  this method serve to display the interventions of the Admin Eatblissement Or Directeur Etablissement.
 
      * the comments should be respected and approved by the security developper
@@ -250,36 +244,30 @@ class InterventionController extends Controller
 
 
 
-       public function ShowMyEtabInterventions()
+    public function ShowMyEtabInterventions()
 
-          {
-              if (Gate::allows('check_role', [1,2])) {
+    {
+        if (Gate::allows('check_role', [1, 2])) {
 
-                   $role=auth()->user()->role;
-                   if($role==2)
-                   {
-                   $etab_id=auth()->user()->administrateur->etablissement_id;
-                   }
-                    elseif($role==1)
-                   {
-                     $etab_id=auth()->user()->directeur->etablissement_id;
+            $role = auth()->user()->role;
+            if ($role == 2) {
+                $etab_id = auth()->user()->administrateur->etablissement_id;
+            } elseif ($role == 1) {
+                $etab_id = auth()->user()->directeur->etablissement_id;
+            }
 
-                    }
+            return  Intervention::where('etablissement_id', $etab_id)->with('enseignant', 'etablissement')->latest()->paginate(5);
+        }
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
 
-                 return  Intervention::where('etablissement_id',$etab_id)->with('enseignant','etablissement')->latest()->paginate(5);
-              }
-              return $this->error('','ACCES INTERDIT ',403);
+    //========================================================  The access is retricted for : DirecteurEtab|AdminEtab|President|AdminUAE    =================================================================
 
-
-
-          }
-
-//========================================================  The access is retricted for : DirecteurEtab|AdminEtab|President|AdminUAE    =================================================================
-
-     /**
+    /**
      * EnseignantInterventions this method serve to display the interventions of a specified enseignant.
      * @param $id Id Enseignant !!!!!!!!
      */
+
 
 
 
@@ -321,10 +309,10 @@ class InterventionController extends Controller
 
 
 
-//================================================ SMEH LINA A KHOYA REDA SBER M3ANA ==========================================
+    //================================================ SMEH LINA A KHOYA REDA SBER M3ANA ==========================================
 
 
 
 
-// ======================================================= YOUSSEF HARRAK ===========================================
+    // ======================================================= YOUSSEF HARRAK ===========================================
 }
