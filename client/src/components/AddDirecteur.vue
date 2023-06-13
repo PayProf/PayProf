@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-center mt-5 ">
-      <button class="btn btn-primary rounded mb-4 w-32" @click="showPopup = true"><span class="text-2xl">+</span></button>
+      <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
     </div>
     
     <div v-if="showPopup" class="popup z-40">

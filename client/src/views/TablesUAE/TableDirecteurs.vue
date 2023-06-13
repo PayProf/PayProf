@@ -23,7 +23,6 @@
           <td>{{ Directeur.NomEtab }}</td>
           <td>{{ Directeur.Email }}</td>
           <td>{{ Directeur.DateNaissance }}</td>
-
           <td>
             <router-link :to="{ path: '/EditDirecteur/' + Directeur.id }" v-if="this.Userrole == 2">
               <button class="add-btn px-4">
@@ -83,6 +82,7 @@ export default {
           headers: { Authorization: `Bearer ${token}` }
         };
         await axios.get('http://127.0.0.1:8000/api/Directeur',config).then(result => {
+          console.log(result.data.data[0])
           this.Directeurs = result.data.data
         })
         console.log(this.Directeurs)

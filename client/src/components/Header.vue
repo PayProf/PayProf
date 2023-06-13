@@ -145,14 +145,14 @@ this.dropdownOpen=!this.dropdownOpen;
   if (this.user.role) {
     switch (this.user.role) {
       case 0 :
-        return 'Enseignat';
+        return 'Enseignant';
       case 1 :
         return 'Directeur';
       case 2 :
         return 'Admin';
       case 3 :
         return 'Directeur UAE';
-      case 4 :
+      case '4' :
         return 'Super Admin';
       default:
         return 'Unknown Role';

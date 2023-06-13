@@ -145,12 +145,14 @@ class EtablissementController extends Controller
 
         // Check the role value to determine the user type and
         // retrieve the associated Etablissement.
-        if (auth()->user()->role == 0 &&  auth()->user()->id == $user_id) {
+        if ( auth()->user()->role==4 &&  auth()->user()->id==$user_id){
+            
+                $data = Enseignant::where('user_id', $user_id)->first();
+                $enseignant = ['id_etablissement' => $data->etablissement_id];
+                $etablissement = Etablissement::where('id', $enseignant['id_etablissement'])->first();
+                return $this->succes($etablissement, "MY ETABLISSEMENT");
+            
 
-            $data = Enseignant::where('user_id', $user_id)->first();
-            $enseignant = ['id_etablissement' => $data->etablissement_id];
-            $etablissement = Etablissement::where('id', $enseignant['id_etablissement'])->first();
-            return $this->succes($etablissement, "MY ETABLISSEMENT");
         }
         if (auth()->user()->role == 2 &&  auth()->user()->id == $user_id) {
 

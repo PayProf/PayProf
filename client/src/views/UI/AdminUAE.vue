@@ -1,17 +1,12 @@
 <template>
   <TableAdmins v-if="showAdmin" />
   <TableDirecteurs v-if="showDir" />
-  <TableEtablissements v-if="showEtablissement" />
+  <TableEtablissements v-if="showEtablissement"/>
   
   <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
     <div class="col-span-1">
       <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
-        <li @click="toggleProfile()" v-if="showProfile" class="bg-neutral text-white">
-          <i class="fa-solid fa-user"></i>
-        </li>
-        <li @click="toggleProfile()" v-else>
-          <i class="fa-solid fa-user"></i>
-        </li>
+        
         <li @click="toggleTableAdmin()" v-if="showAdmin" class="bg-neutral text-white Interventions">
           <i class="fa-solid fa-users"></i>
         </li>

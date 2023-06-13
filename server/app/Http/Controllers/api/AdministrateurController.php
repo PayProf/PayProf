@@ -56,20 +56,22 @@ class AdministrateurController extends Controller
     {
 
         if (Gate::allows('check_role', [4])) {
-            // Create a new Administrateur object based on the request data
-            $admin = new Administrateur();
-            $admin->PPR = $request->input('PPR');
-            $admin->nom = $request->input('nom');
-            $admin->prenom = $request->input('prenom');
-            $admin->etablissement_id = $request->input('etablissement_id');
-            $admin->email_perso = $request->input('email_perso');
+           // Create a new Administrateur object based on the request data
+        $admin=new Administrateur();
+        $admin->PPR=$request->input('PPR');
+        $admin->nom=$request->input('nom');
+        $admin->prenom=$request->input('prenom');
+        $admin->etablissement_id=$request->input('etablissement_id');
+        $admin->email_perso=$request->input('email_perso');
 
-            $id = event(new storeuser($request->input('email_perso'), 2, $request->input('nom'), $request->input('prenom')));
+         
 
-            $admin->user_id = $id[0];
-            $admin->save();
-
-            $data = new AdministrateurResource(Administrateur::find($admin->id));
+         
+         $admin->save();
+         $id=event (new storeuser($request->input('email_perso'),1,$request->input('nom'),$request->input('prenom')));
+         $admin->user_id = $id[0];
+        $data=new AdministrateurResource(Administrateur::find($admin->id));
+            
 
 
             // Check if the creation was successful and return the appropriate response
