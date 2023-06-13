@@ -1,92 +1,136 @@
 <template>
-    <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
-      <div class="col-span-1">
-      <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
+  <div class="hero min-h-screen bg-base-200" v-if="IsLoading">
+    <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+         role="status">
+      <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+    </div>
+  </div>
+  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12" v-else>
+    <div class="col-span-1">
+      <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-40" v-drag>
         <li @click="showProfile" v-if="OpenProfile" href="#tableEns" class="bg-neutral text-white">
           <i class="fa-solid fa-user"></i>
         </li>
         <li @click="showProfile" v-else>
           <i class="fa-solid fa-user"></i>
         </li>
-        <li @click="showEns" v-if="OpenInterventions" class="bg-neutral text-white Interventions">
-          <i class="fa-solid fa-chalkboard-user"></i>
+        <li @click="showEns" v-if="OpenEns" class="bg-neutral text-white Interventions">
+          <i class="fa-solid fa-user-tie"></i>
         </li>
         <li @click="showEns" v-else class="Interventions">
+          <i class="fa-solid fa-user-tie"></i>
+        </li>
+        <li @click="ShowAllint" v-if="OpenInt" class="bg-neutral text-white">
           <i class="fa-solid fa-chalkboard-user"></i>
         </li>
-        <li @click="showGraphe" v-if="OpenGraphe" class="bg-neutral text-white">
-          <i class="fa-sharp fa-solid fa-signal"></i>
-        </li>
-        <li @click="showGraphe" v-else>
-          <i class="fa-sharp fa-solid fa-signal"></i>
+        <li @click="ShowAllint" v-else>
+          <i class="fa-solid fa-chalkboard-user"></i>
         </li>
         <li>
           <i class="fa-solid fa-arrows-up-down-left-right"></i>
         </li>
       </ul>
-      </div>
-      <!-- delete card accepting -->
-      <div class="col-span-11">
-      <!-- <div>
-      <div v-if="OpenDelete"  id="profilecard" class="popup-overlay">
-        <div class="popup-container">
-          <div class="card w-96 bg-neutral text-neutral-content">
-            <div class="card-body items-center text-center">
-              <h2 class="card-title">WARNING !</h2>
-              <p>Are you sure you want to delete the intervention?</p>
-              <div class="card-actions justify-end">
-                <button @click="supIntervention()" class="btn btn-primary">Accept</button>
-                <button @click="OpenDelete = false" class="btn btn-ghost">Deny</button>
-              </div>
-            </div>
+    </div>
+    <div class="col-span-11">
+      <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h1 class="text-2xl font-bold">Bonjour Monsieur Le Directeur de {{ Profile.NomEtab}}</h1>
+          <p class="py-2"><strong>PPR :</strong> {{Profile.PPR}}</p>
+          <p class="py-2"><strong>Nom:</strong> {{Profile.nom}}</p>
+          <p class="py-2"><strong>Prenom :</strong> {{Profile.prenom}}</p>
+          <p class="py-2"><strong>Email :</strong> {{Profile.Email}}</p>
+          <p class="py-2"><strong>Etablissment :</strong> {{ Profile.NomEtab}}</p>
+          <p class="py-2"><strong>Ville :</strong> {{ Profile.DateNaissance }}</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Change Password</button>
           </div>
         </div>
       </div>
-    </div> -->
-    <div v-if="OpenProfile" class="card card-side bg-base-100 shadow-xl">
-    <div class="card-body">
-      <h1 class="text-2xl font-bold">Profile enseignat : Mouad Hayaoui</h1>
-            <p class="py-2"><strong>PPR :</strong> </p>
-            <p class="py-2"><strong>Nom:</strong> </p>
-            <p class="py-2"><strong>Prenom :</strong></p>
-            <p class="py-2"><strong>Email :</strong></p>
-            <p class="py-2"><strong>Etablissment :</strong> Ecole Nationale des sciences appliquee</p>
-      <div class="card-actions justify-end">
-        <button class="btn btn-primary">Change Password</button>
-      </div>
+      <TableEnseignant id="tableEns" v-if="OpenEns"/>
+      <ValidateIntervention v-if="OpenInt"/>
+
     </div>
+
+
   </div>
-    
-      </div>
-    <!-- </> -->
-  
-  
-    </div>
-    <TableEnseignant id="tableEns" v-if="OpenEns"/>
-  
-  </template>
+
+
+</template>
+
 
 
 <script>
-import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
-import store from '../../store';
+import store from '../../store'
 import axios from 'axios';
+import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
+import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
+import PopupForm from '../../components/AddEnseignant.vue';
+import {mapActions,mapState} from 'vuex';
 export default {
-  name: "Director",
+  name: 'Admin',
+  components: {
+    TableEnseignant,
+    PopupForm,
+    ValidateIntervention,
+
+  },
   data() {
     return {
-      done: false,
+      showPopupForm: false,
       OpenEns:false,
+      OpenGraphe:false,
       OpenProfile:true,
       OpenInt:false,
-      OpenInterventions: false,
-      OpenGraphe: false,
-    }
+      IsLoading:false,
+      Profile:{
+        PPR:'',
+        nom:'',
+        prenom:'',
+        email:'',
+        etablissement:'',
+      },
+      Etablissement:{
+
+      },
+
+    };
   },
-  components:{
-    TableEnseignant,
-  },
-  methods:{
+  methods: {
+    //   ...mapActions([
+    //     'getEnseignants'
+    // ]),
+    async GetMyEtab(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/myetablissement',config);
+        this.Etablissement=response.data.data;
+        console.log(response)
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
+    async showmyprofile(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/Directeur/dir/ShowMyProfil',config);
+        this.Profile=response.data.data;
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
+    showStats() {
+      this.OpenStats = !this.OpenStats;
+    },
     showEnseignatsA() {
       this.OpenEnseignants = !this.OpenEnseignants;
     },
@@ -101,12 +145,27 @@ export default {
     },
     ShowAllint(){
       this.OpenInt = !this.OpenInt;
+    },
+    showGraphe(){
+      this.OpenGraphe = !this.OpenGraphe;
     }
-  }
-}
+  },
+
+  computed:{
+    ...mapState([
+      'enseignants',
+      'user'
+    ])
+
+  },
+  async mounted() {
+    this.IsLoading=true;
+    await this.showmyprofile();
+    // await this.GetMyEtab();
+    this.IsLoading=false;
+  },
+};
 
 
 </script>
-
-
 

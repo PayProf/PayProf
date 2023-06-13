@@ -14,11 +14,11 @@
                 <th>Nombre Heures</th>
                 <th>Visa UAE</th>
                 <th>Visa Etab</th>
-                <th>Actions</th>
+                <th v-if="role == 2">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(Intervention,id) in Interventions" :key="id">
+              <tr v-for="(Intervention,index) in Interventions" :key="index">
                 <td>{{ Intervention.enseignant.PPR }}</td>
                 <td><div v-if="!IsRow(Intervention.id)">{{ Intervention.etablissement.nom}}</div><div v-else><input type="text" :placeholder="Intervention.etablissement.nom" v-model="UpdatedIntervetion.NomEtab" class="input input-ghost w-full max-w-xs" /></div></td>
                 <td><div v-if="!IsRow(Intervention.id)">{{ Intervention.intitule_intervention}}</div><div v-else><input type="text" :placeholder="Intervention.intitule_intervention" v-model="UpdatedIntervetion.intitule_intervention" class="input input-ghost w-full max-w-xs" /></div></td>
@@ -35,7 +35,7 @@
                   </div>
                 </td>
                 <td>
-                  <input type="checkbox" :checked="Intervention.visa_etab" class="checkbox" v-if="role == 1"  />
+                  <input type="checkbox" :checked="Intervention.visa_etab" class="checkbox" v-if="role == 1 && !Interventions.visa_etab" @change="UpVisaEtab(Intervention.id,index)" />
                   <div v-else class="flex justify-center">
                     <i class="fa-solid fa-x text-red-500" v-if="!Intervention.visa_etab"></i>
                     <i class="fa-solid fa-check text-green-500" v-else></i>
@@ -68,7 +68,7 @@
              />
            </div>
      <div class="flex justify-center items-center">
-            <AddIntervention @intervention-added="getInterventions"/>
+            <AddIntervention @intervention-added="getInterventions" v-if="role == 2"/>
      </div>
 
 
@@ -105,6 +105,27 @@ export default {
 
   },
   methods: {
+    async UpVisaEtab(id,index){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+          }
+        };
+        this.UpdatedIntervetion.visa_etab=!this.Interventions[index].visa_etab;
+
+        await axios.patch(
+            'http://127.0.0.1:8000/api/Intervention/'+id+'/visaetab',
+            {VisaEtab:this.UpdatedIntervetion.visa_etab}, // Pass the object in the request payload
+            config
+        );
+        await this.getInterventions();
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async ConfirmEdit(id) {
       try {
         const token = store.state.user.token;
