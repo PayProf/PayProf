@@ -13,28 +13,28 @@
             <label class="label">
               <span class="label-text">PPR</span>
             </label>
-            <input type="number" v-model="model.Enseignant.PPR" placeholder="PPR" class="input input-bordered h-9" />
+            <input type="number" required="true" v-model="model.Enseignant.PPR" placeholder="PPR" class="input input-bordered h-9" />
           </div>
 
           <div class="form-control">
             <label class="label">
               <span class="label-text">Nom</span>
             </label>
-            <input type="text" v-model="model.Enseignant.nom" placeholder="Nom" class="input input-bordered h-9" />
+            <input type="text" required="true" v-model="model.Enseignant.nom" placeholder="Nom" class="input input-bordered h-9" />
           </div>
 
           <div class="form-control">
             <label class="label">
               <span class="label-text">Prénom</span>
             </label>
-            <input type="text" v-model="model.Enseignant.prenom" placeholder="Prénom" class="input input-bordered h-9" />
+            <input type="text" required="true" v-model="model.Enseignant.prenom" placeholder="Prénom" class="input input-bordered h-9" />
           </div>
 
           <div class="form-control">
             <label class="label">
               <span class="label-text">Email</span>
             </label>
-            <input type="email" v-model="model.Enseignant.email_perso" placeholder="Email" class="input input-bordered h-9" />
+            <input type="email" required="true" v-model="model.Enseignant.email_perso" placeholder="Email" class="input input-bordered h-9" />
           </div>
 
           <div class="form-control">
@@ -53,7 +53,7 @@
             <label class="label">
               <span class="label-text">Date Naissance</span>
             </label>
-            <input type="date" v-model="model.Enseignant.DateNaissance" placeholder="Date Naissance" class="input input-bordered h-9" />
+            <input type="date" required="true" v-model="model.Enseignant.DateNaissance" placeholder="Date Naissance" class="input input-bordered h-9" />
           </div>
 
           <div class="form-control mt-6 grid grid-cols-2 flex items-center">
