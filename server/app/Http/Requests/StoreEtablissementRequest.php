@@ -27,11 +27,11 @@ class StoreEtablissementRequest extends FormRequest
         
             
             return [
-                'nom' => ['required', 'string','max:30'],
-                'code' => ['required', 'string'],
-                'telephone' => ['required', 'string','min:10'],
-                'FAX' => ['required', 'string','max:15'],
-                'ville' => ['required', 'string'],
+                'nom' => ['required','max:30'],
+                'code' => ['required'],
+                'telephone' => ['required','min:10'],
+                'FAX' => ['required','max:15'],
+                'ville' => ['required'],
             ];
             
         

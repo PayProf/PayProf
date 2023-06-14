@@ -35,14 +35,13 @@ class AdministrateurController extends Controller
     {
         if (Gate::allows('check_role', [4])) {
             // Retrieve a paginated list of Administrateur objects
-            $admin = Administrateur::latest()->paginate(10);
+            $admin = Administrateur::latest()->paginate(5);
 
-            // Transform the Administrateur objects into JSON resources
-            $data = AdministrateurResource::collection($admin);
+            
 
             // Return a success response with the transformed data
 
-            return $this->succes($data, 'DISPLAY');
+            return $this->succes($admin, 'DISPLAY');
         }
 
 
@@ -64,7 +63,7 @@ class AdministrateurController extends Controller
             $admin->PPR = $request->input('PPR');
             $admin->nom = $request->input('nom');
             $admin->prenom = $request->input('prenom');
-            $admin->etablissement_id = $admin->getIdEtablissement($request['Grade']);
+            $admin->etablissement_id = $admin->getIdEtablissement($request['etablissement']);
             $admin->email_perso = $request->input('email_perso');
 
 
@@ -72,12 +71,12 @@ class AdministrateurController extends Controller
             $id = event(new storeuser($request->input('email_perso'), 1, $request->input('nom'), $request->input('prenom')));
             $admin->user_id = $id[0];
             $admin->save();
-            $data = new AdministrateurResource(Administrateur::find($admin->id));
+             $data = new AdministrateurResource(Administrateur::find($admin->id));
 
 
             // Check if the creation was successful and return the appropriate response
             if ($data) {
-                return $this->succes("", "SUCCESSFULLY ADDED");
+                return $this->succes($data, "SUCCESSFULLY ADDED");
             } else {
                 return $this->error("", "UNSUCCESSFULLY ADDED", 500);
             }
