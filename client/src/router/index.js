@@ -129,7 +129,7 @@ const routes = [
         AdminAccess: false,
         AdminUAEAccess: false,
         UserAccess: false,
-        DirectorUAEAccess: false,
+        DirectorUAEAccess: true,
         DirectorAccess:true,
         }
       },

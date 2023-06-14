@@ -56,7 +56,7 @@
           <!-- head -->
           <thead>
           <tr>
-            <th>Intitule          </th>
+            <th>Intitule</th>
             <th>Année</th>
             <th>Semestre</th>
             <th>Date Debut</th>

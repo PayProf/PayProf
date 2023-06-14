@@ -7,14 +7,17 @@
       <p class="py-2"><strong>Telephone :</strong> {{ this.Etablissements.Telephone }}</p>
       <p class="py-2"><strong>Fax :</strong> {{ this.Etablissements.FAX }}</p>
       <p class="py-2"><strong>Nombre Enseignant :</strong> {{ this.Etablissements.Nombre_des_enseignants }}</p>
-
-
     </div>
   </div>
   <TableEnseignant />
+
+    <ValidateInterventionUAE  v-if=" UserRole == 3" />
+
+  
 </template>
 
 <script >
+import ValidateInterventionUAE from '../TablesUAE/ValidateInterventionUAE.vue';
 import TableEnseignant from '../TablesUAE/TableEnseignant.vue'
 import store from "../../store"
 import axios from 'axios';
@@ -25,16 +28,18 @@ export default {
     return {
       EtablissementId: "",
       Etablissements: [],
+      UserRole:store.state.user.role
     }
 
 
   },
   components: {
-    TableEnseignant
+    TableEnseignant,
+    ValidateInterventionUAE
   },
   async mounted() {
     await this.getEtablissement();
-    await this.getProfile();
+    // await this.getProfile();
   },
   methods: {
     async getEtablissement() {
@@ -53,22 +58,22 @@ export default {
         console.log(error)
       }
     },
-    async getProfile(){  
-      try {
-        const token = store.state.user.token;
-        const config = {
-          headers: { Authorization: `Bearer ${token}` }
-        };
-        await axios.get('http://127.0.0.1:8000/api/admins/' + this.$route.params.id+'/myprofile/', config).then(result => {
-          this.Etablissements = result.data.data
-          console.log(result)
-        })
+    // async getProfile(){  
+    //   try {
+    //     const token = store.state.user.token;
+    //     const config = {
+    //       headers: { Authorization: `Bearer ${token}` }
+    //     };
+    //     await axios.get('http://127.0.0.1:8000/api/admins/' + this.$route.params.id+'/myprofile/', config).then(result => {
+    //       this.Etablissements = result.data.data
+    //       console.log(result)
+    //     })
 
-      }
-      catch (error) {
-        console.log(error)
-      }
-    }
+    //   }
+    //   catch (error) {
+    //     console.log(error)
+    //   }
+    // }
   }
 
 }

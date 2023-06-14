@@ -17,8 +17,6 @@
       </thead>
       <tbody>
         <tr v-for="(Directeur,index) in this.Directeurs" :key="index">
-
-
           <td>{{ Directeur.id }}</td>
           <td>{{ Directeur.PPR }}</td>
           <td>{{ Directeur.nom }}</td>
@@ -31,15 +29,14 @@
                 <i class="fas fa-pen"></i>
                 <span class="tooltip" data-tooltip="inspect"></span>
               </button>
-
             <button class="add-btn px-4" @click="deleteDirecteur(Directeur.id)" v-if="this.Userrole == 2">
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
 
-<!--            The error here was caused by route-link it had no link, add it before uncomment-->
+          <!-- The error here was caused by route-link it had no link, add it before uncomment-->
 
-<router-link :to="{ path: '/Etablissement/'+Directeur.NomEtab }">
+            <router-link :to="{ path: '/Etablissement/'+Directeur.NomEtab }"> <!-- Youssef has to send id_etablissement in addition to nometab make this  -->
               <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
