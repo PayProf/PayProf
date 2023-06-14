@@ -112,7 +112,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('admins/{user_id}/showenseignants', [AdministrateurController::class, 'AllEnseignants']);
 
-       
+
 
         Route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'ShowMyprofile']);
 
@@ -125,7 +125,6 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);
 
     Route::apiResource('paiements', PaiementsController::class);
-    Route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 });
 //============================================ ETABLISSEMENT API ============================================
@@ -143,9 +142,9 @@ route::get('etablissements/{etablissement_id}/aboutetablissement', [Etablissemen
 //=======================================================================================================
 route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
 //============================================ PAIEMENT API ============================================
-Route::get('profil/{user_id}/info',[AdministrateurController::class,'InfoUser']);
-Route::put('profil/{user_id}/update',[AdministrateurController::class,'UpdatePassword']);
-Route::put('profil/{user_id}/delete',[AdministrateurController::class,'deleteAccount']);
+Route::get('profil/{user_id}/info',[UpdatePasswordController::class,'InfoUser']);
+Route::put('profil/{user_id}/update',[UpdatePasswordController::class,'UpdatePassword']);
+Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
 
 
 

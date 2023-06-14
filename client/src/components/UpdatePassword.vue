@@ -15,20 +15,20 @@
                 <label class="label">
                   <span class="label-text">Mot De Passe</span>
                 </label>
-                <input type="text" required="true" v-model="NewPassword.OldPass" placeholder="Ancien" class="input input-bordered" />
+                <input type="text" required="true" v-model="NewPassword.password" placeholder="Ancien" class="input input-bordered" />
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Nouveau Mot De Passe</span>
                 </label>
-                <input type="text" required="true" v-model="NewPassword.NewPass" placeholder="Nouveau"
+                <input type="text" required="true" v-model="NewPassword.new_password" placeholder="Nouveau"
                        class="input input-bordered" />
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Confirmation</span>
                 </label>
-                <input type="text" required="true" v-model="NewPassword.NewPassConf" placeholder="Confirmer" class="input input-bordered" />
+                <input type="text" required="true" v-model="NewPassword.new_password_confirmation" placeholder="Confirmer" class="input input-bordered" />
               </div>
 
             </div>
@@ -51,6 +51,7 @@
 <script>
 import store from '../store';
 import axios from 'axios';
+import { useToast } from "vue-toastification";
 export default {
   name: "UpdatePassword",
   data() {
@@ -58,9 +59,9 @@ export default {
       errorsList: "",
       showPopup:false,
       NewPassword:{
-        OldPass:'',
-        NewPass:'',
-        NewPassConf:'',
+        password: "",
+        new_password: "",
+        new_password_confirmation: ""
       },
     }
   },
@@ -74,12 +75,16 @@ export default {
           Accept: 'application/json'
         }
       };
-      const response = await axios.patch('http://127.0.0.1:8000/api/Directeur/profil/'+store.state.user.id+'/updatepassword',this.NewPassword,config);
-
+        console.log(this.NewPassword)
+      const response = await axios.put('http://127.0.0.1:8000/api/profil/'+store.state.user.id+'/update',this.NewPassword,config);
       console.log(response)
     }
     catch (error){
         console.log(error)
+        const toast = useToast();
+        toast.error(error.response.data.message,{
+          timeout:3000,
+        });
     }
     }
   }
