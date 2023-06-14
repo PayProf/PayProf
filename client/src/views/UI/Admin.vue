@@ -95,7 +95,7 @@
 
         </div>
       <TableEnseignant @Directeur-added="GetMyDirecteur" id="tableEns" v-if="OpenEns"/>
-      <ValidateIntervention v-if="OpenInt"/>
+      <ValidateIntervention v-if="OpenInt" :NomE="Etablissement.nom" />
       </div>
 
   

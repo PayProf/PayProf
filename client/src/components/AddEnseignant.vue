@@ -13,7 +13,7 @@
             <label class="label">
               <span class="label-text">PPR</span>
             </label>
-            <input type="number" required="true" v-model="model.Enseignant.PPR" placeholder="PPR" class="input input-bordered h-9" />
+            <input type="number" required="true" v-model="model.Enseignant.PPR" min="0" placeholder="PPR" class="input input-bordered h-9" />
           </div>
 
           <div class="form-control">
@@ -41,7 +41,7 @@
             <label class="label">
               <span class="label-text">Grade</span>
             </label>
-            <select v-model="model.Enseignant.Grade" class="select select-bordered h-9">
+            <select required="true" v-model="model.Enseignant.Grade" class="select select-bordered h-9">
               <option value="">Select Grade</option>
               <option value="PA">PA</option>
               <option value="PE">PS</option>
@@ -68,7 +68,8 @@
 
 <script>
 import axios from 'axios';
-import store from '../store'
+import store from '../store';
+import { useToast } from "vue-toastification";
 
 export default {
   name: 'AddEnseignant',
@@ -94,7 +95,7 @@ export default {
       await this.postEnseignant();
 
       // Additional logic after saving the enseignant
-      this.showPopup = false;
+
     },
     
     async postEnseignant() {
@@ -109,6 +110,7 @@ export default {
         const response = await axios.post(`http://127.0.0.1:8000/api/Enseignant`, this.model.Enseignant, config);
         console.log('Enseignant added successfully');
         this.$emit('Enseignant-added');
+        this.showPopup = false;
 
       } catch (error) {
         console.log(error);
