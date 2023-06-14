@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\EnseignantResource;
+use App\Models\Enseignant;
 
 class DirecteurController extends Controller
 {
@@ -131,7 +133,7 @@ class DirecteurController extends Controller
         if (Gate::allows('check_role', [4]) || Gate::allows('admin_direct', $id)) {
             $directeur = Directeur::FindOrfail($id);
             if($directeur->image){
-                unlink(public_path('uploads') . '/' . $directeur->image); 
+                unlink(public_path('uploads') . '/' . $directeur->image);
             }
             $directeur->delete();
             return $this->succes("", "Directeur deleted successfully");
@@ -220,5 +222,13 @@ class DirecteurController extends Controller
             }
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
+    }
+
+
+    public function MyProfs()
+    {
+        $id=auth()->user()->directeur->etablissement_id;
+        $ens= Enseignant::where('etablissement_id',$id)->with('etablissement','grade')->latest()->paginate(2);
+        return response()->json($ens);
     }
 }

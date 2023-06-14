@@ -34,12 +34,12 @@ class UpdatePasswordController extends Controller
 
             return $this->succes("","Le mot de passe a été mis à jour avec succès.");
         } else {
-            return $this->error("","Aucun utilisateur trouvé avec cet ID.",404); 
+            return $this->error("","Aucun utilisateur trouvé avec cet ID.",404);
         }
     }
 
     public function deleteAccount()
-{ 
+{
     $user = Auth::user();
 
     if ($user) {
@@ -70,4 +70,3 @@ public function InfoUser($user_id){
     }
 }
 }
-     

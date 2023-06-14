@@ -10,6 +10,7 @@ use App\Http\Controllers\api\DirecteurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\api\password\UpdatePasswordController;
 
 
 
@@ -101,6 +102,8 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('Directeur/dir/ShowMyProfil', [DirecteurController::class, 'ShowMyProfil']);
     //route of UpdateMyEmail
     route::PATCH('Directeur/dir/UpdateMyEmail', [DirecteurController::class, 'UpdateMyEmail']);
+    //route of MyProfs
+    route::get('Directeur/dir/MyProfs',[DirecteurController::class,'MyProfs']);
 
     });
     //=======================================================================================================
@@ -115,12 +118,14 @@ route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Updateemail']);
 
+        Route::get('Administrateur/adm/MyDir', [AdministrateurController::class, 'MyDir']);
+
     });
     route::apiResource('etablissements', EtablissementController::class);
     route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);
 
     Route::apiResource('paiements', PaiementsController::class);
-    //oute::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
+    Route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 });
 //============================================ ETABLISSEMENT API ============================================

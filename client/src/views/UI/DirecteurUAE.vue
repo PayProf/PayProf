@@ -29,8 +29,10 @@
     </div>
 
   </div>
+  <div class="col-span-11">
   <TableDirecteurs v-if="showDir" />
   <TableEtablissements v-if="showEtablissement"/>
+  </div>
 </template>
 
 <script>
