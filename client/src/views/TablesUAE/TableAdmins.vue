@@ -48,6 +48,15 @@
         </tr>  
     </tbody>
   </table>
+  <div class="flex justify-center items-center p-5">
+      <v-pagination
+          v-model="page"
+          :pages="pagecount"
+          :range-size="1"
+          active-color="#1d774d"
+          @update:modelValue="getAdmins"
+      />
+    </div>
 </div>
 <AddAdmin />
 
@@ -55,13 +64,16 @@
 </template>
 
 <script>
+import VPagination from "@hennge/vue3-pagination";
+import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 import AddAdmin from '../../components/AddAdmin.vue';
 import store from '../../store';
 import axios from 'axios';
 export default {
     name: 'EtabAdmins',
     components:{
-      AddAdmin
+      AddAdmin,
+      VPagination
     },
     data() {
     return {
@@ -77,6 +89,8 @@ export default {
       UpdatedAdmin:{},
       SelectedId:null,
       openAdd:false,
+      pagecount:null,
+      page:1,
       Userrole:store.state.user.role
     }
   },
@@ -118,11 +132,12 @@ export default {
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        await axios.get('http://127.0.0.1:8000/api/admins',config).then(result => {
-          this.model.Admins = result.data
-          console.log(result.data)
+        await axios.get('http://127.0.0.1:8000/api/admins?page='+this.page,config).then(result => {
+          this.model.Admins = result.data.data
+          this.pagecount = result.data.data.last_page;
+          console.log(this.model.Admins)
         })
-        console.log(this.model.Admins.data)
+
       }
       catch (error) {
         console.log(error)

@@ -45,6 +45,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     route::apiResource('Enseignant', EnseignantController::class);
     //route of  ShowMyInterventions
     route::get('Enseignant/ens/MyIntervention', [EnseignantController::class, 'ShowMyInterventions']);
+    
     route::get('Enseignant/ens/MyGraphe', [EnseignantController::class, 'ShowMyGraphe']);
     //route of  ShowMyPayments
     route::get('Enseignant/ens/MyPayments', [EnseignantController::class, 'ShowMyPayments']);

@@ -25,7 +25,7 @@
         <td>
           <!-- This page isn't created yet !!!! -->
           <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
-            <button class="add-btn px-4"  v-if="user.role==2 ||user.role==4||user.role==3||user.role==1">
+            <button class="add-btn px-4"  v-if="user.role==2 ||user.role==4">
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"> inspecter </span>
             </button>

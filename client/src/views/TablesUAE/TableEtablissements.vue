@@ -49,18 +49,30 @@
         </tr>
       </tbody>
     </table>
+    <div class="flex justify-center items-center p-5">
+      <v-pagination
+          v-model="page"
+          :pages="pagecount"
+          :range-size="1"
+          active-color="#1d774d"
+          @update:modelValue="getEtablissements"
+      />
+    </div>
 
   </div>
 <AddEtablissement />
 </template>
 
 <script>
+import VPagination from "@hennge/vue3-pagination";
+import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 import store from '../../store';
 import axios from 'axios';
 import AddEtablissement from '../../components/AddEtablissement.vue';
 export default {
   components:{
-    AddEtablissement
+    AddEtablissement,
+    VPagination
   },
   name: 'TableEtablissement',
   data() {
@@ -78,6 +90,8 @@ export default {
       UpdatedEtablissement:{},
       SelectedId:null,
       Userrole:store.state.user.role,
+      pagecount:null,
+      page:1,
       openAdd:false
     }
   },
@@ -120,8 +134,9 @@ export default {
           headers: { Authorization: `Bearer ${token}` }
         };
         await axios.get('http://127.0.0.1:8000/api/etablissements',config).then(result=>{
-          console.log('test axios')
-          this.model.Etablissements = result.data
+          this.model.Etablissements = result.data.data
+          this.pagecount = result.data.data.last_page;
+          console.log(this.model.Etablissements.data)
         })
         console.log(this.model.Etablissements)
       }
@@ -129,6 +144,7 @@ export default {
         console.log(error)
       }
     },
+
     deleteEtablissement(EtablissementId){
       const token = store.state.user.token;
         const config = {
@@ -140,6 +156,7 @@ export default {
         this.getEtablissements()
       })
     },
+
     redirectAdd(){
       this.openAdd = !this.openAdd
     }

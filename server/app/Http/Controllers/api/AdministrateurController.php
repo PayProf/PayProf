@@ -33,14 +33,14 @@ class AdministrateurController extends Controller
     {
         if (Gate::allows('check_role', [4])) {
             // Retrieve a paginated list of Administrateur objects
-            $admin = Administrateur::latest()->paginate(10);
+            $admin = Administrateur::latest()->paginate(5);
 
             // Transform the Administrateur objects into JSON resources
-            $data = AdministrateurResource::collection($admin);
+
 
             // Return a success response with the transformed data
 
-            return $this->succes($data, 'DISPLAY');
+            return $this->succes($admin, 'DISPLAY');
         }
 
 

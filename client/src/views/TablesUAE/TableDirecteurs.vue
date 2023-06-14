@@ -36,23 +36,37 @@
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
-<!--            <router-link>-->
+
 <!--            The error here was caused by route-link it had no link, add it before uncomment-->
-              <button class="add-btn px-2">
-                <i class="fas fa-eye"></i>
-                <span class="tooltip" data-tooltip="inspect"></span>
-              </button>
-<!--            </router-link>-->
+
+<router-link :to="{ path: '/Etablissement/'+Directeur.NomEtab }">
+              <button class="add-btn px-4" >
+              <i class="fas fa-eye" ></i>
+              <span class="tooltip" data-tooltip="inspect"></span>
+            </button>
+            </router-link>
+
 
           </td>
         </tr>
       </tbody>
     </table>
+    <div class="flex justify-center items-center p-5">
+      <v-pagination
+          v-model="page"
+          :pages="pagecount"
+          :range-size="1"
+          active-color="#1d774d"
+          @update:modelValue="getDirecteurs"
+      />
+    </div>
   </div>
   <AddDirecteur v-if="this.Userrole == 2" />
 </template>
 
 <script>
+import VPagination from "@hennge/vue3-pagination";
+import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 import axios from 'axios';
 import store from "../../store.js";
 import AddDirecteur from '../../components/AddDirecteur.vue';
@@ -63,18 +77,16 @@ export default {
       Directeurs:[],
       Userrole:store.state.user.role,
       openAdd:false,
+      pagecount:null,
+      page:1,
     }
   },
   components:{
-    AddDirecteur
+    AddDirecteur,
+    VPagination
   },
-
   async mounted() {
-
     await this.getDirecteurs();
-
-  },
-  computed:{
   },
   methods: {
     async getDirecteurs() {
@@ -83,8 +95,10 @@ export default {
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        await axios.get('http://127.0.0.1:8000/api/Directeur',config).then(result => {
+        await axios.get('http://127.0.0.1:8000/api/Directeur?page='+this.page,config).then(result => {
+          this.pagecount = result.data.data.last_page;
           this.Directeurs = result.data.data
+          console.log(this.Directeurs)
         })
 
       }
