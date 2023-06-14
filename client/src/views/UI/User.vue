@@ -74,6 +74,8 @@
           <th>Date Debut</th>
           <th>Date Fin</th>
           <th>Nombre Heures</th>
+          <th>Visa Etab</th>
+          <th>Visa Uae</th>
           <th v-if="IsAdmin">Action</th>
         </tr>
       </thead>
@@ -85,6 +87,22 @@
           <td>{{ intervention.date_debut }}</td>
           <td>{{ intervention.date_fin }}</td>
           <td>{{ intervention.Nbr_heures}}</td>
+          <td>
+                  <input type="checkbox" :checked="intervention.visa_uae" class="checkbox" v-if="role == 3"/>
+                  <div v-else class="flex justify-center">
+                  <i class="fa-solid fa-x text-red-500" v-if="!intervention.visa_uae"></i>
+                  <i class="fa-solid fa-check text-green-500" v-else></i>
+                  </div>
+                </td>
+                <td>
+                  <div v-if="role == 1 && !intervention.visa_etab" class="flex justify-center items-center">
+                  <input type="checkbox" :checked="intervention.visa_etab" class="checkbox" @change="UpVisaEtab(intervention.id,index)" />
+                  </div>
+                  <div v-else class="flex justify-center">
+                    <i class="fa-solid fa-x text-red-500" v-if="!intervention.visa_etab"></i>
+                    <i class="fa-solid fa-check text-green-500" v-else></i>
+                  </div>
+                </td>
           <td v-if="IsAdmin">
             <button @click="showDeleteW" class="delete-btn" >
               <i class="fas fa-trash"></i>

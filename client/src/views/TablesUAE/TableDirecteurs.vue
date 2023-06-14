@@ -1,7 +1,7 @@
 <template>
-  <div class="overflow-x-auto border z-10">
+  <div class="overflow-x-auto  z-10">
     <h1 class="text-black font-bold text-xl">Table Directeurs :</h1>
-    <table class="table w-screen botrder">
+    <table class="table table-zebra w-full z-10">
       <!-- head -->
       <thead>
         <tr>

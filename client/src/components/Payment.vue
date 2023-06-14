@@ -27,20 +27,22 @@
                                 <th>Intitule</th>
                                 <th>Nombre d'heure</th>
                                 <th>Semestre</th>
+                                <th>Paiement</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(Intervention,id) in this.Interventions " :key="id">
+                            <tr v-for="(Intervention,id)  in this.Interventions "  :key="id">
                                 <td class="col-md-9">{{Intervention.intitule_intervention}}</td>
                                 <td class="col-md-9">{{Intervention.Nbr_heures}}</td>
                                 <td class="col-md-9">{{Intervention.semestre}}</td>
-                                <!-- <td class="col-md-3">{{Intervention.nbr_heure}}</td>
-                                <td class="col-md-3">{{Intervention.paiement}}</td> -->
+                                <td class="col-md-3">{{Paiements[id].Net }}</td> 
                             </tr>
                             <tr>
                                 <td class="col-md-9"></td>
                                 <td class="col-md-9"><h3>{{ this.Hours }}</h3></td>
-                                <td class="text-center text-danger "> <h2><strong>Total: {{ Paiements.tot }}</strong></h2> </td>
+                                <td></td>
+                                <td class="text-center text-danger "> <h2><strong>Total: TEST</strong></h2> </td> 
+                                
                             </tr>
                         </tbody>
                     </table>
@@ -97,7 +99,7 @@ export default {
                     headers: { Authorization: `Bearer ${token}` }
                 };
                 const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyPayments', config);
-                console.log(response)
+                this.Paiements = response.data
                 
             }
             catch (error) {
@@ -149,6 +151,7 @@ export default {
             }
             }
 
+
     },
     async mounted(){
         await this.getPayment();
@@ -182,7 +185,7 @@ body {
 
 .receipt-main p {
     color: #333333;
-    font-family: open sans;
+
     line-height: 1.42857;
 }
 

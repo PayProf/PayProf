@@ -2,7 +2,7 @@
 
   
   <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
-    <div class="col-span-1">
+    <div class="col-span-1" >
       <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
         
         <li @click="toggleTableAdmin()" v-if="showAdmin" class="bg-neutral text-white Interventions">
@@ -48,7 +48,7 @@ export default {
     return {
       showAdmin: false,
       showDir: false,
-
+      showSide: false,
       showEtablissement: true,
       Profile:[],
     }

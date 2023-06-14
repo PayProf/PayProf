@@ -25,7 +25,13 @@
               <label class="label">
                 <span class="label-text">Ville</span>
               </label>
-              <input type="text" v-model="model.Etablissement.ville" placeholder="Ville" class="input input-bordered" />
+              <select v-model="model.Etablissement.ville" class="select select-bordered h-9">
+                <option value="">Select etablissement</option>
+                <option >Tanger</option>
+                <option >Tetouane</option>
+                <option >Al Hoceima</option>
+                <option >Larache</option>
+            </select>
             </div>
             <div class="form-control">
               <label class="label">

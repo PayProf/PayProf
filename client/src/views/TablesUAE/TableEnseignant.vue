@@ -79,9 +79,6 @@ export default {
           PPR:'',
 
         }],
-
-
-
       } ,
      
 
@@ -103,6 +100,7 @@ export default {
         };
         const res = await axios.get('http://127.0.0.1:8000/api/etablissements/'+this.$route.params.id+'?with=Enseignants',config)
         this.model.Enseignants=res.data.data.Enseignants;
+        console.log(this.model.Enseignants)
         this.pagecount=res.data.data.last_page;
         console.log(res)
          } catch (error) {

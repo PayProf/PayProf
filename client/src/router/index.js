@@ -73,7 +73,7 @@ const routes = [
     },
     children:[
       {
-        path: '/Payment',
+        path: '/Payment/:id',
         name:'Payment',
         component: Payment,
         meta:{

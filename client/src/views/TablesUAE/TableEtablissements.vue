@@ -1,9 +1,10 @@
 <template>
   <!-- TABLE ETABLISSEMENT -->
-  <div class="overflow-x-auto border">
-    <table class="table w-screen botrder">
+  <div class="overflow-x-auto border border-r-4">
+    <h1 class="text-black font-bold text-xl">Table etablissements :</h1>
+    <table class="table table-zebra w-full z-10">
       <!-- head -->
-      <thead>
+      <thead class="  bg-slate-400">
         <tr>
           <th></th>
           <th>Code</th>
@@ -21,10 +22,10 @@
           <td>{{ id + 1 }}</td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.code }}</div><div v-else><input type="text" :placeholder="Etablissement.code" v-model="this.UpdatedEtablissement.code" class="input input-ghost w-full max-w-xs" disabled/></div></td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.nom }}</div><div v-else><input type="text" :placeholder="Etablissement.nom" v-model="this.UpdatedEtablissement.nom" class="input input-ghost w-full max-w-xs" disabled/></div></td>
-          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Telephone }}</div><div v-else><input type="text" :placeholder="Etablissement.Telephone" v-model="this.UpdatedEtablissement.Telephone" class="input input-ghost w-full max-w-xs" required /></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.telephone }}</div><div v-else><input type="text" :placeholder="Etablissement.telephone" v-model="this.UpdatedEtablissement.telephone" class="input input-ghost w-full max-w-xs" required /></div></td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.FAX }}</div><div v-else><input type="text" :placeholder="Etablissement.FAX" v-model="this.UpdatedEtablissement.FAX" class="input input-ghost w-full max-w-xs" required/></div></td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.ville }}</div><div v-else><input type="text" :placeholder="Etablissement.ville" v-model="this.UpdatedEtablissement.ville" class="input input-ghost w-full max-w-xs" disabled/></div></td>
-          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Nombre_des_enseignants }}</div><div v-else><input type="text" :placeholder="Etablissement.Nombre_des_enseignants" v-model="this.UpdatedEtablissement.Nombre_des_enseignants" class="input input-ghost w-full max-w-xs"  disabled/></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Nbrenseignants }}</div><div v-else><input type="text" :placeholder="Etablissement.Nbrenseignant" v-model="this.UpdatedEtablissement.Nbrenseignant" class="input input-ghost w-full max-w-xs"  disabled/></div></td>
           <td>
 
             <button class="add-btn px-4" v-if="Userrole==4" @click="this.SelectedId = Etablissement.id" >
@@ -39,6 +40,7 @@
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
             </router-link>
+
             <button class="add-btn px-4" @click="deleteEtablissement(Etablissement.id)" v-if="Userrole == 4">
               <i class="fas fa-trash" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
@@ -81,10 +83,10 @@ export default {
         Etablissements: [{
           nom:'',
           code:'',
-          Telephone:'',
+          telephone:'',
           FAX:'',
           ville:'',
-          Nombre_des_enseignants:''
+          Nbrenseignants:''
         }],
       },
       UpdatedEtablissement:{},
@@ -99,7 +101,6 @@ export default {
   mounted() {
 
     this.getEtablissements();
-    console.log('test axios')
 
   },
   methods: {
@@ -133,12 +134,11 @@ export default {
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        await axios.get('http://127.0.0.1:8000/api/etablissements',config).then(result=>{
+        await axios.get('http://127.0.0.1:8000/api/etablissements?page='+this.page,config).then(result=>{
           this.model.Etablissements = result.data.data
           this.pagecount = result.data.data.last_page;
-          console.log(this.model.Etablissements.data)
         })
-        console.log(this.model.Etablissements)
+
       }
       catch (error) {
         console.log(error)
@@ -152,7 +152,6 @@ export default {
         };
       axios.delete(`http://127.0.0.1:8000/api/etablissements/${EtablissementId}`,config)
       .then(res=>{
-        console.log(res.data)
         this.getEtablissements()
       })
     },
