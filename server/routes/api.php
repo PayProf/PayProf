@@ -10,6 +10,7 @@ use App\Http\Controllers\api\DirecteurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\api\password\UpdatePasswordController;
 
 
 
@@ -124,7 +125,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);
 
     Route::apiResource('paiements', PaiementsController::class);
-    //oute::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
+    Route::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 });
 //============================================ ETABLISSEMENT API ============================================

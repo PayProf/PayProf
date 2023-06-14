@@ -21,7 +21,7 @@ class UpdatePasswordController extends Controller
         $user = Auth::user();
 
         // Verify if the current password is correct
-        if ($request->password != $user->password) {
+        if ($request->password != $old_pass) {
             return $this->error("","Le mot de passe actuel est incorrect.",400);
         }
 
@@ -41,12 +41,12 @@ class UpdatePasswordController extends Controller
 
             return $this->succes("","Le mot de passe a été mis à jour avec succès.");
         } else {
-            return $this->error("","Aucun utilisateur trouvé avec cet ID.",404); 
+            return $this->error("","Aucun utilisateur trouvé avec cet ID.",404);
         }
     }
 
     public function deleteAccount()
-{ 
+{
     $user = Auth::user();
 
     if ($user) {
@@ -56,5 +56,5 @@ class UpdatePasswordController extends Controller
         return $this->error("","Aucun utilisateur authentifié trouvé.",404);
     }
 }
-     
+
 }
