@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     //route of UpdateMyEmail
     route::PATCH('Enseignant/ens/UpdateMyEmail', [EnseignantController::class, 'UpdateMyEmail']);
 
-   
+
 
 
     //========================================= Grade API =====================================================
@@ -109,7 +109,7 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
 
         Route::get('admins/{user_id}/showenseignants', [AdministrateurController::class, 'AllEnseignants']);
 
-
+        Route::apiResource('admins', AdministrateurController::class);
 
         Route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'ShowMyprofile']);
 
@@ -122,21 +122,15 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);
 
     Route::apiResource('paiements', PaiementsController::class);
+    route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
+    Route::get('profil/{user_id}/info',[UpdatePasswordController::class,'InfoUser']);
+    Route::put('profil/{user_id}/update',[UpdatePasswordController::class,'UpdatePassword']);
+    Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
 
 });
 
-//=======================================================================================================
-//============================================ ADMINISTRATEUR API ============================================
 
 
-Route::apiResource('admins', AdministrateurController::class);
-route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
-//=======================================================================================================
-route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
-//============================================ PAIEMENT API ============================================
-Route::get('profil/{user_id}/info',[UpdatePasswordController::class,'InfoUser']);
-Route::put('profil/{user_id}/update',[UpdatePasswordController::class,'UpdatePassword']);
-Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
 
 
 
