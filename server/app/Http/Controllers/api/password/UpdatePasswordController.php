@@ -8,6 +8,7 @@ use App\Traits\HttpResponses;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdatePasswordRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UpdatePasswordController extends Controller
 {
@@ -15,11 +16,12 @@ class UpdatePasswordController extends Controller
 
     public function UpdatePassword(UpdatePasswordRequest $request, $user_id)
     {
-        $old_pass = bcrypt($request->password);
-        $user=Auth::user();
+        $old_pass = $request->password;
+        $user=User::find($user_id);
+        $passwd=$user->password;
 
         // Verify if the current password is correct
-        if ($old_pass != $user->password) {
+        if (!password_verify($old_pass,$passwd)) {
             return $this->error("","Le mot de passe actuel est incorrect.",400);
         }
 
