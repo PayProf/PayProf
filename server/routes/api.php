@@ -7,16 +7,13 @@ use App\Http\Controllers\api\GradeController;
 use App\Http\Controllers\api\InterventionController;
 use App\Http\Controllers\api\PaiementsController;
 use App\Http\Controllers\api\DirecteurController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
 route::post('/login', [AuthController::class, 'login']);
 
 route::group(
@@ -40,7 +37,7 @@ route::group(
 */
 
 //====================================Enseignant API ==================================================
-route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
 
     route::apiResource('Enseignant', EnseignantController::class);
     //route of  ShowMyInterventions
@@ -57,7 +54,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     //route of UpdateMyEmail
     route::PATCH('Enseignant/ens/UpdateMyEmail', [EnseignantController::class, 'UpdateMyEmail']);
 
-    //=====================================================================================================
+   
 
 
     //========================================= Grade API =====================================================
@@ -122,20 +119,9 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     //oute::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 });
-//============================================ ETABLISSEMENT API ============================================
 
 
 
-
-
-//=======================================================================================================
-//============================================ ADMINISTRATEUR API ============================================
-
-
-
-//=======================================================================================================
-
-//============================================ PAIEMENT API ============================================
 
 
 

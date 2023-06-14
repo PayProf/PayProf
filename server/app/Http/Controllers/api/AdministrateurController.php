@@ -31,9 +31,9 @@ class AdministrateurController extends Controller
      */
     public function index()
     {
-        $name="<script>$1é</script>";
+        $name="<html>$1é</html>";
         echo strip_tags($name);
-        echo "noice";
+        echo "<br<noice<br>";
         echo htmlspecialchars($name);
 
         if (Gate::allows('check_role', [4])) {
@@ -60,6 +60,9 @@ class AdministrateurController extends Controller
      */
     public function store(StoreAdministrateurRequest $request)
     {
+        echo $request->input('nom');
+        echo $request->input('prenom');
+
 
         if (Gate::allows('check_role', [4])) {
            // Create a new Administrateur object based on the request data
