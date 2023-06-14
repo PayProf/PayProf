@@ -23,35 +23,35 @@ class UpdateDirecteurRequest extends FormRequest
      */
     public function rules()
     {
-        $method=$this->method(); // to check the http method 
-           
-        if($method=="PUT"){
-                return [          
-                    
+        $method=$this->method(); // to check the http method
+
+        if($method=="PATCH"){
+                return [
+
                     //all the fields will be sent to the db (also the the fields unchanged )
 
-                        'PPR'=>['required','unique:directeurs'],
-                        'nom'=>['required'],
-                        'prenom'=>['required'],
-                        'DateNaissance'=>['required','date'],
+                        'PPR'=>['sometimes','required','unique:directeurs'],
+                        'nom'=>['sometimes','required'],
+                        'prenom'=>['sometimes','required'],
+                        'DateNaissance'=>['sometimes','required','date'],
                         //  'Etablissement'=>['required'],
-                        'email_perso'=>['required','email','unique:directeurs'],
+                        'email_perso'=>['sometimes','required','email','unique:directeurs'],
                       // 'IdUser',
-                       
+
                     ];
             }
 
-            else // if the method is PATCH
-            { 
-                
-                return
-                 [                 
-                    
-                    // only the specified fileds will be modified and sent to the db
-                    'email_perso'=>['sometimes','required','email','unique:directeurs'],
-                 ];
-                
-            }
+//            else // if the method is PATCH
+//            {
+//
+//                return
+//                 [
+//
+//                    // only the specified fileds will be modified and sent to the db
+//                    'email_perso'=>['sometimes','required','email','unique:directeurs'],
+//                 ];
+//
+//            }
     }
-    
+
 }

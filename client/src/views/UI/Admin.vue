@@ -64,15 +64,15 @@
           <p class="py-2"><strong>Etablissment :</strong> {{ Directeur.NomEtab }}</p>
           <p class="py-2"><strong>Date de naissance :</strong> {{ Directeur.DateNaissance}}</p>
           <div class="card-actions w-full flex justify-end items-center">
-            <div class="text-white dropdown dropdown-top"><label tabindex="0" class="btn btn-error text-white m-1">Supprimer</label>
-              <ul tabindex="0" class="dropdown-content menu p-2 pb-4 shadow bg-neutral rounded-box w-52">
+            <div class="text-white dropdown dropdown-top"><label tabindex="0" @click="this.CloseDropdown = false" class="btn btn-error text-white m-1">Supprimer</label>
+              <ul v-if="!CloseDropdown" tabindex="0" class="dropdown-content menu p-2 pb-4 shadow bg-neutral rounded-box w-36" >
                 <li><p>Êtes-vous sûr(e) ?</p></li>
                 <li>
                   <a class="hover:ml-2 transition-transform duration-300 transform hover:translate-x-1" @click="this.DeleteDir">Oui</a>
-                  <a class="hover:ml-2 transition-transform duration-300 transform hover:translate-x-1">Non</a>
+                  <a class="hover:ml-2 transition-transform duration-300 transform hover:translate-x-1" @click="this.CloseDropdown = true">Non</a>
                 </li>
               </ul></div>
-            <button class="btn btn-primary">Modifier</button>
+<!--            <button class="btn btn-primary">Modifier</button>-->
           </div>
 
           </div>
@@ -134,6 +134,7 @@ export default {
       IsDir:true,
       OpenInt:false,
       IsLoading:false,
+      CloseDropdown:false,
       Profile:{
         PPR:'',
         nom:'',
