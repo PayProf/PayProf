@@ -37,7 +37,7 @@ class UpdateEnseignantRequest extends FormRequest
                 'DateNaissance' => ['sometimes', 'required', 'date'],
                 //  'Etablissement'=>['required'],
                 'Grade' => ['sometimes', 'required'],
-                'email_perso' => ['sometimes', 'required', 'email', 'unique:enseignants,email'],
+                'email_perso' => ['sometimes', 'required', 'email', 'unique:enseignants'],
                 // 'email_perso'=>['required','email','unique:enseignants'],
                 // 'IdUser',
 

@@ -55,7 +55,8 @@ class EnseignantController extends Controller
    * Attention the comments in this method must be respected.
    */
 
-  public function store(StoreEnseignantRequest $request){
+  public function store(StoreEnseignantRequest $request)
+  {
 
 
     if (Gate::allows('check_role', [2])) {
@@ -125,23 +126,23 @@ class EnseignantController extends Controller
     if (Gate::allows('admin_ens', $id)) {
 
 
-                 $enseignant=Enseignant::find($id);
-//                 $grade_id=$enseignant->IdGrade($request['Grade']);
-//                 $enseignant->PPR = $request['PPR'];
-//                 $enseignant->nom = $request['nom'];
-//                 $enseignant->prenom = $request['prenom'];
-//                 $enseignant->date_naissance = $request['DateNaissance'];
-//                 $enseignant->grade_id=$grade_id;
+      $enseignant = Enseignant::find($id);
+      //                 $grade_id=$enseignant->IdGrade($request['Grade']);
+      //                 $enseignant->PPR = $request['PPR'];
+      //                 $enseignant->nom = $request['nom'];
+      //                 $enseignant->prenom = $request['prenom'];
+      //                 $enseignant->date_naissance = $request['DateNaissance'];
+      //                 $enseignant->grade_id=$grade_id;
 
-//                 $enseignant->save();
-                  $data=$enseignant->update($request->all());
-                  if($data){
-                      return $this->succes("","Intervention updated successfully");
-                  }else{
-                      return $this->error("","error",403);
-                  }
-                }
-                 return $this->error('','ACCES INTERDIT ',403);
+      //                 $enseignant->save();
+      $data = $enseignant->update($request->all());
+      if ($data) {
+        return $this->succes("", "Intervention updated successfully");
+      } else {
+        return $this->error("", "error", 403);
+      }
+    }
+    return $this->error('', 'ACCES INTERDIT ', 403);
   }
 
 
@@ -189,11 +190,6 @@ class EnseignantController extends Controller
           return $this->error("", "Pas d'interventions pour le moment", 404);
         }
       }
-
-
-
-     
-
     }
     return $this->error('', 'ACCES INTERDIT ', 403);
   }
@@ -207,12 +203,12 @@ class EnseignantController extends Controller
         return $this->error("", "Pas d'interventions pour le moment", 404);
       }
     }
-    return $this->error('','ACCES INTERDIT ',403);
+    return $this->error('', 'ACCES INTERDIT ', 403);
   }
 
 
 
-  
+
   //======================================================== The access is retricted for:Enseignant ===================================================
 
 
