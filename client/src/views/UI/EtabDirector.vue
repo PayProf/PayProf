@@ -116,6 +116,22 @@ export default {
         console.log(error)
       }
     },
+    async GetMyEtab(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/myetablissement',config);
+        this.Etablissement=response.data.data;
+
+        console.log(response)
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
     async showmyprofile(){
       try {
         const token = store.state.user.token;

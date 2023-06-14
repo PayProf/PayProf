@@ -19,7 +19,7 @@
               <label class="label">
                 <span class="label-text">Code</span>
               </label>
-              <input type="text" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" />
+              <input type="number" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
@@ -37,14 +37,14 @@
               <label class="label">
                 <span class="label-text">Telephone</span>
               </label>
-              <input type="text" v-model="model.Etablissement.telephone" placeholder="Telephone"
+              <input type="number" v-model="model.Etablissement.telephone" placeholder="Telephone"
                 class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Fax</span>
               </label>
-              <input type="text" v-model="model.Etablissement.FAX" placeholder="Année universitaire"
+              <input type="number" v-model="model.Etablissement.FAX" placeholder="Fax"
                 class="input input-bordered" />
             </div>
           </div>

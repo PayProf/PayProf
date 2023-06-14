@@ -123,12 +123,12 @@ const routes = [
       },
 
       {
-        path: '/Directeur',
+        path: '/Directeur/:id',
         name:'Directeur',
         component: EtabDirector,
         meta:{
         AdminAccess: false,
-        AdminUAEAccess: false,
+        AdminUAEAccess: true,
         UserAccess: false,
         DirectorUAEAccess: true,
         DirectorAccess:true,

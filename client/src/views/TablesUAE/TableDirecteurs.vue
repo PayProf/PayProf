@@ -25,10 +25,7 @@
           <td>{{ Directeur.Email }}</td>
           <td>{{ Directeur.DateNaissance }}</td>
           <td>
-              <button class="add-btn px-4">
-                <i class="fas fa-pen"></i>
-                <span class="tooltip" data-tooltip="inspect"></span>
-              </button>
+              
             <button class="add-btn px-4" @click="deleteDirecteur(Directeur.id)" v-if="this.Userrole == 2">
               <i class="fas fa-trash"></i>
               <span class="tooltip" data-tooltip="inspect"></span>
@@ -36,7 +33,7 @@
 
           <!-- The error here was caused by route-link it had no link, add it before uncomment-->
 
-            <router-link :to="{ path: '/Etablissement/'+Directeur.NomEtab }"> <!-- Youssef has to send id_etablissement in addition to nometab make this  -->
+            <router-link :to="{ path: '/Directeur/'+Directeur.IdEtablissement }"> <!-- Youssef has to send id_etablissement in addition to nometab make this  -->
               <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
@@ -76,6 +73,7 @@ export default {
       openAdd:false,
       pagecount:null,
       page:1,
+      myEtab:""
     }
   },
   components:{
@@ -84,6 +82,7 @@ export default {
   },
   async mounted() {
     await this.getDirecteurs();
+    // await this.getMyEtab();
   },
   methods: {
     async getDirecteurs() {
@@ -102,6 +101,22 @@ export default {
         console.log(error)
       }
     },
+
+    // async getMyEtab(){
+    //   try {
+    //     const token = store.state.user.token;
+    //     const config = {
+    //       headers: { Authorization: `Bearer ${token}` }
+    //     };
+    //     await axios.get('http://127.0.0.1:8000/Directeur/dir/MyEtab',config).then(result => {
+    //       //this.myEtab = result.data.data
+    //       console.log(result)
+    //     })
+    //   }
+    //   catch (error) {
+    //     console.log(error)
+    //   }
+    // },
 
     RedirectAdd() {
       this.openAdd = !this.openAdd

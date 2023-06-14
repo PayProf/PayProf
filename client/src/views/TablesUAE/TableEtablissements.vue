@@ -20,12 +20,12 @@
       <tbody>
         <tr v-for="(Etablissement, id) in this.model.Etablissements.data" :key="id">
           <td>{{ id + 1 }}</td>
-          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.code }}</div><div v-else><input type="text" :placeholder="Etablissement.code" v-model="this.UpdatedEtablissement.code" class="input input-ghost w-full max-w-xs" disabled/></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.code }}</div><div v-else><input type="number" :placeholder="Etablissement.code" v-model="this.UpdatedEtablissement.code" class="input input-ghost w-full max-w-xs" disabled/></div></td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.nom }}</div><div v-else><input type="text" :placeholder="Etablissement.nom" v-model="this.UpdatedEtablissement.nom" class="input input-ghost w-full max-w-xs" disabled/></div></td>
-          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.telephone }}</div><div v-else><input type="text" :placeholder="Etablissement.telephone" v-model="this.UpdatedEtablissement.telephone" class="input input-ghost w-full max-w-xs" required /></div></td>
-          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.FAX }}</div><div v-else><input type="text" :placeholder="Etablissement.FAX" v-model="this.UpdatedEtablissement.FAX" class="input input-ghost w-full max-w-xs" required/></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.telephone }}</div><div v-else><input type="number" :placeholder="Etablissement.telephone" v-model="this.UpdatedEtablissement.telephone" class="input input-ghost w-full max-w-xs" required /></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.FAX }}</div><div v-else><input type="number" :placeholder="Etablissement.FAX" v-model="this.UpdatedEtablissement.FAX" class="input input-ghost w-full max-w-xs" required/></div></td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.ville }}</div><div v-else><input type="text" :placeholder="Etablissement.ville" v-model="this.UpdatedEtablissement.ville" class="input input-ghost w-full max-w-xs" disabled/></div></td>
-          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Nbrenseignants }}</div><div v-else><input type="text" :placeholder="Etablissement.Nbrenseignant" v-model="this.UpdatedEtablissement.Nbrenseignant" class="input input-ghost w-full max-w-xs"  disabled/></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Nbrenseignants }}</div><div v-else><input type="number" :placeholder="Etablissement.Nbrenseignant" v-model="this.UpdatedEtablissement.Nbrenseignant" class="input input-ghost w-full max-w-xs"  disabled/></div></td>
           <td>
 
             <button class="add-btn px-4" v-if="Userrole==4" @click="this.SelectedId = Etablissement.id" >
