@@ -60,7 +60,7 @@ import axios from 'axios';
 import { mapActions, mapState } from 'vuex';
 import AddEnseignant from '../../components/AddEnseignant.vue';
 export default {
-  name: 'TableEnseignants',
+  name: 'TableEnseignantsUAE',
   components:{
     AddEnseignant,
     VPagination,

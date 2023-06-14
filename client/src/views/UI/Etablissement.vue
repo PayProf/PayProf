@@ -9,7 +9,7 @@
       <p class="py-2"><strong>Nombre Enseignant :</strong> {{ this.Etablissements.Nombre_des_enseignants }}</p>
     </div>
   </div>
-  <TableEnseignant />
+  <TableEnseignantUAE />
 
     <ValidateInterventionUAE  v-if=" UserRole == 3" />
 
@@ -18,7 +18,7 @@
 
 <script >
 import ValidateInterventionUAE from '../TablesUAE/ValidateInterventionUAE.vue';
-import TableEnseignant from '../TablesUAE/TableEnseignant.vue'
+import TableEnseignantUAE from '../TablesUAE/TableEnseignant.vue'
 import store from "../../store"
 import axios from 'axios';
 
@@ -34,7 +34,7 @@ export default {
 
   },
   components: {
-    TableEnseignant,
+    TableEnseignantUAE,
     ValidateInterventionUAE
   },
   async mounted() {
