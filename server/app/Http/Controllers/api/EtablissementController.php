@@ -169,4 +169,5 @@ class EtablissementController extends Controller
             return $this->succes($etablissement, "MY ETABLISSEMENT");
         }
     }
+    
 }

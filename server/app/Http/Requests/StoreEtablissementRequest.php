@@ -24,14 +24,17 @@ class StoreEtablissementRequest extends FormRequest
     public function rules()
     { 
         //return an array of validation rules for the form fields.
-        return [
+        
             
-            'nom'=>['required'],
-            'code'=>['required'],
-            'telephone'=>['required'],
-            'FAX'=>['required'],
-            'ville'=>['required'],
-        ];
+            return [
+                'nom' => ['required', 'string','max:30'],
+                'code' => ['required', 'string'],
+                'telephone' => ['required', 'string','min:10'],
+                'FAX' => ['required', 'string','max:15'],
+                'ville' => ['required', 'string'],
+            ];
+            
+        
             
     }
 }

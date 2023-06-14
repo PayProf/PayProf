@@ -64,7 +64,7 @@ class AdministrateurController extends Controller
             $admin->PPR = $request->input('PPR');
             $admin->nom = $request->input('nom');
             $admin->prenom = $request->input('prenom');
-            $admin->etablissement_id = $request->input('etablissement_id');
+            $admin->etablissement_id = $admin->getIdEtablissement($request['Grade']);
             $admin->email_perso = $request->input('email_perso');
 
 
