@@ -69,7 +69,7 @@
               <ul tabindex="0" class="dropdown-content menu p-2 pb-4 shadow bg-neutral rounded-box w-52">
                 <li><p>Êtes-vous sûr(e) ?</p></li>
                 <li>
-                  <a class="hover:ml-2 transition-transform duration-300 transform hover:translate-x-1">Oui</a>
+                  <a class="hover:ml-2 transition-transform duration-300 transform hover:translate-x-1" @click="this.DeleteDir">Oui</a>
                   <a class="hover:ml-2 transition-transform duration-300 transform hover:translate-x-1">Non</a>
                 </li>
               </ul></div>
@@ -113,7 +113,7 @@ import axios from 'axios';
 import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
 import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
-import {mapActions,mapState} from 'vuex';
+import {mapState} from 'vuex';
 import AddDirecteur from "../../components/AddDirecteur.vue";
 export default {
   name: 'Admin',
@@ -187,19 +187,20 @@ export default {
         this.IsDir=false;
       }
     },
-    async CreateDirecteur(){
-
-    },
-    async DeleteDirecteur(id){
+    async DeleteDir(){
+      try {
         const token = store.state.user.token;
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        axios.delete(`http://127.0.0.1:8000/api/Directeur/${id}`,config)
-            .then(res=>{
-              console.log(res.data)
-            })
-
+        const response = await axios.delete('http://127.0.0.1:8000/api/Directeur/'+this.Directeur.id,config);
+        console.log(response)
+        this.Profile=response.data.data;
+        this.IsDir=false;
+      }
+      catch(error){
+        console.log(error)
+      }
     },
   async showmyprofile(){
       try {
