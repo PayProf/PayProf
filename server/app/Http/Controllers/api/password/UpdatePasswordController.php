@@ -13,21 +13,14 @@ class UpdatePasswordController extends Controller
 {
     use HttpResponses;
 
-    public function update(UpdatePasswordRequest $request, $user_id)
+    public function UpdatePassword(UpdatePasswordRequest $request, $user_id)
     {
         $old_pass = bcrypt($request->password);
-
-        // Get the authenticated user
-        $user = Auth::user();
+        $user=Auth::user();
 
         // Verify if the current password is correct
-        if ($request->password != $old_pass) {
+        if ($old_pass != $user->password) {
             return $this->error("","Le mot de passe actuel est incorrect.",400);
-        }
-
-        // Verify if the new password and password confirmation match
-        if ($request->new_password != $request->new_password_confirmation) {
-            return $this->error("","Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas.",400);
         }
 
         // Encrypt the new password
@@ -56,5 +49,24 @@ class UpdatePasswordController extends Controller
         return $this->error("","Aucun utilisateur authentifié trouvé.",404);
     }
 }
+public function InfoUser($user_id){
+    if (auth()->user()->role == 4 &&  auth()->user()->id == $user_id) {
 
+        $data = Enseignant::where('user_id', $user_id)->first();
+        $enseignant = ['nom' => $data->nom,'prenom'=>$data->prenom,'email_perso'=>$data->email_perso];
+        return $this->succes($enseignant, "Informations");
+    }
+    if (auth()->user()->role == 2 &&  auth()->user()->id == $user_id) {
+
+        $data = Administrateur::where('user_id', $user_id)->first();
+        $admin = ['nom' => $data->nom,'prenom'=>$data->prenom,'email_perso'=>$data->email_perso];
+        return $this->succes($admin, "Informations");
+    }
+    if (auth()->user()->role == 1 &&  auth()->user()->id == $user_id) {
+
+        $data = Directeur::where('user_id', $user_id)->first();
+        $directeur = ['nom' => $data->nom,'prenom'=>$data->prenom,'email_perso'=>$data->email_perso];
+        return $this->succes($directeur, "Informations");
+    }
+}
 }

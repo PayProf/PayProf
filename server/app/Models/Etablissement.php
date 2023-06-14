@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Etablissement extends Model
 {
@@ -16,6 +17,7 @@ class Etablissement extends Model
         'FAX',
 
     ];
+ 
     public function enseignants()
     {
         return $this->hasMany(Enseignant::class);

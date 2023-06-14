@@ -27,20 +27,20 @@ class UpdateEtablissementRequest extends FormRequest
         $method=$this->method();
         if($method=='PUT'){
             return [
-                'nom' => ['required', 'string','max:30'],
-                'code' => ['required', 'string'],
-                'telephone' => ['required', 'string','min:10'],
-                'FAX' => ['required', 'string','max:15'],
-                'ville' => ['required', 'string'],
+                'nom' => ['required','max:30'],
+                'code' => ['required'],
+                'telephone' => ['required','min:10'],
+                'FAX' => ['required','max:15'],
+                'ville' => ['required'],
             ];
     }else{
         //'sometimes'=>allow a field to be optional.
         return [
-            'nom'=>['sometimes','required','string','max:30'],
-            'code'=>['sometimes','required',, 'string'],
-            'telephone'=>['sometimes','required','string','min:10'],
-            'FAX'=>['sometimes','required','string','max:15'],
-            'ville'=>['sometimes','required','string'],
+            'nom'=>['sometimes','required','max:30'],
+            'code'=>['sometimes','required'],
+            'telephone'=>['sometimes','required','min:10'],
+            'FAX'=>['sometimes','required','max:15'],
+            'ville'=>['sometimes','required'],
         ];
     }
 
