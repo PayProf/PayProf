@@ -57,7 +57,7 @@
   <div class="card-body">
     <h2 class="card-title">M/Mme : {{ this.User.nom }} {{ this.User.prenom }}</h2>
     <p>Email : {{ this.User.email }}</p>
-      <p>role : {{ getRole }}</p>
+      <p>Role : {{ getRole }}</p>
 <!--    <div class="card-actions justify-end">-->
 <!--      <button class="btn">Change Password </button>-->
 <!--    </div>-->

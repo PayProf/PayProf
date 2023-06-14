@@ -91,6 +91,7 @@ const store = createStore({
       const Exp = new Date(state.user.token_exp);
 
       const current = new Date();
+      console.log(Exp)
 
       return Exp < current;
     
@@ -114,7 +115,8 @@ const store = createStore({
       //get the current date
       const currentDate = new Date();
       //Add hours till expiration to it
-      const Exp = new Date(currentDate.getTime() + (60 * 60 * 1000) + (59 * 60 * 1000));
+      const Exp = new Date(currentDate.getTime() + (5 * 60 * 60 * 1000) + (50 * 60 * 1000));
+
 
       //storing the date as a string
       state.user.token_exp = Exp.toISOString();
@@ -138,7 +140,8 @@ const store = createStore({
       //get the current date
       const currentDate = new Date();
       //Add hours till expiration to it
-      const Exp = new Date(currentDate.getTime() + (60 * 60 * 1000) + (59 * 60 * 1000));
+      const Exp = new Date(currentDate.getTime() + (5 * 60 * 60 * 1000) + (50 * 60 * 1000));
+
 
       //storing the date as a string
       state.user.token_exp = Exp.toISOString();
