@@ -19,7 +19,7 @@
         <tr v-for="(Etablissement, id) in this.Etablissements.data" :key="id">
           <td>{{ Etablissement.id }}</td>
           <td>{{ Etablissement.code }}</td>
-          <td>{{ Etablissement.Nom }}</td>
+          <td>{{ Etablissement.nom }}</td>
           <td>{{ Etablissement.Telephone }}</td>
           <td>{{ Etablissement.ville }}</td>
           <td>{{ Etablissement.Nombre_des_enseignants }}</td>
@@ -46,9 +46,9 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-outline btn-secondary  ml-5 mt-2 text-black" @click="redirectAdd()" v-if="Userrole == 4">Add etablissement</button>
+
   </div>
-<AddEtablissement v-if="openAdd"/>
+<AddEtablissement />
 </template>
 
 <script>

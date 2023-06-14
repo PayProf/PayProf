@@ -9,6 +9,7 @@ use App\Http\Controllers\api\PaiementsController;
 use App\Http\Controllers\api\DirecteurController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\api\password\UpdatePasswordController;
 
 
 
@@ -79,6 +80,7 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     route::get('Intervention/int/ShowMyEtabInterventions', [InterventionController::class, 'ShowMyEtabInterventions']);
     //route of EnseignantInterventions
     route::get('Intervention/{Intervention}/EnseignantInterventions', [InterventionController::class, 'EnseignantInterventions']);
+    route::get('Intervention/{Intervention}/EnseignantInterventionsGraphe', [InterventionController::class, 'EnseignantInterventionsGraphe']);
     //======================================================================================================
 
 
@@ -97,31 +99,44 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     route::get('Directeur/dir/ShowMyProfil', [DirecteurController::class, 'ShowMyProfil']);
     //route of UpdateMyEmail
     route::PATCH('Directeur/dir/UpdateMyEmail', [DirecteurController::class, 'UpdateMyEmail']);
+    //route of MyProfs
+    route::get('Directeur/dir/MyProfs',[DirecteurController::class,'MyProfs']);
 
     });
     //=======================================================================================================
-    
+
     Route::middleware('is_enseignant')->group(function () {
 
         Route::get('admins/{user_id}/showenseignants', [AdministrateurController::class, 'AllEnseignants']);
 
-        Route::apiResource('admins', AdministrateurController::class);
+
 
         Route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'ShowMyprofile']);
 
         Route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Updateemail']);
-        
+
+        Route::get('Administrateur/adm/MyDir', [AdministrateurController::class, 'MyDir']);
+
     });
     route::apiResource('etablissements', EtablissementController::class);
     route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);
 
     Route::apiResource('paiements', PaiementsController::class);
-    //oute::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
 
 });
 
+//=======================================================================================================
+//============================================ ADMINISTRATEUR API ============================================
 
 
+Route::apiResource('admins', AdministrateurController::class);
+route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
+//=======================================================================================================
+route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
+//============================================ PAIEMENT API ============================================
+Route::get('profil/{user_id}/info',[UpdatePasswordController::class,'InfoUser']);
+Route::put('profil/{user_id}/update',[UpdatePasswordController::class,'UpdatePassword']);
+Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
 
 
 

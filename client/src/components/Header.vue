@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="navbar-center">
-      <a class="btn btn-ghost normal-case text-xl" href="https://www.uae.ma/website/node/41">PayProf</a>
+      <a class="btn btn-ghost normal-case text-xl" href="#">PayProf</a>
     </div>
 
 
@@ -145,14 +145,14 @@ this.dropdownOpen=!this.dropdownOpen;
   if (this.user.role) {
     switch (this.user.role) {
       case 0 :
-        return 'Enseignat';
+        return 'Enseignant';
       case 1 :
         return 'Directeur';
       case 2 :
         return 'Admin';
       case 3 :
         return 'Directeur UAE';
-      case 4 :
+      case '4' :
         return 'Super Admin';
       default:
         return 'Unknown Role';

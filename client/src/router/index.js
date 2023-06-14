@@ -45,7 +45,7 @@ import Notfound from "../views/UI/Notfound.vue";
 import { useToast } from "vue-toastification";
 import TableInterventionsEnseignant from "../views/UI/TableInterventionsEnseignant.vue";
 import User from "../views/UI/User.vue";
-
+import Etablissement from "../views/UI/Etablissement.vue"
 /******************************************* Routes Configuration *******************************************/
 
 const routes = [
@@ -60,7 +60,7 @@ const routes = [
       RequiresAuth: false
     }
   },
-
+  
  
   /*The Default Layout for all Pages */
   {
@@ -84,15 +84,27 @@ const routes = [
         }
       },
       {
+        path: '/Etablissement/:id',
+        name:'Etablissement',
+        component: Etablissement,
+        meta:{
+          AdminAccess: true,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: true,
+          DirectorAccess:true,
+          }
+      },
+      {
         path: '/ADuser/:id',
         name:'ADUser',
         component: ADUser,
         meta:{
         AdminAccess: true,
-        AdminUAEAccess: false,
+        AdminUAEAccess: true,
         UserAccess: false,
-        DirectorUAEAccess: false,
-        DirectorAccess:false,
+        DirectorUAEAccess: true,
+        DirectorAccess:true,
         }
       },
 
@@ -101,7 +113,7 @@ const routes = [
         name:'Directeur',
         component: EtabDirector,
         meta:{
-        AdminAccess: true,
+        AdminAccess: false,
         AdminUAEAccess: false,
         UserAccess: false,
         DirectorUAEAccess: false,

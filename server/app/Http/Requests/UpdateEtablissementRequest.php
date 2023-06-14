@@ -26,20 +26,20 @@ class UpdateEtablissementRequest extends FormRequest
         //return an array of validation rules for the form fields.
         $method=$this->method();
         if($method=='PUT'){
-        return [
-            'nom'=>['required'],
-            'code'=>['required'],
-            'telephone'=>['required'],
-            'FAX'=>['required'],
-            'ville'=>['required'],
-        ];
+            return [
+                'nom' => ['required','max:30'],
+                'code' => ['required'],
+                'telephone' => ['required','min:10'],
+                'FAX' => ['required','max:15'],
+                'ville' => ['required'],
+            ];
     }else{
         //'sometimes'=>allow a field to be optional.
         return [
-            'nom'=>['sometimes','required'],
+            'nom'=>['sometimes','required','max:30'],
             'code'=>['sometimes','required'],
-            'telephone'=>['sometimes','required'],
-            'FAX'=>['sometimes','required'],
+            'telephone'=>['sometimes','required','min:10'],
+            'FAX'=>['sometimes','required','max:15'],
             'ville'=>['sometimes','required'],
         ];
     }

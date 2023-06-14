@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\EnseignantResource;
+use App\Models\Enseignant;
 
 class DirecteurController extends Controller
 {
@@ -39,14 +41,14 @@ class DirecteurController extends Controller
     }
 
 
-    //============================================The access is retricted for:AdminEtab ===========================================================================   
+    //============================================The access is retricted for:AdminEtab ===========================================================================
 
 
     /**
      * Store() it's a method that serve to add a new directeur.
      * @param  StoreDirecteurRequest / it's a class that serve to validate the data before the insert.
-     * @return  / a success message that mean the  new directeur was successfully inserted 
-     * Attention the comments in this method must be respected 
+     * @return  / a success message that mean the  new directeur was successfully inserted
+     * Attention the comments in this method must be respected
      */
 
     public function store(StoreDirecteurRequest $request)
@@ -55,7 +57,7 @@ class DirecteurController extends Controller
         if (Gate::allows('check_role', [2])) {
 
             $directeur = new Directeur();
-            $directeur->etablissement_id = $request['etablissement_id'];
+            $directeur->etablissement_id = auth()->user()->administrateur->etablissement_id;
             $directeur->PPR = $request['PPR'];
             $directeur->nom = $request['nom'];
             $directeur->prenom = $request['prenom'];
@@ -74,7 +76,7 @@ class DirecteurController extends Controller
         return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
-    //=============================================The access is retricted for:AdminUAE|President|AdminEtab =============================================================    
+    //=============================================The access is retricted for:AdminUAE|President|AdminEtab =============================================================
 
 
     /**
@@ -98,7 +100,7 @@ class DirecteurController extends Controller
      * Update() this method serve to update the information of a specified directeur.
      * @param  UpdateDirecteurRequest contain the validation rules of the data .
      * @param  int  $id ID directeur!!!!!!!!!!!
-     * @return  //a success message that mean the data of the directeur was successfully updated. 
+     * @return  //a success message that mean the data of the directeur was successfully updated.
      */
 
     public function update(UpdateDirecteurRequest $request, $id)
@@ -123,15 +125,17 @@ class DirecteurController extends Controller
     /**
      * Destroy() this method serve to remove a specified directeur.
      * @param  int  $id IDDIRECTEUR !!!!!!
-     * @return ///a success message that means the directeur was successfully deleted. 
+     * @return ///a success message that means the directeur was successfully deleted.
      */
 
     public function destroy($id)
     {
         if (Gate::allows('check_role', [4]) || Gate::allows('admin_direct', $id)) {
             $directeur = Directeur::FindOrfail($id);
+            if($directeur->image){
+                unlink(public_path('uploads') . '/' . $directeur->image);
+            }
             $directeur->delete();
-            unlink(public_path('uploads') . '/' . $directeur->image);                                               //destroy the appropriate image .     
             return $this->succes("", "Directeur deleted successfully");
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
@@ -152,7 +156,7 @@ class DirecteurController extends Controller
     {
         if (Gate::allows('check_role', [1])) {
 
-            $id = auth()->user()->enseignant->id;
+            $id = auth()->user()->directeur->id;
             $directeur = Directeur::where('id', $id)->first();
             $directeur->email_perso = $request['email_perso'];
             $directeur->save();
@@ -174,8 +178,9 @@ class DirecteurController extends Controller
 
     {
         if (Gate::allows('check_role', [1])) {
-            $id = auth()->user()->enseignant->id;
-            return new DirecteurResource(Directeur::where('user_id', $id)->with('etablissement')->first());
+            $id = auth()->user()->directeur->id;
+            return new DirecteurResource(Directeur::where('id', $id)->with('etablissement')->first());
+
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
     }
@@ -194,7 +199,7 @@ class DirecteurController extends Controller
     {
 
         if (Gate::allows('check_role', [1])) { {
-                $id = auth()->user()->enseignant->id;
+                $id = auth()->user()->directeur->id;
                 $request->validate(['image' => 'required|max:1024|mimes:png,jpg,png']);
             }
 
@@ -211,11 +216,19 @@ class DirecteurController extends Controller
                 $directeur->image = $image_name;
                 $result = $directeur->save();
             }
-            // =================================== Si le resultat est true ==============================================                          
+            // =================================== Si le resultat est true ==============================================
             if ($result) {
                 return $this->succes("", "image uploaded successfully");
             }
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
+    }
+
+
+    public function MyProfs()
+    {
+        $id=auth()->user()->directeur->etablissement_id;
+        $ens= Enseignant::where('etablissement_id',$id)->with('etablissement','grade')->latest()->paginate(2);
+        return response()->json($ens);
     }
 }

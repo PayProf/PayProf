@@ -39,7 +39,7 @@
 
 <script>
 
-import {mapActions, mapState} from "vuex";
+import {mapActions} from "vuex";
 import { useToast } from "vue-toastification";
 
 export default{
@@ -70,9 +70,6 @@ export default{
 
   computed:{
 
-    ...mapState([
-        'progress'
-    ]),
     ToggleLogin(){
       if(this.FormData.email.length<1 || this.FormData.password.length<1)
       {

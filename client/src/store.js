@@ -28,6 +28,9 @@ const store = createStore({
       token:   localStorage.getItem('TOKEN'),
       token_exp: localStorage.getItem('EXPIRATION')
     },
+    SelectedId:{
+      Id:localStorage.getItem('SELECTEDID'),
+    },
 
     Interventions: [
       {

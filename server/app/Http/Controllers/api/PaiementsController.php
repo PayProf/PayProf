@@ -23,17 +23,17 @@ class PaiementsController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('check_role', [3,4])) {   
-        // Retrieve a paginated list of Paiements objects
-        $paiement = Paiements::latest()->paginate(10);
+        if (Gate::allows('check_role', [3, 4])) {
+            // Retrieve a paginated list of Paiements objects
+            $paiement = Paiements::latest()->paginate(10);
 
-        // Transform the Paiements objects into JSON resources
-        $data = PaiementResource::collection($paiement);
+            // Transform the Paiements objects into JSON resources
+            $data = PaiementResource::collection($paiement);
 
-        // Return a success response with the transformed data
-        return $this->succes($data, 'DISPLAY');
+            // Return a success response with the transformed data
+            return $this->succes($data, 'DISPLAY');
         }
-        return $this->error('','ACCES INTERDIT ',403);
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
     /**
@@ -44,7 +44,7 @@ class PaiementsController extends Controller
      */
     public function store(StorePaiementsRequest $request)
     {
-       //TRIGGER
+        //TRIGGER
 
         // Create a new Paiements object based on the request data
         // $data = new PaiementResource(Paiements::create($request->all()));
@@ -66,12 +66,13 @@ class PaiementsController extends Controller
         // Retrieve the specific Paiements resource by ID
         $data = new PaiementResource(Paiements::findOrFail($id));
 
-        // Return a success response with the transformed data
-        return $this->succes($data, 'DISPLAY');
-    }
+        
 
-        return $this->error('','ACCES INTERDIT ',403);
+            // Return a success response with the transformed data
+            return $this->succes($data, 'DISPLAY');
+        }
 
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
     /**
@@ -118,6 +119,4 @@ class PaiementsController extends Controller
         // // Return a success response
         // return $this->succes('', 'DELETED DATA');
     }
-
-   
 }

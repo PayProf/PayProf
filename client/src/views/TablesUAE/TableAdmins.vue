@@ -49,8 +49,8 @@
     </tbody>
   </table>
 </div>
-<AddAdmin v-if="openAdd"/>
-<button class="btn btn-outline btn-success" @click="RedirectAdd()" >Ajouter un admin</button>
+<AddAdmin />
+
   
 </template>
 

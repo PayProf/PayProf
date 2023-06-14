@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button class="btn btn-primary rounded mb-4 " @click="showPopup = true">ADD</button>
+    <div class="flex justify-center mt-5 ">
+      <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
+    </div>
     <div v-if="showPopup" class="popup z-40">
       <div class="popup-content card w-96 bg-neutral ">
         <div class="card-body items-center text-center">
@@ -18,8 +20,7 @@
                 <label class="label">
                   <span class="label-text">Nom</span>
                 </label>
-                <input type="text" v-model="model.Admin.nom" placeholder="Nom"
-                  class="input input-bordered" />
+                <input type="text" v-model="model.Admin.nom" placeholder="Nom" class="input input-bordered" />
               </div>
               <div class="form-control">
                 <label class="label">
@@ -31,17 +32,22 @@
                 <label class="label">
                   <span class="label-text">Etablissement</span>
                 </label>
-                <input type="text" v-model="model.Admin.etablissement_id" placeholder="Email"
-                  class="input input-bordered" />
+                <select v-model="model.Admin.etablissement_id" class="select select-bordered h-9">
+
+                  <option value="">Select etablissement</option>
+                  <option v-for="(Etablissement, id) in this.Etablissements.data" :key="id">
+                    {{ Etablissement.id }}
+                  </option>
+
+                </select>
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Email</span>
                 </label>
-                <input type="text" v-model="model.Admin.email_perso" placeholder="Email"
-                  class="input input-bordered" />
+                <input type="text" v-model="model.Admin.email_perso" placeholder="Email" class="input input-bordered" />
               </div>
-              
+
             </div>
 
             <div class="form-control mt-6">
@@ -67,6 +73,7 @@ export default {
   data() {
     return {
       errorsList: "",
+      Etablissements:[],
       showPopup: false,
       model: {
         Admin: {
@@ -79,15 +86,33 @@ export default {
       }
     }
   },
-
+  mounted(){
+    this.getEtablissements();
+  },
   methods: {
-    saveAdmin() {
-      const token = store.state.user.token;
+    async getEtablissements() {
+      try {
+        const token = store.state.user.token;
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
+        await axios.get('http://127.0.0.1:8000/api/etablissements',config).then(result=>{
+          console.log('test axios')
+          this.Etablissements = result.data
+        })
+        console.log(this.Etablissements)
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
+    saveAdmin() {
+      const token = store.state.user.token;
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
       var myThis = this;
-      axios.post('http://127.0.0.1:8000/api/admins', this.model.Admin,config)
+      axios.post('http://127.0.0.1:8000/api/admins', this.model.Admin, config)
         .then(result => {
           console.log(result.data)
           this.model.Admin = {
