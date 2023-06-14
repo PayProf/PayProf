@@ -97,7 +97,6 @@ export default {
           this.Directeurs = result.data.data
           console.log(this.Directeurs)
         })
-
       }
       catch (error) {
         console.log(error)

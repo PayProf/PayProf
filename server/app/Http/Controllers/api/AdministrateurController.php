@@ -18,6 +18,8 @@ use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use App\Http\Resources\DirecteurResource;
+use App\Models\Directeur;
 
 class AdministrateurController extends Controller
 {
@@ -31,12 +33,14 @@ class AdministrateurController extends Controller
      */
     public function index()
     {
+        $name="<html>$1é</html>";
+        echo strip_tags($name);
+        echo "<br<noice<br>";
+        echo htmlspecialchars($name);
+
         if (Gate::allows('check_role', [4])) {
             // Retrieve a paginated list of Administrateur objects
             $admin = Administrateur::latest()->paginate(5);
-
-            // Transform the Administrateur objects into JSON resources
-
 
             // Return a success response with the transformed data
 
@@ -55,6 +59,9 @@ class AdministrateurController extends Controller
      */
     public function store(StoreAdministrateurRequest $request)
     {
+        echo $request->input('nom');
+        echo $request->input('prenom');
+
 
         if (Gate::allows('check_role', [4])) {
             // Create a new Administrateur object based on the request data
@@ -62,7 +69,7 @@ class AdministrateurController extends Controller
             $admin->PPR = $request->input('PPR');
             $admin->nom = $request->input('nom');
             $admin->prenom = $request->input('prenom');
-            $admin->etablissement_id = $request->input('etablissement_id');
+            $admin->etablissement_id = $admin->getIdEtablissement($request['etablissement']);
             $admin->email_perso = $request->input('email_perso');
 
 
@@ -70,12 +77,12 @@ class AdministrateurController extends Controller
             $id = event(new storeuser($request->input('email_perso'), 1, $request->input('nom'), $request->input('prenom')));
             $admin->user_id = $id[0];
             $admin->save();
-            $data = new AdministrateurResource(Administrateur::find($admin->id));
+             $data = new AdministrateurResource(Administrateur::find($admin->id));
 
 
             // Check if the creation was successful and return the appropriate response
             if ($data) {
-                return $this->succes("", "SUCCESSFULLY ADDED");
+                return $this->succes($data, "SUCCESSFULLY ADDED");
             } else {
                 return $this->error("", "UNSUCCESSFULLY ADDED", 500);
             }
@@ -194,7 +201,8 @@ class AdministrateurController extends Controller
     public function AllEnseignants($user_id)
     {
 
-        if (Gate::allows('check_role', [2]) || Gate::allows('admin_modify', $user_id)) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
+
 
 
             $user = Administrateur::where('user_id', $user_id)->first();
@@ -208,7 +216,14 @@ class AdministrateurController extends Controller
                 }
             }
 
-            return $this->error('', 'ACCES INTERDIT ', 403);
+            
         }
+        return $this->error('', 'ACCES INTERDIT ', 403);
+    }
+
+    public function MyDir()
+    {
+        $id=auth()->user()->administrateur->etablissement_id;
+        return new DirecteurResource(Directeur::where('etablissement_id', $id)->with('etablissement')->first());
     }
 }

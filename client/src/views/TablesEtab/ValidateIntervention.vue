@@ -35,7 +35,9 @@
                   </div>
                 </td>
                 <td>
-                  <input type="checkbox" :checked="Intervention.visa_etab" class="checkbox" v-if="role == 1 && !Interventions.visa_etab" @change="UpVisaEtab(Intervention.id,index)" />
+                  <div v-if="role == 1 && !Interventions.visa_etab" class="flex justify-center items-center">
+                  <input type="checkbox" :checked="Intervention.visa_etab" class="checkbox" @change="UpVisaEtab(Intervention.id,index)" />
+                  </div>
                   <div v-else class="flex justify-center">
                     <i class="fa-solid fa-x text-red-500" v-if="!Intervention.visa_etab"></i>
                     <i class="fa-solid fa-check text-green-500" v-else></i>

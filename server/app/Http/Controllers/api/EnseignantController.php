@@ -55,9 +55,7 @@ class EnseignantController extends Controller
    * Attention the comments in this method must be respected.
    */
 
-  public function store(StoreEnseignantRequest $request)
-
-  {
+  public function store(StoreEnseignantRequest $request){
 
 
     if (Gate::allows('check_role', [2])) {
@@ -154,8 +152,6 @@ class EnseignantController extends Controller
    */
 
   public function destroy($id)
-
-
   {
     if (Gate::allows('admin_ens', $id)) {
       $ens = Enseignant::FindOrfail($id);
@@ -187,7 +183,7 @@ class EnseignantController extends Controller
         $id = auth()->user()->enseignant->id;
 
         if (Intervention::where('enseignant_id', $id)->exists()) {
-          //                     return  EnseignantInterventionResource::collection (Enseignant::where('id',$id)->with('interventions.etablissement')->paginate(3));
+          //                     return  EnseignantInterventionResource::collection (Enseignant::where('id',$id)->with('interventions.etablissement')->paginate(5));
           return Intervention::where('enseignant_id', $id)->paginate(5);
         } else {
           return $this->error("", "Pas d'interventions pour le moment", 404);
@@ -196,14 +192,12 @@ class EnseignantController extends Controller
 
 
 
-      return $this->error('', 'ACCES INTERDIT ', 403);
+     
+
     }
+    return $this->error('', 'ACCES INTERDIT ', 403);
   }
-
   public function ShowMyGraphe()
-
-
-
   {
     if (auth()->user()->role == 0) {
       $id = auth()->user()->enseignant->id;
@@ -213,8 +207,12 @@ class EnseignantController extends Controller
         return $this->error("", "Pas d'interventions pour le moment", 404);
       }
     }
-    //add Return access denied
+    return $this->error('','ACCES INTERDIT ',403);
   }
+
+
+
+  
   //======================================================== The access is retricted for:Enseignant ===================================================
 
 
@@ -240,10 +238,8 @@ class EnseignantController extends Controller
           return $this->error("", 'Pas de payements pour le moment', 404);
         }
       }
-
-
-      return $this->error('', 'ACCES INTERDIT ', 403);
     }
+    return $this->error('', 'ACCES INTERDIT ', 403);
   }
 
 

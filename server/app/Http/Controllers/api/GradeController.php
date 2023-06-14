@@ -39,16 +39,19 @@ class GradeController extends Controller
    public function store(StoreGradeRequest $request)
    {
 
-      if (Gate::allows('check_role', [4])) {
+            if (Gate::allows('check_role', [4])) {
+               $grade= new GradeResource(Grade::create($request->all()));
+                 if($grade)
+                 {
+                 return response()->json(["message"=>"added successfuly"]);
+                 }
+              
 
-         $grade = new GradeResource(Grade::create($request->all()));
-         if ($grade) {
-            return response()->json(["message" => "added successfuly"]);
+              
+            }
+            return $this->error('','ACCES INTERDIT ',403);
+
          }
-      }
-      // @AnasChatt : Fixed merge problem
-      return $this->error('', 'ACCES INTERDIT ', 403);
-   }
 
 
    //================================================================================== The access is retricted for :AdminUAE| AdminEtab  ============================================

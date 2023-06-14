@@ -25,21 +25,19 @@ class UpdateAdministrateurRequest extends FormRequest
     {
         $method=$this->method();
         if($method=='PUT'){
-        return [
-            'PPR'=>['required'],
-            'nom'=>['required'],
-            'prenom'=>['required'],
-            'etablissement_id'=>['required'],
-            'user_id'=>['required'],
-            'email_perso'=>['required','email'],
+            return [
+                'PPR' => ['required','min:7'],
+                'nom' => ['required','max:30'],
+                'prenom' => ['required','max:30'],
+                'etablissement_id' => ['required'],
+                'email_perso' => ['required', 'email']
             ];
         }else{
             return [
-                'PPR'=>['sometimes','required'],
-                'nom'=>['sometimes','required'],
-                'prenom'=>['sometimes','required'],
+                'PPR'=>['sometimes','required','min:7'],
+                'nom'=>['sometimes','required','max:30'],
+                'prenom'=>['sometimes','required','max:30'],
                 'etablissement_id'=>['sometimes','required'],
-                'user_id'=>['sometimes','required'],
                 'email_perso'=>['sometimes','required','email'],
                 ];
         }

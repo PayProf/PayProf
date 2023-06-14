@@ -7,16 +7,14 @@ use App\Http\Controllers\api\GradeController;
 use App\Http\Controllers\api\InterventionController;
 use App\Http\Controllers\api\PaiementsController;
 use App\Http\Controllers\api\DirecteurController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\api\password\UpdatePasswordController;
 
 
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
 route::post('/login', [AuthController::class, 'login']);
 
 route::group(
@@ -40,7 +38,7 @@ route::group(
 */
 
 //====================================Enseignant API ==================================================
-route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
 
     route::apiResource('Enseignant', EnseignantController::class);
     //route of  ShowMyInterventions
@@ -58,7 +56,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     //route of UpdateMyEmail
     route::PATCH('Enseignant/ens/UpdateMyEmail', [EnseignantController::class, 'UpdateMyEmail']);
 
-    //=====================================================================================================
+
 
 
     //========================================= Grade API =====================================================
@@ -95,13 +93,16 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     //============================================ Directeur API ============================================
     Route::middleware('is_enseignant')->group(function () {
 
-        route::apiResource('Directeur', DirecteurController::class);
-        //route of UploadMyImage
-        route::POST('Directeur/dir/UploadMyImage', [DirecteurController::class, 'UploadMyImage']);
-        //route of ShowMyProfil
-        route::get('Directeur/dir/ShowMyProfil', [DirecteurController::class, 'ShowMyProfil']);
-        //route of UpdateMyEmail
-        route::PATCH('Directeur/dir/UpdateMyEmail', [DirecteurController::class, 'UpdateMyEmail']);
+
+    route::apiResource('Directeur', DirecteurController::class);
+    //route of UploadMyImage
+    route::POST('Directeur/dir/UploadMyImage', [DirecteurController::class, 'UploadMyImage']);
+    //route of ShowMyProfil
+    route::get('Directeur/dir/ShowMyProfil', [DirecteurController::class, 'ShowMyProfil']);
+    //route of UpdateMyEmail
+    route::PATCH('Directeur/dir/UpdateMyEmail', [DirecteurController::class, 'UpdateMyEmail']);
+    //route of MyProfs
+    route::get('Directeur/dir/MyProfs',[DirecteurController::class,'MyProfs']);
     });
     //=======================================================================================================
 
@@ -114,25 +115,20 @@ route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'ShowMyprofile']);
 
         Route::put('admins/{user_id}/updateemail', [AdministrateurController::class, 'Updateemail']);
+
+        Route::get('Administrateur/adm/MyDir', [AdministrateurController::class, 'MyDir']);
+
     });
     route::apiResource('etablissements', EtablissementController::class);
     route::get('etablissements/{user_id}/myetablissement', [EtablissementController::class, 'ShowMyetablissement']);
 
     Route::apiResource('paiements', PaiementsController::class);
-    //oute::patch("profil/{user_id}/updatepassword",[UpdatePasswordController::class,'UpdatePassword']);
+    route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
+    Route::get('profil/{user_id}/info',[UpdatePasswordController::class,'InfoUser']);
+    Route::put('profil/{user_id}/update',[UpdatePasswordController::class,'UpdatePassword']);
+    Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
 
 });
-//============================================ ETABLISSEMENT API ============================================
 
 
 
-
-
-//=======================================================================================================
-//============================================ ADMINISTRATEUR API ============================================
-
-
-
-//=======================================================================================================
-
-//============================================ PAIEMENT API ============================================

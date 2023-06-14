@@ -117,7 +117,8 @@ const routes = [
         AdminUAEAccess: true,
         UserAccess: false,
         DirectorUAEAccess: true,
-        DirectorAccess:false,
+        DirectorAccess:true,
+
         }
       },
 

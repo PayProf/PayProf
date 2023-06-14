@@ -32,13 +32,6 @@
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Etablissement</span>
-                </label>
-                <input type="text" v-model="model.Directeur.etablissement_id" placeholder="Email"
-                  class="input input-bordered" />
-              </div>
-              <div class="form-control">
-                <label class="label">
                   <span class="label-text">Email</span>
                 </label>
                 <input type="text" v-model="model.Directeur.email_perso" placeholder="Email"
@@ -74,6 +67,12 @@ import store from '../store';
 import axios from 'axios';
 export default {
   name: 'AddDirecteur',
+  props: {
+    NomEta:{
+      type: String,
+      required: true
+    }
+  },
 
   data() {
     return {
@@ -85,7 +84,7 @@ export default {
           nom: "",
           prenom: "",
           Email: "",
-          NomEtab: "",
+          NomEtab:this.NomEta,
           DateNaissance: ""
         }
       }
@@ -93,57 +92,28 @@ export default {
   },
 
   methods: {
-    saveDirecteur() {
-      const token = store.state.user.token;
+    async saveDirecteur() {
+      try {
+        const token = store.state.user.token;
         const config = {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
+          }
         };
+        const response = await axios.post(`http://127.0.0.1:8000/api/Directeur`, this.model.Directeur, config);
+        console.log('Director added successfully');
+        this.$emit('Directeur-added');
 
-      var myThis = this;
-      axios.post('http://127.0.0.1:8000/api/Directeur', this.model.Directeur,config)
-        .then(result => {
-          console.log(result.data)
-          this.model.Directeur = {
-            PPR: "",
-            nom: "",
-            prenom: "",
-            Email: "",
-            etablissement_id: "",
-            DateNaissance: ""
-          }
-
-        }).catch(function (error) {
-
-          if (error.response) {
-
-            if (error.response.status == 422) {
-
-              //if you don't specify "myThis" an undefined error will be shown
-              myThis.errorsList = error.response.data.errors;
-            }
-
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-
-        });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     //Redirect to table view
     RedirectTable() {
       this.$router.push('/TableDirecteurs')
-    }
+    },
 
   },
 

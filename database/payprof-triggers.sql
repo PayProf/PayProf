@@ -1,3 +1,4 @@
+-- Active: 1683941185561@@127.0.0.1@5432@postgres
 
 ---------------------------------------------------------------------------------------------------------------------------------
 -- Trigger pour faire un UPDATE du nombre des enseignants dans un etablissement 

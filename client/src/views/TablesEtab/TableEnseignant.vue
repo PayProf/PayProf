@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-10">
+  <div class="mt-10 overflow-x-auto">
     <table class="table table-zebra w-full ">
       <!-- head -->
       <thead>
@@ -19,24 +19,24 @@
         <td><div>{{Enseignant.PPR}}</div></td>
         <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.nom }}</div><div v-else><input type="text" :placeholder="Enseignant.nom" v-model="this.UpdatedEnseignant.nom" class="input input-ghost w-full max-w-xs" /></div></td>
         <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.prenom }}</div><div v-else><input type="text" :placeholder="Enseignant.prenom" v-model="this.UpdatedEnseignant.prenom" class="input input-ghost w-full max-w-xs" /></div></td>
-        <td><div v-if="!IsRow(Enseignant.id)"><div v-if="role == 2 || role == 1">{{ Enseignant.grade.designation }}</div><div v-else>{{Enseignant.Grade}}</div></div><div v-else><input type="text" :placeholder="Enseignant.grade.designation" v-model="this.UpdatedEnseignant.grade" class="input input-ghost w-full max-w-xs" /></div></td>
-        <td><div>{{ Enseignant.email_perso}}</div></td>
-        <td><div v-if="!IsRow(Enseignant.id)">{{ Enseignant.date_naissance }}</div><div v-else><input type="text" :placeholder="Enseignant.date_naissance" v-model="this.UpdatedEnseignant.date_naissance" class="input input-ghost w-full max-w-xs" /></div></td>
-        <td>
-            <button class="add-btn px-4" v-if="user.role==2" @click="this.SelectedId = Enseignant.id" >
+        <td><div v-if="!IsRow(Enseignant.id)"><div v-if="role == 2 || role==1 ">{{ Enseignant.grade.designation }}</div><div v-else>{{Enseignant.Grade}}</div></div><div v-else><input type="text" :placeholder="Enseignant.grade.designation" v-model="this.UpdatedEnseignant.grade" class="input input-ghost w-full max-w-xs" /></div></td>
+        <td><div v-if="role == 2 || role==1">{{ Enseignant.email_perso}}</div><div v-else>{{Enseignant.Email}}</div></td>
+        <td><div v-if="!IsRow(Enseignant.id)"><div v-if="role == 2|| role==1">{{ Enseignant.date_naissance }}</div><div v-else>{{ Enseignant.DateNaissance }}</div></div><div v-else><input type="text" :placeholder="Enseignant.date_naissance" v-model="this.UpdatedEnseignant.date_naissance" class="input input-ghost w-full max-w-xs" /></div></td>
+        <td >
+            <button class="add-btn px-4" v-if="role == 2 || role==4" @click="this.SelectedId = Enseignant.id" >
               <i class="fas fa-pen" v-if="!IsRow(Enseignant.id)"></i>
               <i class="fas fa-check" v-else @click="ConfirmEdit(Enseignant.id)"></i>
               <span class="tooltip" data-tooltip="inspect">modifier</span>
             </button>
 
 
-          <button class="add-btn px-4" @click="DeleteEnseignant(Enseignant.id)" v-if="user.role==2 ||user.role==4">
+          <button class="add-btn px-4" @click="DeleteEnseignant(Enseignant.id)" v-if="role == 2 || role==4">
             <i class="fas fa-trash" ></i>
             <span class="tooltip" data-tooltip="inspect">supprimer</span>
           </button>
           <!-- This page isn't created yet !!!! -->
           <router-link :to="{ path: '/ADuser/'+Enseignant.id }">
-            <button class="add-btn px-4"  v-if="user.role==2 ||user.role==4">
+            <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"> inspecter </span>
             </button>
@@ -51,11 +51,11 @@
           :pages="pagecount"
           :range-size="1"
           active-color="#1d774d"
-          @update:modelValue="getEnseignants"
+          @update:modelValue="getTables"
       />
     </div>
     <div class="flex justify-center">
-    <AddEnseignant/>
+    <AddEnseignant @Enseignant-added="getTables" v-if="role == 2"/>
     </div>
   </div>
 
@@ -77,6 +77,9 @@ export default {
     VPagination,
 
   },
+  props:[
+      'IdEtab',
+  ],
   data() {
     return {
       model:{
@@ -164,6 +167,20 @@ export default {
         console.log(error)
       }
     },
+
+    async getEnseignantsDir(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const res = await axios.get('http://127.0.0.1:8000/api/Directeur/dir/MyProfs?page='+this.page,config)
+        this.model.Enseignants=res.data.data;
+        this.pagecount=res.data.last_page;
+      } catch (error) {
+        console.log(error)
+      }
+    },
         
     async DeleteEnseignant(id) {
       try {
@@ -179,11 +196,14 @@ export default {
 
       
     },
-    getTables(){
+    async getTables(){
         if(store.state.user.role==4){
-          return this.getEnseignantsEtab()
+          await this.getEnseignantsEtab();
         }else if(store.state.user.role==2 ){
-          return this.getEnseignants()
+          await this.getEnseignants();
+        }
+        else if(store.state.user.role==1){
+          await this.getEnseignantsDir();
         }
       }
     // deleteEnseignant(EnseignantId){
