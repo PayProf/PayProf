@@ -106,10 +106,9 @@ export default {
             Accept: 'application/json'
           }
         };
-        console.log(this.model.Enseignant)
         const response = await axios.post(`http://127.0.0.1:8000/api/Enseignant`, this.model.Enseignant, config);
-        console.log(response)
         console.log('Enseignant added successfully');
+        this.$emit('Enseignant-added');
 
       } catch (error) {
         console.log(error);

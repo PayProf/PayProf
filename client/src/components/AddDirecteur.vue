@@ -34,7 +34,7 @@
                 <label class="label">
                   <span class="label-text">Etablissement</span>
                 </label>
-                <input type="text" v-model="model.Directeur.etablissement_id" placeholder="Email"
+                <input type="text" v-model="model.Directeur.etablissement_id" placeholder="Etablissement"
                   class="input input-bordered" />
               </div>
               <div class="form-control">
@@ -102,10 +102,9 @@ export default {
             Accept: 'application/json'
           }
         };
-        console.log(this.model.Enseignant)
-        const response = await axios.post(`http://127.0.0.1:8000/api/Directeur`, this.model.Enseignant, config);
-        console.log(response)
+        const response = await axios.post(`http://127.0.0.1:8000/api/Directeur`, this.model.Directeur, config);
         console.log('Director added successfully');
+        this.$emit('Directeur-added');
 
       } catch (error) {
         console.log(error);

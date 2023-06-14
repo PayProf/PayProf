@@ -83,7 +83,7 @@
               <div class="grid grid-cols-6 w-1/3">
                 <div class="flex items-center justify-end col-span-2">
             <i class="fa-solid fa-triangle-exclamation"></i></div>
-                <div class="flex items-center justify-start ml-4 col-span-4">
+                <div class="flex items-center justify-start gap-1 col-span-4">
               <h1> Pas de Directeur</h1></div>
               </div>
             </div>
@@ -96,9 +96,10 @@
 
 
         </div>
-      </div>
-      <TableEnseignant id="tableEns" v-if="OpenEns"/>
+      <TableEnseignant @Directeur-added="GetMyDirecteur" id="tableEns" v-if="OpenEns"/>
       <ValidateIntervention v-if="OpenInt"/>
+      </div>
+
   
     </div>
 
@@ -157,7 +158,10 @@ export default {
       try {
         const token = store.state.user.token;
         const config = {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {
+            Authorization: `Bearer ${token}`
+
+          }
         };
         const response = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/myetablissement',config);
         this.Etablissement=response.data.data;
