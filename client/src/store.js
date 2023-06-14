@@ -91,7 +91,6 @@ const store = createStore({
       const Exp = new Date(state.user.token_exp);
 
       const current = new Date();
-      console.log(Exp)
 
       return Exp < current;
     

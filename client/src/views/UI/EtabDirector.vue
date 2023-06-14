@@ -41,8 +41,8 @@
           <p class="py-2"><strong>Email :</strong> {{Profile.Email}}</p>
           <p class="py-2"><strong>Etablissment :</strong> {{ Profile.NomEtab}}</p>
           <p class="py-2"><strong>Ville :</strong> {{ Profile.DateNaissance }}</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary">Change Password</button>
+          <div class="flex justify-end">
+          <UpdatePassword></UpdatePassword>
           </div>
         </div>
       </div>
@@ -66,9 +66,11 @@ import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
 import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
 import {mapActions,mapState} from 'vuex';
+import UpdatePassword from "../../components/UpdatePassword.vue";
 export default {
   name: 'Admin',
   components: {
+    UpdatePassword,
     TableEnseignant,
     PopupForm,
     ValidateIntervention,
