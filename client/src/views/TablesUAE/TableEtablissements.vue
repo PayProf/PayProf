@@ -21,8 +21,8 @@
           <td>{{ id + 1 }}</td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.code }}</div><div v-else><input type="text" :placeholder="Etablissement.code" v-model="this.UpdatedEtablissement.code" class="input input-ghost w-full max-w-xs" disabled/></div></td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.nom }}</div><div v-else><input type="text" :placeholder="Etablissement.nom" v-model="this.UpdatedEtablissement.nom" class="input input-ghost w-full max-w-xs" disabled/></div></td>
-          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Telephone }}</div><div v-else><input type="text" :placeholder="Etablissement.Telephone" v-model="this.UpdatedEtablissement.Telephone" class="input input-ghost w-full max-w-xs" /></div></td>
-          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.FAX }}</div><div v-else><input type="text" :placeholder="Etablissement.FAX" v-model="this.UpdatedEtablissement.FAX" class="input input-ghost w-full max-w-xs" /></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Telephone }}</div><div v-else><input type="text" :placeholder="Etablissement.Telephone" v-model="this.UpdatedEtablissement.Telephone" class="input input-ghost w-full max-w-xs" required /></div></td>
+          <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.FAX }}</div><div v-else><input type="text" :placeholder="Etablissement.FAX" v-model="this.UpdatedEtablissement.FAX" class="input input-ghost w-full max-w-xs" required/></div></td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.ville }}</div><div v-else><input type="text" :placeholder="Etablissement.ville" v-model="this.UpdatedEtablissement.ville" class="input input-ghost w-full max-w-xs" disabled/></div></td>
           <td><div v-if="!IsRow(Etablissement.id)">{{ Etablissement.Nombre_des_enseignants }}</div><div v-else><input type="text" :placeholder="Etablissement.Nombre_des_enseignants" v-model="this.UpdatedEtablissement.Nombre_des_enseignants" class="input input-ghost w-full max-w-xs"  disabled/></div></td>
           <td>

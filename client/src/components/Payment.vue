@@ -10,11 +10,10 @@
                         <div class="col-xs-8 col-sm-8 col-md-8 text-left">
                             <div class="receipt-left">
                                 <b>
-                                    <h5>Customer Name </h5>
+                                    <h5>{{ this.Profile.nom }} {{ this.Profile.prenom }}  </h5>
                                 </b>
-                                <p><b>Mobile :</b> </p>
-                                <p><b>Email :</b> </p>
-                                <p><b>Date debut :</b> </p>
+                                <p><b>Mobile :</b>{{ this.Profile.Telephone }} </p>
+                                <p><b>Email :</b> {{ this.Profile.email_perso }} </p>
                             </div>
                         </div>
 
@@ -31,36 +30,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="col-md-9">Payment for August 2016</td>
-                                <td class="col-md-3"> 15,000 DH</td>
-                                <td class="col-md-3"> 15,000 DH</td>
+                            <tr v-for="(Paiement,id) in this.Paiements.data " :key="id">
+                                <td class="col-md-9">{{Paiement.intitule}}</td>
+                                <td class="col-md-3">{{Paiement.nbr_heure}}</td>
+                                <td class="col-md-3">{{Paiement.paiement}}</td>
                             </tr>
                             <tr>
-                                <td class="col-md-9">Payment for August 2016</td>
-                                <td class="col-md-3"> 15,000 DH</td>
-                                <td class="col-md-3"> 15,000 DH</td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-9">Payment for August 2016</td>
-                                <td class="col-md-3"> 15,000 DH</td>
-                                <td class="col-md-3"> 15,000 DH</td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-9">Payment for August 2016</td>
-                                <td class="col-md-3"> 15,000 DH</td>
-                                <td class="col-md-3"> 15,000 DH</td>
-                            </tr>
-                            <tr>
-
-                                <td class="text-center">
-                                    <h2><strong>Total: </strong></h2>
-                                </td>
-
                                 <td class="col-md-9"></td>
-                                <td class="text-center text-danger">
-                                    <h2><strong> 31.566 DH</strong></h2>
-                                </td>
+                                <td class="col-md-9">{{ this.Hours }}</td>
+                                <td class="text-center text-danger "> <h2><strong>Total: {{ Paiements.tot }}</strong></h2> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -73,7 +51,6 @@
                                 <h5 style="color: rgb(92, 90, 90);">PayProf</h5>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -84,12 +61,16 @@
 </template>
 
 <script>
-
+import store from '../store'
+import axios from 'axios'
 export default {
     name: 'Payment',
     data() {
         return {
             isVisible: false,
+            Profile:[],
+            Paiements:[],
+            Hours:""
         }
     },
     methods: {
@@ -108,15 +89,51 @@ export default {
                 const config = {
                     headers: { Authorization: `Bearer ${token}` }
                 };
-                const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/ShowMyProfil', config);
-                this.Profile = response.data.data;
+                const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyPayments', config);
+                console.log(response)
+                
             }
             catch (error) {
                 console.log(error)
             }
-        }
+        },
+        async getHours(){
+            try {
+                const token = store.state.user.token;
+                const config = {
+                    headers: { Authorization: `Bearer ${token}` }
+                };
+                const response = await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyHours', config);
+                console.log(response)
+                this.Hours = response.data.hours;
+            }
+            catch (error) {
+                console.log(error)
+            }
+        },
+        async getProfile(id){
+            try {
+                const token = store.state.user.token;
+                const config = {
+                 headers: { Authorization: `Bearer ${token}` }
+                };
+
+                const res= await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id,config)
+                this.Profile=res.data.data;
+            }
+            catch (error) {
+                console.log(error)
+            }
+    }
+
+    },
+    async mounted(){
+        await this.getPayment();
+        await this.getHours();
+        await this.getProfile();
 
     }
+
 }
 </script>
 

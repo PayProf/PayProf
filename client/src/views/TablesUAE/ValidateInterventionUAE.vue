@@ -28,7 +28,7 @@
                <td><div v-if="!IsRow(Intervention.id)">{{ Intervention.date_fin }}</div><div v-else><input type="text" :placeholder="Intervention.date_fin" v-model="UpdatedIntervetion.date_fin" class="input input-ghost w-full max-w-xs" /></div></td>
                <td><div v-if="!IsRow(Intervention.id)">{{ Intervention.Nbr_heures }}</div><div v-else><input type="text" :placeholder="Intervention.Nbr_heures" v-model="UpdatedIntervetion.Nbr_heures" class="input input-ghost w-full max-w-xs" /></div></td>
                <td>
-                 <input type="checkbox" :checked="Intervention.visa_uae" class="checkbox" v-if="role == 3 && !Interventions.visa_etab" @change="UpVisaUAE(Intervention.id,index)"/>
+                 <input type="checkbox" :checked="Intervention.visa_uae" :disabled="!Intervention.visa_etab" class="checkbox" v-if="role == 3 && !Interventions.visa_etab" @change="UpVisaUAE(Intervention.id,index)"/>
                  <div v-else class="flex justify-center">
                  <i class="fa-solid fa-x text-red-500" v-if="!Intervention.visa_uae"></i>
                  <i class="fa-solid fa-check text-green-500" v-else></i>

@@ -22,7 +22,7 @@
         <td><div v-if="!IsRow(Admin.id)">{{ Admin.nom }}</div><div v-else><input type="text" :placeholder="Admin.nom" v-model="this.UpdatedAdmin.nom" class="input input-ghost w-full max-w-xs" disabled/></div></td>
         <td><div v-if="!IsRow(Admin.id)">{{ Admin.prenom }}</div><div v-else><input type="text" :placeholder="Admin.prenom" v-model="this.UpdatedAdmin.prenom" class="input input-ghost w-full max-w-xs" disabled/></div></td>
         <td><div v-if="!IsRow(Admin.id)">{{ Admin.etablissement_id }}</div><div v-else><input type="text" :placeholder="Admin.etablissement_id" v-model="this.UpdatedAdmin.etablissement_id" class="input input-ghost w-full max-w-xs" disabled/></div></td>
-        <td><div v-if="!IsRow(Admin.id)">{{ Admin.email_perso }}</div><div v-else><input type="text" :placeholder="Admin.email_perso" v-model="this.UpdatedAdmin.email_perso" class="input input-ghost w-full max-w-xs" /></div></td>
+        <td><div v-if="!IsRow(Admin.id)">{{ Admin.email_perso }}</div><div v-else><input type="text" :placeholder="Admin.email_perso" v-model="this.UpdatedAdmin.email_perso" class="input input-ghost w-full max-w-xs" required/></div></td>
           
           <td>
             <button class="add-btn px-4" v-if="Userrole==4" @click="this.SelectedId = Admin.id" >
