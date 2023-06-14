@@ -8,37 +8,37 @@
       <div class="popup-content card w-96 bg-neutral ">
         <div class="card-body items-center text-center">
           <h2 class="card-title">Changer Votre Mot de Passe</h2>
-          <form @submit.prevent="saveDirecteur(); showPopup = false">
+          <form @submit.prevent="UpdatePassword(); showPopup = false">
             <!-- Form fields fogr addin an Directeur -->
             <div class="grid grid-cols-2 gap-4">
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Ancien Mot De Passe</span>
+                  <span class="label-text">Mot De Passe</span>
                 </label>
-                <input type="text" v-model="NewPassword.OldPass" placeholder="PPR" class="input input-bordered" />
+                <input type="text" required="true" v-model="NewPassword.OldPass" placeholder="Ancien" class="input input-bordered" />
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Nouveau Mot De Passe</span>
                 </label>
-                <input type="text" required="true" v-model="NewPassword.NewPass" placeholder="Nom"
+                <input type="text" required="true" v-model="NewPassword.NewPass" placeholder="Nouveau"
                        class="input input-bordered" />
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Confirmation du Nouveau Mot De Passe</span>
+                  <span class="label-text">Confirmation</span>
                 </label>
-                <input type="text" required="true" v-model="NewPassword.NewPassConf" placeholder="Prenom" class="input input-bordered" />
+                <input type="text" required="true" v-model="NewPassword.NewPassConf" placeholder="Confirmer" class="input input-bordered" />
               </div>
 
             </div>
 
             <div class="form-control mt-6">
               <button type="submit" class="btn btn-primary rounded" style="margin-bottom: 5px;">
-                Add Directeur
+                Changer
               </button>
               <button type="button" class="btn btn-error rounded" @click="showPopup = false">
-                Cancel
+                Annuler
               </button>
             </div>
           </form>
@@ -64,6 +64,25 @@ export default {
       },
     }
   },
+  methods:{
+    async UpdatePassword(){
+      try{
+      const token = store.state.user.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json'
+        }
+      };
+      const response = await axios.patch('http://127.0.0.1:8000/api/Directeur/profil/'+store.state.user.id+'/updatepassword',this.NewPassword,config);
+
+      console.log(response)
+    }
+    catch (error){
+        console.log(error)
+    }
+    }
+  }
 }
 
 </script>
