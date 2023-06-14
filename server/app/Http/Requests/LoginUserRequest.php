@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\email_check;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginUserRequest extends FormRequest
@@ -20,7 +21,7 @@ class LoginUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'=>['required','string','email'],
+            'email' => ['required', new email_check],
             'password'=>['required','string','min:6']
         ];
     }

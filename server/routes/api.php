@@ -7,7 +7,6 @@ use App\Http\Controllers\api\GradeController;
 use App\Http\Controllers\api\InterventionController;
 use App\Http\Controllers\api\PaiementsController;
 use App\Http\Controllers\api\DirecteurController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\api\password\UpdatePasswordController;
@@ -15,9 +14,7 @@ use App\Http\Controllers\api\password\UpdatePasswordController;
 
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
 route::post('/login', [AuthController::class, 'login']);
 
 route::group(
@@ -41,7 +38,7 @@ route::group(
 */
 
 //====================================Enseignant API ==================================================
-route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
 
     route::apiResource('Enseignant', EnseignantController::class);
     //route of  ShowMyInterventions
@@ -58,7 +55,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     //route of UpdateMyEmail
     route::PATCH('Enseignant/ens/UpdateMyEmail', [EnseignantController::class, 'UpdateMyEmail']);
 
-    //=====================================================================================================
+   
 
 
     //========================================= Grade API =====================================================
@@ -127,11 +124,6 @@ route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('paiements', PaiementsController::class);
 
 });
-//============================================ ETABLISSEMENT API ============================================
-
-
-
-
 
 //=======================================================================================================
 //============================================ ADMINISTRATEUR API ============================================
@@ -145,6 +137,7 @@ route::get('etablissements/{etablissement_id}/aboutetablissement', [Etablissemen
 Route::get('profil/{user_id}/info',[UpdatePasswordController::class,'InfoUser']);
 Route::put('profil/{user_id}/update',[UpdatePasswordController::class,'UpdatePassword']);
 Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
+
 
 
 

@@ -139,7 +139,9 @@ class InterventionController extends Controller
     public function destroy($id)
 
           {
-              if (Gate::allows('interv_etab', $id)) {
+
+             if (Gate::allows('interv_etab', $id)) {
+
                  $intervention= Intervention::find($id);
                  if($intervention)
                  {
@@ -149,7 +151,8 @@ class InterventionController extends Controller
                 else{
                      return $this->error("","intervention introuvable",404);
                  }
-              }
+             }
+
               return $this->error('','ACCES INTERDIT ',403);
 
 
@@ -273,17 +276,19 @@ class InterventionController extends Controller
 
        public function EnseignantInterventions($id)
           {
+            if (!Gate::allows('check_role', [0])) {
 
-
-//                 if(Intervention::where('enseignant_id',$id)->exists())
-//                 {
+                if(Intervention::where('enseignant_id',$id)->exists())
+                 {
                      return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->latest()->paginate(5));
-//                 }
-//
-//                 else
-//                {
-//                     return $this->error("","intervention introuvable",404);
-//                }
+                 }
+
+                 else
+                {
+                     return $this->error("","intervention introuvable",404);
+                }
+            }
+            return $this->error('','ACCES INTERDIT ',403);
 
 
 
@@ -291,16 +296,17 @@ class InterventionController extends Controller
     public function EnseignantInterventionsGraphe($id)
     {
 
-
-//                 if(Intervention::where('enseignant_id',$id)->exists())
-//                 {
-        return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->get());
-//                 }
-//
-//                 else
-//                {
-//                     return $this->error("","intervention introuvable",404);
-//                }
+        if (!Gate::allows('check_role', [0])) {
+                if(Intervention::where('enseignant_id',$id)->exists())
+                 {
+                    return  InterventionResource::collection(Intervention::where('enseignant_id',$id)->with('enseignant','etablissement')->get());
+                }
+                 else
+                {
+                  return $this->error("","intervention introuvable",404);
+                }
+            }
+            return $this->error('','ACCES INTERDIT ',403);
 
 
 

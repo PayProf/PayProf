@@ -33,6 +33,11 @@ class AdministrateurController extends Controller
      */
     public function index()
     {
+        $name="<html>$1é</html>";
+        echo strip_tags($name);
+        echo "<br<noice<br>";
+        echo htmlspecialchars($name);
+
         if (Gate::allows('check_role', [4])) {
             // Retrieve a paginated list of Administrateur objects
             $admin = Administrateur::latest()->paginate(5);
@@ -56,6 +61,9 @@ class AdministrateurController extends Controller
      */
     public function store(StoreAdministrateurRequest $request)
     {
+        echo $request->input('nom');
+        echo $request->input('prenom');
+
 
         if (Gate::allows('check_role', [4])) {
             // Create a new Administrateur object based on the request data
@@ -195,7 +203,8 @@ class AdministrateurController extends Controller
     public function AllEnseignants($user_id)
     {
 
-        if (Gate::allows('check_role', [2]) || Gate::allows('admin_modify', $user_id)) {
+        if (Gate::allows('check_role', [4]) || Gate::allows('admin_modify',$user_id)) {
+
 
 
             $user = Administrateur::where('user_id', $user_id)->first();
@@ -209,8 +218,9 @@ class AdministrateurController extends Controller
                 }
             }
 
-            return $this->error('', 'ACCES INTERDIT ', 403);
+            
         }
+        return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
     public function MyDir()

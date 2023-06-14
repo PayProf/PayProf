@@ -146,6 +146,24 @@ class AuthServiceProvider extends ServiceProvider
 
         });
 
+        ///////////////////// IN Payments CONTROLLER  ///////////
+        Gate::define('Pay_etab', function (User $user, $id) {
+
+            $admin = Administrateur::where('user_id', $user->id)->first();
+
+            $direct=Directeur::where('user_id', $user->id)->first();
+            $inter = Intervention::find($id);
+
+            if($direct && $user->role==1 && $direct->etablissement_id==$inter->etablissement_id){
+                return true;
+            }
+            if($admin && $user->role==2 && $admin->etablissement_id==$inter->etablissement_id){
+                return true;}
+
+       return false; 
+
+        });
+
 
 
 
