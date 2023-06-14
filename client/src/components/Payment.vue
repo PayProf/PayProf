@@ -1,7 +1,7 @@
 <template>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <div class="col-md-12 mx-10 mt-24">
+    <div class="col-md-12 mx-20 mt-24">
         <div class="row">
 
             <div class="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
@@ -12,8 +12,8 @@
                                 <b>
                                     <h5>{{ this.Profile.nom }} {{ this.Profile.prenom }}  </h5>
                                 </b>
-                                <p><b>Mobile :</b>{{ this.Profile.Telephone }} </p>
-                                <p><b>Email :</b> {{ this.Profile.email_perso }} </p>
+                                <p><b>PPR :</b>{{ this.Profile.PPR }} </p>
+                                <p><b>Email :</b> {{ this.Profile.Email }} </p>
                             </div>
                         </div>
 
@@ -26,18 +26,20 @@
                             <tr>
                                 <th>Intitule</th>
                                 <th>Nombre d'heure</th>
-                                <th>Paiement</th>
+                                <th>Semestre</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(Paiement,id) in this.Paiements.data " :key="id">
-                                <td class="col-md-9">{{Paiement.intitule}}</td>
-                                <td class="col-md-3">{{Paiement.nbr_heure}}</td>
-                                <td class="col-md-3">{{Paiement.paiement}}</td>
+                            <tr v-for="(Intervention,id) in this.Interventions " :key="id">
+                                <td class="col-md-9">{{Intervention.intitule_intervention}}</td>
+                                <td class="col-md-9">{{Intervention.Nbr_heures}}</td>
+                                <td class="col-md-9">{{Intervention.semestre}}</td>
+                                <!-- <td class="col-md-3">{{Intervention.nbr_heure}}</td>
+                                <td class="col-md-3">{{Intervention.paiement}}</td> -->
                             </tr>
                             <tr>
                                 <td class="col-md-9"></td>
-                                <td class="col-md-9">{{ this.Hours }}</td>
+                                <td class="col-md-9"><h3>{{ this.Hours }}</h3></td>
                                 <td class="text-center text-danger "> <h2><strong>Total: {{ Paiements.tot }}</strong></h2> </td>
                             </tr>
                         </tbody>
@@ -57,7 +59,10 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-neutral" @click="downloadPDF()" id="btn">Telecharger payement</button>
+    <div class="flex justify-center mb-24" v-if="UserRole == 0">
+        <button class="btn btn-neutral" @click="downloadPDF()" id="btn">Telecharger payement</button>
+    </div>
+    
 </template>
 
 <script>
@@ -68,9 +73,11 @@ export default {
     data() {
         return {
             isVisible: false,
+            Interventions:[],
             Profile:[],
             Paiements:[],
-            Hours:""
+            Hours:"",
+            UserRole: store.state.user.role
         }
     },
     methods: {
@@ -111,26 +118,43 @@ export default {
                 console.log(error)
             }
         },
-        async getProfile(id){
+        async getProfile(){
             try {
                 const token = store.state.user.token;
                 const config = {
                  headers: { Authorization: `Bearer ${token}` }
                 };
 
-                const res= await axios.get('http://127.0.0.1:8000/api/Enseignant/'+store.state.user.id,config)
+                const res= await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/ShowMyProfil',config)
+                console.log(res)
                 this.Profile=res.data.data;
             }
             catch (error) {
                 console.log(error)
             }
-    }
+            },
+            async getInterventions(){
+            try {
+                const token = store.state.user.token;
+                const config = {
+                 headers: { Authorization: `Bearer ${token}` }
+                };
+
+                const res= await axios.get('http://127.0.0.1:8000/api/Enseignant/ens/MyIntervention',config)
+                console.log(res)
+                this.Interventions=res.data.data;
+            }
+            catch (error) {
+                console.log(error)
+            }
+            }
 
     },
     async mounted(){
         await this.getPayment();
         await this.getHours();
         await this.getProfile();
+        await this.getInterventions();
 
     }
 

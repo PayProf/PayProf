@@ -111,7 +111,7 @@
     </div>
   </div>
   <router-link :to="{ path: '/Payment/'+Profile.PPR }" >
-    <button class="btn btn-neutral mt-3"   >Voir paiement</button>
+    <button class="btn btn-neutral mt-3">Voir paiement</button>
   </router-link>
   
 
