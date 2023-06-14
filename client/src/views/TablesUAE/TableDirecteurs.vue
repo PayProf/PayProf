@@ -33,7 +33,7 @@
 
           <!-- The error here was caused by route-link it had no link, add it before uncomment-->
 
-            <router-link :to="{ path: '/Directeur/'+Directeur.IdEtablissement }"> <!-- Youssef has to send id_etablissement in addition to nometab make this  -->
+            <router-link :to="{ path: '/DirecteurEtabUae/'+Directeur.IdEtablissement }"> <!-- Youssef has to send id_etablissement in addition to nometab make this  -->
               <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>

@@ -1,8 +1,8 @@
 <template>
-
+<div class="overflow-x-auto  z-10">
 <h1 class="text-black font-bold text-xl">Table Admins :</h1>
     <div class="overflow-x-auto border">
-  <table class="table w-screen border z-10">
+      <table class="table table-zebra w-full z-10">
     <!-- head -->
     <thead>
       <tr>
@@ -36,7 +36,7 @@
               <span class="tooltip" data-tooltip="inspect"></span>
             </button>
             <!-- This page isn't created yet !!!! -->
-            <router-link :to="{ path: '/Etablissement/'+Admin.etablissement_id }">
+            <router-link :to="{ path: '/AdminEtabUae/'+Admin.etablissement_id }">
               <button class="add-btn px-4" >
               <i class="fas fa-eye" ></i>
               <span class="tooltip" data-tooltip="inspect"></span>
@@ -57,6 +57,7 @@
           @update:modelValue="getAdmins"
       />
     </div>
+  </div>
 </div>
 <AddAdmin />
 
