@@ -32,13 +32,6 @@
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Etablissement</span>
-                </label>
-                <input type="text" v-model="model.Directeur.etablissement_id" placeholder="Etablissement"
-                  class="input input-bordered" />
-              </div>
-              <div class="form-control">
-                <label class="label">
                   <span class="label-text">Email</span>
                 </label>
                 <input type="text" v-model="model.Directeur.email_perso" placeholder="Email"
@@ -74,6 +67,12 @@ import store from '../store';
 import axios from 'axios';
 export default {
   name: 'AddDirecteur',
+  props: {
+    NomEta:{
+      type: String,
+      required: true
+    }
+  },
 
   data() {
     return {
@@ -85,7 +84,7 @@ export default {
           nom: "",
           prenom: "",
           Email: "",
-          NomEtab: "",
+          NomEtab:this.NomEta,
           DateNaissance: ""
         }
       }

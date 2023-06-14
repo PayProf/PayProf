@@ -50,13 +50,12 @@
           <p class="py-2"><strong>Nombre des Enseignants :</strong> {{ Etablissement.Nbrenseignants }}</p>
           <p class="py-2"><strong>Ville :</strong> {{ Etablissement.ville }}</p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary">Change Password</button>
+            <UpdatePassword/>
           </div>
   </div>
 </div>
       <div v-if="OpenDir" class="card card-side bg-base-100 shadow-xl">
-        <div v-if="IsDir">
-        <div class="card-body">
+        <div v-if="IsDir" class="card-body">
           <h1 class="text-2xl font-bold">Voici Votre Directeur</h1>
           <p class="py-2"><strong>PPR :</strong> {{Directeur.PPR}}</p>
           <p class="py-2"><strong>Nom:</strong> {{Directeur.nom}}</p>
@@ -64,7 +63,7 @@
           <p class="py-2"><strong>Email :</strong> {{Directeur.Email}}</p>
           <p class="py-2"><strong>Etablissment :</strong> {{ Directeur.NomEtab }}</p>
           <p class="py-2"><strong>Date de naissance :</strong> {{ Directeur.DateNaissance}}</p>
-          <div class="card-actions justify-end items-center">
+          <div class="card-actions w-full flex justify-end items-center">
             <div class="text-white dropdown dropdown-top"><label tabindex="0" class="btn btn-error text-white m-1">Supprimer</label>
               <ul tabindex="0" class="dropdown-content menu p-2 pb-4 shadow bg-neutral rounded-box w-52">
                 <li><p>Êtes-vous sûr(e) ?</p></li>
@@ -77,7 +76,6 @@
           </div>
 
           </div>
-        </div>
         <div v-else class="card-body bg-error">
             <div class="flex justify-center items-center">
               <div class="grid grid-cols-6 w-1/3">
@@ -88,7 +86,7 @@
               </div>
             </div>
             <div class="flex justify-center">
-            <AddDirecteur/>
+            <AddDirecteur :NomEta="this.Etablissement.nom" />
             </div>
 
             </div>
@@ -115,6 +113,7 @@ import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
 import {mapState} from 'vuex';
 import AddDirecteur from "../../components/AddDirecteur.vue";
+import UpdatePassword from "../../components/UpdatePassword.vue";
 export default {
   name: 'Admin',
   components: {
@@ -122,6 +121,7 @@ export default {
     PopupForm,
     ValidateIntervention,
     AddDirecteur,
+    UpdatePassword,
 
   },
   data() {
