@@ -38,11 +38,15 @@
           <p class="py-2"><strong>PPR :</strong> {{Profile.PPR}}</p>
           <p class="py-2"><strong>Nom:</strong> {{Profile.nom}}</p>
           <p class="py-2"><strong>Prenom :</strong> {{Profile.prenom}}</p>
-          <p class="py-2"><strong>Email :</strong> {{Profile.Email}}</p>
+          <div v-if="!UpdatingEmail"><p class="py-2"><strong>Email :</strong> {{Profile.Email}}</p></div><div v-else><strong>Email : </strong><input type="email" v-model="this.UpProfile.email_perso" class="input input-ghost w-full max-w-xs" /></div>
           <p class="py-2"><strong>Etablissment :</strong> {{ Profile.NomEtab}}</p>
           <p class="py-2"><strong>Ville :</strong> {{ Profile.DateNaissance }}</p>
-          <div class="flex justify-end">
-          <UpdatePassword></UpdatePassword>
+          <div class="flex flex-col md:flex-row justify-end">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 flex items-center">
+              <button class="btn btn-primary rounded" @click="UpdatingEmail = true" v-if="!UpdatingEmail">Modifier Email</button>
+              <button class="btn btn-neutral rounded" @click="UpdateEmail()" v-else>Confirmer</button>
+              <UpdatePassword></UpdatePassword>
+            </div>
           </div>
         </div>
       </div>
@@ -67,6 +71,8 @@ import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
 import {mapActions,mapState} from 'vuex';
 import UpdatePassword from "../../components/UpdatePassword.vue";
+import {useToast} from "vue-toastification";
+
 export default {
   name: 'Admin',
   components: {
@@ -84,12 +90,16 @@ export default {
       OpenProfile:true,
       OpenInt:false,
       IsLoading:false,
+      UpdatingEmail:false,
       Profile:{
         PPR:'',
         nom:'',
         prenom:'',
         email:'',
         etablissement:'',
+      },
+      UpProfile:{
+        email_perso:'',
       },
       Etablissement:{
 
@@ -102,6 +112,27 @@ export default {
     //   ...mapActions([
     //     'getEnseignants'
     // ]),
+    async UpdateEmail(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.patch('http://127.0.0.1:8000/api/Directeur/dir/UpdateMyEmail',this.UpProfile,config);
+
+        await this.showmyprofile();
+        this.UpdatingEmail = false;
+
+      }
+      catch(error){
+        console.log(error);
+        const toast = useToast();
+        toast.error('Invalid Email',{
+          timeout:3000,
+        });
+        this.UpdatingEmail = false;
+      }
+    },
     async GetMyEtab(){
       try {
         const token = store.state.user.token;
@@ -110,8 +141,6 @@ export default {
         };
         const response = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/myetablissement',config);
         this.Etablissement=response.data.data;
-
-        console.log(response)
 
       }
       catch(error){
