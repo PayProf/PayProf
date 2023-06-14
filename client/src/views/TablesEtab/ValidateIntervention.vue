@@ -128,6 +128,27 @@ export default {
         console.log(error);
       }
     },
+    async UpVisaUAE(id,index){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+          }
+        };
+        this.UpdatedIntervetion.visa_uae=!this.Interventions[index].visa_uae;
+
+        await axios.patch(
+            'http://127.0.0.1:8000/api/Intervention/'+id+'/visauae',
+            {VisaEtab:this.UpdatedIntervetion.visa_uae}, // Pass the object in the request payload
+            config
+        );
+        await this.getInterventions();
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async ConfirmEdit(id) {
       try {
         const token = store.state.user.token;

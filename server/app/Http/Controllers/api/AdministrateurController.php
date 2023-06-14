@@ -42,8 +42,6 @@ class AdministrateurController extends Controller
             // Retrieve a paginated list of Administrateur objects
             $admin = Administrateur::latest()->paginate(5);
 
-            
-
             // Return a success response with the transformed data
 
             return $this->succes($admin, 'DISPLAY');

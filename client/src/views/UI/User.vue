@@ -98,7 +98,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-neutral" @click="downloadPDF()">Telecharger payement</button>
+
     <AddIntervention v-if="IsAdmin"/>
     <div class="flex justify-center items-center p-5">
     <v-pagination
@@ -110,7 +110,10 @@
     />
     </div>
   </div>
-
+  <router-link :to="{ path: '/Payment/'+Profile.PPR }" >
+    <button class="btn btn-neutral mt-3">Voir paiement</button>
+  </router-link>
+  
 
   <div v-if="OpenGraphe" class="w-200 h-200 bg-gray-200 mt-5 ">
     <div class="flex justify-end">
@@ -119,9 +122,7 @@
     </div>
     </div>
   </div>
-  <div ref="content" v-show="false">
-    <h1>teeeeest</h1>
-  </div>
+  
 
 </template>
 
@@ -136,7 +137,7 @@ import TableInterventionsUserVue from '../TablesEtab/TableInterventionsUser.vue'
 import VPagination from "@hennge/vue3-pagination";
 import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 import jspdf from 'jspdf'
-
+import Payment from '../../components/Payment.vue';
 
 export default {
   name: 'User',
@@ -167,6 +168,7 @@ export default {
     AddIntervention,
     TableInterventionsUserVue,
     VPagination,
+    Payment
   },
   methods: {
     showInterventions(){
@@ -215,10 +217,7 @@ export default {
         console.log(error)
       }
     },
-    downloadPDF(){
-
-      window.print()
-    }
+    
 
   },
   async mounted() {

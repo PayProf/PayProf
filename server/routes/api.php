@@ -42,8 +42,9 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
 
     route::apiResource('Enseignant', EnseignantController::class);
     //route of  ShowMyInterventions
-    route::get('Enseignant/ens/MyIntervention',[EnseignantController::class,'ShowMyInterventions']);
-    route::get('Enseignant/ens/MyGraphe',[EnseignantController::class,'ShowMyGraphe']);
+    route::get('Enseignant/ens/MyIntervention', [EnseignantController::class, 'ShowMyInterventions']);
+    
+    route::get('Enseignant/ens/MyGraphe', [EnseignantController::class, 'ShowMyGraphe']);
     //route of  ShowMyPayments
     route::get('Enseignant/ens/MyPayments', [EnseignantController::class, 'ShowMyPayments']);
     //route of UploadMyImage
@@ -92,6 +93,7 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     //============================================ Directeur API ============================================
     Route::middleware('is_enseignant')->group(function () {
 
+
     route::apiResource('Directeur', DirecteurController::class);
     //route of UploadMyImage
     route::POST('Directeur/dir/UploadMyImage', [DirecteurController::class, 'UploadMyImage']);
@@ -101,7 +103,6 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     route::PATCH('Directeur/dir/UpdateMyEmail', [DirecteurController::class, 'UpdateMyEmail']);
     //route of MyProfs
     route::get('Directeur/dir/MyProfs',[DirecteurController::class,'MyProfs']);
-
     });
     //=======================================================================================================
 
@@ -128,10 +129,6 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
 
 });
-
-
-
-
 
 
 

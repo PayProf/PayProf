@@ -56,7 +56,7 @@
           <!-- head -->
           <thead>
           <tr>
-            <th>Intitule          </th>
+            <th>Intitule</th>
             <th>Année</th>
             <th>Semestre</th>
             <th>Date Debut</th>
@@ -164,6 +164,7 @@ export default {
         const res= await axios.get('http://127.0.0.1:8000/api/Intervention/'+id+'/EnseignantInterventions?page='+this.page,config)
         this.Interventions=res.data.data
         this.pagecount=res.data.meta.last_page
+        console.log( this.Interventions)
       }
       catch (error) {
         console.log(error)

@@ -30,13 +30,12 @@ class EtablissementController extends Controller
         if (Gate::allows('check_role', [4, 3])) {
 
             //// Retrieve a paginated list of Etablissement objects.
-            $etablissements = Etablissement::latest()->paginate(10);
+            $etablissements = Etablissement::latest()->paginate(5);
             // used to transform the collection of Etablissement objects into a collection of JSON resources.
-            $data = EtablissementResource::collection($etablissements);
-            // Return a success response with the transformed data.
-            return $this->succes($data, 'DISPLAY');
-        }
 
+            // Return a success response with the transformed data.
+            return $this->succes($ $etablissements, 'DISPLAY');
+        }
         return $this->error('', 'ACCES INTERDIT ', 403);
     }
 
