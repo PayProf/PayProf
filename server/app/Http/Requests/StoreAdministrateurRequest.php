@@ -25,10 +25,10 @@ class StoreAdministrateurRequest extends FormRequest
     {
        
             return [
-                'PPR' => ['required', 'numeric','min:7'],
-                'nom' => ['required', 'string','max:30'],
-                'prenom' => ['required', 'string','max:30'],
-                'etablissement_id' => ['required','exists:etablissements'],
+                'PPR' => ['required','min:7'],
+                'nom' => ['required','max:30'],
+                'prenom' => ['required','max:30'],
+                'etablissement' => ['required'],
                 'email_perso' => ['required', 'email']
             ];
         

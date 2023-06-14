@@ -109,7 +109,7 @@ route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('admins/{user_id}/showenseignants', [AdministrateurController::class, 'AllEnseignants']);
 
-        Route::apiResource('admins', AdministrateurController::class);
+       
 
         Route::get('admins/{user_id}/myprofile', [AdministrateurController::class, 'ShowMyprofile']);
 
@@ -133,11 +133,14 @@ route::group(['middleware' => ['auth:sanctum']], function () {
 //============================================ ADMINISTRATEUR API ============================================
 
 
-
+Route::apiResource('admins', AdministrateurController::class);
+route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
 //=======================================================================================================
-
+route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
 //============================================ PAIEMENT API ============================================
-
+Route::get('profil/{user_id}/info',[AdministrateurController::class,'InfoUser']);
+Route::put('profil/{user_id}/update',[AdministrateurController::class,'UpdatePassword']);
+Route::put('profil/{user_id}/delete',[AdministrateurController::class,'deleteAccount']);
 
 
 

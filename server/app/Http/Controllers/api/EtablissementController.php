@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEtablissementRequest;
-use App\Http\Requests\UpdateEtablissementRequest;
-use App\Http\Resources\EtablissementResource;
-use App\Models\Administrateur;
 use App\Models\Directeur;
 use App\Models\Enseignant;
-use App\Models\Etablissement;
 use Illuminate\Http\Request;
+use App\Models\Etablissement;
 use App\Traits\HttpResponses;
+use App\Models\Administrateur;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\EtablissementResource;
+use App\Http\Requests\StoreEtablissementRequest;
+use App\Http\Requests\UpdateEtablissementRequest;
 
 
 
@@ -145,14 +146,12 @@ class EtablissementController extends Controller
 
         // Check the role value to determine the user type and
         // retrieve the associated Etablissement.
-        if ( auth()->user()->role==4 &&  auth()->user()->id==$user_id){
-            
-                $data = Enseignant::where('user_id', $user_id)->first();
-                $enseignant = ['id_etablissement' => $data->etablissement_id];
-                $etablissement = Etablissement::where('id', $enseignant['id_etablissement'])->first();
-                return $this->succes($etablissement, "MY ETABLISSEMENT");
-            
+        if (auth()->user()->role == 4 &&  auth()->user()->id == $user_id) {
 
+            $data = Enseignant::where('user_id', $user_id)->first();
+            $enseignant = ['id_etablissement' => $data->etablissement_id];
+            $etablissement = Etablissement::where('id', $enseignant['id_etablissement'])->first();
+            return $this->succes($etablissement, "MY ETABLISSEMENT");
         }
         if (auth()->user()->role == 2 &&  auth()->user()->id == $user_id) {
 
@@ -169,5 +168,20 @@ class EtablissementController extends Controller
             return $this->succes($etablissement, "MY ETABLISSEMENT");
         }
     }
+    public function AboutEtablissement($etablissement_id)
+    {
+        $admin = Administrateur::where('etablissement_id', $etablissement_id)->first();
+        $directeur = Directeur::where('etablissement_id', $etablissement_id)->first();
     
+        $data = [
+            "id_admin" => $admin ? $admin->id : null,
+            "id_directeur" => $directeur ? $directeur->id : null,
+        ];
+    
+        if ($admin || $directeur) {
+            return $this->succes($data, "DISPLAY");
+        } else {
+            return $this->error("", "NO DATA FOUND", 404);
+        }
+    }
 }
