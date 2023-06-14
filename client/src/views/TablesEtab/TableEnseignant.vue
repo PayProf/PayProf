@@ -55,7 +55,7 @@
       />
     </div>
     <div class="flex justify-center">
-    <AddEnseignant v-if="role == 2"/>
+    <AddEnseignant @Enseignant-added="getTables" v-if="role == 2"/>
     </div>
   </div>
 

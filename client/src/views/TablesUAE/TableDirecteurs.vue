@@ -85,7 +85,6 @@ export default {
         await axios.get('http://127.0.0.1:8000/api/Directeur',config).then(result => {
           this.Directeurs = result.data.data
         })
-
       }
       catch (error) {
         console.log(error)
