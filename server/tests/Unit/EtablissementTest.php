@@ -5,6 +5,8 @@ namespace Tests\Unit;
 use Tests\TestCase;
 
 use App\Http\Controllers\api\EtablissementController;
+use App\Models\Administrateur;
+use App\Models\Directeur;
 use App\Models\Enseignant;
 use App\Models\Etablissement;
 use App\Models\User;
@@ -148,14 +150,30 @@ class EtablissementTest extends TestCase
     public function test_show_my_etablissements()
     {
         $user = User::factory()->create([
-            'role' => 0
+            'role' => 1
         ]);
-        $ens = Enseignant::factory()->create([
+        $ens = Directeur::factory()->create([
             "user_id" => $user->id,
             "etablissement_id" =>  Etablissement::count()
         ]);
 
         $response = $this->actingAs($user)->json("get", 'api/etablissements/' . $user->id . '/myetablissement');
+        assertSame($response->status(), 200, 'show specific etablissement is not working');
+    }
+
+    public function test_show_my_more_about_etablissements()
+    {
+        $etab = Etablissement::factory()->create();
+        $user = User::factory()->create([
+            'role' => 1
+        ]);
+        $admn = Administrateur::factory()->create([
+            'etablissement_id' => $etab->id
+        ]);
+        $dir = Directeur::factory()->create([
+            'etablissement_id' => $etab->id
+        ]);
+        $response = $this->actingAs($user)->json("get", 'api/etablissements/' . $etab->id . '/aboutetablissement');
         assertSame($response->status(), 200, 'show specific etablissement is not working');
     }
 }
