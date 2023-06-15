@@ -126,6 +126,7 @@ export default {
   },
   data() {
     return {
+      userRole:store.state.user.role,
       showPopupForm: false,
       OpenEns:false,
       OpenGraphe:false,
@@ -217,6 +218,20 @@ export default {
         console.log(error)
       }
     },
+    async showAdmprofile(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/admins/'+this.$route.params.id,config);
+        this.Profile=response.data.data;
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
   showStats() {
       this.OpenStats = !this.OpenStats;
     },
@@ -252,10 +267,15 @@ export default {
   },
   async mounted() {
     this.IsLoading=true;
-    await this.showmyprofile();
     await this.GetMyEtab();
     await this.GetMyDirecteur();
+    if(this.userRole==2){
+    await this.showmyprofile();
+    }else if(this.userRole==4){
+      await this.showAdmprofile()
+    }
     this.IsLoading=false;
+    
 },
 };
 

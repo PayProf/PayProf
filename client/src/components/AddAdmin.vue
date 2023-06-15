@@ -35,8 +35,8 @@
                 <select v-model="model.Admin.etablissement_id" class="select select-bordered h-9">
 
                   <option value="">Select etablissement</option>
-                  <option v-for="(Etablissement, id) in this.Etablissements.data" :key="id">
-                    {{ Etablissement.id }}
+                  <option v-for="(Etablissement, id) in this.Etablissements" :key="id">
+                    {{ Etablissement.nom }}
                   </option>
 
                 </select>
@@ -98,7 +98,8 @@ export default {
         };
         await axios.get('http://127.0.0.1:8000/api/etablissements',config).then(result=>{
           console.log('test axios')
-          this.Etablissements = result.data
+          this.Etablissements = result.data.data.data
+          console.log(result.data.data.data)
         })
         console.log(this.Etablissements)
       }

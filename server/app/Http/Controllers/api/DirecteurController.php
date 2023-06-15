@@ -231,4 +231,11 @@ class DirecteurController extends Controller
         $ens= Enseignant::where('etablissement_id',$id)->with('etablissement','grade')->latest()->paginate(2);
         return response()->json($ens);
     }
+
+    public function MyEtab()
+    {
+      $id=auth()->user()->directeur->etablissement_id;
+      return new EtablissementResource(Etablissement::where('id',$id)->first());
+
+    }
 }

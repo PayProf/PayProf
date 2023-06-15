@@ -14,18 +14,22 @@
         <li @click="showProfile" v-else>
           <i class="fa-solid fa-user"></i>
         </li>
-        <li @click="showEns" v-if="OpenEns" class="bg-neutral text-white Interventions">
+        
+          <li @click="showEns" v-if="OpenEns" class="bg-neutral text-white Interventions">
           <i class="fa-solid fa-user-tie"></i>
         </li>
         <li @click="showEns" v-else class="Interventions">
           <i class="fa-solid fa-user-tie"></i>
         </li>
+        
+        <div v-if="this.userRole==1">
         <li @click="ShowAllint" v-if="OpenInt" class="bg-neutral text-white">
           <i class="fa-solid fa-chalkboard-user"></i>
         </li>
         <li @click="ShowAllint" v-else>
           <i class="fa-solid fa-chalkboard-user"></i>
         </li>
+      </div>
         <li>
           <i class="fa-solid fa-arrows-up-down-left-right"></i>
         </li>
@@ -69,6 +73,7 @@ import axios from 'axios';
 import TableEnseignant from '../TablesEtab/TableEnseignant.vue';
 import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
+import TableEnseignantUAE from '../TablesUAE/TableEnseignant.vue'
 import {mapActions,mapState} from 'vuex';
 import UpdatePassword from "../../components/UpdatePassword.vue";
 import {useToast} from "vue-toastification";
@@ -84,6 +89,7 @@ export default {
   },
   data() {
     return {
+      userRole:store.state.user.role,
       showPopupForm: false,
       OpenEns:false,
       OpenGraphe:false,
@@ -104,6 +110,7 @@ export default {
       Etablissement:{
 
       },
+      MonDir:[],
       IdEtab:'',
 
     };
@@ -147,6 +154,36 @@ export default {
         console.log(error)
       }
     },
+    async GetDirEtab(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/etablissements/'+this.$route.params.id+'/myetablissement',config);
+        this.Etablissement=response.data.data;
+        console.log(response)
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
+    async GetDir(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/Directeur/'+this.$route.params.id,config);
+        this.Profile=response.data.data;
+        console.log(response)
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
     async showmyprofile(){
       try {
         const token = store.state.user.token;
@@ -162,6 +199,7 @@ export default {
         console.log(error)
       }
     },
+   
     showStats() {
       this.OpenStats = !this.OpenStats;
     },
@@ -193,10 +231,17 @@ export default {
 
   },
   async mounted() {
-    this.IsLoading=true;
-    await this.showmyprofile();
-    // await this.GetMyEtab();
-    this.IsLoading=false;
+    if(this.userRole==1){
+      this.IsLoading=true;
+      await this.showmyprofile();
+      // await this.GetMyEtab();
+      this.IsLoading=false;
+    }
+    if(this.userRole==4){
+      await this.GetDir();
+      await this.GetDirEtab();
+    }
+    
   },
 };
 

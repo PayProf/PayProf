@@ -179,13 +179,13 @@ class EnseignantController extends Controller
 
 
   {
-    if (Gate::allows('check_role', [0])) {
+    if (Gate::allows('check_role', [0]) ) {
       if (auth()->user()->role == 0) {
         $id = auth()->user()->enseignant->id;
 
         if (Intervention::where('enseignant_id', $id)->exists()) {
-          //                     return  EnseignantInterventionResource::collection (Enseignant::where('id',$id)->with('interventions.etablissement')->paginate(5));
-          return Intervention::where('enseignant_id', $id)->paginate(5);
+                             // return  EnseignantInterventionResource::collection (Enseignant::where('id',$id)->with('interventions.etablissement')->paginate(5));
+         return Intervention::where('enseignant_id', $id)->paginate(5);
         } else {
           return $this->error("", "Pas d'interventions pour le moment", 404);
         }
@@ -227,7 +227,7 @@ class EnseignantController extends Controller
 
         if (Paiements::where('enseignant_id', $id)->exists()) {
 
-          $ens = Enseignant::where('id', $id)->with('paiements')->get();
+          $ens = Paiements::where('enseignant_id', $id)->get(); //Enseignant::where('id', $id)->with('paiements')->get();
 
           return response()->json($ens);
         } else {

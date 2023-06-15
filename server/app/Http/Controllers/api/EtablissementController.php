@@ -34,7 +34,7 @@ class EtablissementController extends Controller
             // used to transform the collection of Etablissement objects into a collection of JSON resources.
 
             // Return a success response with the transformed data.
-            return $this->succes($ $etablissements, 'DISPLAY');
+            return $this->succes( $etablissements, 'DISPLAY');
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
     }

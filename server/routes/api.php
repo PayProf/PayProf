@@ -104,6 +104,8 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     //route of MyProfs
     route::get('Directeur/dir/MyProfs',[DirecteurController::class,'MyProfs']);
     });
+    route::get('Directeur/dir/MyEtab', [DirecteurController::class, 'MyEtab']);
+    
     //=======================================================================================================
 
     Route::middleware('is_enseignant')->group(function () {

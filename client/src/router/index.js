@@ -12,6 +12,8 @@ import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
 //Admin de l'etablissement
 import Admin from '../views/UI/Admin.vue';
 import ADUser from '../views/UI/ADUSER.vue'
+import AdminEtabUae from '../views/UI/AdminEtabUae.vue'
+import DirecteurEtabUae from '../views/UI/DirecteurEtabUae.vue'
 
 //Directeur de l'etablissement
 import EtabDirector from "../views/UI/EtabDirector.vue";
@@ -21,7 +23,7 @@ import TableEtablissement from "../views/TablesUAE/TableEtablissements.vue"
 //Table Admins et Directeurs for view and edit, concerns the UAE admin
 import TableAdmins from "../views/TablesUAE/TableAdmins.vue";
 import TableDirecteurs from "../views/TablesUAE/TableDirecteurs.vue";
-import TableEnseignants from "../views/TablesEtab/TableEnseignant.vue";
+// import TableEnseignants from "../views/TablesEtab/TableEnseignant.vue";
 
 
 //Edit forms for admin and directeurs
@@ -33,8 +35,7 @@ import AddAdmin from "../components/AddAdmin.vue";
 import AddDirecteur from "../components/AddDirecteur.vue";
 
 //Edit Profile
-import EditProfile from '../components/EditProfile.vue';
-import EditAdmin from '../components/EditAdmin.vue'
+
 
 //Table intervention for validations
 import ValidateIntervention from '../views/TablesEtab/ValidateIntervention.vue'
@@ -73,7 +74,7 @@ const routes = [
     },
     children:[
       {
-        path: '/Payment',
+        path: '/Payment/:id',
         name:'Payment',
         component: Payment,
         meta:{
@@ -93,6 +94,30 @@ const routes = [
         AdminUAEAccess: false,
         UserAccess: false,
         DirectorUAEAccess: true,
+        DirectorAccess:false,
+        }
+      },
+      {
+        path: '/AdminEtabUae/:id',
+        name:'AdminEtabUae',
+        component: AdminEtabUae,
+        meta:{
+        AdminAccess: false,
+        AdminUAEAccess: true,
+        UserAccess: false,
+        DirectorUAEAccess: false,
+        DirectorAccess:false,
+        }
+      },
+      {
+        path: '/DirecteurEtabUae/:id',
+        name:'DirecteurEtabUae',
+        component: DirecteurEtabUae,
+        meta:{
+        AdminAccess: false,
+        AdminUAEAccess: true,
+        UserAccess: false,
+        DirectorUAEAccess: false,
         DirectorAccess:false,
         }
       },
@@ -123,12 +148,12 @@ const routes = [
       },
 
       {
-        path: '/Directeur',
+        path: '/Directeur/:id',
         name:'Directeur',
         component: EtabDirector,
         meta:{
         AdminAccess: false,
-        AdminUAEAccess: false,
+        AdminUAEAccess: true,
         UserAccess: false,
         DirectorUAEAccess: true,
         DirectorAccess:true,
@@ -195,18 +220,7 @@ const routes = [
 
       //Edit Profile :id
 
-      {
-        path: '/EditProfile/',
-        name:'EditProfile',
-        component:EditProfile ,
-        meta:{
-          AdminAccess: true,
-          AdminUAEAccess: true,
-          UserAccess: true,
-          DirectorUAEAccess: true,
-          DirectorAccess:true,
-        }
-      },
+      
 
       // Adding forms
 
@@ -239,25 +253,18 @@ const routes = [
 
 
 
-      {
-        path: '/EditAdmin/:id ',
-        name:'EditAdmin ',
-        component: EditAdmin,
-        // meta:{
-        //   RequiresAuth: false
-        // }
-      },
+     
 
 
 
-      {
-        path: '/TableEnseignants',
-        name:'TableEnseignants',
-        component: TableEnseignants,
-        // meta:{
-        //   RequiresAuth: false
-        // }
-      },
+      // {
+      //   path: '/TableEnseignants',
+      //   name:'TableEnseignants',
+      //   component: TableEnseignants,
+      //   // meta:{
+      //   //   RequiresAuth: false
+      //   // }
+      // },
 
       {
         path: '/TableEtablissement',
@@ -301,12 +308,12 @@ const routes = [
         /*The Page where there's all enseignants */
 
       {
-        path:'/Admin/',
+        path:'/Admin/:id',
         name:'Admin',
         component: Admin,
         meta:{
           AdminAccess: true,
-          AdminUAEAccess: false,
+          AdminUAEAccess: true,
           UserAccess: false,
           DirectorUAEAccess: false,
           DirectorAccess:false,

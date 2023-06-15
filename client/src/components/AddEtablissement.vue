@@ -19,26 +19,32 @@
               <label class="label">
                 <span class="label-text">Code</span>
               </label>
-              <input type="text" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" />
+              <input type="number" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Ville</span>
               </label>
-              <input type="text" v-model="model.Etablissement.ville" placeholder="Ville" class="input input-bordered" />
+              <select v-model="model.Etablissement.ville" class="select select-bordered h-9">
+                <option value="">Select etablissement</option>
+                <option >Tanger</option>
+                <option >Tetouane</option>
+                <option >Al Hoceima</option>
+                <option >Larache</option>
+            </select>
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Telephone</span>
               </label>
-              <input type="text" v-model="model.Etablissement.telephone" placeholder="Telephone"
+              <input type="number" v-model="model.Etablissement.telephone" placeholder="Telephone"
                 class="input input-bordered" />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Fax</span>
               </label>
-              <input type="text" v-model="model.Etablissement.FAX" placeholder="Année universitaire"
+              <input type="number" v-model="model.Etablissement.FAX" placeholder="Fax"
                 class="input input-bordered" />
             </div>
           </div>
