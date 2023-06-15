@@ -1,5 +1,8 @@
 <template>
-  <div class="mt-10 overflow-x-auto">
+  <div v-if="Loading">
+  </div>
+  <div v-else>
+  <div class="overflow-x-auto">
     <table class="table table-zebra w-full ">
       <!-- head -->
       <thead>
@@ -58,7 +61,7 @@
     <AddEnseignant @Enseignant-added="getTables" v-if="role == 2"/>
     </div>
   </div>
-
+  </div>
 
 
 </template>
@@ -102,6 +105,7 @@ export default {
       pagecount:null,
       page:1,
       role:store.state.user.role,
+      Loading:false,
 
     }
   },
@@ -216,7 +220,9 @@ export default {
 
   },
   async mounted() {
+    this.Loading=true;
      await this.getTables();
+     this.Loading=false;
     }
   }
 

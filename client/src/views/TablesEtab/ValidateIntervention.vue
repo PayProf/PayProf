@@ -1,4 +1,7 @@
 <template>
+  <div v-if="Loading">
+  </div>
+  <div v-else>
    <div class="overflow-x-auto">
     <table class="table table-zebra w-full">
             <!-- head -->
@@ -70,8 +73,9 @@
              />
            </div>
      <div class="flex justify-center items-center">
-            <AddIntervention @intervention-added="getInterventions" v-if="role == 2"/>
+            <AddIntervention @intervention-added="getInterventions" :NomEta="NomE" v-if="role == 2"/>
      </div>
+  </div>
 
 
 </template>
@@ -84,6 +88,12 @@ import store from "../../store.js";
 import AddIntervention from "../../components/AddIntervention.vue";
 export default {
   name: 'Interventions',
+  props:{
+    NomE: {
+      type: String,
+      required: true
+    },
+  },
   components:{
     AddIntervention,
     VPagination,
@@ -98,12 +108,14 @@ export default {
       pagecount:null,
       EditMode:false,
       EditedId:null,
+      Loading:false,
     }
   },
 
   async mounted() {
-
+    this.Loading=true;
     await this.getInterventions();
+    this.Loading=false;
 
   },
   methods: {
