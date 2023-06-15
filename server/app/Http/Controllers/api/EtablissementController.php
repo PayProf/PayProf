@@ -34,7 +34,7 @@ class EtablissementController extends Controller
             // used to transform the collection of Etablissement objects into a collection of JSON resources.
 
             // Return a success response with the transformed data.
-            return $this->succes($ $etablissements, 'DISPLAY');
+            return $this->succes( $etablissements, 'DISPLAY');
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
     }
@@ -69,7 +69,7 @@ class EtablissementController extends Controller
         if (Gate::allows('check_role', [4, 3]) || Gate::allows('direct_etab', $id)) {
 
             // Retrieve the specific Etablissement resource by ID.
-            $data = new EtablissementResource(Etablissement::findOrFail($id)); //returns a specific Etablissement resource by ID 
+            $data = new EtablissementResource(Etablissement::findOrFail($id)); //returns a specific Etablissement resource by ID
             // Check if the 'with' query parameter is present in the request.
             if ($request->query('with')) {
                 $value = $request->query('with');
@@ -171,12 +171,12 @@ class EtablissementController extends Controller
     {
         $admin = Administrateur::where('etablissement_id', $etablissement_id)->first();
         $directeur = Directeur::where('etablissement_id', $etablissement_id)->first();
-    
+
         $data = [
             "id_admin" => $admin ? $admin->id : null,
             "id_directeur" => $directeur ? $directeur->id : null,
         ];
-    
+
         if ($admin || $directeur) {
             return $this->succes($data, "DISPLAY");
         } else {

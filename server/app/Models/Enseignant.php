@@ -39,7 +39,12 @@ class Enseignant extends Model
         return $hours;
     }
 
+    public function tots($id)
+    {
 
+        $tots = DB::table('paiements')->where('enseignant_id', $id)->sum('Net');
+        return $tots;
+    }
 
     public function etablissement()
     {

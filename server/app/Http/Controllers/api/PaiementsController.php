@@ -61,12 +61,12 @@ class PaiementsController extends Controller
      */
     public function show($id)
     {
-       
+
         if (Gate::allows('check_role', [3,4])||  Gate::allows('Pay_etab',$id)) {
         // Retrieve the specific Paiements resource by ID
         $data = new PaiementResource(Paiements::findOrFail($id));
 
-        
+
 
             // Return a success response with the transformed data
             return $this->succes($data, 'DISPLAY');
@@ -119,4 +119,5 @@ class PaiementsController extends Controller
         // // Return a success response
         // return $this->succes('', 'DELETED DATA');
     }
+
 }

@@ -157,7 +157,7 @@ class EnseignantController extends Controller
     if (Gate::allows('admin_ens', $id)) {
       $ens = Enseignant::FindOrfail($id);
       if ($ens->image)
-        unlink(public_path('uploads') . '/' . $ens->image);                                         //destroy the appropriate image .       
+        unlink(public_path('uploads') . '/' . $ens->image);                                         //destroy the appropriate image .
       $ens->delete();
       return $this->succes("", "enseignant deleted successfully");
     }
@@ -227,9 +227,11 @@ class EnseignantController extends Controller
 
         if (Paiements::where('enseignant_id', $id)->exists()) {
 
-          $ens = Enseignant::where('id', $id)->with('paiements')->get();
+          $ens =Paiements::where('enseignant_id', $id)->get();
+          $sum= new Enseignant();
 
-          return response()->json($ens);
+
+          return response()->json(["ens"=>$ens,"sum"=>$sum->tots($id)]);
         } else {
           return $this->error("", 'Pas de payements pour le moment', 404);
         }

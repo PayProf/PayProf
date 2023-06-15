@@ -1,7 +1,7 @@
 <template>
-   <div class="flex justify-center mt-5 ">
-      <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
-    </div>
+  <div class="flex justify-center mt-5 ">
+    <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true"><i class="fa-solid fa-plus"></i></button>
+  </div>
   <div v-if="showPopup" class="popup z-40">
     <div class="popup-content card w-96 bg-neutral ">
       <div class="card-body items-center text-center">
@@ -13,33 +13,39 @@
               <label class="label">
                 <span class="label-text">Nom</span>
               </label>
-              <input type="text" v-model="model.Etablissement.nom" placeholder="Nom" class="input input-bordered" />
+              <input type="text" v-model="model.Etablissement.nom" placeholder="Nom" class="input input-bordered" pattern="^[^\d]+$" title="Please enter a non-numeric value." required />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Code</span>
               </label>
-              <input type="text" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" />
+              <input type="text" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" pattern="^[^\d]+$" title="Please enter a non-numeric value." required/>
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Ville</span>
               </label>
-              <input type="text" v-model="model.Etablissement.ville" placeholder="Ville" class="input input-bordered" />
+              <select v-model="model.Etablissement.ville" class="select select-bordered h-9" required>
+                <option value="">Select etablissement</option>
+                <option >Tanger</option>
+                <option >Tetouane</option>
+                <option >Al Hoceima</option>
+                <option >Larache</option>
+              </select>
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Telephone</span>
               </label>
-              <input type="text" v-model="model.Etablissement.telephone" placeholder="Telephone"
-                class="input input-bordered" />
+              <input type="number" v-model="model.Etablissement.telephone" placeholder="Telephone"
+                     class="input input-bordered" required min="0"/>
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Fax</span>
               </label>
-              <input type="text" v-model="model.Etablissement.FAX" placeholder="Année universitaire"
-                class="input input-bordered" />
+              <input type="number" v-model="model.Etablissement.FAX" placeholder="Fax"
+                     class="input input-bordered" required min="0"/>
             </div>
           </div>
 
@@ -47,7 +53,7 @@
             <button type="submit" class="btn btn-primary rounded" style="margin-bottom: 5px;">
               Add Etablissement
             </button>
-            <button type="button" class="btn btn-primary rounded" @click="showPopup = false">
+            <button type="button" class="btn btn-error text-white rounded" @click="showPopup = false">
               Cancel
             </button>
           </div>
@@ -56,7 +62,7 @@
     </div>
   </div>
 </template>
-  
+
 <script>
 import store  from "../store";
 import axios from 'axios';
@@ -86,38 +92,38 @@ export default {
       };
       var myThis = this;
       axios.post('http://127.0.0.1:8000/api/etablissements', this.model.Etablissement, config)
-        .then(result => {
-          console.log(result.data)
-          this.model.Etablissement = {
-            nom: "",
-            code: "",
-            ville: "",
-            Telephone: "",
-            FAX: ""
+          .then(result => {
+            console.log(result.data)
+            this.model.Etablissement = {
+              nom: "",
+              code: "",
+              ville: "",
+              Telephone: "",
+              FAX: ""
 
-          }
-
-        }).catch(function (error) {
-
-          if (error.response) {
-
-            if (error.response.status == 422) {
-
-              //if you don't specify "myThis" an undefined error will be shown
-              myThis.errorsList = error.response.data.errors;
             }
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
 
-            console.log(error.request);
-          } else {
+          }).catch(function (error) {
 
-            console.log('Error', error.message);
+        if (error.response) {
+
+          if (error.response.status == 422) {
+
+            //if you don't specify "myThis" an undefined error will be shown
+            myThis.errorsList = error.response.data.errors;
           }
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
 
-        });
+          console.log(error.request);
+        } else {
+
+          console.log('Error', error.message);
+        }
+
+      });
     },
 
 
@@ -127,7 +133,7 @@ export default {
 
 };
 </script>
-  
+
 <style>
 .popup {
   position: fixed;

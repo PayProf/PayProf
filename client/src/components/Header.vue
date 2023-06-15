@@ -3,32 +3,32 @@
 
   <div class="navbar bg-base-100 fixed top-0 w-full drop-shadow-md mb-10 z-50" id="header">
     <div class="navbar-start">
-      <div class="dropdown">
-          <label class="btn btn-circle swap swap-rotate">
+<!--      <div class="dropdown">-->
+<!--          <label class="btn btn-circle swap swap-rotate">-->
 
-          <!-- this hidden checkbox controls the state -->
-          <input type="checkbox" />
+<!--          &lt;!&ndash; this hidden checkbox controls the state &ndash;&gt;-->
+<!--          <input type="checkbox" />-->
 
-          <!-- hamburger icon -->
-          <svg class="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
+<!--          &lt;!&ndash; hamburger icon &ndash;&gt;-->
+<!--          <svg class="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>-->
 
-          <!-- close icon -->
-          <svg class="swap-on fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"/></svg>
+<!--          &lt;!&ndash; close icon &ndash;&gt;-->
+<!--          <svg class="swap-on fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"/></svg>-->
 
-        </label>
-        <ul v-if="IsAuth" tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+<!--        </label>-->
+<!--        <ul v-if="IsAuth" tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">-->
 
-          <li><a @click="toggleProfile()">Profile</a></li>
-          <!-- to show them only if he is logged in  -->
-          <li><a @click="toggleEtab()">Table etablissment</a></li>
-          <li><a @click="toggleAdm()">Table admins</a></li>
-          <li><a @click="toggleDir()">table directeurs</a></li>
-        </ul>
-        <ul v-else tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-          <li><a @click="toggleDir()">About Us</a></li>
-        </ul>
+<!--          <li><a @click="toggleProfile()">Profile</a></li>-->
+<!--          &lt;!&ndash; to show them only if he is logged in  &ndash;&gt;-->
+<!--          <li><a @click="toggleEtab()">Table etablissment</a></li>-->
+<!--          <li><a @click="toggleAdm()">Table admins</a></li>-->
+<!--          <li><a @click="toggleDir()">table directeurs</a></li>-->
+<!--        </ul>-->
+<!--        <ul v-else tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">-->
+<!--          <li><a @click="toggleDir()">About Us</a></li>-->
+<!--        </ul>-->
 
-      </div>
+<!--      </div>-->
     </div>
     <div class="navbar-center">
       <a class="btn btn-ghost normal-case text-xl" href="#">PayProf</a>
@@ -44,26 +44,27 @@
             d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
         </svg>
       </button>
-
-    <div class="dropdown dropdown-end" v-if="IsAuth">
-  <label @click="showdrop" tabindex="0" class="btn btn-ghost btn-circle avatar">
-    <div class="avatar online placeholder">
-      <div class="bg-neutral-focus text-neutral-content rounded-full w-10">
-        <span class="text-xl">{{ initials }}</span>
-      </div>
-    </div>
-  </label>
-  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-neutral text-white text-primary-content">
-  <div class="card-body">
-    <h2 class="card-title">M/Mme : {{ this.User.nom }} {{ this.User.prenom }}</h2>
-    <p>Email : {{ this.User.email }}</p>
-      <p>Role : {{ getRole }}</p>
+<!--<div v-if="this.role < 3">-->
+<!--    <div class="dropdown dropdown-end" v-if="IsAuth">-->
+<!--  <label @click="showdrop" tabindex="0" class="btn btn-ghost btn-circle avatar">-->
+<!--    <div class="avatar online placeholder">-->
+<!--      <div class="bg-neutral-focus text-neutral-content rounded-full w-10">-->
+<!--        <span class="text-xl">{{ initials }}</span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </label>-->
+<!--</div>-->
+<!--  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-neutral text-white text-primary-content">-->
+<!--  <div class="card-body">-->
+<!--    <h2 class="card-title">M/Mme : {{ this.User.nom }} {{ this.User.prenom }}</h2>-->
+<!--    <p>Email : {{ this.User.email }}</p>-->
+<!--      <p>Role : {{ getRole }}</p>-->
 <!--    <div class="card-actions justify-end">-->
 <!--      <button class="btn">Change Password </button>-->
 <!--    </div>-->
-  </div>
-</div>
-</div>
+<!--  </div>-->
+<!--</div>-->
+<!--</div>-->
     </div>
 
 
@@ -82,6 +83,7 @@ export default {
   name: 'Header',
  data(){
 return{
+  role:store.state.user.role,
   dropdownOpen:false,
   User:{
 

@@ -6,6 +6,7 @@ import Home from '../views/Home.vue';
 // UAE
 import AdminUAE from "../views/UI/AdminUAE.vue";
 import DirecteurUAE from "../views/UI/DirecteurUAE.vue";
+import AdminEtabUae from "../views/UI/AdminEtabUae.vue";
 
 
 
@@ -61,8 +62,8 @@ const routes = [
       RequiresAuth: false
     }
   },
-  
- 
+
+
   /*The Default Layout for all Pages */
   {
     path: '/Dashboard',
@@ -72,16 +73,17 @@ const routes = [
       RequiresAuth: true,
     },
     children:[
+
       {
-        path: '/Payment',
+        path: '/Payment/:id',
         name:'Payment',
         component: Payment,
         meta:{
-        AdminAccess: true,
-        AdminUAEAccess: true,
-        UserAccess: true,
-        DirectorUAEAccess: true,
-        DirectorAccess:true,
+          AdminAccess: true,
+          AdminUAEAccess: true,
+          UserAccess: true,
+          DirectorUAEAccess: true,
+          DirectorAccess:true,
         }
       },
       {
@@ -148,7 +150,7 @@ const routes = [
           DirectorAccess:false,
         }
       },
-     
+
 
       /* Table admins des établissement home page, concern the uni admin only */
       {
@@ -163,7 +165,7 @@ const routes = [
           DirectorAccess:false,
         }
       },
-     
+
 
       {
         path: '/TableInterventionsEnseignant/',
@@ -240,23 +242,16 @@ const routes = [
 
 
       {
-        path: '/EditAdmin/:id ',
-        name:'EditAdmin ',
-        component: EditAdmin,
-        // meta:{
-        //   RequiresAuth: false
-        // }
-      },
-
-
-
-      {
         path: '/TableEnseignants',
         name:'TableEnseignants',
         component: TableEnseignants,
-        // meta:{
-        //   RequiresAuth: false
-        // }
+        meta:{
+          AdminAccess: true,
+          AdminUAEAccess: true,
+          UserAccess: false,
+          DirectorUAEAccess: true,
+          DirectorAccess:true,
+        }
       },
 
       {
@@ -307,6 +302,19 @@ const routes = [
         meta:{
           AdminAccess: true,
           AdminUAEAccess: false,
+          UserAccess: false,
+          DirectorUAEAccess: false,
+          DirectorAccess:false,
+        }
+      },
+
+      {
+        path: '/AdminEtabUae/:id',
+        name:'AdminEtabUae',
+        component: AdminEtabUae,
+        meta:{
+          AdminAccess: false,
+          AdminUAEAccess: true,
           UserAccess: false,
           DirectorUAEAccess: false,
           DirectorAccess:false,

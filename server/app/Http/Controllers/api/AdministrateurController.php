@@ -33,10 +33,6 @@ class AdministrateurController extends Controller
      */
     public function index()
     {
-        $name="<html>$1é</html>";
-        echo strip_tags($name);
-        echo "<br<noice<br>";
-        echo htmlspecialchars($name);
 
         if (Gate::allows('check_role', [4])) {
             // Retrieve a paginated list of Administrateur objects
@@ -216,7 +212,7 @@ class AdministrateurController extends Controller
                 }
             }
 
-            
+
         }
         return $this->error('', 'ACCES INTERDIT ', 403);
     }
