@@ -8,8 +8,8 @@
 <div class="hero min-h-screen bg-base-200" v-else @keyup.enter="login">
   <div class="hero-content flex-col lg:flex-row-reverse">
     <div class="text-center lg:text-left">
-      <h1 class="text-5xl font-bold">Bienvenu sur la platforme PlayProf</h1>
-      <p class="py-6">pour acceder la platforme veuillez se connecter</p>
+      <h1 class="text-5xl font-bold">Bienvenue sur la plateforme PayProf.</h1>
+      <p class="py-6">Pour accéder à la plateforme, veuillez vous connecter.</p>
     </div>
     <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
       <div class="card-body">

@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     route::apiResource('Enseignant', EnseignantController::class);
     //route of  ShowMyInterventions
     route::get('Enseignant/ens/MyIntervention', [EnseignantController::class, 'ShowMyInterventions']);
-    
+
     route::get('Enseignant/ens/MyGraphe', [EnseignantController::class, 'ShowMyGraphe']);
     //route of  ShowMyPayments
     route::get('Enseignant/ens/MyPayments', [EnseignantController::class, 'ShowMyPayments']);
@@ -128,7 +128,7 @@ Route::group(['middleware' => ['auth:sanctum', 'XssProtection']], function () {
     route::get('etablissements/{etablissement_id}/aboutetablissement', [EtablissementController::class, 'AboutEtablissement']);
     Route::get('profil/{user_id}/info',[UpdatePasswordController::class,'InfoUser']);
     Route::put('profil/{user_id}/update',[UpdatePasswordController::class,'UpdatePassword']);
-    Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
+//    Route::put('profil/{user_id}/delete',[UpdatePasswordController::class,'deleteAccount']);
 
 });
 

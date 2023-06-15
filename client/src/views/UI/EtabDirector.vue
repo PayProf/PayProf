@@ -5,9 +5,9 @@
       <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
     </div>
   </div>
-  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12" v-else>
+  <div class="p-4 min-h-screen sm:mx-30 grid grid-cols-12" v-else>
     <div class="col-span-1">
-      <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-40" v-drag>
+      <ul class="menu bg-base-200 rounded-box mt-20 w-12 z-40" v-drag>
         <li @click="showProfile" v-if="OpenProfile" href="#tableEns" class="bg-neutral text-white">
           <i class="fa-solid fa-user"></i>
         </li>
@@ -42,11 +42,15 @@
           <p class="py-2"><strong>PPR :</strong> {{Profile.PPR}}</p>
           <p class="py-2"><strong>Nom:</strong> {{Profile.nom}}</p>
           <p class="py-2"><strong>Prenom :</strong> {{Profile.prenom}}</p>
-          <p class="py-2"><strong>Email :</strong> {{Profile.Email}}</p>
+          <div v-if="!UpdatingEmail"><p class="py-2"><strong>Email :</strong> {{Profile.Email}}</p></div><div v-else><strong>Email : </strong><input type="email" v-model="this.UpProfile.email_perso" class="input input-ghost w-full max-w-xs" /></div>
           <p class="py-2"><strong>Etablissment :</strong> {{ Profile.NomEtab}}</p>
           <p class="py-2"><strong>Ville :</strong> {{ Profile.DateNaissance }}</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary">Change Password</button>
+          <div class="flex flex-col md:flex-row justify-end">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 flex items-center">
+              <button class="btn btn-primary rounded" @click="UpdatingEmail = true" v-if="!UpdatingEmail">Modifier Email</button>
+              <button class="btn btn-neutral rounded" @click="UpdateEmail()" v-else>Confirmer</button>
+              <UpdatePassword></UpdatePassword>
+            </div>
           </div>
         </div>
       </div>
@@ -71,9 +75,13 @@ import ValidateIntervention from '../TablesEtab/ValidateIntervention.vue';
 import PopupForm from '../../components/AddEnseignant.vue';
 import TableEnseignantUAE from '../TablesUAE/TableEnseignant.vue'
 import {mapActions,mapState} from 'vuex';
+import UpdatePassword from "../../components/UpdatePassword.vue";
+import {useToast} from "vue-toastification";
+
 export default {
   name: 'Admin',
   components: {
+    UpdatePassword,
     TableEnseignant,
     PopupForm,
     ValidateIntervention,
@@ -88,12 +96,16 @@ export default {
       OpenProfile:true,
       OpenInt:false,
       IsLoading:false,
+      UpdatingEmail:false,
       Profile:{
         PPR:'',
         nom:'',
         prenom:'',
         email:'',
         etablissement:'',
+      },
+      UpProfile:{
+        email_perso:'',
       },
       Etablissement:{
 
@@ -107,6 +119,27 @@ export default {
     //   ...mapActions([
     //     'getEnseignants'
     // ]),
+    async UpdateEmail(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.patch('http://127.0.0.1:8000/api/Directeur/dir/UpdateMyEmail',this.UpProfile,config);
+
+        await this.showmyprofile();
+        this.UpdatingEmail = false;
+
+      }
+      catch(error){
+        console.log(error);
+        const toast = useToast();
+        toast.error('Invalid Email',{
+          timeout:3000,
+        });
+        this.UpdatingEmail = false;
+      }
+    },
     async GetMyEtab(){
       try {
         const token = store.state.user.token;

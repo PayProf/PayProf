@@ -15,7 +15,7 @@
                 <label class="label">
                   <span class="label-text">PPR</span>
                 </label>
-                <input type="text" v-model="model.Directeur.PPR" placeholder="PPR" class="input input-bordered" />
+                <input type="number" v-model="model.Directeur.PPR" placeholder="PPR" class="input input-bordered" pattern="[0-9]{7,}" title="Please enter at least 7 numbers." min="0" />
               </div>
               <div class="form-control">
                 <label class="label">
@@ -34,7 +34,7 @@
                 <label class="label">
                   <span class="label-text">Email</span>
                 </label>
-                <input type="text" v-model="model.Directeur.email_perso" placeholder="Email"
+                <input type="email" v-model="model.Directeur.email_perso" placeholder="Email"
                   class="input input-bordered" />
               </div>
               <div class="form-control">
@@ -78,6 +78,11 @@ export default {
     return {
       errorsList: "",
       showPopup:false,
+      UpdatedDirecteur:{
+        nom:'',
+        prenom:'',
+
+      },
       model: {
         Directeur: {
           PPR: "",

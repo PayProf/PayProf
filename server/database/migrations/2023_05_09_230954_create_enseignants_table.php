@@ -21,9 +21,9 @@ return new class extends Migration
             $table->date('date_naissance');
             $table->string('email_perso');
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
-            $table->foreignId('grade_id')->constrained();
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->string('image')->nullable(); 
+            $table->foreignId('grade_id')->constrained()->nullable()->nullOnDelete();
+            $table->foreignId('user_id')->unique()->constrained('users')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
 
         });

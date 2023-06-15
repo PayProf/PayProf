@@ -51,14 +51,14 @@
       </div>
     </div>
   </label>
-  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-primary text-primary-content">
+  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-neutral text-white text-primary-content">
   <div class="card-body">
-    <h2 class="card-title">M/Mme : {{ user.nom }} {{ user.prenom }}</h2>
-    <p>Email : {{ user.email }}</p>
-      <p>role : {{ getRole }}</p>
-    <div class="card-actions justify-end">
-      <button class="btn">Change Password </button>
-    </div>
+    <h2 class="card-title">M/Mme : {{ this.User.nom }} {{ this.User.prenom }}</h2>
+    <p>Email : {{ this.User.email }}</p>
+      <p>Role : {{ getRole }}</p>
+<!--    <div class="card-actions justify-end">-->
+<!--      <button class="btn">Change Password </button>-->
+<!--    </div>-->
   </div>
 </div>
 </div>
@@ -72,13 +72,17 @@ import router from '../router';
 import store from '../store.js';
 import Etabs from '../views/TablesUAE/TableEtablissements.vue';
 import {mapActions,mapState} from "vuex";
+import axios from "axios";
 
 export default {
   name: 'Header',
  data(){
 return{
   dropdownOpen:false,
-  showSide:false
+
+  User:{
+
+  },
 }
  },
   components: {
@@ -88,6 +92,20 @@ return{
     title: String,
   },
   methods: {
+    async GetProfile(){
+      try {
+        const token = store.state.user.token;
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const response = await axios.get('http://127.0.0.1:8000/api/profil/'+store.state.user.id+'/info',config);
+        this.User=response.data.data;
+
+      }
+      catch(error){
+        console.log(error)
+      }
+    },
 
 
     ...mapActions([
@@ -114,9 +132,9 @@ return{
   computed: {
     ...mapState(['user']),
     initials() {
-      if (this.user && this.user.prenom && this.user.nom) {
-        const firstLetter = this.user.prenom.charAt(0);
-        const lastLetter = this.user.nom.charAt(0);
+      if (this.User && this.User.prenom && this.User.nom) {
+        const firstLetter = this.User.prenom.charAt(0);
+        const lastLetter = this.User.nom.charAt(0);
         return `${firstLetter}${lastLetter}`;
       }
       return '';
@@ -127,13 +145,13 @@ return{
     getRole() {
   if (this.user.role) {
     switch (this.user.role) {
-      case 0 :
+      case '0' :
         return 'Enseignant';
-      case 1 :
+      case '1' :
         return 'Directeur';
-      case 2 :
+      case '2' :
         return 'Admin';
-      case 3 :
+      case '3' :
         return 'Directeur UAE';
       case '4' :
         return 'Super Admin';
@@ -142,6 +160,11 @@ return{
     }
   }
 },
+
   },
+
+  async mounted() {
+    await this.GetProfile();
+  }
 };
 </script>

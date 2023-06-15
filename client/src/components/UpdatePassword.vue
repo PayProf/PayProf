@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="flex justify-center mt-5 ">
-      <button class="btn btn-primary rounded mb-4 px-20" @click="showPopup = true">Changer le Mot de Passe</button>
+    <div class="flex justify-center ">
+      <button class="btn btn-primary rounded px-20" @click="showPopup = true">Changer le Mot de Passe</button>
     </div>
 
     <div v-if="showPopup" class="popup z-40">
@@ -75,9 +75,11 @@ export default {
           Accept: 'application/json'
         }
       };
-        console.log(this.NewPassword)
       const response = await axios.put('http://127.0.0.1:8000/api/profil/'+store.state.user.id+'/update',this.NewPassword,config);
-      console.log(response)
+        const toast = useToast();
+        toast.success('Successfully Changed',{
+          timeout:3000,
+        });
     }
     catch (error){
         console.log(error)
