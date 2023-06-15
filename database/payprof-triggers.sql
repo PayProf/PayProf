@@ -45,10 +45,11 @@ AS $BODY$
 
 BEGIN
     IF OLD.visa_uae = true  THEN
-       raise exception 'intervention deja aprouvé par Admin UAE';
+       raise exception '#Déjà Approuvé#';
+    ELSE
+        RETURN new;
     END IF;
 
-    RETURN OLD;
 END;
 $BODY$;
 
@@ -70,7 +71,7 @@ DECLARE
 BEGIN
 
     IF NEW."Nbr_heures" > 250 THEN
-        RAISE EXCEPTION 'Le nombre d''heures est très élevé.';
+        RAISE EXCEPTION '#Nombre Heures très grand#';
     END IF;
 
     SELECT COUNT(id) INTO count_interventions
@@ -81,7 +82,7 @@ BEGIN
         AND I.visa_etab = TRUE;
 
     IF count_interventions = 5 THEN
-        RAISE EXCEPTION 'Le professeur ne peut pas effectuer une intervention à ce moment.';
+        RAISE EXCEPTION '#Nombre Interventions Dépassé#';
     END IF;
 
     RETURN NEW;
@@ -123,17 +124,15 @@ BEGIN
         CASE semestre
             WHEN 1 THEN
                 IF AUXdate_debut > NEW.date_debut OR NEW.date_fin > AUXdate_S2 THEN
-                    RAISE EXCEPTION 'Les dates insérées sont incompatibles.';
+                    RAISE EXCEPTION '#Dates Incompatibles#';
                 END IF;
             WHEN 2 THEN
                 IF AUXdate_S2 > NEW.date_debut OR NEW.date_fin > AUXdate_fin THEN
-                    RAISE EXCEPTION 'Les dates insérées sont incompatibles.';
+                    RAISE EXCEPTION '#Dates Incompatibles#';
                 END IF;
-            ELSE
-                RAISE EXCEPTION 'Semestre invalide.';
         END CASE;
     ELSE
-        RAISE EXCEPTION 'Donnée invalide.';
+        RAISE EXCEPTION '#Dates Incompatibles#';
     END IF;
 
     RETURN NEW;

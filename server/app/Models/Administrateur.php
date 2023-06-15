@@ -25,7 +25,7 @@ class Administrateur extends Model
     ->where('nom', $etablissement)
     ->first();
         
-    return  $etablissement_id->id;;
+    return  $etablissement_id->id;
 }
     public function etablissement()
     {

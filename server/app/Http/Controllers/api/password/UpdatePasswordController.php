@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\api\password;
 
 use App\Models\User;
+use App\Models\Directeur;
+use App\Models\Enseignant;
+use App\Models\Administrateur;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use App\Http\Controllers\Controller;
@@ -20,12 +23,12 @@ class UpdatePasswordController extends Controller
     public function UpdatePassword(UpdatePasswordRequest $request, $user_id)
     {
         $old_pass = $request->password;
-        $user=User::find($user_id);
-        $passwd=$user->password;
+        $user = User::find($user_id);
+        $passwd = $user->password;
 
         // Verify if the current password is correct
-        if (!password_verify($old_pass,$passwd)) {
-            return $this->error("","Le mot de passe actuel est incorrect.",400);
+        if (!password_verify($old_pass, $passwd)) {
+            return $this->error("", "Le mot de passe actuel est incorrect.", 400);
         }
 
         // Encrypt the new password
@@ -37,21 +40,22 @@ class UpdatePasswordController extends Controller
             $user->password = $encryptedPassword;
             $user->save();
 
-            return $this->succes("","Le mot de passe a été mis à jour avec succès.");
+            return $this->succes("", "Le mot de passe a été mis à jour avec succès.");
         } else {
-            return $this->error("","Aucun utilisateur trouvé avec cet ID.",404);
+            return $this->error("", "Aucun utilisateur trouvé avec cet ID.", 404);
         }
     }
 
     public function deleteAccount()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if ($user) {
-        $user->delete();
-        return $this->succes("","Le compte a été supprimé avec succès.");
-    } else {
-        return $this->error("","Aucun utilisateur authentifié trouvé.",404);
+        if ($user) {
+            $user->delete();
+            return $this->succes("", "Le compte a été supprimé avec succès.");
+        } else {
+            return $this->error("", "Aucun utilisateur authentifié trouvé.", 404);
+        }
     }
 }
     public function InfoUser($user_id){
@@ -74,6 +78,7 @@ class UpdatePasswordController extends Controller
             $data = Directeur::where('user_id', $user_id)->first();
             $user = User::where('id', $user_id)->first();
             $directeur = ['nom' => $data->nom,'prenom'=>$data->prenom,'email'=>$user->email];
+
             return $this->succes($directeur, "Informations");
         }
     }

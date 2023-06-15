@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email_perso');
             $table->foreignId('etablissement_id')->constrained()->onDelete('cascade');
             $table->foreignId('grade_id')->constrained()->nullable()->nullOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('user_id')->unique()->constrained('users')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
 
