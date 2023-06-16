@@ -1,7 +1,6 @@
 <template>
+  <div v-if="!Loading">
   <div class="overflow-x-auto  z-10">
-    <h1 class="text-black font-bold text-xl">Table Admins :</h1>
-    <div class="overflow-x-auto border">
       <table class="table table-zebra w-full z-10">
         <!-- head -->
         <thead>
@@ -58,8 +57,8 @@
         />
       </div>
     </div>
-  </div>
   <AddAdmin />
+  </div>
 
 
 </template>
@@ -84,7 +83,8 @@ export default {
           nom:'',
           prenom:'',
           etablissement_id:'',
-          email_perso:''
+          email_perso:'',
+          Loading:'',
         }]
       },
       UpdatedAdmin:{},
@@ -92,13 +92,15 @@ export default {
       openAdd:false,
       pagecount:null,
       page:1,
-      Userrole:store.state.user.role
+      Userrole:store.state.user.role,
+      Loading:false,
     }
   },
 
-  mounted() {
-
-    this.getAdmins();
+  async mounted() {
+    this.Loading=true;
+    await this.getAdmins();
+    this.Loading=false;
 
   },
   methods: {

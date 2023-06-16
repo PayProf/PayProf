@@ -1,6 +1,6 @@
 <template>
+  <div v-if="!Loading">
   <div class="overflow-x-auto  z-10">
-    <h1 class="text-black font-bold text-xl">Table Directeurs :</h1>
     <table class="table table-zebra w-full z-10">
       <!-- head -->
       <thead>
@@ -56,6 +56,7 @@
     </div>
   </div>
   <AddDirecteur v-if="this.Userrole == 2" />
+  </div>
 </template>
 
 <script>
@@ -73,7 +74,8 @@ export default {
       openAdd:false,
       pagecount:null,
       page:1,
-      myEtab:""
+      myEtab:"",
+      Loading:false,
     }
   },
   components:{
@@ -81,7 +83,9 @@ export default {
     VPagination
   },
   async mounted() {
+    this.Loading=true;
     await this.getDirecteurs();
+    this.Loading=false;
     // await this.getMyEtab();
   },
   methods: {

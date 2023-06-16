@@ -1,10 +1,11 @@
 <template>
   <!-- TABLE ETABLISSEMENT -->
-  <div class="overflow-x-auto border border-r-4">
-    <h1 class="text-black font-bold text-xl">Table etablissements :</h1>
+  <div v-if="!Loading" class="mt-0">
+  <div class="overflow-x-auto" >
+<!--    <h1 class="text-black font-bold text-xl">Table etablissements :</h1>-->
     <table class="table table-zebra w-full z-10">
       <!-- head -->
-      <thead class="  bg-slate-400">
+      <thead class="bg-slate-400">
       <tr>
         <th></th>
         <th>Code</th>
@@ -63,6 +64,8 @@
 
   </div>
   <AddEtablissement v-if="this.Userrole==4"/>
+  </div>
+
 </template>
 
 <script>
@@ -94,13 +97,15 @@ export default {
       Userrole:store.state.user.role,
       pagecount:null,
       page:1,
-      openAdd:false
+      openAdd:false,
+      Loading:false,
     }
   },
 
-  mounted() {
-
-    this.getEtablissements();
+  async mounted() {
+    this.Loading=true;
+    await this.getEtablissements();
+    this.Loading=false;
 
   },
   methods: {
