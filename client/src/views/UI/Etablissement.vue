@@ -1,5 +1,26 @@
 <template>
-  <div class="card card-side bg-base-100 shadow-xl  mx-64">
+  <div class="p-4 mt-20 min-h-screen sm:mx-30 grid grid-cols-12">
+    <div class="col-span-1">
+      <ul class="menu bg-base-200 rounded-box mt-6 w-12 z-50" v-drag>
+        <li @click="toggleTableEnseignant()" v-if="showDir" class="bg-neutral text-white">
+          <i class="fa-solid fa-user-tie"></i>
+        </li>
+        <li @click="toggleTableEnseignant()" v-else>
+          <i class="fa-solid fa-user-tie"></i>
+        </li>
+        <li @click="toggleTableIntervention()" v-if="showInt" class="bg-neutral text-white">
+          <i class="fa-solid fa-chalkboard-user"></i>
+        </li>
+        <li @click="toggleTableIntervention()" v-else>
+          <i class="fa-solid fa-chalkboard-user"></i>
+        </li>
+        <li>
+          <i class="fa-solid fa-arrows-up-down-left-right"></i>
+        </li>
+      </ul>
+    </div>
+    <div class="col-span-11">
+      <div class="card card-side bg-base-100 shadow-xl  mx-64">
     <div class="card-body">
       <h1 class="text-2xl font-bold">Etablissement {{ Etablissements.nom }}</h1>
       <p class="py-2"><strong>Nom :</strong>{{ this.Etablissements.code }}</p>
@@ -9,9 +30,15 @@
       <p class="py-2"><strong>Nombre Enseignant :</strong> {{ this.Etablissements.Nombre_des_enseignants }}</p>
     </div>
   </div>
-  <TableEnseignantUAE />
-
-    <ValidateInterventionUAE  v-if=" UserRole == 3" />
+  <div class=" mt-3">
+    <TableEnseignantUAE v-if="showEns"/>
+  <ValidateInterventionUAE  v-if=" UserRole == 3 && showInt" />
+  </div>
+  
+  </div>
+  </div>
+  
+  
 
   
 </template>
@@ -28,7 +55,9 @@ export default {
     return {
       EtablissementId: "",
       Etablissements: [],
-      UserRole:store.state.user.role
+      UserRole:store.state.user.role,
+      showEns:true,
+      showInt:false
     }
 
 
@@ -58,22 +87,14 @@ export default {
         console.log(error)
       }
     },
-    // async getProfile(){  
-    //   try {
-    //     const token = store.state.user.token;
-    //     const config = {
-    //       headers: { Authorization: `Bearer ${token}` }
-    //     };
-    //     await axios.get('http://127.0.0.1:8000/api/admins/' + this.$route.params.id+'/myprofile/', config).then(result => {
-    //       this.Etablissements = result.data.data
-    //       console.log(result)
-    //     })
+    toggleTableEnseignant(){
+      this.showEns = !this.showEns
+    },
+    toggleTableIntervention(){
+      this.showInt = !this.showInt
+    }
 
-    //   }
-    //   catch (error) {
-    //     console.log(error)
-    //   }
-    // }
+    
   }
 
 }

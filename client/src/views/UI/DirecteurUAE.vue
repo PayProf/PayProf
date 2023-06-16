@@ -20,8 +20,16 @@
       </ul>
     </div>
     <div class="col-span-11">
-  <TableDirecteurs v-if="showDir" />
+      <div class="card card-side bg-base-100 shadow-xl">
+    <div class="card-body mb-3">
+      <h1 class="text-2xl font-bold text-center">Bonjour Directeur UAE</h1>
+    </div>
+  </div>
+  <div class=" mt-3">
+    <TableDirecteurs v-if="showDir" />
   <TableEtablissements v-if="showEtablissement"/>
+  </div>
+  
   </div>
   </div>
   
@@ -39,7 +47,7 @@ export default {
     data(){
       return{
         showDir: false,
-        showEtablissement: false,
+        showEtablissement: true,
       }
     },
     methods:{

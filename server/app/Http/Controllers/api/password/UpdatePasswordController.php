@@ -12,9 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Directeur;
-use App\Models\Enseignant;
-use App\Models\Administrateur;
+
 
 class UpdatePasswordController extends Controller
 {
@@ -57,7 +55,7 @@ class UpdatePasswordController extends Controller
             return $this->error("", "Aucun utilisateur authentifié trouvé.", 404);
         }
     }
-}
+
     public function InfoUser($user_id){
 
         if (auth()->user()->role == 0 &&  auth()->user()->id == $user_id) {

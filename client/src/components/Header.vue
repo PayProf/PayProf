@@ -4,18 +4,7 @@
   <div class="navbar bg-base-100 fixed top-0 w-full drop-shadow-md mb-10 z-50" id="header">
     <div class="navbar-start">
 
-          <label class="btn btn-circle swap swap-rotate" @click="toggleSide()">
-
-          <!-- this hidden checkbox controls the state -->
-          <input type="checkbox" />
-
-          <!-- hamburger icon -->
-          <svg class="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
-
-          <!-- close icon -->
-          <svg class="swap-on fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"/></svg>
-
-        </label>
+         
 
         
 
@@ -43,7 +32,7 @@
         </svg>
       </button>
       
-    <div class="dropdown dropdown-end" v-if="IsAuth">
+    <div class="dropdown dropdown-end" v-if="IsAuth && (this.user.role==0 ||this.user.role==1 || this.user.role==3 )">
   <label @click="showdrop" tabindex="0" class="btn btn-ghost btn-circle avatar">
     <div class="avatar online placeholder">
       <div class="bg-neutral-focus text-neutral-content rounded-full w-10">
@@ -51,7 +40,7 @@
       </div>
     </div>
   </label>
-  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-neutral text-white text-primary-content">
+  <div  v-show="dropdownOpen" class="absolute right-0 mt-2 rounded-md shadow-lg overflow-hidden z-20 card w-96 bg-neutral  text-primary-content">
   <div class="card-body">
     <h2 class="card-title">M/Mme : {{ this.User.nom }} {{ this.User.prenom }}</h2>
     <p>Email : {{ this.User.email }}</p>
@@ -81,7 +70,8 @@ return{
   dropdownOpen:false,
 
   User:{
-
+   nom:"",
+   prenom:"" 
   },
 }
  },
@@ -100,6 +90,7 @@ return{
         };
         const response = await axios.get('http://127.0.0.1:8000/api/profil/'+store.state.user.id+'/info',config);
         this.User=response.data.data;
+        console.log(response)
 
       }
       catch(error){
@@ -143,6 +134,7 @@ return{
       return store.state.user.token;
     },
     getRole() {
+
   if (this.user.role) {
     switch (this.user.role) {
       case '0' :
@@ -163,8 +155,8 @@ return{
 
   },
 
-  async mounted() {
-    await this.GetProfile();
-  }
+  // async mounted() {
+  //   await this.GetProfile();
+  // }
 };
 </script>

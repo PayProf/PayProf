@@ -13,19 +13,19 @@
               <label class="label">
                 <span class="label-text">Nom</span>
               </label>
-              <input type="text" v-model="model.Etablissement.nom" placeholder="Nom" class="input input-bordered" />
+              <input type="text" v-model="model.Etablissement.nom" placeholder="Nom" class="input input-bordered" pattern="^[^\d]+$" title="Please enter a non-numeric value." required />
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Code</span>
               </label>
-              <input type="number" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" />
+              <input type="number" v-model="model.Etablissement.code" placeholder="Code" class="input input-bordered" required min="0"/>
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Ville</span>
               </label>
-              <select v-model="model.Etablissement.ville" class="select select-bordered h-9">
+              <select v-model="model.Etablissement.ville" class="select select-bordered h-9" required>
                 <option value="">Select etablissement</option>
                 <option >Tanger</option>
                 <option >Tetouane</option>
@@ -38,14 +38,14 @@
                 <span class="label-text">Telephone</span>
               </label>
               <input type="number" v-model="model.Etablissement.telephone" placeholder="Telephone"
-                class="input input-bordered" />
+                class="input input-bordered" required min="0"/>
             </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Fax</span>
               </label>
               <input type="number" v-model="model.Etablissement.FAX" placeholder="Fax"
-                class="input input-bordered" />
+                class="input input-bordered" required min="0"/>
             </div>
           </div>
 

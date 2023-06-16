@@ -14,38 +14,36 @@
                 <label class="label">
                   <span class="label-text">PPR</span>
                 </label>
-                <input type="text" v-model="model.Admin.PPR" placeholder="PPR" class="input input-bordered" />
+                <input type="number" v-model="model.Admin.PPR" placeholder="PPR" class="input input-bordered" required min="0" />
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Nom</span>
                 </label>
-                <input type="text" v-model="model.Admin.nom" placeholder="Nom" class="input input-bordered" />
+                <input type="text" v-model="model.Admin.nom" placeholder="Nom" class="input input-bordered" pattern="^[^\d]+$" title="Please enter a non-numeric value." required/>
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Prenom</span>
                 </label>
-                <input type="text" v-model="model.Admin.prenom" placeholder="Prenom" class="input input-bordered" />
+                <input type="text" v-model="model.Admin.prenom" placeholder="Prenom" class="input input-bordered" pattern="^[^\d]+$" title="Please enter a non-numeric value." required/>
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Etablissement</span>
                 </label>
-                <select v-model="model.Admin.etablissement_id" class="select select-bordered h-9">
-
+                <select v-model="model.Admin.etablissement" class="select select-bordered h-9" required >
                   <option value="">Select etablissement</option>
                   <option v-for="(Etablissement, id) in this.Etablissements" :key="id">
                     {{ Etablissement.nom }}
                   </option>
-
                 </select>
               </div>
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Email</span>
                 </label>
-                <input type="text" v-model="model.Admin.email_perso" placeholder="Email" class="input input-bordered" />
+                <input type="email" v-model="model.Admin.email_perso" placeholder="Email" class="input input-bordered" required/>
               </div>
 
             </div>
@@ -81,7 +79,7 @@ export default {
           nom: "",
           prenom: "",
           email_perso: "",
-          etablissement_id: ""
+          etablissement:"",
         }
       }
     }
@@ -121,7 +119,7 @@ export default {
             nom: "",
             prenom: "",
             email_perso: "",
-            etablissement_id: ""
+            etablissement: ""
           }
 
         }).catch(function (error) {

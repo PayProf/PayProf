@@ -44,9 +44,7 @@
             <p class="py-2"><strong>Etablissment :</strong> {{ Etablissement.nom }}</p>
             <p class="py-2"><strong>Nombre des Enseignants :</strong> {{ Etablissement.Nbrenseignants }}</p>
             <p class="py-2"><strong>Ville :</strong> {{ Etablissement.ville }}</p>
-            <div class="card-actions justify-end">
-              <UpdatePassword/>
-            </div>
+            
     </div>
   </div>
         <div v-if="OpenDir" class="card card-side bg-base-100 shadow-xl">
@@ -73,7 +71,6 @@
         <TableEnseignant @Directeur-added="GetMyDirecteur" id="tableEns" v-if="OpenEns"/>
         </div>
       </div>
-  
   </template>
   
     
@@ -111,9 +108,7 @@
           email:'',
           etablissement:'',
         },
-        Etablissement:{
-  
-        },
+        Etablissement:{},
         Directeur: {
   
         },
@@ -135,6 +130,7 @@
           };
           const response = await axios.get('http://127.0.0.1:8000/api/etablissements/'+store.state.user.id+'/myetablissement',config);
           this.Etablissement=response.data.data;
+          console.log(response)
   
         }
         catch(error){

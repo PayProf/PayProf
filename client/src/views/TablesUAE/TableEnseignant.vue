@@ -1,5 +1,6 @@
 <template>
   <div class="mt-10">
+    <h1 class="text-black font-bold text-xl">Table Enseignant :</h1>
     <table class="table table-zebra w-full ">
       <!-- head -->
       <thead>
@@ -34,7 +35,7 @@
       </tr>
       </tbody>
     </table>
-    <div class="flex justify-center items-center p-5">
+    <!-- <div class="flex justify-center items-center p-5">
       <v-pagination
           v-model="page"
           :pages="pagecount"
@@ -42,9 +43,9 @@
           active-color="#1d774d"
           @update:modelValue="getEnseignantsEtab"
       />
-    </div>
-    <div class="flex justify-center">
-    <AddEnseignant/>
+    </div> -->
+    <div class="flex justify-center" v-if="Userrole==2">
+    <AddEnseignant />
     </div>
   </div>
 
@@ -80,6 +81,7 @@ export default {
 
         }],
       } ,
+      Userrole:store.state.user.role,
      
 
     }
@@ -101,7 +103,6 @@ export default {
         const res = await axios.get('http://127.0.0.1:8000/api/etablissements/'+this.$route.params.id+'?with=Enseignants',config)
         this.model.Enseignants=res.data.data.Enseignants;
         console.log(this.model.Enseignants)
-        this.pagecount=res.data.data.last_page;
         console.log(res)
          } catch (error) {
             console.log(error)
